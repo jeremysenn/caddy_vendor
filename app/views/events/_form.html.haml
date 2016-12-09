@@ -19,7 +19,7 @@
         remote: true unless @event.new_record? |
 
 -#
-= form_for @event, :html => {class: 'form-horizontal', role: 'form'}, remote: true do |f|
+= form_for @event, :html => {class: 'form-horizontal event_form', role: 'form'}, remote: true do |f|
   .row.form-group
     %div{:class => "col-sm-12"}
       %label.col-sm-2.control-label.lead{for: "event_title"} 
@@ -57,7 +57,7 @@
         Players
       %div{:class => "col-sm-10"}
         = f.nested_fields_for :players do |ff|
-          .card.card-block
+          .card.card-block.player_fields
             .row.form-group
               .col-sm-6
                 = ff.collection_select :member_id, Club.first.members, :id, :full_name, class: 'input-lg form-control', required: true
@@ -104,16 +104,16 @@
     $(this).find('[autofocus]').first().focus();
   });
 
-  $your_container.on('click', '.add_nested_fields_link', function() {
-    if ($your_container.find('.some_class_in_your_nested_fields:visible').length === max_items - 1) {
+  $('.event_form').on('click', '.add_nested_fields_link', function() {
+    if ($('.event_form').find('.player_fields:visible').length === 4) {
       $(this).hide();
     }
     return true;
   });
 
-  $your_container.on('click', '.remove_nested_fields_link', function() {
-    if ($your_container.find('.some_class_in_your_nested_fields:visible').length === max_items) {
-      $your_container.find('.add_nested_fields_link').show();
+  $('.event_form').on('click', '.remove_nested_fields_link', function() {
+    if ($('.event_form').find('.player_fields:visible').length === 5) {
+      $('.event_form').find('.add_nested_fields_link').show();
     }
     return true;
   });
