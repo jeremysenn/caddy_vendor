@@ -57,6 +57,13 @@ gem 'nested_form_fields'
 # Set environment variables within application.yml
 gem "figaro"
 
+# Connect to MS SQL Database
+#gem 'tiny_tds' 
+#gem 'activerecord-sqlserver-adapter'
+
+# Flexible authentication solution for Rails with Warden.
+gem 'devise'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
