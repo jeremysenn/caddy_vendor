@@ -3,9 +3,11 @@
     .modal-content
       .modal-header
         %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
-        %h4.modal-title Edit Event
-        %small 
-          Party Size
-          = @event.party_size
+        %h4.modal-title 
+          Edit Event
+          .pull-right
+            %small.text-muted
+              Party Size
+              = @event.party_size
       .modal-body
         = render 'form', event: @event
