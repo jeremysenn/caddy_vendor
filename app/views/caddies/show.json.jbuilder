@@ -1,0 +1,1 @@
+json.partial! "caddies/caddy", caddy: @caddy

@@ -6,6 +6,11 @@ class CreateEvents < ActiveRecord::Migration[5.0]
       t.datetime :end
       t.string :color
       
+      t.string :size
+      t.string :round
+      t.text :notes
+      t.belongs_to :club, index: true
+      
       t.timestamps
     end
   end

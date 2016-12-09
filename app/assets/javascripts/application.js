@@ -17,4 +17,5 @@
 //= require moment 
 //= require fullcalendar
 //= require daterangepicker
+//= require nested_form_fields
 //= require_tree .

@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b Member:
+  = @player.member
+%p
+  %b Caddy:
+  = @player.caddy
+%p
+  %b Event:
+  = @player.event
+%p
+  %b Caddy type:
+  = @player.caddy_type
+%p
+  %b Fee:
+  = @player.fee
+%p
+  %b Tip:
+  = @player.tip
+
+= link_to 'Edit', edit_player_path(@player)
+\|
+= link_to 'Back', players_path

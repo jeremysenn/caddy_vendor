@@ -1,0 +1,13 @@
+= simple_form_for(@player) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.association :member
+    = f.association :caddy
+    = f.association :event
+    = f.input :caddy_type
+    = f.input :fee
+    = f.input :tip
+
+  .form-actions
+    = f.button :submit

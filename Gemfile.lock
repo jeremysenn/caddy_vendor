@@ -105,6 +105,10 @@ GEM
     momentjs-rails (2.15.1)
       railties (>= 3.1)
     multi_json (1.12.1)
+    nested_form_fields (0.8)
+      coffee-rails (>= 3.2.1)
+      jquery-rails
+      rails (>= 3.2.0)
     nio4r (1.2.1)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
@@ -200,6 +204,7 @@ DEPENDENCIES
   jquery-rails
   listen (~> 3.0.5)
   momentjs-rails
+  nested_form_fields
   puma (~> 3.0)
   rails (~> 5.0.0, >= 5.0.0.1)
   rb-readline

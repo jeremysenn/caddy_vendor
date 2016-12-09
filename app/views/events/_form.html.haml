@@ -1,22 +1,119 @@
-= simple_form_for @event, remote: true do |f|
-  .form-inputs
-    = f.input :title, autofocus: true, input_html: {autofocus: true}
-    =# f.input :date_range, input_html: { class: "form-control input-sm date-range-picker" }
-    = f.input :date_range, as: :hidden, input_html: { class: "date-range-picker" }
-    = f.input_field :start, as: :hidden, value: Date.today, class: 'form-control input-sm start_hidden'
-    = f.input_field :end, as: :hidden, value: Date.today, class: 'form-control input-sm end_hidden'
-    =# f.input :color, as: :select, collection: [['Black','black'], ['Green','green'], ['Red','red']]
-    =# f.input :color, as: :hidden, value: 'green'
-  .form-actions
-    = f.button :submit
-    = link_to 'Delete',                      |
-      event,                                 |
-      method: :delete,                       |
-      class: 'btn btn-danger',               |
-      data: { confirm: 'Are you sure?' },    |
-      remote: true unless @event.new_record? |
+-#
+  = simple_form_for @event, remote: true do |f|
+    .form-inputs
+      = f.input :title, autofocus: true, input_html: {autofocus: true}
+      =# f.input :date_range, input_html: { class: "form-control input-sm date-range-picker" }
+      = f.input :date_range, as: :hidden, input_html: { class: "date-range-picker" }
+      = f.input_field :start, as: :hidden, value: Date.today, class: 'form-control input-sm start_hidden'
+      = f.input_field :end, as: :hidden, value: Date.today, class: 'form-control input-sm end_hidden'
+      =# f.input :color, as: :select, collection: [['Black','black'], ['Green','green'], ['Red','red']]
+      =# f.input :color, as: :hidden, value: 'green'
+      = f.association :club, as: :select, collection: Club.order(:name), include_blank: false
+    .form-actions
+      = f.button :submit
+      = link_to 'Delete',                      |
+        event,                                 |
+        method: :delete,                       |
+        class: 'btn btn-danger',               |
+        data: { confirm: 'Are you sure?' },    |
+        remote: true unless @event.new_record? |
+
+-#
+= form_for @event, :html => {class: 'form-horizontal', role: 'form'}, remote: true do |f|
+  .row.form-group
+    %div{:class => "col-sm-12"}
+      %label.col-sm-2.control-label.lead{for: "event_title"} 
+        Title
+      .col-sm-10
+        = f.text_field :title, placeholder:'Title', class: 'input-lg form-control', required: true
+  .row.form-group
+    %div{:class => "col-sm-12"}
+      %label.col-sm-2.control-label.lead{for: "event_club_id"} 
+        Club
+      %div{:class => "col-sm-4"}
+        = f.collection_select :club_id, Club.all, :id, :name, required: true
+  = f.hidden_field :date_range, class: "date-range-picker"
+  = f.hidden_field :start, value: Date.today, class: 'start_hidden'
+  = f.hidden_field :end, value: Date.today, class: 'end_hidden'
+  .row.form-group
+    %div{:class => "col-sm-12"}
+      %label.col-sm-2.control-label.lead{for: "event_title"} 
+        Round
+      %div{:class => "col-sm-8"}
+        =# f.select :round, ["Eighteen Holes", "Nine Holes"], class: 'input-lg form-control', required: true
+        .btn-group-horizontal{"data-toggle" => "buttons"}
+          %label.btn.btn-secondary{class: "#{(@event.new_record? or @event.eighteen_holes? ) ? 'active' : ''}"}
+            = f.radio_button :round, 'Eighteen Holes', :checked => @event.new_record?
+            Eighteen
+          %label.btn.btn-secondary{class: "#{@event.nine_holes? ? 'active' : ''}"}
+            = f.radio_button :round, 'Nine Holes'
+            Nine
+      -#
+        %div{:class => "col-sm-4"}
+          = f.select :size, ["Foursome", "Threesome", "Twosome", "Single"], class: 'input-lg form-control', required: true
+  .row.form-group
+    %div{:class => "col-sm-12"}
+      %label.col-sm-2.control-label.lead{for: "event_players"} 
+        Players
+      %div{:class => "col-sm-10"}
+        = f.nested_fields_for :players do |ff|
+          .card.card-block
+            .row.form-group
+              .col-sm-6
+                = ff.collection_select :member_id, Club.first.members, :id, :full_name, class: 'input-lg form-control', required: true
+              .col-sm-6
+                = ff.collection_select :caddy_id, Club.first.caddies, :id, :full_name, class: 'input-lg form-control', required: true
+            .row.form-group
+              .col-sm-6
+                .input-group
+                  .input-group-addon $
+                  = ff.text_field :fee, placeholder: 'Fee', value: number_with_precision(ff.object.fee, :precision => 2), class: 'input-lg form-control', required: true
+              .col-sm-6
+                .input-group
+                  .input-group-addon $
+                  = ff.text_field :tip, placeholder: 'Tip', value: number_with_precision(ff.object.tip, :precision => 2), class: 'input-lg form-control'
+            .row.form-group
+              .col-sm-12
+                .btn-group-horizontal{"data-toggle" => "buttons"}
+                  %label.btn.btn-secondary{class: "#{(ff.object.new_record? or ff.object.carry? ) ? 'active' : ''}"}
+                    = ff.radio_button :caddy_type, 'Carry', :checked => @event.new_record?
+                    Carry
+                  %label.btn.btn-secondary{class: "#{(ff.object.chase? ) ? 'active' : ''}"}
+                    = ff.radio_button :caddy_type, 'Chase'
+                    Chase
+            %p= ff.remove_nested_fields_link 'x', class: 'btn btn-sm btn-danger', role: 'button', data: { confirm: 'Are you sure you want to delete?' }
+        = f.add_nested_fields_link :players
+  .row.form-group
+    %div{:class => "col-sm-12"}
+      %label.col-sm-2.control-label.lead{for: "event_notes"} 
+        Notes
+      .col-sm-10
+        = f.text_area :notes, placeholder:'Notes', class: 'input-lg form-control'
+  .row.form-group
+    %div{:class => "col-sm-12"}
+      = f.submit "Save", :class => 'btn btn-lg btn-primary'
+      = link_to 'Delete',                      |
+            event,                                 |
+            method: :delete,                       |
+            class: 'btn btn-lg btn-danger',               |
+            data: { confirm: 'Are you sure?' },    |
+            remote: true unless @event.new_record? |
 
 :javascript
   $('.modal').on('shown.bs.modal', function() {
     $(this).find('[autofocus]').first().focus();
+  });
+
+  $your_container.on('click', '.add_nested_fields_link', function() {
+    if ($your_container.find('.some_class_in_your_nested_fields:visible').length === max_items - 1) {
+      $(this).hide();
+    }
+    return true;
+  });
+
+  $your_container.on('click', '.remove_nested_fields_link', function() {
+    if ($your_container.find('.some_class_in_your_nested_fields:visible').length === max_items) {
+      $your_container.find('.add_nested_fields_link').show();
+    }
+    return true;
   });
