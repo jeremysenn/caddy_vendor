@@ -1,4 +1,5 @@
 class CaddiesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_caddy, only: [:show, :edit, :update, :destroy]
 
   # GET /caddies

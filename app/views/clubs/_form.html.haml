@@ -3,6 +3,7 @@
 
   .form-inputs
     = f.input :name
+  = f.hidden_field :user_id, value: current_user.id
 
   .form-actions
     = f.button :submit

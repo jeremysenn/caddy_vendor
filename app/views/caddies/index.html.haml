@@ -1,24 +1,23 @@
-.container
-  %h1 Listing caddies
+%h1 Listing caddies
 
-  %table
-    %thead
+%table
+  %thead
+    %tr
+      %th First name
+      %th Last name
+      %th
+      %th
+      %th
+
+  %tbody
+    - @caddies.each do |caddy|
       %tr
-        %th First name
-        %th Last name
-        %th
-        %th
-        %th
+        %td= caddy.first_name
+        %td= caddy.last_name
+        %td= link_to 'Show', caddy
+        %td= link_to 'Edit', edit_caddy_path(caddy)
+        %td= link_to 'Destroy', caddy, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
-    %tbody
-      - @caddies.each do |caddy|
-        %tr
-          %td= caddy.first_name
-          %td= caddy.last_name
-          %td= link_to 'Show', caddy
-          %td= link_to 'Edit', edit_caddy_path(caddy)
-          %td= link_to 'Destroy', caddy, :method => :delete, :data => { :confirm => 'Are you sure?' }
+%br
 
-  %br
-
-  = link_to 'New Caddy', new_caddy_path
+= link_to 'New Caddy', new_caddy_path

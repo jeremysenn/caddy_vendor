@@ -1,22 +1,20 @@
-.container
-  %h1 Listing clubs
+%h1 Listing clubs
+%table
+  %thead
+    %tr
+      %th Name
+      %th
+      %th
+      %th
 
-  %table
-    %thead
+  %tbody
+    - @clubs.each do |club|
       %tr
-        %th Name
-        %th
-        %th
-        %th
+        %td= club.name
+        %td= link_to 'Show', club
+        %td= link_to 'Edit', edit_club_path(club)
+        %td= link_to 'Destroy', club, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
-    %tbody
-      - @clubs.each do |club|
-        %tr
-          %td= club.name
-          %td= link_to 'Show', club
-          %td= link_to 'Edit', edit_club_path(club)
-          %td= link_to 'Destroy', club, :method => :delete, :data => { :confirm => 'Are you sure?' }
+%br
 
-  %br
-
-  = link_to 'New Club', new_club_path
+= link_to 'New Club', new_club_path

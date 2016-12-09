@@ -1,19 +1,18 @@
-.container
-  %p#notice= notice
+%p#notice= notice
 
-  %p
-    %b First name:
-    = @member.first_name
-  %p
-    %b Last name:
-    = @member.last_name
-  %p
-    %b Clubs:
+%p
+  %b First name:
+  = @member.first_name
+%p
+  %b Last name:
+  = @member.last_name
+%p
+  %b Clubs:
+  %br
+  - @member.clubs.each do |club|
+    = link_to club.name, club
     %br
-    - @member.clubs.each do |club|
-      = link_to club.name, club
-      %br
 
-  = link_to 'Edit', edit_member_path(@member)
-  \|
-  = link_to 'Back', members_path
+= link_to 'Edit', edit_member_path(@member)
+\|
+= link_to 'Back', members_path

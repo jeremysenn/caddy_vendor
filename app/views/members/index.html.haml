@@ -1,24 +1,23 @@
-.container
-  %h1 Listing members
+%h1 Listing members
 
-  %table
-    %thead
+%table
+  %thead
+    %tr
+      %th First name
+      %th Last name
+      %th
+      %th
+      %th
+
+  %tbody
+    - @members.each do |member|
       %tr
-        %th First name
-        %th Last name
-        %th
-        %th
-        %th
+        %td= member.first_name
+        %td= member.last_name
+        %td= link_to 'Show', member
+        %td= link_to 'Edit', edit_member_path(member)
+        %td= link_to 'Destroy', member, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
-    %tbody
-      - @members.each do |member|
-        %tr
-          %td= member.first_name
-          %td= member.last_name
-          %td= link_to 'Show', member
-          %td= link_to 'Edit', edit_member_path(member)
-          %td= link_to 'Destroy', member, :method => :delete, :data => { :confirm => 'Are you sure?' }
+%br
 
-  %br
-
-  = link_to 'New Member', new_member_path
+= link_to 'New Member', new_member_path

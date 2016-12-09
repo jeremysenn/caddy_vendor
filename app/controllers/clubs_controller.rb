@@ -1,10 +1,11 @@
 class ClubsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_club, only: [:show, :edit, :update, :destroy]
 
   # GET /clubs
   # GET /clubs.json
   def index
-    @clubs = Club.all
+    @clubs = current_user.clubs
   end
 
   # GET /clubs/1
@@ -69,6 +70,6 @@ class ClubsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def club_params
-      params.require(:club).permit(:name)
+      params.require(:club).permit(:name, :user_id)
     end
 end
