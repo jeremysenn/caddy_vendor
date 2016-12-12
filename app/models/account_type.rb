@@ -1,9 +1,8 @@
-class CaddyPayRate < ApplicationRecord
-#  self.primary_key = 'Transaction_ID'
-  self.table_name= 'CaddyPayRates'
+class AccountType < ActiveRecord::Base
+  self.primary_key = 'AccountTypeID'
+  self.table_name= 'AccountTypes'
   
   establish_connection :ez_cash
-  
   
   #############################
   #     Instance Methods      #
@@ -11,6 +10,8 @@ class CaddyPayRate < ApplicationRecord
   
   
   #############################
-  #     Class Methods         #
+  #     Class Methods      #
   #############################
+  
+  
 end

@@ -58,8 +58,8 @@ gem 'nested_form_fields'
 gem "figaro"
 
 # Connect to MS SQL Database
-#gem 'tiny_tds' 
-#gem 'activerecord-sqlserver-adapter'
+gem 'tiny_tds' 
+gem 'activerecord-sqlserver-adapter', :github => 'rails-sqlserver/activerecord-sqlserver-adapter', :branch => 'master'
 
 # Flexible authentication solution for Rails with Warden.
 gem 'devise'

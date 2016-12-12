@@ -1,0 +1,351 @@
+class Customer < ActiveRecord::Base
+  self.primary_key = 'CustomerID'
+  self.table_name= 'Customer'
+  
+  establish_connection :ez_cash
+  
+  has_many :bill_payments
+  has_many :transfers
+  
+  attr_accessor :password
+  before_save :encrypt_all_security_question_answers, :prepare_password
+  
+  validates :NameF, :NameL, :user_name, :PhoneMobile, :Answer1, :Answer2, :Answer3, presence: true
+  
+  validates_uniqueness_of :user_name
+  
+  validates_uniqueness_of :Email, :allow_blank => true
+  validates_format_of :Email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, :allow_blank => true
+  
+  validates :password, :presence => true, :on => :create
+  validates_length_of :password, :minimum => 4, :allow_blank => true
+  validates_confirmation_of :password
+  
+  validates :CustomQuestion1, presence: true, if: :custom_question_1?
+  validates :CustomQuestion2, presence: true, if: :custom_question_2?
+  validates :CustomQuestion3, presence: true, if: :custom_question_3?
+  validate :questions_not_duplicated  
+        
+  #############################
+  #     Instance Methods      #
+  #############################
+  
+  def accounts
+    Account.where(CustomerID: id)
+  end
+  
+  def active_accounts
+    Account.where(CustomerID: id, active: true)
+  end
+  
+  def active_checking_accounts
+    active_accounts.select { |a| (a.account_type.AccountTypeDesc == "Checking") }
+  end
+  
+  def active_payment_accounts
+    active_accounts.select { |a| (a.account_type.AccountTypeDesc == "Payments") }
+  end
+  
+  def active_wire_accounts
+    active_accounts.select { |a| (a.account_type.AccountTypeDesc == "Wires") }
+  end
+  
+  def active_money_order_accounts
+    active_accounts.select { |a| (a.account_type.AccountTypeDesc == "Money Order") }
+  end
+  
+  def active_heavy_metal_debit_card_accounts
+    active_accounts.select { |a| (a.account_type.AccountTypeDesc == "Heavy Metal Debit") }
+  end
+  
+  def heavy_metal_debit_card_accounts
+    accounts.select { |a| (a.account_type.AccountTypeDesc == "Heavy Metal Debit") }
+  end
+  
+  def heavy_metal_debit_card_accounts_and_active_wire_accounts
+    heavy_metal_debit_card_accounts + active_wire_accounts
+  end
+  
+  def active_heavy_metal_debit_card_accounts_and_active_wire_accounts
+    active_heavy_metal_debit_card_accounts + active_wire_accounts
+  end
+  
+  def active_debit_card_accounts
+    active_accounts.select { |a| (a.account_type.AccountTypeDesc == "Debit Card") }
+  end
+  
+  def active_funding_bank_account_accounts
+    active_accounts.select { |a| (a.account_type.AccountTypeDesc == "Funding Bank Account") }
+  end
+  
+  def active_payee_accounts
+    active_payment_accounts + active_money_order_accounts
+  end
+  
+  def active_payee_accounts_and_active_wire_accounts
+    active_payee_accounts + active_wire_accounts
+  end
+  
+  def primary_account
+    active_accounts.select { |a| (a.primary?) }.first
+  end
+  
+  # Array of account numbers
+  def account_numbers
+    accounts.map{ |a| a.account_number_with_leading_zeros }
+  end
+  
+  ### Informix log records ###
+  def log_records
+    log_records = LogRecord.find_all_by_pos_batch_nbr(id)
+#    log_records = []
+    active_heavy_metal_debit_card_accounts.each do |account|
+     log_records = log_records + account.log_records
+    end
+    active_payee_accounts.each do |account| # Only get payee log records where this customer's primary account is the 'to' account (acct_2_nbr)
+     log_records = log_records + account.log_records.select { |lr| (lr.acct_2_nbr == primary_account.account_number_with_leading_zeros)}
+#     log_records = LogRecord.find_all_by_acct_1_nbr(account_number_with_leading_zeros) + LogRecord.find_all_by_acct_2_nbr(account_number_with_leading_zeros) +
+#      LogRecord.find_all_by_acct_1_nbr(account_id_with_leading_zeros) + LogRecord.find_all_by_acct_2_nbr(account_id_with_leading_zeros)
+    end
+    # Return unique array of log_records that don't have acct_1_nbr or acct_2_nbr of 000000000000000000, and that are not a PUT TFR transaction
+    return log_records.uniq{|lr| lr.sys_seq_nbr}.reject { |lr| (lr.acct_1_nbr == "000000000000000000" or lr.acct_2_nbr == "000000000000000000") }.reject { |lr| (lr.pri_tran_code.strip == "PUT" and lr.sec_tran_code.strip == "TFR") }
+  end
+  
+  def all_log_records
+    log_records = LogRecord.find_all_by_pos_batch_nbr(id)
+#    log_records = []
+    accounts.each do |account|
+     log_records = log_records + account.all_log_records
+    end
+    # Return unique array of log_records that don't have acct_1_nbr or acct_2_nbr of 000000000000000000
+    return log_records.uniq{|lr| lr.sys_seq_nbr}#.reject { |lr| (lr.acct_1_nbr == "000000000000000000" or lr.acct_2_nbr == "000000000000000000") }
+  end
+  ### End Informix log records ###
+  
+  def displayable_transactions
+    transactions = []
+    heavy_metal_debit_card_accounts.each do |account|
+      transactions = transactions + account.displayable_transactions
+    end
+    return transactions
+  end
+  
+  def generate_token(column)
+    begin
+      self[column] = SecureRandom.urlsafe_base64
+    end while User.exists?(column => self[column])
+  end
+  
+  def encrypt_password(pass)
+#    BCrypt::Engine.hash_secret(pass, password_salt)
+#    Digest::SHA1.hexdigest(pass + user_salt).upcase
+    Digest::SHA1.hexdigest(user_salt + pass).upcase
+  end
+  
+  ### Start AES Decryption Methods ###
+  def decrypted_ssn
+    decoded_ssn = Base64.decode64(self.SSN).unpack("H*").first
+    Decrypt.decryption(decoded_ssn)
+  end
+  
+  def decrypted_answer_1
+    unless self.Answer1.blank?
+      decoded_answer_1 = Base64.decode64(self.Answer1).unpack("H*").first
+      Decrypt.decryption(decoded_answer_1)
+    end
+  end
+  
+  def decrypted_answer_2
+    unless self.Answer2.blank?
+      decoded_answer_2 = Base64.decode64(self.Answer2).unpack("H*").first
+      Decrypt.decryption(decoded_answer_2)
+    end
+  end
+  
+  def decrypted_answer_3
+    unless self.Answer3.blank?
+      decoded_answer_3 = Base64.decode64(self.Answer3).unpack("H*").first
+      Decrypt.decryption(decoded_answer_3)
+    end
+  end
+  ### End AES Decryption Methods ###
+  
+  def mobile_bill_payments
+    BillPayment.where(customer_id: id)
+  end
+  
+  def total_balance_available
+    total = 0
+    active_heavy_metal_debit_card_accounts.each do |account|
+      total = total + account.available_balance
+    end
+    return total
+  end
+  
+  def primary_balance_available
+    primary_account.Balance
+#    primary_account.available_balance
+  end
+  
+  def lang_obj_text_1
+    LangObjText.find_by_LangObjID_and_LangID(self.LangObjID1, self.LangID)
+  end
+  
+  def lang_obj_text_2
+    LangObjText.find_by_LangObjID_and_LangID(self.LangObjID2, self.LangID)
+  end
+  
+  def lang_obj_text_3
+    LangObjText.find_by_LangObjID_and_LangID(self.LangObjID3, self.LangID)
+  end
+  
+  def security_question_1
+    lang_obj_text_1.LangObjText unless lang_obj_text_1.blank?
+  end
+  
+  def security_question_2
+    lang_obj_text_2.LangObjText unless lang_obj_text_2.blank?
+  end
+  
+  def security_question_3
+    lang_obj_text_3.LangObjText unless lang_obj_text_3.blank?
+  end
+  
+  # All the possible security question lang_obj_text's
+  def all_lang_obj_text_questions
+    LangObjText.where(LangObjID: [8572,8573,8574,8575,9683,9684,9685,9686,9687,9688], LangID: self.LangID)
+  end
+  
+  def custom_question_1?
+    lang_obj_text_1.LangObjID == 9688 unless lang_obj_text_1.blank?
+  end
+  
+  def custom_question_2?
+    lang_obj_text_2.LangObjID == 9688 unless lang_obj_text_2.blank?
+  end
+  
+  def custom_question_3?
+    lang_obj_text_3.LangObjID == 9688 unless lang_obj_text_3.blank?
+  end
+  
+  def needs_to_update_profile?
+    self.IsTempUserName == true or self.IsTempPassword == true or user_name.blank? or pwd_needs_change == 1
+  end
+  
+  ### Start custom validations ###
+  def questions_not_duplicated
+    errors.add(:LangObjID2, "Selected questions should not be duplicated") if security_question_1 == security_question_2
+    errors.add(:LangObjID3, "Selected questions should not be duplicated") if security_question_1 == security_question_3
+    errors.add(:LangObjID3, "Selected questions should not be duplicated") if security_question_2 == security_question_3
+  end
+  ### End custom validations ###
+  
+  def send_forgot_password_message
+    phone = self.PhoneMobile || " "
+    email = self.Email || " "
+#    random_password = ('0'..'z').to_a.shuffle.first(8).join
+    random_password = SecureRandom.hex(4)
+#    encrypted_random_password = Digest::SHA1.hexdigest(random_password + user_salt).upcase
+    encrypted_random_password = Digest::SHA1.hexdigest(user_salt + random_password).upcase
+    subject = "Forgot Password"
+    message = "Your temporary password is #{random_password} Please use this and your username to login at www.personalfinancesystem.com"
+    
+    ### Just send sms text message ###
+    TgsOutMsg.create(msg_type: 1, msg_body: message, to_email: email, to_phone: phone, 
+      email_subject: " ", processed: false, err_flag: false, seq_nbr: 0) if self.MessageSMS == 1 and self.MessageEmail == 0 and not phone.blank?
+    
+    ### Just send email message ###
+    TgsOutMsg.create(msg_type: 2, msg_body: message, to_email: email, to_phone: phone, 
+      email_subject: subject, processed: false, err_flag: false, seq_nbr: 0) if self.MessageSMS == 0 and self.MessageEmail == 1 and not email.blank?
+    
+    ### Send both sms text and email message ###
+    TgsOutMsg.create(msg_type: 3, msg_body: message, to_email: email, to_phone: phone, 
+      email_subject: subject, processed: false, err_flag: false, seq_nbr: 0) if self.MessageSMS == 1 and self.MessageEmail == 1 and not email.blank? and not phone.blank?
+    
+    self.update_attributes(pwd_hash: encrypted_random_password, IsTempPassword: true, pwd_needs_change: 1, Answer1: decrypted_answer_1, Answer2: decrypted_answer_2, Answer3: decrypted_answer_3 )
+  end
+  
+  def group
+    Group.find(self.GroupID)
+  end
+  
+  def can_create_bill_payments?
+    group.IsViewPayeeSection == true
+  end
+  
+  def entities
+    Entity.where(OwningCustomerID: id)
+  end
+  
+  def is_customer_service_rep?
+    self.GroupID < 5
+  end
+  
+  def cust_pics
+    cust_pics = CustPic.where(cust_nbr: id.to_s)
+    unless cust_pics.blank?
+      return cust_pics
+    else
+      return []
+    end
+  end
+  
+  def images
+    images = Image.where(custid: id)
+    unless images.blank?
+      return images
+    else
+      return []
+    end
+  end
+  
+  def cust_pics_without_drivers_license
+    cust_pics.where.not(event_code: ["DL", "DLF"]) unless cust_pics.blank?
+  end
+  
+  def drivers_license_cust_pic
+    cust_pics.where(event_code: ["DL", "DLF"]).last unless cust_pics.blank?
+  end
+  
+  def customer_cards
+    CustomerCard.where(CustomerID: id)
+  end
+  
+  def full_name
+    "#{self.NameF} #{self.NameL}"
+  end
+  
+  #############################
+  #     Class Methods      #
+  #############################
+  
+  def self.authenticate(user_name, pass)
+    customer = Customer.find_by_user_name(user_name)
+    return customer if customer #&& customer.pwd_hash == customer.encrypt_password(pass)
+  end
+  
+  private
+
+  def encrypt_all_security_question_answers
+    unless self.Answer1.blank?
+      encrypted = Decrypt.encryption(self.Answer1) # Encrypt the answer
+      self.Answer1 = Base64.strict_encode64(encrypted) # Base 64 encode it; strict_encode64 doesn't add the \n character on the end
+    end
+    unless self.Answer2.blank?
+      encrypted = Decrypt.encryption(self.Answer2) # Encrypt the answer
+      self.Answer2 = Base64.strict_encode64(encrypted) # Base 64 encode it; strict_encode64 doesn't add the \n character on the end
+    end
+    unless self.Answer3.blank?
+      encrypted = Decrypt.encryption(self.Answer3) # Encrypt the answer 
+      self.Answer3 = Base64.strict_encode64(encrypted) # Base 64 encode it; strict_encode64 doesn't add the \n character on the end
+    end
+  end
+  
+  def prepare_password
+    unless password.blank?
+#      self.pwd_hash = Digest::SHA1.hexdigest(password + user_salt).upcase
+      self.pwd_hash = Digest::SHA1.hexdigest(user_salt + password).upcase
+    end
+  end
+
+end
