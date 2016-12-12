@@ -29,6 +29,8 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
     @event.save
     if @event.paid?
+      @event.color = 'green'
+      @event.save
       redirect_to @event, notice: 'Pay out.' 
     end
 
@@ -48,6 +50,8 @@ class EventsController < ApplicationController
   def update
     @event.update(event_params)
     if @event.paid?
+      @event.color = 'green'
+      @event.save
       redirect_to @event, notice: 'Pay out.' 
     end
 #    respond_to do |format|
