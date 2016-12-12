@@ -1,6 +1,30 @@
-%p#notice= notice
-
-
-= link_to 'Edit', edit_event_path(@event)
-\|
-= link_to 'Back', events_path
+.container
+  %h1= @event.title
+  %table.table.table-striped
+    %thead.thead-inverse
+      %tr
+        %th Member
+        %th Caddy
+        %th Type
+        %th Fee
+        %th Tip
+        %th Total
+    %tbody
+      - @event.players.each do |player|
+        %tr
+          %td= player.member.full_name
+          %td= player.caddy.full_name
+          %td= player.caddy_type
+          %td= number_to_currency(player.fee)
+          %td= number_to_currency(player.tip)
+          %td= number_to_currency(player.total)
+    %tfoot
+      %tr
+        %th
+        %th
+        %th
+        %th
+        %th
+        %th= number_to_currency(@event.players_total)
+  = link_to 'Cancel', :back, class: 'btn btn-lg btn-secondary'
+  = link_to 'Pay', '#', class: 'btn btn-lg btn-primary'

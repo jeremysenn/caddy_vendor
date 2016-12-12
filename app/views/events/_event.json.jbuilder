@@ -10,5 +10,9 @@ json.allDay event.all_day_event? ? true : false
 
 json.club_id event.club
 
+json.color 'gray' if event.open?
+json.color 'blue' if event.closed?
+json.color 'red' if event.paid?
+
 json.update_url event_path(event, method: :patch)
 json.edit_url edit_event_path(event)

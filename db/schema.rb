@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161209164356) do
+ActiveRecord::Schema.define(version: 20161212151823) do
 
   create_table "caddies", force: :cascade do |t|
     t.string   "first_name"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 20161209164356) do
     t.integer  "club_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "status"
     t.index ["club_id"], name: "index_events_on_club_id"
   end
 

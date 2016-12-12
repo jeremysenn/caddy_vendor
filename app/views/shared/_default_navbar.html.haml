@@ -1,0 +1,18 @@
+%nav.navbar.navbar-fixed-top.navbar-dark.bg-inverse
+  %button.navbar-toggler.hidden-sm-up{"data-target" => "#exCollapsingNavbar2", "data-toggle" => "collapse", :type => "button"}
+    \☰
+  #exCollapsingNavbar2.collapse.navbar-toggleable-xs
+    %a.navbar-brand{:href => root_path} 
+      Caddy Master
+    %ul.nav.navbar-nav  
+      -#
+        %li.nav-item
+          %a.nav-link{:href => '#'} About
+        %li.nav-item
+          %a.nav-link{:href => '#'} Contact
+      .float-xs-right
+        - unless user_signed_in?
+          %li.nav-item= link_to 'Log in', new_user_session_path, class: 'btn btn-outline-primary nav-link'
+          %li.nav-item= link_to 'Sign up', new_user_registration_path, class: 'btn btn-outline-success nav-link'
+        - else
+          %li.nav-item= link_to 'Log out', destroy_user_session_path, method: :delete, data: { confirm: 'Are you sure you want to sign out?' }, class: 'btn btn-outline-danger nav-link'

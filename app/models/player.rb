@@ -15,6 +15,10 @@ class Player < ApplicationRecord
     caddy_type == "Chase"
   end
   
+  def total
+    fee + tip
+  end
+  
   #############################
   #     Class Methods         #
   #############################

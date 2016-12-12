@@ -1,5 +1,32 @@
 .container
-  %br
+  %p
+    = form_tag events_path, id: 'clubs_form', method: 'get', :class => "form-inline", role: 'search' do |f|
+      .btn-group{"data-toggle" => "buttons"}
+        - current_user.clubs.each do |club|
+          -#
+            %label.btn.btn-secondary{class: "#{params[:q] == club.id.to_s ? 'active' : ''}", :onclick => "$('#clubs_form').submit();"}
+          %label.btn.btn-secondary{:onclick => "$('#clubs_form').submit();"}
+            = radio_button_tag :q, 2
+            = club.name
+        =# radio_button_tag :q, 1
+        =# search_field_tag :q, params[:q], :placeholder => "Search clubs", class: "form-control input-lg"
+        -#
+          %span.input-group-btn
+            %button.btn.btn-default.btn-lg{:type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
+              %i.fa.fa-search
+    -#
+      = form_tag events_path, method: 'get', id: 'clubs_form' do
+        - current_user.clubs.each do |club|
+          = radio_button_tag :q, club.id, :onclick => "$('#clubs_form').submit();"
+          = club.name
+    -#
+      .btn-group{"data-toggle" => "buttons"}
+        - current_user.clubs.each do |club|
+          %label.btn.btn-secondary{class: "#{params[:q] == club.id.to_s ? 'active' : ''}", :onclick => "$('#clubs_form').submit();"}
+            = radio_button_tag :q, club.id
+            = club.name
+
+
   .calendar
   #remote_container
 
