@@ -1,0 +1,25 @@
+%p
+  %b Name:
+  = @company.CompanyName
+%p
+  %b Clubs:
+  %br
+  - @company.clubs.each do |club|
+    = link_to club.name, club
+    %br
+%p
+  %b Members:
+  %br
+  - @company.members.each do |member|
+    = member.full_name
+    %br
+%p
+  %b Caddies:
+  %br
+  - @company.caddies.each do |caddy|
+    = link_to caddy.full_name, caddy
+    %br
+
+= link_to 'Edit', edit_company_path(@company)
+\|
+= link_to 'Back', companies_path

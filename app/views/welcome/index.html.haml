@@ -2,6 +2,8 @@
   .homepage-intro-header
     .container
       .col-lg-12
+        - flash.each do |name, msg|
+          %p= content_tag(:div, msg, class: "alert alert-info")
         .intro-message
           %h1 Caddy Master
           %br

@@ -5,7 +5,7 @@ class ClubsController < ApplicationController
   # GET /clubs
   # GET /clubs.json
   def index
-    @clubs = current_user.clubs
+    @clubs = current_user.company.clubs
   end
 
   # GET /clubs/1

@@ -4,6 +4,7 @@ class Customer < ActiveRecord::Base
   
   establish_connection :ez_cash
   
+  belongs_to :company, :foreign_key => "CompanyNumber"
   has_many :bill_payments
   has_many :transfers
   

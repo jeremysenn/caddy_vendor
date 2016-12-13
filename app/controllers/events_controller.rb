@@ -5,7 +5,13 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    @events = Event.all
+    unless params[:club_id].blank?
+      @club = Club.find(params[:club_id]) 
+    else
+      @club = current_user.clubs.first
+    end
+    @events = @club.events
+    session[:club_id] = @club.id
   end
 
   # GET /events/1

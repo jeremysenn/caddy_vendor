@@ -10,6 +10,7 @@
   %body
     = render 'shared/default_navbar'
     %div.container-fluid
-      - flash.each do |name, msg|
-        %p= content_tag(:div, msg, class: "alert alert-info")
+      - unless current_page?(root_path)
+        - flash.each do |name, msg|
+          %p= content_tag(:div, msg, class: "alert alert-info")
       = yield

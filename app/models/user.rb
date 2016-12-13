@@ -4,5 +4,25 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
        
-  has_many :clubs
+  belongs_to :company
+  
+  #############################
+  #     Instance Methods      #
+  #############################
+  
+  def clubs
+    company.clubs
+  end
+  
+  def members
+    company.members
+  end
+  
+  def caddies
+    company.caddies
+  end
+  
+  #############################
+  #     Class Methods         #
+  #############################
 end
