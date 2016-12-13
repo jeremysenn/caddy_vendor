@@ -25,6 +25,17 @@
                   %a.btn.btn-secondary.btn-lg.btn-block{:href => clubs_path, :role => "button"}
                     %i.fa.fa-tree
                     Clubs
+          - else
+            %ul.list-inline.text-xs-center
+              %li.list-inline-item
+                .col-xs-12
+                  %a.btn.btn-primary.btn-lg.btn-block{:href => new_user_session_path, :role => "button"}
+                    Log In
+              %li.list-inline-item
+                .col-xs-12
+                  %a.btn.btn-success.btn-lg.btn-block{:href => new_user_registration_path, :role => "button"}
+                    Sign Up
+
 .row
   .intro-next
     .container
