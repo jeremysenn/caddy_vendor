@@ -5,13 +5,11 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    unless params[:club_id].blank?
-      @club = Club.find(params[:club_id]) 
+    unless current_club.blank?
+      @events = current_club.events
     else
-      @club = current_user.clubs.first
+      @events = Event.all
     end
-    @events = @club.events
-    session[:club_id] = @club.id
   end
 
   # GET /events/1
@@ -55,11 +53,6 @@ class EventsController < ApplicationController
   # PATCH/PUT /events/1.json
   def update
     @event.update(event_params)
-    if @event.paid?
-      @event.color = 'green'
-      @event.save
-      redirect_to @event, notice: 'Pay out.' 
-    end
 #    respond_to do |format|
 #      if @event.update(event_params)
 #        format.html { redirect_to @event, notice: 'Event was successfully updated.' }
@@ -89,7 +82,7 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:title, :date_range, :start, :end, :color, :size, :round, :status, :notes, :club_id, 
-        players_attributes:[:event_id, :member_id, :caddy_id, :caddy_type, :fee, :tip, :_destroy,:id])
+      params.require(:event).permit(:title, :date_range, :start, :end, :color, :size, :round, :notes, :club_id, 
+        players_attributes:[:event_id, :member_id, :caddy_id, :caddy_type, :fee, :tip, :round, :status, :_destroy,:id])
     end
 end

@@ -19,6 +19,26 @@ class Player < ApplicationRecord
     fee + tip
   end
   
+  def open?
+    status == 'open'
+  end
+  
+  def closed?
+    status == 'closed'
+  end
+  
+  def paid?
+    status == 'paid'
+  end
+  
+  def eighteen_holes?
+    round == "Eighteen Holes"
+  end
+  
+  def nine_holes?
+    round == "Nine Holes"
+  end
+  
   #############################
   #     Class Methods         #
   #############################

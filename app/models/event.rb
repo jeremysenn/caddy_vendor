@@ -28,18 +28,6 @@ class Event < ApplicationRecord
     round == "Nine Holes"
   end
   
-  def open?
-    status == 'open'
-  end
-  
-  def closed?
-    status == 'closed'
-  end
-  
-  def paid?
-    status == 'paid'
-  end
-  
   def players_total
     total = 0
     players.each do |player|

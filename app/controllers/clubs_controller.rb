@@ -11,6 +11,7 @@ class ClubsController < ApplicationController
   # GET /clubs/1
   # GET /clubs/1.json
   def show
+    session[:club_id] = @club.id
   end
 
   # GET /clubs/new
