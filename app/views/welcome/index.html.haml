@@ -13,17 +13,18 @@
             No more cash • Fully automated
           -# %img.img-responsive{:alt => "", :src => image_path('logo_transparent_261x190.png')}
           %hr.intro-divider/
-          %ul.list-inline.text-xs-center
-            %li.list-inline-item
-              .col-xs-12
-                %a.btn.btn-secondary.btn-lg.btn-block{:href => events_path, :role => "button"}
-                  %i.fa.fa-calendar
-                  Calendar
-            %li.list-inline-item
-              .col-xs-12
-                %a.btn.btn-secondary.btn-lg.btn-block{:href => clubs_path, :role => "button"}
-                  %i.fa.fa-tree
-                  Clubs
+          - if user_signed_in?
+            %ul.list-inline.text-xs-center
+              %li.list-inline-item
+                .col-xs-12
+                  %a.btn.btn-secondary.btn-lg.btn-block{:href => events_path, :role => "button"}
+                    %i.fa.fa-calendar
+                    Calendar
+              %li.list-inline-item
+                .col-xs-12
+                  %a.btn.btn-secondary.btn-lg.btn-block{:href => clubs_path, :role => "button"}
+                    %i.fa.fa-tree
+                    Clubs
 .row
   .intro-next
     .container
