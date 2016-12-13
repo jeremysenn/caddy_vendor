@@ -21,11 +21,11 @@ class Event < ApplicationRecord
   end
   
   def eighteen_holes?
-    round == "Eighteen Holes"
+    round == "18"
   end
   
   def nine_holes?
-    round == "Nine Holes"
+    round == "9"
   end
   
   def players_total

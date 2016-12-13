@@ -23,10 +23,10 @@
       %div{:class => "col-sm-8"}
         .btn-group-horizontal{"data-toggle" => "buttons"}
           %label.btn.btn-secondary{class: "#{(@event.new_record? or @event.eighteen_holes? ) ? 'active' : ''}"}
-            = f.radio_button :round, 'Eighteen Holes', :checked => @event.new_record?
+            = f.radio_button :round, '18', :checked => @event.new_record?
             Eighteen
           %label.btn.btn-secondary{class: "#{@event.nine_holes? ? 'active' : ''}"}
-            = f.radio_button :round, 'Nine Holes'
+            = f.radio_button :round, '9'
             Nine
       -#
         %div{:class => "col-sm-4"}
@@ -43,23 +43,24 @@
                 = ff.collection_select :member_id, current_user.members, :id, :full_name, class: 'input-lg form-control', required: true
               .col-sm-6
                 = ff.collection_select :caddy_id, current_user.caddies, :id, :full_name, class: 'input-lg form-control', required: true
-            .row.form-group
-              .col-sm-6
-                .input-group
-                  .input-group-addon $
-                  = ff.text_field :fee, placeholder: 'Fee', value: number_with_precision(ff.object.fee, :precision => 2), class: 'input-lg form-control', required: true
-              .col-sm-6
-                .input-group
-                  .input-group-addon $
-                  = ff.text_field :tip, placeholder: 'Tip', value: number_with_precision(ff.object.tip, :precision => 2), class: 'input-lg form-control'
+            -#
+              .row.form-group
+                .col-sm-6
+                  .input-group
+                    .input-group-addon $
+                    = ff.text_field :fee, placeholder: 'Fee', value: number_with_precision(ff.object.fee, :precision => 2), class: 'input-lg form-control', required: true
+                .col-sm-6
+                  .input-group
+                    .input-group-addon $
+                    = ff.text_field :tip, placeholder: 'Tip', value: number_with_precision(ff.object.tip, :precision => 2), class: 'input-lg form-control'
             .row.form-group
               .col-sm-6
                 .btn-group-horizontal{"data-toggle" => "buttons"}
                   %label.btn.btn-secondary{class: "#{(ff.object.new_record? or ff.object.eighteen_holes? ) ? 'active' : ''}"}
-                    = ff.radio_button :round, 'Eighteen Holes', :checked => @event.new_record?
+                    = ff.radio_button :round, '18', :checked => @event.new_record?
                     Eighteen
                   %label.btn.btn-secondary{class: "#{ff.object.nine_holes? ? 'active' : ''}"}
-                    = ff.radio_button :round, 'Nine Holes'
+                    = ff.radio_button :round, '9'
                     Nine
               .col-sm-6
                 .btn-group-horizontal{"data-toggle" => "buttons"}
