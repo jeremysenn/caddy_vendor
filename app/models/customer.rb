@@ -5,8 +5,12 @@ class Customer < ActiveRecord::Base
   establish_connection :ez_cash
   
   belongs_to :company, :foreign_key => "CompanyNumber"
+  
   has_many :bill_payments
   has_many :transfers
+  has_one :account, :foreign_key => "CustomerID"
+  
+  scope :members, -> { where(GroupID: 14) }
   
   attr_accessor :password
   before_save :encrypt_all_security_question_answers, :prepare_password

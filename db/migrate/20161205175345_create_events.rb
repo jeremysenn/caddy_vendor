@@ -8,6 +8,7 @@ class CreateEvents < ActiveRecord::Migration[5.0]
       
       t.string :size
       t.string :round
+      t.string :status, default: 'open'
       t.text :notes
       t.belongs_to :club, index: true
       

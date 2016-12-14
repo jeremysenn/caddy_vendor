@@ -2,22 +2,27 @@
 
 %p
   %b Member:
-  = @player.member
+  = @player.member.full_name
 %p
   %b Caddy:
-  = @player.caddy
+  = @player.caddy.full_name
 %p
   %b Event:
-  = @player.event
+  = @player.event.title
+  %br
+  = @player.event.start
+%p
+  %b Round:
+  = @player.round_as_string
 %p
   %b Caddy type:
   = @player.caddy_type
 %p
   %b Fee:
-  = @player.fee
+  = number_to_currency(@player.fee)
 %p
   %b Tip:
-  = @player.tip
+  = number_to_currency(@player.tip)
 
 = link_to 'Edit', edit_player_path(@player)
 \|

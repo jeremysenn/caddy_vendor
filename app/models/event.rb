@@ -36,6 +36,10 @@ class Event < ApplicationRecord
     return total
   end
   
+  def not_paid?
+    players.where.not(status: 'paid').count > 0
+  end
+  
   #############################
   #     Class Methods         #
   #############################

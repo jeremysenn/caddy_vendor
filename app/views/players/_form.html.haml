@@ -1,13 +1,68 @@
-= simple_form_for(@player) do |f|
-  = f.error_notification
+%h3= @player.event.title
+= form_for @player, :html => {class: 'form-horizontal', role: 'form'} do |f|
+  .row.form-group
+    %div{:class => "col-sm-12"}
+      %label.col-sm-1.control-label.lead{for: "player_member"} 
+        Member
+      .col-sm-6
+        = f.collection_select :member_id, current_user.members, :id, :full_name, class: 'input-lg form-control', required: true
+  .row.form-group
+    %div{:class => "col-sm-12"}
+      %label.col-sm-1.control-label.lead{for: "player_caddy"} 
+        Caddy
+      .col-sm-6
+        = f.collection_select :caddy_id, current_user.caddies, :id, :full_name, class: 'input-lg form-control', required: true
+  .row.form-group
+    %div{:class => "col-sm-12"}
+      .col-sm-6
+        .btn-group-horizontal{"data-toggle" => "buttons"}
+          %label.btn.btn-secondary{class: "#{(@player.new_record? or @player.eighteen_holes? ) ? 'active' : ''}"}
+            = f.radio_button :round, '18', :checked => @player.new_record?
+            Eighteen
+          %label.btn.btn-secondary{class: "#{@player.nine_holes? ? 'active' : ''}"}
+            = f.radio_button :round, '9'
+            Nine
+  .row.form-group
+    %div{:class => "col-sm-12"}
+      .col-sm-6
+        .btn-group-horizontal{"data-toggle" => "buttons"}
+          %label.btn.btn-secondary{class: "#{(@player.new_record? or @player.carry? ) ? 'active' : ''}"}
+            = f.radio_button :caddy_type, 'Carry', :checked => @player.new_record?
+            Carry
+          %label.btn.btn-secondary{class: "#{(@player.chase? ) ? 'active' : ''}"}
+            = f.radio_button :caddy_type, 'Chase'
+            Chase
+  .row.form-group
+    %div{:class => "col-sm-12"}
+      %label.col-sm-1.control-label.lead{for: "player_fee"} 
+        Fee
+      .col-sm-2
+        .input-group
+          .input-group-addon $
+          = f.text_field :fee, placeholder:'Fee', value: @player.pay_rate, class: 'input-lg form-control', required: true, readonly: true
+  .row.form-group
+    %div{:class => "col-sm-12"}
+      %label.col-sm-1.control-label.lead{for: "player_tip"} 
+        Tip
+      .col-sm-2
+        .input-group
+          .input-group-addon $
+          = f.text_field :tip, placeholder:'Tip', class: 'input-lg form-control'
+  .row.form-group
+    %div{:class => "col-sm-12"}
+      .col-sm-6
+        = f.submit "Submit", :class => 'btn btn-primary'
+-#
+  = simple_form_for(@player) do |f|
+    = f.error_notification
 
-  .form-inputs
-    = f.association :member
-    = f.association :caddy
-    = f.association :event
-    = f.input :caddy_type
-    = f.input :fee
-    = f.input :tip
+    .form-inputs
+      = f.association :member
+      = f.association :caddy
+      = f.association :event
+      = f.input :caddy_type
+      = f.input :fee
+      = f.input :tip
 
-  .form-actions
-    = f.button :submit
+    .form-actions
+      = f.button :submit

@@ -6,7 +6,7 @@ class CreatePlayers < ActiveRecord::Migration[5.0]
       t.belongs_to :event, foreign_key: true
       t.string :caddy_type
       t.string :status
-      t.string :round
+      t.integer :round
       t.decimal :fee, :precision => 7, :scale => 2
       t.decimal :tip, :precision => 7, :scale => 2
 

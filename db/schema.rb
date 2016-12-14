@@ -19,10 +19,11 @@ ActiveRecord::Schema.define(version: 20161209162106) do
     t.string   "color"
     t.string   "size"
     t.string   "round"
+    t.string   "status",     default: "open"
     t.text     "notes"
     t.integer  "club_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.index ["club_id"], name: "index_events_on_club_id"
   end
 
@@ -32,7 +33,7 @@ ActiveRecord::Schema.define(version: 20161209162106) do
     t.integer  "event_id"
     t.string   "caddy_type"
     t.string   "status"
-    t.string   "round"
+    t.integer  "round"
     t.decimal  "fee",        precision: 7, scale: 2
     t.decimal  "tip",        precision: 7, scale: 2
     t.datetime "created_at",                         null: false

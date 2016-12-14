@@ -1,5 +1,6 @@
 class Player < ApplicationRecord
-  belongs_to :member
+  
+  belongs_to :member, :foreign_key => "member_id", :class_name => 'Customer'
   belongs_to :caddy
   belongs_to :event, optional: true
   
@@ -39,6 +40,14 @@ class Player < ApplicationRecord
     round == '9'
   end
   
+  def round_as_string
+    if eighteen_holes?
+      "Eighteen Holes"
+    elsif nine_holes?
+      "Nine Holes"
+    end
+  end
+  
   def pay_rate
    caddy_pay_rate = CaddyPayRate.where(ClubCompanyID: event.club.company.id, RankingAcronym: caddy.RankingAcronym, Type: caddy_type, NbrHoles: round.to_i).first
    unless caddy_pay_rate.blank?
@@ -46,6 +55,10 @@ class Player < ApplicationRecord
    else
      0
    end
+  end
+  
+  def member
+    Customer.find(member_id)
   end
   
   #############################
