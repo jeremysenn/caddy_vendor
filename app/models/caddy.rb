@@ -4,7 +4,10 @@ class Caddy < ApplicationRecord
   
   establish_connection :ez_cash
   
+  belongs_to :company, :foreign_key => "ClubCompanyNbr"
+  
 #  has_and_belongs_to_many :clubs
+
   
   #############################
   #     Instance Methods      #
@@ -24,6 +27,10 @@ class Caddy < ApplicationRecord
   
   def customer
     Customer.where(CustomerID: self.CustomerID).first
+  end
+  
+  def account
+    customer.account unless customer.blank?
   end
   
   #############################

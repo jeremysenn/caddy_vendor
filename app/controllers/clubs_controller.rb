@@ -1,11 +1,12 @@
 class ClubsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_club, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /clubs
   # GET /clubs.json
   def index
-    @clubs = current_user.company.clubs
+    @clubs = current_user.clubs
   end
 
   # GET /clubs/1

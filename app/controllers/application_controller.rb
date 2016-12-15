@@ -3,6 +3,11 @@ class ApplicationController < ActionController::Base
   
   helper_method :current_club
   
+  rescue_from CanCan::AccessDenied do |exception|
+    flash[:danger] = exception.message
+    redirect_to root_url
+  end
+  
   def current_club=(club)
     session[:club_id] = club.id
   end

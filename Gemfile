@@ -64,6 +64,12 @@ gem 'activerecord-sqlserver-adapter', :github => 'rails-sqlserver/activerecord-s
 # Flexible authentication solution for Rails with Warden.
 gem 'devise'
 
+# SOAP calls to personalfinancesystem.com web services
+gem 'savon'
+
+# Authorization
+gem 'cancancan'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri

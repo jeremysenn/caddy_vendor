@@ -1,11 +1,12 @@
 class CaddiesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_caddy, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /caddies
   # GET /caddies.json
   def index
-    @caddies = Caddy.all
+    @caddies = current_user.caddies
   end
 
   # GET /caddies/1

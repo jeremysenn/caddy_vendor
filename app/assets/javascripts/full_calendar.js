@@ -60,6 +60,7 @@ initialize_calendar = function() {
           $('.end_hidden').val(moment(event.end).format('YYYY-MM-DD HH:mm'));
         });
       }
+      
     });
   })
 };
