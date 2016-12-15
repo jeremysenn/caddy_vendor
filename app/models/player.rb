@@ -33,11 +33,11 @@ class Player < ApplicationRecord
   end
   
   def eighteen_holes?
-    round == '18'
+    round == 18
   end
   
   def nine_holes?
-    round == '9'
+    round == 9
   end
   
   def round_as_string
@@ -48,10 +48,10 @@ class Player < ApplicationRecord
     end
   end
   
-  def pay_rate
-   caddy_pay_rate = CaddyPayRate.where(ClubCompanyID: event.club.company.id, RankingAcronym: caddy.RankingAcronym, Type: caddy_type, NbrHoles: round.to_i).first
-   unless caddy_pay_rate.blank?
-     caddy_pay_rate.Payrate
+  def caddy_pay_rate
+   pay_rate = CaddyPayRate.where(ClubCompanyID: event.club.company.id, RankingAcronym: caddy.RankingAcronym, Type: caddy_type, NbrHoles: round).first
+   unless pay_rate.blank?
+     pay_rate.Payrate
    else
      0
    end

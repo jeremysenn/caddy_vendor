@@ -7,10 +7,17 @@ class Event < ApplicationRecord
   validates :title, presence: true
   attr_accessor :date_range
   
-  
   #############################
   #     Instance Methods      #
   #############################
+  
+  def player_names
+    names = ''
+    players.each do |player|
+      names = names + ' ' + player.member.full_name
+    end
+    return names
+  end
   
   def all_day_event?
     self.start == self.start.midnight && self.end == self.end.midnight ? true : false
@@ -38,6 +45,18 @@ class Event < ApplicationRecord
   
   def not_paid?
     players.where.not(status: 'paid').count > 0
+  end
+  
+  def open?
+    status == 'open'
+  end
+  
+  def closed?
+    status == 'closed'
+  end
+  
+  def paid?
+    status == 'paid'
   end
   
   #############################

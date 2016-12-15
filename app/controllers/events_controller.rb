@@ -48,6 +48,9 @@ class EventsController < ApplicationController
   # PATCH/PUT /events/1.json
   def update
     @event.update(event_params)
+    if params[:pay]
+      redirect_to @event, notice: 'Select Member and Caddy for Payment'
+    end
 #    respond_to do |format|
 #      if @event.update(event_params)
 #        format.html { redirect_to @event, notice: 'Event was successfully updated.' }
@@ -77,7 +80,7 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:title, :date_range, :start, :end, :color, :size, :round, :notes, :club_id, 
+      params.require(:event).permit(:title, :date_range, :start, :end, :color, :size, :round, :status, :notes, :club_id, 
         players_attributes:[:event_id, :member_id, :caddy_id, :caddy_type, :fee, :tip, :round, :status, :_destroy,:id])
     end
 end

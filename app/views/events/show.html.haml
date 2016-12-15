@@ -1,23 +1,23 @@
 .container
-  %h1= @event.title
+  %br
   %table.table.table-striped
-    %thead.thead-inverse
+    %thead
       %tr
         %th Member
         %th Caddy
         %th Type
         %th Fee
         %th Tip
-        %th Total
+        %th
     %tbody
       - @event.players.each do |player|
         %tr
           %td= player.member.full_name
           %td= player.caddy.full_name
           %td= player.caddy_type
-          %td= number_to_currency(player.fee)
+          %td= number_to_currency(player.caddy_pay_rate)
           %td= number_to_currency(player.tip)
-          %td= number_to_currency(player.total)
+          %td= link_to 'Pay', '#', class: 'btn btn-success'
     %tfoot
       %tr
         %th
@@ -25,6 +25,6 @@
         %th
         %th
         %th
-        %th= number_to_currency(@event.players_total)
-  = link_to 'Cancel', :back, class: 'btn btn-lg btn-secondary'
-  = link_to 'Pay', '#', class: 'btn btn-lg btn-primary'
+  -#
+    = link_to 'Cancel', :back, class: 'btn btn-secondary'
+    = link_to 'Pay', '#', class: 'btn btn-primary'
