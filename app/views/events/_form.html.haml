@@ -1,10 +1,11 @@
 = form_for @event, :html => {class: 'form-horizontal event_form', role: 'form'}, remote: true do |f|
-  .row.form-group
-    %div{:class => "col-sm-12"}
-      %label.col-sm-2.control-label.lead{for: "event_title"} 
-        Title
-      .col-sm-10
-        = f.text_field :title, placeholder:'Title', class: 'input-lg form-control', autofocus: true, required: true
+  -#
+    .row.form-group
+      %div{:class => "col-sm-12"}
+        %label.col-sm-2.control-label.lead{for: "event_title"} 
+          Title
+        .col-sm-10
+          = f.text_field :title, placeholder:'Title', class: 'input-lg form-control', autofocus: true, required: true
   -#
     .row.form-group
       %div{:class => "col-sm-12"}
