@@ -12,9 +12,9 @@ class ApplicationController < ActionController::Base
     session[:club_id] = club.id
   end
   
-  # If i don't find a club from session i return null object
+  # If i don't find a club from session I return the current_user company's first club.
   def current_club
-    Club.find_by(ClubCourseID: session[:club_id]) || NullClub.new
+    Club.find_by(ClubCourseID: session[:club_id]) || current_user.company.clubs.first
   end
   
 end
