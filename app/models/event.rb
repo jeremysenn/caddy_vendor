@@ -2,7 +2,7 @@ class Event < ApplicationRecord
   belongs_to :club
   
   has_many :players, :dependent => :destroy
-  accepts_nested_attributes_for :players, allow_destroy: true, limit: 3
+  accepts_nested_attributes_for :players, allow_destroy: true, limit: 5
   
   validates :title, presence: true
   attr_accessor :date_range
