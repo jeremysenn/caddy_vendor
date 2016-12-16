@@ -77,7 +77,7 @@ class Ability
       # Transfers
       ############
       can :manage, Transfer do |transfer|
-        transfer.player.event.company == user.company
+        transfer.player.event.club.company == user.company
       end
       can :create, :transfers
       
