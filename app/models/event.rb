@@ -44,7 +44,7 @@ class Event < ApplicationRecord
   end
   
   def not_paid?
-    players.where.not(status: 'paid').count > 0
+    players.where(status: [nil, 'open', 'closed']).count > 0
   end
   
   def open?
