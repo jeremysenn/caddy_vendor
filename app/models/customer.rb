@@ -316,6 +316,14 @@ class Customer < ActiveRecord::Base
     CustomerCard.where(CustomerID: id)
   end
   
+  def first_name
+    self.NameF
+  end
+  
+  def last_name
+    self.NameL
+  end
+  
   def full_name
     "#{self.NameF} #{self.NameL}"
   end

@@ -2,9 +2,9 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :first_name
-    = f.input :last_name
-    = f.collection_select :club_ids, Club.order(:name), :id, :name, {}, {multiple: true}
+    = f.input :first_name, disabled: true
+    = f.input :last_name, disabled: true
+    = f.input :RankingAcronym, collection: current_user.company.caddy_rankings_array, include_blank: false
 
   .form-actions
     = f.button :submit

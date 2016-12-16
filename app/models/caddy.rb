@@ -5,6 +5,7 @@ class Caddy < ApplicationRecord
   establish_connection :ez_cash
   
   belongs_to :company, :foreign_key => "ClubCompanyNbr"
+  belongs_to :customer, :foreign_key => "CustomerID"
   
 #  has_and_belongs_to_many :clubs
 
@@ -25,9 +26,9 @@ class Caddy < ApplicationRecord
     "#{first_name} #{last_name}"
   end
   
-  def customer
-    Customer.where(CustomerID: self.CustomerID).first
-  end
+#  def customer
+#    Customer.where(CustomerID: self.CustomerID).first
+#  end
   
   def account
     customer.account unless customer.blank?

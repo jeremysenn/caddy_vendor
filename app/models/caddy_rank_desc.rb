@@ -4,6 +4,8 @@ class CaddyRankDesc < ApplicationRecord
   
   establish_connection :ez_cash
   
+  belongs_to :company
+  
   
   #############################
   #     Instance Methods      #

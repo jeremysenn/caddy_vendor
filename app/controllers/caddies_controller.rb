@@ -71,6 +71,6 @@ class CaddiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def caddy_params
-      params.require(:caddy).permit(:first_name, :last_name, :club_ids => [])
+      params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym)
     end
 end

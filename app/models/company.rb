@@ -10,12 +10,22 @@ class Company < ActiveRecord::Base
   has_many :caddies, :foreign_key => "ClubCompanyNbr"
   has_many :customers, :foreign_key => "CompanyNumber"
   
+  has_many :caddy_rank_descs, :foreign_key => "ClubCompanyID"
+  
   #############################
   #     Instance Methods      #
   #############################
   
   def account
     Account.where(CompanyNumber: self.CompanyNumber, CustomerID: nil).last
+  end
+  
+  def caddy_rankings_array
+    rankings = []
+    caddy_rank_descs.each do |caddy_rank|
+      rankings << caddy_rank.RankingAcronym
+    end
+    return rankings
   end
   
 #  def members

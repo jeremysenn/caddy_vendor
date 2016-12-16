@@ -6,6 +6,7 @@
         %th Member
         %th Caddy
         %th Type
+        %th Round
         %th Fee
         %th Tip
         %th
@@ -15,6 +16,7 @@
           %td= player.member.full_name
           %td= player.caddy.full_name
           %td= player.caddy_type
+          %td= player.round
           %td= number_to_currency("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}")
           %td= number_to_currency("#{player.tip.blank? ? '0' : player.tip}")
           %td
