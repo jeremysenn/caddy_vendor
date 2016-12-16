@@ -18,9 +18,10 @@
           %td= number_to_currency("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}")
           %td= number_to_currency("#{player.tip.blank? ? '0' : player.tip}")
           %td
-            - unless player.paid?
+            - unless player.paid? or player.caddy.account.blank?
               %button.btn.btn-success{"data-target" => "#player_#{player.id}_payment", "data-toggle" => "modal", :type => "button"}
                 Pay
+            = "No account for Caddy" if player.caddy.account.blank?
         - unless player.paid?
           / Payment Modal
           .modal.fade{id: "player_#{player.id}_payment", "aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
@@ -35,7 +36,7 @@
                     = f.hidden_field :customer_id, value: player.member_id
                     = f.hidden_field :player_id, value: player.id
                     = f.hidden_field :from_account, value: player.member.account.id
-                    = f.hidden_field :to_account, value: player.caddy.account.id
+                    = f.hidden_field :to_account, value: player.caddy.account.id unless player.caddy.account.blank?
                     = f.hidden_field :fee, value: 0 # Don't add in additional ATM fee at this time
                     .row.form-group
                       %div{:class => "col-sm-12"}

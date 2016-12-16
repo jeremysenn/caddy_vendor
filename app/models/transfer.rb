@@ -150,6 +150,7 @@ class Transfer < ApplicationRecord
   
   def update_player
     player.update_attributes(status: 'paid', fee: caddy_fee, tip: caddy_tip)
+    player.event.update_attribute(:color, 'green')
   end
   
   #############################

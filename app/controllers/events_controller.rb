@@ -33,6 +33,9 @@ class EventsController < ApplicationController
   def create
     @event = Event.new(event_params)
     @event.save
+    if params[:pay]
+      redirect_to @event, notice: 'Select Member and Caddy for Payment'
+    end
 
 #    respond_to do |format|
 #      if @event.save

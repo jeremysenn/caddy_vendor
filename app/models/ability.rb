@@ -59,20 +59,27 @@ class Ability
       # Events
       ############
       can :manage, Event do |event|
-        event.club.company == user.company
+        unless event.club.blank?
+          event.club.company == user.company
+        else
+          true
+        end
       end
+      can :create, :events
       
       # Players
       ############
       can :manage, Player do |player|
         player.event.company == user.company
       end
+      can :create, :players
       
       # Transfers
       ############
       can :manage, Transfer do |transfer|
         transfer.player.event.company == user.company
       end
+      can :create, :transfers
       
     end
     
