@@ -2,7 +2,7 @@ class Transfer < ApplicationRecord
   belongs_to :customer
   belongs_to :player
   
-  after_create :transfer_web_service_call
+#  after_create :transfer_web_service_call
   after_create :update_player
   
 #  validates :from_account, :to_account, :amount, :fee, presence: true
