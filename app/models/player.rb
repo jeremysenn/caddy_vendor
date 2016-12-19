@@ -5,7 +5,7 @@ class Player < ApplicationRecord
   belongs_to :event, optional: true
   has_one :transfer
   
-  validates :tip, numericality: { :greater_than_or_equal_to => 0 }
+#  validates :tip, numericality: { :greater_than_or_equal_to => 0 }
   
   #############################
   #     Instance Methods      #
