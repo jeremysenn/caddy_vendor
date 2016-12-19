@@ -42,6 +42,10 @@ gem 'haml-rails'
 # Bootstrap 4 Ruby Gem for Rails / Sprockets and Compass. https://rubygems.org/gems/bootstrap
 gem 'bootstrap'
 
+source 'https://rails-assets.org' do
+  gem 'rails-assets-tether', '>= 1.1.0'
+end
+
 # Font-Awesome Sass gem for use in Ruby/Rails projects
 gem 'font-awesome-sass'
 

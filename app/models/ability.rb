@@ -70,7 +70,7 @@ class Ability
       # Players
       ############
       can :manage, Player do |player|
-        player.event.company == user.company
+        player.event.club.company == user.company
       end
       can :create, :players
       

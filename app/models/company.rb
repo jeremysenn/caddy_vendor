@@ -7,7 +7,7 @@ class Company < ActiveRecord::Base
   has_many :users
   has_many :clubs, :foreign_key => "ClubCompanyNumber"
   has_many :members, -> { members }, :foreign_key => "CompanyNumber", :class_name => 'Customer' # Use 'members' scope in Customer
-  has_many :caddies, :foreign_key => "ClubCompanyNbr"
+  has_many :caddies, :through => :clubs
   has_many :customers, :foreign_key => "CompanyNumber"
   
   has_many :caddy_rank_descs, :foreign_key => "ClubCompanyID"

@@ -1,13 +1,23 @@
 class Player < ApplicationRecord
   
   belongs_to :member, :foreign_key => "member_id", :class_name => 'Customer'
-  belongs_to :caddy
+#  belongs_to :caddy
   belongs_to :event, optional: true
   has_one :transfer
+  
+  validates :tip, numericality: { :greater_than_or_equal_to => 0 }
   
   #############################
   #     Instance Methods      #
   #############################
+  
+  def caddy
+    Caddy.where(CustomerID: caddy_id, ClubCompanyNbr: club.id).first
+  end
+  
+  def club
+    event.club
+  end
   
   def carry?
     caddy_type == "Carry"
@@ -50,7 +60,7 @@ class Player < ApplicationRecord
   end
   
   def caddy_pay_rate
-   pay_rate = CaddyPayRate.where(ClubCompanyID: event.club.company.id, RankingAcronym: caddy.RankingAcronym, Type: caddy_type, NbrHoles: round).first
+   pay_rate = CaddyPayRate.where(ClubCompanyID: club.id, RankingAcronym: caddy.RankingAcronym, Type: caddy_type, NbrHoles: round).first
    unless pay_rate.blank?
      pay_rate.Payrate
    else

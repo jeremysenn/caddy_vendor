@@ -1,6 +1,6 @@
 class PlayersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_player, only: [:show, :edit, :update, :destroy]
+  before_action :set_player, only: [:show, :edit, :update, :destroy, :update_tip]
   load_and_authorize_resource
 
   # GET /players
@@ -43,11 +43,26 @@ class PlayersController < ApplicationController
   # PATCH/PUT /players/1.json
   def update
     respond_to do |format|
-      if @player.update(player_params)
+      if @player.update_attributes(player_params)
         format.html { redirect_to @player, notice: 'Player was successfully updated.' }
+#        render json: {}, status: :ok 
         format.json { render :show, status: :ok, location: @player }
       else
-        format.html { render :edit }
+        format.html { render action: "edit" }
+        format.json { render json: @player.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
+  
+  def update_tip
+    respond_to do |format|
+      if @player.update_attribute(:tip, params[:value])
+        format.html { redirect_to @player, notice: 'Player was successfully updated.' }
+#        render json: {}, status: :ok 
+        format.json { render :show, status: :ok, location: @player }
+      else
+        format.html { render action: "edit" }
         format.json { render json: @player.errors, status: :unprocessable_entity }
       end
     end

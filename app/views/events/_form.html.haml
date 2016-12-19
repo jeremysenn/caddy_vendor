@@ -49,7 +49,7 @@
                   .col-sm-6
                     = ff.collection_select :member_id, current_user.members, :id, :full_name, class: 'input-lg form-control', required: true
                   .col-sm-6
-                    = ff.collection_select :caddy_id, current_user.caddies, :id, :full_name, class: 'input-lg form-control', required: true
+                    = ff.collection_select :caddy_id, current_club.caddies, :id, :full_name, class: 'input-lg form-control', required: true
               - else
                 .row.form-group
                   .col-sm-6

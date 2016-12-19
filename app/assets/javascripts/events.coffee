@@ -12,3 +12,36 @@ jQuery ->
       sum = parseFloat(caddy_fee)
     $(this).closest(".modal").find('#transfer_amount').val sum
     return
+
+  ### Edit in place ###
+  # turn to inline mode
+  $.fn.editable.defaults.mode = 'inline';
+
+  # Force all elements submit via PUT method
+  # $.fn.editable.defaults.ajaxOptions = {type: "put"}
+
+  $('#players').editable
+    selector: '.tip'
+
+    title: 'Tip'
+    name: 'tip'
+    #placeholder: 'Required'
+    #display: (value) ->
+    #  $(this).text value + '$'
+    #  return
+    ajaxOptions: 
+      type: 'put'
+      dataType: 'json'
+    validate: (value) ->
+      if $.trim(value) == ''
+        return 'This field is required'
+      if ! $.isNumeric(value) or value < 0
+        return 'Must be a positive number'
+      return
+    success: (response, newValue) ->
+      if response.status == 'error'
+        return response.msg
+      #msg will be shown in editable form
+      return
+  return
+  ### End Edit in place ###
