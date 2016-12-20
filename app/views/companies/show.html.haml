@@ -1,21 +1,21 @@
 .container
-  %p
-    %b Name:
+  %p.lead
+    Name:
     = @company.CompanyName
-  %p
-    %b Clubs:
+  %p.lead
+    Clubs:
     %br
     - @company.clubs.each do |club|
       = link_to club.name, club
       %br
-  %p
-    %b Members:
+  %p.lead
+    Members:
     %br
     - @company.members.each do |member|
       = link_to member.full_name, member
       %br
-  %p
-    %b Caddies:
+  %p.lead
+    Caddies:
     %br
     - @company.caddies.each do |caddy|
       = link_to caddy.full_name, caddy
