@@ -1,9 +1,9 @@
 .container
-  %p
-    %b First name:
+  %p.lead
+    First name:
     = @customer.first_name
-  %p
-    %b Last name:
+  %p.lead
+    Last name:
     = @customer.last_name
 
   = link_to 'Edit', edit_customer_path(@customer)

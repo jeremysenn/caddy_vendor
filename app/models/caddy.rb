@@ -4,7 +4,7 @@ class Caddy < ApplicationRecord
   
   establish_connection :ez_cash
   
-  belongs_to :company, :foreign_key => "ClubCompanyNbr"
+  belongs_to :club, :foreign_key => "ClubCompanyNbr"
   belongs_to :customer, :foreign_key => "CustomerID"
   
 #  has_and_belongs_to_many :clubs

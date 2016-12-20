@@ -47,7 +47,7 @@ class Ability
       # Caddies
       ############
       can :manage, Caddy do |caddy|
-        caddy.company == user.company
+        caddy.club.company == user.company
       end
       
       # Customers

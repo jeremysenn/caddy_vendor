@@ -18,7 +18,7 @@
     Caddies:
     %br
     - @company.caddies.each do |caddy|
-      = link_to caddy.full_name, caddy
+      = link_to "#{caddy.full_name} (#{caddy.club.name})", caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr)
       %br
 
   = link_to 'Edit', edit_company_path(@company)

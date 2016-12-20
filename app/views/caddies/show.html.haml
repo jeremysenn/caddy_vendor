@@ -1,15 +1,15 @@
 .container
-  %p
-    %b First name:
+  %p.lead
+    First name:
     = @caddy.first_name
-  %p
-    %b Last name:
+  %p.lead
+    Last name:
     = @caddy.last_name
-  %p
-    %b Ranking:
+  %p.lead
+    Ranking:
     = @caddy.RankingAcronym
 
 
-  = link_to 'Edit', edit_caddy_path(@caddy)
+  = link_to 'Edit', edit_caddy_path(@caddy.id, club_id: @caddy.ClubCompanyNbr)
   \|
   = link_to 'Back', caddies_path

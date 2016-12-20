@@ -16,7 +16,7 @@
     %br
     - unless @caddies.blank?
       - @caddies.each do |caddy|
-        = link_to caddy.full_name, caddy
+        = link_to "#{caddy.full_name}", caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr)
         %br
     - else
       None

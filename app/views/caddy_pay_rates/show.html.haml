@@ -1,18 +1,18 @@
 .container
-  %p
-    %b Club:
+  %p.lead
+    Club:
     = @caddy_pay_rate.club.name
-  %p
-    %b Ranking:
+  %p.lead
+    Ranking:
     = @caddy_pay_rate.RankingAcronym
-  %p
-    %b Type:
+  %p.lead
+    Type:
     = @caddy_pay_rate.Type
-  %p
-    %b Holes:
+  %p.lead
+    Holes:
     = @caddy_pay_rate.NbrHoles
-  %p
-    %b Rate:
+  %p.lead
+    Rate:
     = number_to_currency(@caddy_pay_rate.Payrate)
 
   = link_to 'Edit', edit_caddy_pay_rate_path(@caddy_pay_rate.id, ranking_acronym: @caddy_pay_rate.RankingAcronym)
