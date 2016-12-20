@@ -2,7 +2,7 @@
   %br
   %h3= @event.club.name
   %p.lead= @event.start.strftime("%-m/%-d/%y %l:%M %p")
-  .float-right
+  #player_total.pull-right
     %p.lead 
       Total
       = number_to_currency(@event.players_total)
