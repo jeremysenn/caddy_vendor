@@ -46,6 +46,7 @@ class CaddyPayRatesController < ApplicationController
   # PATCH/PUT /caddy_pay_rates/1
   # PATCH/PUT /caddy_pay_rates/1.json
   def update
+    @caddy_pay_rate = CaddyPayRate.where(ClubCompanyID: params[:id], RankingAcronym: caddy_pay_rate_params[:ranking_acronym]).first
     respond_to do |format|
       if @caddy_pay_rate.update(caddy_pay_rate_params)
 #        format.html { redirect_to @caddy_pay_rate, notice: 'CaddyPayRate was successfully updated.' }
