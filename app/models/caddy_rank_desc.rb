@@ -4,7 +4,7 @@ class CaddyRankDesc < ApplicationRecord
   
   establish_connection :ez_cash
   
-  belongs_to :company
+  belongs_to :club, :foreign_key => "ClubCompanyID"
   
   
   #############################

@@ -1,0 +1,20 @@
+.container
+  %p
+    %b Club:
+    = @caddy_pay_rate.club.name
+  %p
+    %b Ranking:
+    = @caddy_pay_rate.RankingAcronym
+  %p
+    %b Type:
+    = @caddy_pay_rate.Type
+  %p
+    %b Holes:
+    = @caddy_pay_rate.NbrHoles
+  %p
+    %b Rate:
+    = number_to_currency(@caddy_pay_rate.Payrate)
+
+  = link_to 'Edit', edit_caddy_pay_rate_path(@caddy_pay_rate.id, ranking_acronym: @caddy_pay_rate.RankingAcronym)
+  \|
+  = link_to 'Back', caddy_pay_rates_path

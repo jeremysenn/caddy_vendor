@@ -1,0 +1,45 @@
+.container
+  %h1 Listing CaddyPayRates
+
+  - @caddy_pay_rates.group_by{|cpr| cpr.club}.each do |club, caddy_pay_rates|
+    %p.lead= club.name
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Ranking
+          %th Type
+          %th Holes
+          %th Rate
+          %th
+      %tbody
+        - caddy_pay_rates.each do |caddy_pay_rate|
+          %tr
+            %td= caddy_pay_rate.RankingAcronym
+            %td= caddy_pay_rate.Type
+            %td= caddy_pay_rate.NbrHoles
+            %td= number_to_currency(caddy_pay_rate.Payrate)
+            %td
+              = link_to 'Show', caddy_pay_rate_path(caddy_pay_rate.ClubCompanyID, ranking_acronym: caddy_pay_rate.RankingAcronym), class: 'btn btn-sm btn-secondary'
+              = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate.ClubCompanyID, ranking_acronym: caddy_pay_rate.RankingAcronym), class: 'btn btn-sm btn-primary'
+
+-#
+  %table
+    %thead
+      %tr
+        %th Club
+        %th
+        %th
+        %th
+
+    %tbody
+      - @caddy_pay_rates.each do |caddy_pay_rate|
+        %tr
+          %td= caddy_pay_rate.club.name
+          -#
+            %td= link_to 'Show', caddy_pay_rate
+            %td= link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate)
+            %td= link_to 'Destroy', caddy_pay_rate, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+  %br
+
+  = link_to 'New CaddyPayRate', new_caddy_pay_rate_path

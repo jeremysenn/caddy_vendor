@@ -1,0 +1,9 @@
+.container
+  %div{:class => "col-sm-6"}
+    %h1 Editing caddy pay rate
+
+    = render 'form'
+
+    = link_to 'Show', caddy_pay_rate_path(@caddy_pay_rate.ClubCompanyID, ranking_acronym: @caddy_pay_rate.RankingAcronym)
+    \|
+    = link_to 'Back', caddy_pay_rates_path

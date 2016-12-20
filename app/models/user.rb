@@ -22,6 +22,14 @@ class User < ApplicationRecord
     company.caddies
   end
   
+  def caddy_pay_rates
+    company.caddy_pay_rates
+  end
+  
+  def caddy_rank_descs
+    company.caddy_rank_descs
+  end
+  
   #############################
   #     Class Methods         #
   #############################

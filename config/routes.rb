@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :members
   resources :clubs
   resources :events
+  resources :caddy_pay_rates
   get 'welcome/index'
   root 'welcome#index'
 end

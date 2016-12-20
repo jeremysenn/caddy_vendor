@@ -45,7 +45,7 @@
                 = f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
                 = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
                 = f.hidden_field :amount, value: player.caddy_pay_rate
-                = f.submit "Pay", :class => 'btn btn-success'
+                = f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Your confirm message' }
             = "No account for Caddy" if player.caddy.account.blank?
             = "Paid" if player.paid?
         - unless player.paid?

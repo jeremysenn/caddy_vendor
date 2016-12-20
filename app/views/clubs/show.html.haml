@@ -1,15 +1,7 @@
--#
-  .container
-    %br
-    - unless current_club.blank?
-      %p.lead.text-xs-right= current_club.name
-    .calendar
-    #remote_container
 
--#
 .container
-  %p
-    %b Name:
+  %p.lead 
+    Name:
     = @club.name
   -#
     %p
@@ -18,8 +10,9 @@
       - @club.members.each do |member|
         = link_to member.full_name, member
         %br
-  %p
-    %b Caddies:
+
+  %p.lead 
+    Caddies:
     %br
     - unless @caddies.blank?
       - @caddies.each do |caddy|
@@ -27,6 +20,27 @@
         %br
     - else
       None
+
+  %p.lead Caddy Pay Rates:
+  %table.table.table-striped
+    %thead
+      %tr
+        %th Ranking
+        %th Type
+        %th Holes
+        %th Rate
+        %th
+    %tbody
+      - @caddy_pay_rates.each do |caddy_pay_rate|
+        %tr
+          %td= caddy_pay_rate.RankingAcronym
+          %td= caddy_pay_rate.Type
+          %td= caddy_pay_rate.NbrHoles
+          %td= number_to_currency(caddy_pay_rate.Payrate)
+          %td
+            = link_to 'Show', caddy_pay_rate_path(caddy_pay_rate.ClubCompanyID, ranking_acronym: caddy_pay_rate.RankingAcronym), class: 'btn btn-sm btn-secondary'
+            = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate.ClubCompanyID, ranking_acronym: caddy_pay_rate.RankingAcronym), class: 'btn btn-sm btn-primary'
+
 
   = link_to 'Edit', edit_club_path(@club)
   \|

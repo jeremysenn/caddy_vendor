@@ -81,6 +81,12 @@ class Ability
       end
       can :create, :transfers
       
+      # CaddyPayRates
+      ############
+      can :manage, CaddyPayRate do |caddy_pay_rate|
+        caddy_pay_rate.club.company == user.company
+      end
+      
     end
     
   end

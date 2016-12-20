@@ -14,6 +14,7 @@ class ClubsController < ApplicationController
   def show
     session[:club_id] = @club.id
     @caddies = @club.caddies
+    @caddy_pay_rates = @club.caddy_pay_rates
   end
 
   # GET /clubs/new
