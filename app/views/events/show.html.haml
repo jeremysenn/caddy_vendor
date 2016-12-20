@@ -20,11 +20,16 @@
           %td= player.caddy_type
           %td= player.round
           %td
-            = "#{player.fee.blank? ? number_to_currency(player.caddy_pay_rate) : number_to_currency(player.fee)}"
-          %td
+            =# "#{player.fee.blank? ? number_to_currency(player.caddy_pay_rate) : number_to_currency(player.fee)}"
+            $
+            = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 2)
+          %td.text-primary
             =# number_to_currency("#{player.tip.blank? ? '0' : player.tip}")
-            %a{href: nil, class: 'tip', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_tip"}
-              = "#{player.tip.blank? ? '0' : player.tip}"
+            $
+            %a{href: nil, class: 'tip', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_tip", "data-value" => player.tip.blank? ? '0' : player.tip}
+              = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 2)
+              =# number_to_currency("#{player.tip.blank? ? '0' : player.tip}")
+
           %td
             - unless player.paid? or player.caddy.account.blank?
               %button.btn.btn-success{"data-target" => "#player_#{player.id}_payment", "data-toggle" => "modal", :type => "button"}

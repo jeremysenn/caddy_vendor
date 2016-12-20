@@ -27,7 +27,7 @@ jQuery ->
       name: 'tip'
       #placeholder: 'Required'
       #display: (value) ->
-      #  $(this).text value + '$'
+      #  $(this).text '$' + value
       #  return
       ajaxOptions: 
         type: 'put'
