@@ -4,7 +4,6 @@
   %p.lead
     = @event.start.strftime("%-m/%-d/%y %l:%M %p")
     #player_total.pull-right
-      Total
       = number_to_currency(@event.players_total)
   %table.table.table-striped#players
     %thead
@@ -48,7 +47,7 @@
                 = f.hidden_field :fee, value: 0 # Don't add in additional ATM fee at this time
                 = f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
                 = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
-                = f.hidden_field :amount, value: player.caddy_pay_rate
+                = f.hidden_field :amount, value: player.caddy_pay_rate, class: 'amount'
                 = f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure?' }
             = "No account for Caddy" if player.caddy.account.blank?
             = "Paid" if player.paid?
