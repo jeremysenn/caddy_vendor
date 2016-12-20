@@ -42,7 +42,7 @@ jQuery ->
         if response.status == 'error'
           return response.msg
         caddy_fee = parseFloat($(this).closest('tr').find('#transfer_caddy_fee:first').val())
-        caddy_tip = newValue
+        caddy_tip = parseFloat(newValue)
         $(this).closest('tr').find('#transfer_caddy_tip:first').val caddy_tip
         $(this).closest('tr').find('#transfer_amount:first').val caddy_fee + caddy_tip
         sum = 0
