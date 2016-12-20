@@ -35,7 +35,7 @@
             - else
               = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 2)
           %td
-            - unless player.paid? or player.caddy.account.blank?
+            - unless player.caddy.account.blank?
               -#
                 %button.btn.btn-success{"data-target" => "#player_#{player.id}_payment", "data-toggle" => "modal", :type => "button"}
                   Pay
@@ -48,7 +48,7 @@
                 = f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
                 = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
                 = f.hidden_field :amount, value: player.total, class: 'amount'
-                = f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure?' }
+                = f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure?' } unless player.paid?
             = "No account for Caddy" if player.caddy.account.blank?
             = "Paid" if player.paid?
         - unless player.paid?
