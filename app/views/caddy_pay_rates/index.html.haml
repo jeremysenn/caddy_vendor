@@ -19,8 +19,8 @@
             %td= caddy_pay_rate.NbrHoles
             %td= number_to_currency(caddy_pay_rate.Payrate)
             %td
-              = link_to 'Show', caddy_pay_rate_path(caddy_pay_rate.ClubCompanyID, ranking_acronym: caddy_pay_rate.RankingAcronym), class: 'btn btn-sm btn-secondary'
-              = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate.ClubCompanyID, ranking_acronym: caddy_pay_rate.RankingAcronym), class: 'btn btn-sm btn-primary'
+              = link_to 'Show', caddy_pay_rate, class: 'btn btn-sm btn-secondary'
+              = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate), class: 'btn btn-sm btn-primary'
 
 -#
   %table

@@ -1,5 +1,5 @@
 class CaddyPayRate < ApplicationRecord
-  self.primary_key = 'ClubCompanyID'
+  self.primary_key = 'ID'
   self.table_name= 'CaddyPayRates'
   
   establish_connection :ez_cash

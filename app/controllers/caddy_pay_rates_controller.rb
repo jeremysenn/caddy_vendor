@@ -1,6 +1,6 @@
 class CaddyPayRatesController < ApplicationController
   before_action :authenticate_user!
-#  before_action :set_caddy_pay_rate, only: [:show, :edit, :update, :destroy]
+  before_action :set_caddy_pay_rate, only: [:show, :edit, :update, :destroy]
   load_and_authorize_resource
 
   # GET /caddy_pay_rates
@@ -12,8 +12,6 @@ class CaddyPayRatesController < ApplicationController
   # GET /caddy_pay_rates/1
   # GET /caddy_pay_rates/1.json
   def show
-    # Look up caddy pay rate by composite of club ID and ranking acronym
-    @caddy_pay_rate = CaddyPayRate.where(ClubCompanyID: params[:id], RankingAcronym: params[:ranking_acronym]).first
   end
 
   # GET /caddy_pay_rates/new
@@ -23,8 +21,6 @@ class CaddyPayRatesController < ApplicationController
 
   # GET /caddy_pay_rates/1/edit
   def edit
-    # Look up caddy pay rate by composite of club ID and ranking acronym
-    @caddy_pay_rate = CaddyPayRate.where(ClubCompanyID: params[:id], RankingAcronym: params[:ranking_acronym]).first
   end
 
   # POST /caddy_pay_rates
@@ -46,11 +42,9 @@ class CaddyPayRatesController < ApplicationController
   # PATCH/PUT /caddy_pay_rates/1
   # PATCH/PUT /caddy_pay_rates/1.json
   def update
-    @caddy_pay_rate = CaddyPayRate.where(ClubCompanyID: params[:id], RankingAcronym: caddy_pay_rate_params[:RankingAcronym]).first
     respond_to do |format|
       if @caddy_pay_rate.update(caddy_pay_rate_params)
-#        format.html { redirect_to @caddy_pay_rate, notice: 'CaddyPayRate was successfully updated.' }
-        format.html { redirect_to caddy_pay_rate_path(@caddy_pay_rate.id, ranking_acronym: @caddy_pay_rate.RankingAcronym), notice: 'CaddyPayRate was successfully updated.' }
+        format.html { redirect_to @caddy_pay_rate, notice: 'CaddyPayRate was successfully updated.' }
         format.json { render :show, status: :ok, location: @caddy_pay_rate }
       else
         format.html { render :edit }
@@ -71,9 +65,9 @@ class CaddyPayRatesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-#    def set_caddy_pay_rate
-#      @caddy_pay_rate = CaddyPayRate.find(params[:id])
-#    end
+    def set_caddy_pay_rate
+      @caddy_pay_rate = CaddyPayRate.find(params[:id])
+    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def caddy_pay_rate_params

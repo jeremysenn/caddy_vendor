@@ -1,5 +1,5 @@
 class CaddyRankDesc < ApplicationRecord
-#  self.primary_key = 'Transaction_ID'
+  self.primary_key = 'ID'
   self.table_name= 'CaddyRankDesc'
   
   establish_connection :ez_cash
