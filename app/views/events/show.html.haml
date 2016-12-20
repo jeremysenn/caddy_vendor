@@ -2,6 +2,10 @@
   %br
   %h3= @event.club.name
   %p.lead= @event.start.strftime("%-m/%-d/%y %l:%M %p")
+  .float-right
+    %p.lead 
+      Total
+      = number_to_currency(@event.players_total)
   %table.table.table-striped#players
     %thead
       %tr
@@ -45,7 +49,7 @@
                 = f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
                 = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
                 = f.hidden_field :amount, value: player.caddy_pay_rate
-                = f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Your confirm message' }
+                = f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure?' }
             = "No account for Caddy" if player.caddy.account.blank?
             = "Paid" if player.paid?
         - unless player.paid?
