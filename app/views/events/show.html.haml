@@ -23,18 +23,31 @@
             =# "#{player.fee.blank? ? number_to_currency(player.caddy_pay_rate) : number_to_currency(player.fee)}"
             $
             = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 2)
-          %td.text-primary
+          %td{class: "#{player.paid? ? '' : 'text-primary'}"}
             =# number_to_currency("#{player.tip.blank? ? '0' : player.tip}")
             $
-            %a{href: nil, class: 'tip', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_tip", "data-value" => player.tip.blank? ? '0' : player.tip}
+            - unless player.paid?
+              %a{href: nil, class: 'tip', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_tip", "data-value" => player.tip.blank? ? '0' : player.tip}
+                = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 2)
+            - else
               = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 2)
-              =# number_to_currency("#{player.tip.blank? ? '0' : player.tip}")
-
           %td
             - unless player.paid? or player.caddy.account.blank?
-              %button.btn.btn-success{"data-target" => "#player_#{player.id}_payment", "data-toggle" => "modal", :type => "button"}
-                Pay
+              -#
+                %button.btn.btn-success{"data-target" => "#player_#{player.id}_payment", "data-toggle" => "modal", :type => "button"}
+                  Pay
+              = form_for Transfer.new, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
+                = f.hidden_field :customer_id, value: player.member_id
+                = f.hidden_field :player_id, value: player.id
+                = f.hidden_field :from_account, value: player.member.account.id
+                = f.hidden_field :to_account, value: player.caddy.account.id unless player.caddy.account.blank?
+                = f.hidden_field :fee, value: 0 # Don't add in additional ATM fee at this time
+                = f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
+                = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
+                = f.hidden_field :amount, value: player.caddy_pay_rate
+                = f.submit "Pay", :class => 'btn btn-success'
             = "No account for Caddy" if player.caddy.account.blank?
+            = "Paid" if player.paid?
         - unless player.paid?
           / Payment Modal
           .modal.fade{id: "player_#{player.id}_payment", "aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}

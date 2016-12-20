@@ -41,6 +41,7 @@ jQuery ->
       success: (response, newValue) ->
         if response.status == 'error'
           return response.msg
+        $(this).closest('tr').find('#transfer_caddy_tip:first').val newValue
         #msg will be shown in editable form
         return
     return

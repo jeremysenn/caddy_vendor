@@ -61,7 +61,7 @@
                   .col-sm-6
                     .btn-group-horizontal{"data-toggle" => "buttons"}
                       %label.btn.btn-secondary{class: "#{(ff.object.new_record? or ff.object.eighteen_holes? ) ? 'active' : ''}"}
-                        = ff.radio_button :round, 18, :checked => @event.new_record?
+                        = ff.radio_button :round, 18, :checked => ff.object.new_record?
                         Eighteen
                       %label.btn.btn-secondary{class: "#{ff.object.nine_holes? ? 'active' : ''}"}
                         = ff.radio_button :round, 9
@@ -69,7 +69,7 @@
                   .col-sm-6
                     .btn-group-horizontal{"data-toggle" => "buttons"}
                       %label.btn.btn-secondary{class: "#{(ff.object.new_record? or ff.object.carry? ) ? 'active' : ''}"}
-                        = ff.radio_button :caddy_type, 'Carry', :checked => @event.new_record?
+                        = ff.radio_button :caddy_type, 'Carry', :checked => ff.object.new_record?
                         Carry
                       %label.btn.btn-secondary{class: "#{(ff.object.chase? ) ? 'active' : ''}"}
                         = ff.radio_button :caddy_type, 'Chase'
