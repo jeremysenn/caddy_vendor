@@ -2,8 +2,7 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :name
-  = f.hidden_field :user_id, value: current_user.id
+    = f.input :CourseName, as: :string
 
   .form-actions
     = f.button :submit
