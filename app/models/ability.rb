@@ -84,8 +84,13 @@ class Ability
       # CaddyPayRates
       ############
       can :manage, CaddyPayRate do |caddy_pay_rate|
-        caddy_pay_rate.club.company == user.company
+        unless caddy_pay_rate.club.blank?
+          caddy_pay_rate.club.company == user.company
+        else
+          true
+        end
       end
+      can :create, :caddy_pay_rates
       
     end
     
