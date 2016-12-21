@@ -22,7 +22,7 @@ class CaddyPayRatesController < ApplicationController
 
   # GET /caddy_pay_rates/1/edit
   def edit
-    @club = Club.find(params[:club_id])
+    @club = @caddy_pay_rate.club
   end
 
   # POST /caddy_pay_rates
