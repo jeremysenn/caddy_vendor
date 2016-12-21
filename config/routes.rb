@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   resources :clubs
   resources :events
   resources :caddy_pay_rates
+  resources :caddy_rank_descs
+  
   get 'welcome/index'
   root 'welcome#index'
 end

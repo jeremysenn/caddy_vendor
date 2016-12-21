@@ -20,6 +20,14 @@ class Club < ApplicationRecord
     self.CourseName
   end
   
+  def caddy_rankings_array
+    rankings = []
+    caddy_rank_descs.each do |caddy_rank|
+      rankings << caddy_rank.RankingAcronym
+    end
+    return rankings
+  end
+  
   #############################
   #     Class Methods         #
   #############################

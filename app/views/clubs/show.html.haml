@@ -22,7 +22,7 @@
       None
 
   %p.lead Caddy Pay Rates:
-  %p.lead= link_to "Create New Caddy Pay Rank", new_caddy_pay_rate_path(club_id: @club.id)
+  %p.lead= link_to "Create new caddy pay rate", new_caddy_pay_rate_path(club_id: @club.id)
   %table.table.table-striped
     %thead
       %tr
@@ -41,6 +41,23 @@
           %td
             = link_to 'Show', caddy_pay_rate, class: 'btn btn-sm btn-secondary'
             = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate), class: 'btn btn-sm btn-primary'
+
+  %p.lead Caddy Rank Descs:
+  %p.lead= link_to "Create new caddy rank desc", new_caddy_rank_desc_path(club_id: @club.id)
+  %table.table.table-striped
+    %thead
+      %tr
+        %th Ranking
+        %th Description
+        %th
+    %tbody
+      - @caddy_rank_descs.each do |caddy_rank_desc|
+        %tr
+          %td= caddy_rank_desc.RankingAcronym
+          %td= caddy_rank_desc.RankingDescription
+          %td
+            = link_to 'Show', caddy_rank_desc, class: 'btn btn-sm btn-secondary'
+            = link_to 'Edit', edit_caddy_rank_desc_path(caddy_rank_desc), class: 'btn btn-sm btn-primary'
 
 
   = link_to 'Edit', edit_club_path(@club)

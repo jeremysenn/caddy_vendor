@@ -1,18 +1,9 @@
--#
-  = form_for @caddy_pay_rate, :html => {class: 'form-horizontal', role: 'form'} do |f|
-    .row.form-group
-      %div{:class => "col-sm-6"}
-        %label.col-sm-2.control-label.lead{for: "caddy_pay_rate_ranking_acronym"} 
-          Ranking Acronym
-        .col-sm-10
-          = f.text_field :RankingAcronym, placeholder:'Ranking Acronym', class: 'input-lg form-control', autofocus: true, required: true
-
 = simple_form_for(@caddy_pay_rate) do |f|
   = f.error_notification
 
   .form-inputs
     %p= f.collection_select :ClubCompanyID, current_user.clubs.order(:CourseName), :ClubCourseID, :CourseName, {selected: params[:club_id]}
-    = f.input :RankingAcronym, collection: current_user.company.caddy_rankings_array.uniq, include_blank: false
+    = f.input :RankingAcronym, collection: @club.caddy_rankings_array.uniq, include_blank: false
     = f.input :Type, collection: ["Carry", "Chase"], include_blank: false
     = f.input :NbrHoles, collection: [9, 18], include_blank: false
     = f.input :Payrate, as: :string

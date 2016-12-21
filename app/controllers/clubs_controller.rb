@@ -15,6 +15,7 @@ class ClubsController < ApplicationController
     session[:club_id] = @club.id
     @caddies = @club.caddies
     @caddy_pay_rates = @club.caddy_pay_rates
+    @caddy_rank_descs = @club.caddy_rank_descs
   end
 
   # GET /clubs/new

@@ -92,6 +92,17 @@ class Ability
       end
       can :create, :caddy_pay_rates
       
+      # CaddyRankDescs
+      ############
+      can :manage, CaddyRankDesc do |caddy_rank_desc|
+        unless caddy_rank_desc.club.blank?
+          caddy_rank_desc.club.company == user.company
+        else
+          true
+        end
+      end
+      can :create, :caddy_rank_descs
+      
     end
     
   end
