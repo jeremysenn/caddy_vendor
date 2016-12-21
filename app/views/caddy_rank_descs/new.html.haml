@@ -1,7 +1,8 @@
 .container
   %div{:class => "col-sm-6"}
-    %h1 New caddy rank desc
-
-    = render 'form'
-
-    = link_to 'Back', caddy_rank_descs_path
+    %br
+    %h3 New caddy rank description
+    %br
+    .card.card-block
+      %h4.card-title= @club.name
+      = render 'form'

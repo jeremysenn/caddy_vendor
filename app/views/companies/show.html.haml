@@ -1,26 +1,60 @@
 .container
-  %p.lead
-    Name:
+  %br
+  %h3
     = @company.CompanyName
-  %p.lead
-    Clubs:
-    %br
-    - @company.clubs.each do |club|
-      = link_to club.name, club
-      %br
-  %p.lead
-    Members:
-    %br
-    - @company.members.each do |member|
-      = link_to member.full_name, member
-      %br
-  %p.lead
-    Caddies:
-    %br
-    - @company.caddies.each do |caddy|
-      = link_to "#{caddy.full_name} (#{caddy.club.name})", caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr)
-      %br
+  %br
+  .card.card-block
+    %h4.card-title Clubs
+    .table-responsive
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Name
+            %th
+        %tbody
+          - @company.clubs.each do |club|
+            %tr
+              %td= club.name
+              %td
+                = link_to "Show", club, class: 'btn btn-secondary'
+                = link_to 'Edit', edit_club_path(club), class: 'btn btn-primary'
 
-  = link_to 'Edit', edit_company_path(@company)
-  \|
-  = link_to 'Back', companies_path
+  .card.card-block
+    %h4.card-title Members
+    .table-responsive
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Name
+            %th
+        %tbody
+          - @company.members.each do |member|
+            %tr
+              %td= member.full_name
+              %td
+                = link_to "Show", member, class: 'btn btn-secondary'
+                = link_to 'Edit', edit_customer_path(member), class: 'btn btn-primary'  
+
+  .card.card-block
+    %h4.card-title Caddies
+    .table-responsive
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Name
+            %th Club
+            %th Ranking
+            %th
+        %tbody
+          - @company.caddies.each do |caddy|
+            %tr
+              %td= caddy.full_name
+              %td= link_to caddy.club.name, caddy.club
+              %td= link_to caddy.RankingAcronym, caddy_rank_desc_path(caddy.caddy_rank_desc)
+              %td
+                = link_to "Show", caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr), class: 'btn btn-secondary'
+                = link_to 'Edit', edit_caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr), class: 'btn btn-primary'
+  
+  = link_to 'Companies', companies_path, class: 'btn btn-secondary'
+  = link_to 'Edit company', edit_company_path(@company), class: 'btn btn-primary'
+  

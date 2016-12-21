@@ -19,6 +19,7 @@ initialize_calendar = function() {
       forceEventDuration: true,
       defaultTimedEventDuration: '00:15:00',
       slotDuration: '00:15:00',
+      allDaySlot: false,
       businessHours: {
           // days of week. an array of zero-based day of week integers (0=Sunday)
           dow: [ 1, 2, 3, 4, 5, 6, 7 ], // Monday - Sunday

@@ -1,9 +1,8 @@
 .container
   %div{:class => "col-sm-6"}
-    %h1 Editing caddy rank desc
-
-    = render 'form'
-
-    = link_to 'Show', @caddy_rank_desc
-    \|
-    = link_to 'Back', caddy_pay_rates_path
+    %br
+    %h3 Editing caddy rank description
+    %br
+    .card.card-block
+      %h4.card-title= @club.name
+      = render 'form'

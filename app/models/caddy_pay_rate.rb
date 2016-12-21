@@ -10,6 +10,9 @@ class CaddyPayRate < ApplicationRecord
   #     Instance Methods      #
   #############################
   
+  def caddy_rank_desc
+    CaddyRankDesc.where(ClubCompanyID: self.ClubCompanyID, RankingAcronym: self.RankingAcronym).last
+  end
   
   #############################
   #     Class Methods         #

@@ -1,8 +1,8 @@
 .container
-  %h1 Editing caddy
-
-  = render 'form'
-
-  = link_to 'Show', @caddy
-  \|
-  = link_to 'Back', caddies_path
+  %div{:class => "col-sm-6"}
+    %br
+    %h3 Editing caddy
+    %br
+    .card.card-block
+      %h4.card-title= @club.name
+      = render 'form'

@@ -1,7 +1,8 @@
 .container
   %div{:class => "col-sm-6"}
-    %h1 New caddy pay rate
-
-    = render 'form'
-
-    = link_to 'Back', caddy_pay_rates_path
+    %br
+    %h3 New caddy pay rate
+    %br
+    .card.card-block
+      %h4.card-title= @club.name
+      = render 'form'

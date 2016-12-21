@@ -1,24 +1,27 @@
 .container
-  %h1 Listing CaddyPayRates
-
+  %br
+  %h3 CaddyPayRates
+  %br
   - @caddy_pay_rates.group_by{|cpr| cpr.club}.each do |club, caddy_pay_rates|
-    %p.lead= club.name
-    %p.lead= link_to "Create new caddy pay rate for #{club.name}", new_caddy_pay_rate_path(club_id: club.id)
-    %table.table.table-striped
-      %thead
-        %tr
-          %th Ranking
-          %th Type
-          %th Holes
-          %th Rate
-          %th
-      %tbody
-        - caddy_pay_rates.each do |caddy_pay_rate|
-          %tr
-            %td= caddy_pay_rate.RankingAcronym
-            %td= caddy_pay_rate.Type
-            %td= caddy_pay_rate.NbrHoles
-            %td= number_to_currency(caddy_pay_rate.Payrate)
-            %td
-              = link_to 'Show', caddy_pay_rate, class: 'btn btn-sm btn-secondary'
-              = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate), class: 'btn btn-sm btn-primary'
+    .card.card-block
+      %h4.card-title= club.name
+      .table-responsive
+        %table.table.table-striped
+          %thead
+            %tr
+              %th Ranking
+              %th Type
+              %th Holes
+              %th Rate
+              %th
+          %tbody
+            - caddy_pay_rates.each do |caddy_pay_rate|
+              %tr
+                %td= caddy_pay_rate.RankingAcronym
+                %td= caddy_pay_rate.Type
+                %td= caddy_pay_rate.NbrHoles
+                %td= number_to_currency(caddy_pay_rate.Payrate)
+                %td
+                  = link_to 'Show', caddy_pay_rate, class: 'btn btn-secondary'
+                  = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate), class: 'btn btn-primary'
+      .card-link= link_to "New #{club.name} caddy pay rate", new_caddy_pay_rate_path(club_id: club.id), class: 'btn btn-primary'

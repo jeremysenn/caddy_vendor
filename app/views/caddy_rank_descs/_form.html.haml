@@ -2,9 +2,11 @@
   = f.error_notification
 
   .form-inputs
-    %p= f.collection_select :ClubCompanyID, current_user.clubs.order(:CourseName), :ClubCourseID, :CourseName, {selected: params[:club_id]}
+    =# f.collection_select :ClubCompanyID, current_user.clubs.order(:CourseName), :ClubCourseID, :CourseName, {selected: params[:club_id]}
+    = f.input :ClubCompanyID, :as => :hidden, :input_html => { :value => "#{@caddy_rank_desc.new_record? ? @club.id : @caddy_rank_desc.club.id}" }
     = f.input :RankingAcronym, as: :string
     = f.input :RankingDescription, as: :text
 
   .form-actions
-    = f.button :submit
+    = link_to 'Cancel', :back, class: 'btn btn-secondary'
+    = f.button :submit, class: 'btn btn-primary'

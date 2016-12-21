@@ -17,10 +17,12 @@ class CaddyRankDescsController < ApplicationController
   # GET /caddy_rank_descs/new
   def new
     @caddy_rank_desc = CaddyRankDesc.new
+    @club = Club.find(params[:club_id])
   end
 
   # GET /caddy_rank_descs/1/edit
   def edit
+    @club = @caddy_rank_desc.club
   end
 
   # POST /caddy_rank_descs

@@ -1,65 +1,72 @@
-
 .container
-  %p.lead 
-    Name:
+  %br
+  %h3
     = @club.name
-  -#
-    %p
-      %b Members:
-      %br
-      - @club.members.each do |member|
-        = link_to member.full_name, member
-        %br
-
-  %p.lead 
-    Caddies:
     %br
-    - unless @caddies.blank?
-      - @caddies.each do |caddy|
-        = link_to "#{caddy.full_name}", caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr)
-        %br
-    - else
-      None
+    %a{href: events_path, class: 'btn btn-primary'}
+      %i.fa.fa-calendar
+      Calendar
+  %br
+  .card.card-block
+    %h4.card-title Caddies
+    .table-responsive
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Name
+            %th Ranking
+            %th
+        %tbody
+          - @caddies.each do |caddy|
+            %tr
+              %td= caddy.full_name
+              %td= caddy.RankingAcronym
+              %td
+                = link_to "Show", caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr), class: 'btn btn-secondary'
+                = link_to 'Edit', edit_caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr), class: 'btn btn-primary'
 
-  %p.lead Caddy Pay Rates:
-  %p.lead= link_to "Create new caddy pay rate", new_caddy_pay_rate_path(club_id: @club.id)
-  %table.table.table-striped
-    %thead
-      %tr
-        %th Ranking
-        %th Type
-        %th Holes
-        %th Rate
-        %th
-    %tbody
-      - @caddy_pay_rates.each do |caddy_pay_rate|
-        %tr
-          %td= caddy_pay_rate.RankingAcronym
-          %td= caddy_pay_rate.Type
-          %td= caddy_pay_rate.NbrHoles
-          %td= number_to_currency(caddy_pay_rate.Payrate)
-          %td
-            = link_to 'Show', caddy_pay_rate, class: 'btn btn-sm btn-secondary'
-            = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate), class: 'btn btn-sm btn-primary'
+  
+  .card.card-block
+    %h4.card-title Caddy Pay Rates
+    .table-responsive
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Ranking
+            %th Type
+            %th Holes
+            %th Rate
+            %th
+        %tbody
+          - @caddy_pay_rates.each do |caddy_pay_rate|
+            %tr
+              %td= caddy_pay_rate.RankingAcronym
+              %td= caddy_pay_rate.Type
+              %td= caddy_pay_rate.NbrHoles
+              %td= number_to_currency(caddy_pay_rate.Payrate)
+              %td
+                = link_to 'Show', caddy_pay_rate, class: 'btn btn-secondary'
+                = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate), class: 'btn btn-primary'
+    .card-link= link_to "New caddy pay rate", new_caddy_pay_rate_path(club_id: @club.id), class: 'btn btn-primary'
 
-  %p.lead Caddy Rank Descs:
-  %p.lead= link_to "Create new caddy rank desc", new_caddy_rank_desc_path(club_id: @club.id)
-  %table.table.table-striped
-    %thead
-      %tr
-        %th Ranking
-        %th Description
-        %th
-    %tbody
-      - @caddy_rank_descs.each do |caddy_rank_desc|
-        %tr
-          %td= caddy_rank_desc.RankingAcronym
-          %td= caddy_rank_desc.RankingDescription
-          %td
-            = link_to 'Show', caddy_rank_desc, class: 'btn btn-sm btn-secondary'
-            = link_to 'Edit', edit_caddy_rank_desc_path(caddy_rank_desc), class: 'btn btn-sm btn-primary'
+  .card.card-block
+    %h4.card-title Caddy Rank Descriptions
+    .table-responsive
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Ranking
+            %th Description
+            %th
+        %tbody
+          - @caddy_rank_descs.each do |caddy_rank_desc|
+            %tr
+              %td= caddy_rank_desc.RankingAcronym
+              %td= caddy_rank_desc.RankingDescription
+              %td
+                = link_to 'Show', caddy_rank_desc, class: 'btn btn-secondary'
+                = link_to 'Edit', edit_caddy_rank_desc_path(caddy_rank_desc), class: 'btn btn-primary'
+    .card-link= link_to "New caddy rank description", new_caddy_rank_desc_path(club_id: @club.id), class: 'btn btn-primary'
 
-
-  = link_to 'Edit', edit_club_path(@club)
-  \|
-  = link_to 'Back', clubs_path
+  = link_to 'Clubs', clubs_path, class: 'btn btn-secondary'
+  = link_to 'Edit club', edit_club_path(@club), class: 'btn btn-primary'

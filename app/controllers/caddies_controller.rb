@@ -14,6 +14,7 @@ class CaddiesController < ApplicationController
   def show
     # Look up caddy by composite of customer ID and club ID
     @caddy = Caddy.where(CustomerID: params[:id], ClubCompanyNbr: params[:club_id]).first
+    @club = @caddy.club
   end
 
   # GET /caddies/new
@@ -25,6 +26,7 @@ class CaddiesController < ApplicationController
   def edit
     # Look up caddy by composite of customer ID and club ID
     @caddy = Caddy.where(CustomerID: params[:id], ClubCompanyNbr: params[:club_id]).first
+    @club = @caddy.club
   end
 
   # POST /caddies

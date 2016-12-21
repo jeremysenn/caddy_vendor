@@ -1,14 +1,16 @@
 .container
-  %p.lead
-    Club:
-    = @caddy_rank_desc.club.name
-  %p.lead
-    Ranking:
-    = @caddy_rank_desc.RankingAcronym
-  %p.lead
-    Description:
-    = @caddy_rank_desc.RankingDescription
-
-  = link_to 'Edit', edit_caddy_rank_desc_path(@caddy_rank_desc)
-  \|
-  = link_to 'Back', caddy_rank_descs_path
+  %br
+  .card.card-block
+    %p.lead
+      Club:
+      = link_to @caddy_rank_desc.club.name, @caddy_rank_desc.club
+    %p.lead
+      Ranking:
+      = @caddy_rank_desc.RankingAcronym
+    %p.lead
+      Description:
+      = @caddy_rank_desc.RankingDescription
+      
+    = link_to 'Caddy Rank Descriptions', caddy_rank_descs_path, class: 'btn btn-secondary'
+    = link_to 'Edit', edit_caddy_rank_desc_path(@caddy_rank_desc), class: 'btn btn-primary'
+    

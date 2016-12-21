@@ -1,20 +1,21 @@
 .container
-  %p.lead
-    Club:
-    = @caddy_pay_rate.club.name
-  %p.lead
-    Ranking:
-    = @caddy_pay_rate.RankingAcronym
-  %p.lead
-    Type:
-    = @caddy_pay_rate.Type
-  %p.lead
-    Holes:
-    = @caddy_pay_rate.NbrHoles
-  %p.lead
-    Rate:
-    = number_to_currency(@caddy_pay_rate.Payrate)
+  %br
+  .card.card-block
+    %p.lead
+      Club:
+      = link_to @caddy_pay_rate.club.name, @caddy_pay_rate.club
+    %p.lead
+      Ranking:
+      = link_to @caddy_pay_rate.RankingAcronym, caddy_rank_desc_path(@caddy_pay_rate.caddy_rank_desc)
+    %p.lead
+      Type:
+      = @caddy_pay_rate.Type
+    %p.lead
+      Holes:
+      = @caddy_pay_rate.NbrHoles
+    %p.lead
+      Rate:
+      = number_to_currency(@caddy_pay_rate.Payrate)
 
-  = link_to 'Edit', edit_caddy_pay_rate_path(@caddy_pay_rate)
-  \|
-  = link_to 'Back', caddy_pay_rates_path
+    = link_to 'Caddy Pay Rates', caddy_pay_rates_path, class: 'btn btn-secondary'
+    = link_to 'Edit', edit_caddy_pay_rate_path(@caddy_pay_rate), class: 'btn btn-primary'

@@ -34,6 +34,10 @@ class Caddy < ApplicationRecord
     customer.account unless customer.blank?
   end
   
+  def caddy_rank_desc
+    CaddyRankDesc.where(ClubCompanyID: self.ClubCompanyNbr, RankingAcronym: self.RankingAcronym).last
+  end
+  
   #############################
   #     Class Methods         #
   #############################
