@@ -1,7 +1,12 @@
 .container
   - unless current_club.blank?
-    %br
-    %p.lead.text-xs-right= current_club.name
+    -#
+      %br
+      %p.lead.text-xs-right
+        = current_club.name
+    %p
+      = form_tag events_path, id: 'clubs_form', method: 'get', class: 'form-inline' do |f|
+        = select_tag :club_id, options_from_collection_for_select(current_user.clubs, "id", "name", current_club.id), onchange: "$(this).parent('form').submit();"
   -#
     %p
       = form_tag events_path, id: 'clubs_form', method: 'get', class: 'form-inline' do |f|

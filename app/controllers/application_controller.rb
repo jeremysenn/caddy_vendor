@@ -12,6 +12,10 @@ class ApplicationController < ActionController::Base
     session[:club_id] = club.id
   end
   
+  def current_club_id
+    session[:club_id]
+  end
+  
   # If i don't find a club from session I return the current_user company's first club.
   def current_club
     Club.find_by(ClubCourseID: session[:club_id]) || current_user.company.clubs.first
