@@ -6,7 +6,7 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    session[:club_id] = params[:club_id]
+    session[:club_id] = params[:club_id] unless params[:club_id].blank?
     unless current_club.blank?
       @events = current_club.events
     else
