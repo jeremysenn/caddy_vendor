@@ -12,7 +12,7 @@
       = @caddy.last_name
     %p.lead
       Ranking:
-      = link_to @caddy.RankingAcronym, caddy_rank_desc_path(@caddy.caddy_rank_desc)
+      = @caddy.RankingAcronym
 
     = link_to 'Caddies', caddies_path, class: 'btn btn-secondary'
     = link_to 'Edit', edit_caddy_path(@caddy.id, club_id: @caddy.ClubCompanyNbr), class: 'btn btn-primary'
