@@ -60,6 +60,10 @@ initialize_calendar = function() {
           $('.start_hidden').val(moment(event.start).format('YYYY-MM-DD HH:mm'));
           $('.end_hidden').val(moment(event.end).format('YYYY-MM-DD HH:mm'));
         });
+      },
+      
+      eventAfterRender: function(event, element, view) {
+        $(element).css('width','50%');
       }
       
     });

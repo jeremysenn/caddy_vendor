@@ -31,7 +31,8 @@ class TransfersController < ApplicationController
     respond_to do |format|
       if @transfer.save
 #        format.html { redirect_to @transfer, notice: 'Transfer was successfully created.' }
-        format.html { redirect_to :back, notice: 'Transfer was successfully created.' }
+#        format.html { redirect_to :back, notice: 'Transfer was successfully created.' }
+        format.html { redirect_back fallback_location: root_path, notice: 'Transfer was successfully created.' }
         format.json { render :show, status: :created, location: @transfer }
       else
         format.html { render :new }
