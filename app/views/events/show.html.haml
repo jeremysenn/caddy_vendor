@@ -1,156 +1,120 @@
 .container
   %br
-  %h3= @event.club.name
-  %p.lead
-    = @event.start.strftime("%-m/%-d/%y %l:%M %p")
-    #player_total.pull-right
-      = number_to_currency(@event.players_total)
-  %table.table.table-striped#players
-    %thead
-      %tr
-        %th Member
-        %th Caddy
-        %th Type
-        %th Round
-        %th Fee
-        %th Tip
-        %th
-    %tbody
-      - @event.players.each do |player|
-        %tr
-          %td= player.member.full_name
-          %td= player.caddy.full_name
-          %td= player.caddy_type
-          %td= player.round
-          %td
-            =# "#{player.fee.blank? ? number_to_currency(player.caddy_pay_rate) : number_to_currency(player.fee)}"
-            $
-            = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 2)
-          %td{class: "#{player.paid? ? '' : 'text-primary'}"}
-            =# number_to_currency("#{player.tip.blank? ? '0' : player.tip}")
-            $
-            - unless player.paid?
-              %a{href: nil, class: 'tip', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_tip", "data-value" => player.tip.blank? ? '0' : player.tip}
-                = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 2)
-            - else
-              = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 2)
-          %td
-            - unless player.caddy.account.blank?
-              -#
-                %button.btn.btn-success{"data-target" => "#player_#{player.id}_payment", "data-toggle" => "modal", :type => "button"}
-                  Pay
-              = form_for Transfer.new, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
-                = f.hidden_field :customer_id, value: player.member_id
-                = f.hidden_field :player_id, value: player.id
-                = f.hidden_field :from_account, value: player.member.account.id
-                = f.hidden_field :to_account, value: player.caddy.account.id unless player.caddy.account.blank?
-                = f.hidden_field :fee, value: 0 # Don't add in additional ATM fee at this time
-                = f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
-                = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
-                = f.hidden_field :amount, value: player.total, class: 'amount'
-                = f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure?' } unless player.paid?
-            = "No account for Caddy" if player.caddy.account.blank?
-            = "Paid" if player.paid?
-        - unless player.paid?
-          / Payment Modal
-          .modal.fade{id: "player_#{player.id}_payment", "aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
-            .modal-dialog{:role => "document"}
-              .modal-content
-                .modal-header
-                  %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
-                    %span{"aria-hidden" => "true"} ×
-                  %h4#myModalLabel.modal-title Submit Payment
-                .modal-body
+  .card.card-block
+    .card-title
+      %h4= @event.club.name
+      %p.lead
+        = @event.start.strftime("%-m/%-d/%y %l:%M %p")
+        #player_total.pull-right
+          = number_to_currency(@event.players_total)
+    .table-responsive
+      %table.table.table-striped#players
+        %thead
+          %tr
+            %th Member
+            %th Caddy
+            %th Type
+            %th Round
+            %th Fee
+            %th Tip
+            %th
+        %tbody
+          - @event.players.each do |player|
+            %tr
+              %td= player.member.full_name
+              %td= player.caddy.full_name
+              %td= player.caddy_type
+              %td= player.round
+              %td
+                =# "#{player.fee.blank? ? number_to_currency(player.caddy_pay_rate) : number_to_currency(player.fee)}"
+                $
+                = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 2)
+              %td{class: "#{player.paid? ? '' : 'text-primary'}"}
+                =# number_to_currency("#{player.tip.blank? ? '0' : player.tip}")
+                $
+                - unless player.paid?
+                  %a{href: nil, class: 'tip', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_tip", "data-value" => player.tip.blank? ? '0' : player.tip}
+                    = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 2)
+                - else
+                  = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 2)
+              %td
+                - unless player.caddy.account.blank?
+                  -#
+                    %button.btn.btn-success{"data-target" => "#player_#{player.id}_payment", "data-toggle" => "modal", :type => "button"}
+                      Pay
                   = form_for Transfer.new, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
                     = f.hidden_field :customer_id, value: player.member_id
                     = f.hidden_field :player_id, value: player.id
                     = f.hidden_field :from_account, value: player.member.account.id
                     = f.hidden_field :to_account, value: player.caddy.account.id unless player.caddy.account.blank?
                     = f.hidden_field :fee, value: 0 # Don't add in additional ATM fee at this time
+                    = f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
+                    = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
+                    = f.hidden_field :amount, value: player.total, class: 'amount'
+                    = f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure?' } unless player.paid?
+                = "No account for Caddy" if player.caddy.account.blank?
+                = "Paid" if player.paid?
+    .card-link= link_to "Done", events_path, class: 'btn btn-primary'
+    -#
+      - unless player.paid?
+        / Payment Modal
+        .modal.fade{id: "player_#{player.id}_payment", "aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+          .modal-dialog{:role => "document"}
+            .modal-content
+              .modal-header
+                %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+                  %span{"aria-hidden" => "true"} ×
+                %h4#myModalLabel.modal-title Submit Payment
+              .modal-body
+                = form_for Transfer.new, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
+                  = f.hidden_field :customer_id, value: player.member_id
+                  = f.hidden_field :player_id, value: player.id
+                  = f.hidden_field :from_account, value: player.member.account.id
+                  = f.hidden_field :to_account, value: player.caddy.account.id unless player.caddy.account.blank?
+                  = f.hidden_field :fee, value: 0 # Don't add in additional ATM fee at this time
+                  .row.form-group
+                    %div{:class => "col-sm-12"}
+                      %label.col-sm-2.control-label.lead{for: "player_member"} 
+                        Member
+                      .col-sm-6
+                        = player.member.full_name
+                  .row.form-group
+                    %div{:class => "col-sm-12"}
+                      %label.col-sm-2.control-label.lead{for: "player_caddy"} 
+                        Caddy 
+                      .col-sm-6
+                        = player.caddy.full_name
+                  .row.form-group
+                    %div{:class => "col-sm-12"}
+                      %label.col-sm-2.control-label.lead{for: "transfer_caddy_fee"} 
+                        Fee
+                      .col-sm-6
+                        .input-group
+                          .input-group-addon $
+                          = f.text_field :caddy_fee, placeholder:'Caddy Fee', value: player.caddy_pay_rate, class: 'input-lg form-control', required: true, readonly: true
+                  .row.form-group
+                    %div{:class => "col-sm-12"}
+                      %label.col-sm-2.control-label.lead{for: "transfer_caddy_tip"} 
+                        Tip
+                      .col-sm-6
+                        .input-group
+                          .input-group-addon $
+                          = f.text_field :caddy_tip, placeholder:'Caddy Tip', value: 0, class: 'input-lg form-control tip_field'
+                  .row.form-group
+                    %div{:class => "col-sm-12"}
+                      %label.col-sm-2.control-label.lead{for: "transfer_amount"} 
+                        Total
+                      .col-sm-6
+                        .input-group
+                          .input-group-addon $
+                          = f.text_field :amount, placeholder:'Total', value: player.caddy_pay_rate, class: 'input-lg form-control'
+                  .modal-footer
+                    %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Close
+                    = f.submit "Pay", :class => 'btn btn-success'
+                    #fee
                     .row.form-group
-                      %div{:class => "col-sm-12"}
-                        %label.col-sm-2.control-label.lead{for: "player_member"} 
-                          Member
-                        .col-sm-6
-                          = player.member.full_name
-                    .row.form-group
-                      %div{:class => "col-sm-12"}
-                        %label.col-sm-2.control-label.lead{for: "player_caddy"} 
-                          Caddy 
-                        .col-sm-6
-                          = player.caddy.full_name
-                    .row.form-group
-                      %div{:class => "col-sm-12"}
-                        %label.col-sm-2.control-label.lead{for: "transfer_caddy_fee"} 
-                          Fee
-                        .col-sm-6
-                          .input-group
-                            .input-group-addon $
-                            = f.text_field :caddy_fee, placeholder:'Caddy Fee', value: player.caddy_pay_rate, class: 'input-lg form-control', required: true, readonly: true
-                    .row.form-group
-                      %div{:class => "col-sm-12"}
-                        %label.col-sm-2.control-label.lead{for: "transfer_caddy_tip"} 
-                          Tip
-                        .col-sm-6
-                          .input-group
-                            .input-group-addon $
-                            = f.text_field :caddy_tip, placeholder:'Caddy Tip', value: 0, class: 'input-lg form-control tip_field'
-                    .row.form-group
-                      %div{:class => "col-sm-12"}
-                        %label.col-sm-2.control-label.lead{for: "transfer_amount"} 
-                          Total
-                        .col-sm-6
-                          .input-group
-                            .input-group-addon $
-                            = f.text_field :amount, placeholder:'Total', value: player.caddy_pay_rate, class: 'input-lg form-control'
-                    -#
-                      .row.form-group
-                        %div{:class => "col-sm-12 col-md-12"}
-                          %label.col-sm-2.control-label{for: :body} From
-                          .col-sm-10
-                            #from.form-control.input-lg
-                      .row.form-group
-                        %div{:class => "col-sm-12 col-md-12"}
-                          %label.col-sm-2.control-label{for: :body} To
-                          .col-sm-10
-                            #to.form-control.input-lg
-                      .row.form-group
-                        %div{:class => "col-sm-12 col-md-12"}
-                          %label.col-sm-2.control-label{for: :body} Amount
-                          .col-sm-10
-                            #original_amount.form-control.input-lg
-                    .modal-footer
-                      %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Close
-                      = f.submit "Pay", :class => 'btn btn-success'
-                      -# %button.btn.btn-success{:type => "button"} Pay
-                    -#
-                      .row.form-group
-                        %div{:class => "col-sm-12 col-md-12"}
-                          %label.col-sm-2.control-label{for: :body} Fee
-                          .col-sm-10
-                            %div{class: "input-group"}
-                              %div{class: "input-group-addon"} $
-                              = f.number_field :fee, :class => 'form-control input-lg', :step => 0.01, readonly: true
-                    -#
-                      .row.form-group
-                        %div{:class => "col-sm-12 col-md-12"}
-                          %label.col-sm-2.control-label{for: :body} Total
-                          .col-sm-10
-                            %div{class: "input-group"}
-                              %div{class: "input-group-addon"} $
-                              = f.number_field :amount, :class => 'form-control input-lg', :step => 0.01, placeholder: "#{current_user.primary_account.blank? ? number_to_currency(0) : number_to_currency(current_user.primary_balance_available)} Available", readonly: true
-                      #fee
-                      .row.form-group
-                        %div{:class => "col-sm-12 col-md-12"}
-                          = f.submit "Submit", :class => 'btn btn-primary btn-block btn-lg', data: { disable_with: "Sending ..." }
-
-    %tfoot
-      %tr
-        %th
-        %th
-        %th
-        %th
-        %th
+                      %div{:class => "col-sm-12 col-md-12"}
+                        = f.submit "Submit", :class => 'btn btn-primary btn-block btn-lg', data: { disable_with: "Sending ..." }
   -#
     = link_to 'Cancel', :back, class: 'btn btn-secondary'
     = link_to 'Pay', '#', class: 'btn btn-primary'
