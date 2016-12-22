@@ -3,6 +3,8 @@
     .modal-content
       .modal-header
         %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
-        %h4.modal-title New Round
+        .modal-title 
+          %h4= current_club.name
+          %p.lead#new_event_start
       .modal-body
         = render 'form', event: @event

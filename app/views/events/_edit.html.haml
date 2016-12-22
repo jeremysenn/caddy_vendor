@@ -3,11 +3,13 @@
     .modal-content
       .modal-header
         %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
-        %h4.modal-title 
-          Edit Round
-          .pull-right
-            %small.text-muted
-              Party Size
-              = @event.party_size
+        .modal-title 
+          %h4= current_club.name
+          %p.lead= @event.start.strftime("%-m/%-d/%y %l:%M %p")
+          -#
+            .pull-right
+              %small.text-muted
+                Party Size
+                = @event.party_size
       .modal-body
         = render 'form', event: @event
