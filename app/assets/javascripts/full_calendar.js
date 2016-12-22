@@ -26,17 +26,19 @@ initialize_calendar = function() {
           start: '07:00', // a start time (7am in this example)
           end: '18:00' // an end time (6pm in this example)
         },
+        
+      select: function(start, end, jsEvent, view) {
+        if (view.name !== 'month') { // Don't allow event creation from month view
+          $.getScript('/events/new', function() {
+            $('#event_date_range').val(moment(start).format("MM/DD/YYYY HH:mm") + ' - ' + moment(end).format("MM/DD/YYYY HH:mm"))
+            //date_range_picker();
+            $('.start_hidden').val(moment(start).format('YYYY-MM-DD HH:mm'));
+            $('.end_hidden').val(moment(end).format('YYYY-MM-DD HH:mm'));
+            $('#new_event_start').text(moment(start).format("MM/DD/YY h:mm A"));
+          });
 
-      select: function(start, end) {
-        $.getScript('/events/new', function() {
-          $('#event_date_range').val(moment(start).format("MM/DD/YYYY HH:mm") + ' - ' + moment(end).format("MM/DD/YYYY HH:mm"))
-          //date_range_picker();
-          $('.start_hidden').val(moment(start).format('YYYY-MM-DD HH:mm'));
-          $('.end_hidden').val(moment(end).format('YYYY-MM-DD HH:mm'));
-          $('#new_event_start').text(moment(start).format("MM/DD/YY h:mm A"));
-        });
-
-        calendar.fullCalendar('unselect');
+          calendar.fullCalendar('unselect');
+        };
       },
 
       eventDrop: function(event, delta, revertFunc) {
