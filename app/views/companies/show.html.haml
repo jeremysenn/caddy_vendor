@@ -50,7 +50,7 @@
             %tr
               %td= caddy.full_name
               %td= link_to caddy.club.name, caddy.club
-              %td= link_to caddy.RankingAcronym, caddy_rank_desc_path(caddy.caddy_rank_desc)
+              %td= caddy.RankingAcronym
               %td
                 = link_to "Show", caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr), class: 'btn btn-secondary'
                 = link_to 'Edit', edit_caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr), class: 'btn btn-primary'
