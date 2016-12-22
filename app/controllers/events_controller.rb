@@ -35,7 +35,8 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
     @event.save
     if params[:pay]
-      redirect_to @event, notice: 'Select Member and Caddy for Payment'
+      #redirect_to @event, notice: 'Select Member and Caddy for Payment'
+      redirect_to @event
     end
 
 #    respond_to do |format|
@@ -54,7 +55,8 @@ class EventsController < ApplicationController
   def update
     @event.update(event_params)
     if params[:pay]
-      redirect_to @event, notice: 'Select Member and Caddy for Payment'
+#      redirect_to @event, notice: 'Select Member and Caddy for Payment'
+      redirect_to @event
     end
 #    respond_to do |format|
 #      if @event.update(event_params)
