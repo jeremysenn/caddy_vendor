@@ -130,7 +130,8 @@
               = 'Paid' if @event.paid?
   .row.form-group
     %div{:class => "col-sm-12"}
-      = f.submit "Pay", :class => 'btn btn-success', name: 'pay'
+      %button.btn.btn-secondary{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} Cancel
+      = f.submit "Pay", :class => 'btn btn-success', name: 'pay' if @event.not_paid?
       = f.submit "Save", :class => 'btn btn-primary'
       = link_to 'Delete',                      |
             event,                                 |
