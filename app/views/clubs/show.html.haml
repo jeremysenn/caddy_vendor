@@ -20,7 +20,7 @@
           - @caddies.each do |caddy|
             %tr
               %td= caddy.full_name
-              %td= caddy.RankingAcronym
+              %td= link_to caddy.acronym, caddy.caddy_rank_desc
               %td
                 = link_to "Show", caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr), class: 'btn btn-secondary'
                 = link_to 'Edit', edit_caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr), class: 'btn btn-primary'
@@ -40,7 +40,7 @@
         %tbody
           - @caddy_pay_rates.each do |caddy_pay_rate|
             %tr
-              %td= caddy_pay_rate.RankingAcronym
+              %td= link_to caddy_pay_rate.acronym, caddy_pay_rate.caddy_rank_desc
               %td= caddy_pay_rate.Type
               %td= caddy_pay_rate.NbrHoles
               %td= number_to_currency(caddy_pay_rate.Payrate)

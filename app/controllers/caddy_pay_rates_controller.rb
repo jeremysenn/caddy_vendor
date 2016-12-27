@@ -73,6 +73,6 @@ class CaddyPayRatesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def caddy_pay_rate_params
-      params.require(:caddy_pay_rate).permit(:ClubCompanyID, :RankingAcronym, :Type, :NbrHoles, :Payrate)
+      params.require(:caddy_pay_rate).permit(:ClubCompanyID, :RankingAcronym, :Type, :NbrHoles, :Payrate, :RankingID)
     end
 end

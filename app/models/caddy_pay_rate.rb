@@ -5,13 +5,14 @@ class CaddyPayRate < ApplicationRecord
   establish_connection :ez_cash
   
   belongs_to :club, :foreign_key => "ClubCompanyID"
+  belongs_to :caddy_rank_desc, :foreign_key => "RankingID"
     
   #############################
   #     Instance Methods      #
   #############################
   
-  def caddy_rank_desc
-    CaddyRankDesc.where(ClubCompanyID: self.ClubCompanyID, RankingAcronym: self.RankingAcronym).last
+  def acronym
+    caddy_rank_desc.acronym unless caddy_rank_desc.blank?
   end
   
   #############################

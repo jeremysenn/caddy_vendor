@@ -36,7 +36,7 @@ class CaddiesController < ApplicationController
 
     respond_to do |format|
       if @caddy.save
-        format.html { redirect_to @caddy, notice: 'Caddy was successfully created.' }
+        format.html { redirect_to caddy_path(@caddy, club_id: @caddy.club.id), notice: 'Caddy was successfully created.' }
         format.json { render :show, status: :created, location: @caddy }
       else
         format.html { render :new }
@@ -50,7 +50,7 @@ class CaddiesController < ApplicationController
   def update
     respond_to do |format|
       if @caddy.update(caddy_params)
-        format.html { redirect_to @caddy, notice: 'Caddy was successfully updated.' }
+        format.html { redirect_to caddy_path(@caddy, club_id: @caddy.club.id), notice: 'Caddy was successfully updated.' }
         format.json { render :show, status: :ok, location: @caddy }
       else
         format.html { render :edit }
@@ -77,6 +77,6 @@ class CaddiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def caddy_params
-      params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym)
+      params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym, :RankingID)
     end
 end

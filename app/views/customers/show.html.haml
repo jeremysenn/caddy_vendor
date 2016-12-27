@@ -1,11 +1,12 @@
 .container
-  %p.lead
-    First name:
-    = @customer.first_name
-  %p.lead
-    Last name:
-    = @customer.last_name
+  %br
+  .card.card-block
+    %p.lead
+      First name:
+      = @customer.first_name
+    %p.lead
+      Last name:
+      = @customer.last_name
 
-  = link_to 'Edit', edit_customer_path(@customer)
-  \|
-  = link_to 'Back', customers_path
+    = link_to 'Members', customers_path, class: 'btn btn-secondary'
+    = link_to 'Edit', edit_customer_path(@customer), class: 'btn btn-primary'

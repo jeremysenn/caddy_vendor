@@ -7,7 +7,7 @@
     - else
       %p
         = form_tag events_path, id: 'clubs_form', method: 'get', class: 'form-inline' do |f|
-          = select_tag :club_id, options_from_collection_for_select(current_user.clubs, "id", "name", current_club.id), onchange: "$(this).parent('form').submit();"
+          = select_tag :club_id, options_from_collection_for_select(current_user.clubs, "id", "name", current_club.id), onchange: "$(this).parent('form').submit();", class: "form-control"
   -#
     %p
       = form_tag events_path, id: 'clubs_form', method: 'get', class: 'form-inline' do |f|

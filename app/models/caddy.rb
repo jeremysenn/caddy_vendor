@@ -6,6 +6,7 @@ class Caddy < ApplicationRecord
   
   belongs_to :club, :foreign_key => "ClubCompanyNbr"
   belongs_to :customer, :foreign_key => "CustomerID"
+  belongs_to :caddy_rank_desc, :foreign_key => "RankingID"
   
 #  has_and_belongs_to_many :clubs
 
@@ -34,8 +35,8 @@ class Caddy < ApplicationRecord
     customer.account unless customer.blank?
   end
   
-  def caddy_rank_desc
-    CaddyRankDesc.where(ClubCompanyID: self.ClubCompanyNbr, RankingAcronym: self.RankingAcronym).last
+  def acronym
+    caddy_rank_desc.acronym unless caddy_rank_desc.blank?
   end
   
   #############################

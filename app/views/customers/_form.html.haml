@@ -2,8 +2,9 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :NameF
-    = f.input :NameL
+    = f.input :NameF, label: 'First Name'
+    = f.input :NameL, label: 'Last Name'
 
   .form-actions
-    = f.button :submit
+    = link_to 'Cancel', :back, class: 'btn btn-secondary'
+    = f.button :submit, 'Save member', class: 'btn btn-primary'

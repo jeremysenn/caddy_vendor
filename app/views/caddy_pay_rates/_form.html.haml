@@ -4,7 +4,8 @@
   .form-inputs
     =# f.collection_select :ClubCompanyID, current_user.clubs.order(:CourseName), :ClubCourseID, :CourseName, {selected: params[:club_id]}
     = f.input :ClubCompanyID, :as => :hidden, :input_html => { :value => "#{@caddy_pay_rate.new_record? ? @club.id : @caddy_pay_rate.club.id}" }
-    = f.input :RankingAcronym, collection: @club.caddy_rankings_array.uniq, include_blank: false
+    =# f.input :RankingAcronym, collection: @club.caddy_rankings_array.uniq, include_blank: false
+    = f.association :caddy_rank_desc, collection: @club.caddy_rank_descs, label_method: :RankingAcronym, label: "Ranking", value_method: :id, include_blank: false
     = f.input :Type, collection: ["Carry", "Chase"], include_blank: false
     = f.input :NbrHoles, collection: [9, 18], include_blank: false
     = f.input :Payrate, as: :string
