@@ -12,6 +12,7 @@ class CompaniesController < ApplicationController
   # GET /companies/1
   # GET /companies/1.json
   def show
+    @members = @company.members.order(:NameL).page(params[:page]).per(60)
   end
 
   # GET /companies/new
