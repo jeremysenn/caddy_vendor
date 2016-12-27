@@ -21,17 +21,22 @@
 
   .card.card-block
     %h4.card-title Members
-    - @members.each_slice(20) do |members|
-      %div.col-xs-4
-        .table-responsive
-          %table.table.table-striped.table-sm
-            %tbody
-              - members.each do |member|
-                %tr
-                  %td= member.full_name
-                  %td
-                    = link_to "Show", member, class: 'btn btn-secondary btn-sm'
-                    = link_to 'Edit', edit_customer_path(member), class: 'btn btn-primary btn-sm'
+    - @members.each do |member|
+      %div.col-xs-6.col-sm-4.col-md-3
+        %p= link_to member.full_name, member
+    -#   
+      - @members.each_slice(40) do |members|
+        %div.col-xs-6.col-sm-4
+          .table-responsive
+            %table.table.table-striped.table-sm
+              %tbody
+                - members.each do |member|
+                  %tr
+                    %td= link_to member.full_name, member
+                    -#
+                      %td
+                        = link_to "Show", member, class: 'btn btn-secondary btn-sm'
+                        = link_to 'Edit', edit_customer_path(member), class: 'btn btn-primary btn-sm'
     
     = paginate @members
 

@@ -6,7 +6,8 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
-    @customers = current_user.members
+#    @customers = current_user.members
+    @members = current_user.members.order(:NameL).page(params[:page]).per(240)
   end
 
   # GET /customers/1
