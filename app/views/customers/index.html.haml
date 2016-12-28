@@ -1,13 +1,43 @@
 .container
   %br
+  %p
+    = form_tag customers_path, id: 'customers_form', method: 'get', class: 'form-inline' do |f|
+      .input-group
+        = search_field_tag :q, params[:q], :placeholder => "Search members", class: "form-control input-lg"
+        %span.input-group-btn
+          %button.btn.btn-secondary{id: 'member_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
+            %i.fa.fa-search
+
   .card.card-block
     %h4.card-title Members
-    - @members.each do |member|
-      %div.col-xs-6.col-sm-4.col-md-3
-        %p= link_to member.full_name, member
-    
+    - unless @members.blank?
+      .table-responsive
+        %table.table.table-striped
+          %thead
+            %tr
+              %th Name
+              %th
+          %tbody
+            - @members.each do |member|
+              %tr
+                %td= member.full_name
+                %td
+                  = link_to "Show", member, class: 'btn btn-secondary'
+                  = link_to 'Edit', edit_customer_path(member), class: 'btn btn-primary'
+    - else
+      %p.lead No members found
+
     = paginate @members
-    %p= link_to 'New member', new_customer_path, class: 'btn btn-primary'
+    = link_to 'New member', new_customer_path, class: 'btn btn-primary'
+  -#
+    .card.card-block
+      %h4.card-title Members
+      - @members.each do |member|
+        %div.col-xs-6.col-sm-4.col-md-3
+          %p= link_to member.full_name, member
+
+      = paginate @members
+      %p= link_to 'New member', new_customer_path, class: 'btn btn-primary'
   -#
     %h1 Listing members
 
