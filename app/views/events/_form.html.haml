@@ -48,7 +48,7 @@
                 .row.form-group
                   .col-sm-6
                     =# ff.collection_select :member_id, current_user.members, :id, :full_name, class: 'input-lg form-control', required: true
-                    = ff.select :member_id, current_user.members.order(:NameL).collect { |m| [ m.full_name, m.id ] }, {required: true, include_blank: false}, class: "form-control"
+                    = ff.select :member_id, current_user.members.order(:NameL).collect { |m| [ m.full_name_by_last_name, m.id ] }, {required: true, include_blank: false}, class: "form-control"
                   .col-sm-6
                     =# ff.collection_select :caddy_id, current_club.caddies, :id, :full_name, class: 'input-lg form-control', required: true
                     = ff.select :caddy_id, current_club.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "form-control"

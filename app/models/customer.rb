@@ -100,33 +100,6 @@ class Customer < ActiveRecord::Base
     accounts.map{ |a| a.account_number_with_leading_zeros }
   end
   
-  ### Informix log records ###
-  def log_records
-    log_records = LogRecord.find_all_by_pos_batch_nbr(id)
-#    log_records = []
-    active_heavy_metal_debit_card_accounts.each do |account|
-     log_records = log_records + account.log_records
-    end
-    active_payee_accounts.each do |account| # Only get payee log records where this customer's primary account is the 'to' account (acct_2_nbr)
-     log_records = log_records + account.log_records.select { |lr| (lr.acct_2_nbr == primary_account.account_number_with_leading_zeros)}
-#     log_records = LogRecord.find_all_by_acct_1_nbr(account_number_with_leading_zeros) + LogRecord.find_all_by_acct_2_nbr(account_number_with_leading_zeros) +
-#      LogRecord.find_all_by_acct_1_nbr(account_id_with_leading_zeros) + LogRecord.find_all_by_acct_2_nbr(account_id_with_leading_zeros)
-    end
-    # Return unique array of log_records that don't have acct_1_nbr or acct_2_nbr of 000000000000000000, and that are not a PUT TFR transaction
-    return log_records.uniq{|lr| lr.sys_seq_nbr}.reject { |lr| (lr.acct_1_nbr == "000000000000000000" or lr.acct_2_nbr == "000000000000000000") }.reject { |lr| (lr.pri_tran_code.strip == "PUT" and lr.sec_tran_code.strip == "TFR") }
-  end
-  
-  def all_log_records
-    log_records = LogRecord.find_all_by_pos_batch_nbr(id)
-#    log_records = []
-    accounts.each do |account|
-     log_records = log_records + account.all_log_records
-    end
-    # Return unique array of log_records that don't have acct_1_nbr or acct_2_nbr of 000000000000000000
-    return log_records.uniq{|lr| lr.sys_seq_nbr}#.reject { |lr| (lr.acct_1_nbr == "000000000000000000" or lr.acct_2_nbr == "000000000000000000") }
-  end
-  ### End Informix log records ###
-  
   def displayable_transactions
     transactions = []
     heavy_metal_debit_card_accounts.each do |account|
@@ -326,6 +299,10 @@ class Customer < ActiveRecord::Base
   
   def full_name
     "#{self.NameF} #{self.NameL}"
+  end
+  
+  def full_name_by_last_name
+    "#{self.NameL}, #{self.NameF} "
   end
   
   #############################
