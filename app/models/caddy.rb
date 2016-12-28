@@ -39,6 +39,10 @@ class Caddy < ApplicationRecord
     caddy_rank_desc.acronym unless caddy_rank_desc.blank?
   end
   
+  def rank_description
+    caddy_rank_desc.description unless caddy_rank_desc.blank?
+  end
+  
   #############################
   #     Class Methods         #
   #############################

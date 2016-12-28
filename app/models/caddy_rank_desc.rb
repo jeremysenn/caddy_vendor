@@ -17,6 +17,10 @@ class CaddyRankDesc < ApplicationRecord
     self.RankingAcronym
   end
   
+  def description
+    self.RankingDescription
+  end
+  
   #############################
   #     Class Methods         #
   #############################

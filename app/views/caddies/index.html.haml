@@ -1,23 +1,46 @@
-%h1 Listing caddies
+.container
+  %br
+  .card.card-block
+    %h4.card-title Caddies
+    .table-responsive
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Name
+            %th Club
+            %th Ranking
+            %th
+        %tbody
+          - @caddies.each do |caddy|
+            %tr
+              %td= caddy.full_name
+              %td= link_to caddy.club.name, caddy.club
+              %td= link_to caddy.rank_description, caddy.caddy_rank_desc
+              %td
+                = link_to "Show", caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr), class: 'btn btn-secondary'
+                = link_to 'Edit', edit_caddy_path(caddy.id, club_id: caddy.ClubCompanyNbr), class: 'btn btn-primary'
 
-%table
-  %thead
-    %tr
-      %th First name
-      %th Last name
-      %th
-      %th
-      %th
+-#
+  %h1 Listing caddies
 
-  %tbody
-    - @caddies.each do |caddy|
+  %table
+    %thead
       %tr
-        %td= caddy.first_name
-        %td= caddy.last_name
-        %td= link_to 'Show', caddy
-        %td= link_to 'Edit', edit_caddy_path(caddy)
-        %td= link_to 'Destroy', caddy, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %th First name
+        %th Last name
+        %th
+        %th
+        %th
 
-%br
+    %tbody
+      - @caddies.each do |caddy|
+        %tr
+          %td= caddy.first_name
+          %td= caddy.last_name
+          %td= link_to 'Show', caddy
+          %td= link_to 'Edit', edit_caddy_path(caddy)
+          %td= link_to 'Destroy', caddy, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
-= link_to 'New Caddy', new_caddy_path
+  %br
+
+  = link_to 'New Caddy', new_caddy_path
