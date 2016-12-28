@@ -15,21 +15,21 @@ class Customer < ActiveRecord::Base
   attr_accessor :password
   before_save :encrypt_all_security_question_answers, :prepare_password
   
-  validates :NameF, :NameL, :user_name, :PhoneMobile, :Answer1, :Answer2, :Answer3, presence: true
+#  validates :NameF, :NameL, :user_name, :PhoneMobile, :Answer1, :Answer2, :Answer3, presence: true
   
-  validates_uniqueness_of :user_name
+#  validates_uniqueness_of :user_name
   
-  validates_uniqueness_of :Email, :allow_blank => true
-  validates_format_of :Email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, :allow_blank => true
+#  validates_uniqueness_of :Email, :allow_blank => true
+#  validates_format_of :Email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, :allow_blank => true
   
-  validates :password, :presence => true, :on => :create
-  validates_length_of :password, :minimum => 4, :allow_blank => true
-  validates_confirmation_of :password
+#  validates :password, :presence => true, :on => :create
+#  validates_length_of :password, :minimum => 4, :allow_blank => true
+#  validates_confirmation_of :password
   
-  validates :CustomQuestion1, presence: true, if: :custom_question_1?
-  validates :CustomQuestion2, presence: true, if: :custom_question_2?
-  validates :CustomQuestion3, presence: true, if: :custom_question_3?
-  validate :questions_not_duplicated  
+#  validates :CustomQuestion1, presence: true, if: :custom_question_1?
+#  validates :CustomQuestion2, presence: true, if: :custom_question_2?
+#  validates :CustomQuestion3, presence: true, if: :custom_question_3?
+#  validate :questions_not_duplicated  
         
   #############################
   #     Instance Methods      #
