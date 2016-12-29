@@ -308,7 +308,19 @@ class Customer < ActiveRecord::Base
   end
   
   def member_number
-    account.ActNbr unless account.blank?
+    if primary?
+      account.ActNbr unless account.blank?
+    else
+      parent_customer.member_number
+    end
+  end
+  
+  def primary?
+    self.ParentCustID.blank?
+  end
+  
+  def parent_customer
+    Customer.where(CustomerID: self.ParentCustID).first unless primary?
   end
   
   #############################
