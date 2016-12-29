@@ -2,7 +2,7 @@
   .modal-dialog
     .modal-content
       .modal-header
-        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button", onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"} ×
         .modal-title 
           %h4= current_club.name
           %p.lead= @event.start.strftime("%-m/%-d/%y %l:%M %p")

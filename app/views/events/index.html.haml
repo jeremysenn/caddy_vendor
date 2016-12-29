@@ -8,17 +8,5 @@
       %p
         = form_tag events_path, id: 'clubs_form', method: 'get', class: 'form-inline' do |f|
           = select_tag :club_id, options_from_collection_for_select(current_user.clubs, "id", "name", current_club.id), onchange: "$(this).parent('form').submit();", class: "form-control"
-  -#
-    %p
-      = form_tag events_path, id: 'clubs_form', method: 'get', class: 'form-inline' do |f|
-        = select_tag :club_id, options_from_collection_for_select(current_user.clubs, "id", "name", @club.id), onchange: "$(this).parent('form').submit();"
-        -#
-          .btn-group{"data-toggle" => "buttons"}
-            - current_user.clubs.each do |club|
-              -#
-                %label.btn.btn-secondary{class: "#{params[:q] == club.id.to_s ? 'active' : ''}", :onclick => "$('#clubs_form').submit();"}
-              %label.btn.btn-secondary
-                = radio_button_tag :club_id, club.id, {}, :onclick => "$('#clubs_form').submit(); alert('here');"
-                = club.name
   .calendar
   #remote_container
