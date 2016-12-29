@@ -7,6 +7,9 @@
     %p.lead
       Last name:
       = @customer.last_name
+    %p.lead
+      Member Number:
+      = "#{@customer.member_number.blank? ? 'None' : @customer.member_number}"
 
     = link_to 'Members', customers_path, class: 'btn btn-secondary'
     = link_to 'Edit', edit_customer_path(@customer), class: 'btn btn-primary'

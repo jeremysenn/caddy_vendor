@@ -15,6 +15,8 @@ class Customer < ActiveRecord::Base
   attr_accessor :password
   before_save :encrypt_all_security_question_answers, :prepare_password
   
+  accepts_nested_attributes_for :account
+  
 #  validates :NameF, :NameL, :user_name, :PhoneMobile, :Answer1, :Answer2, :Answer3, presence: true
   
 #  validates_uniqueness_of :user_name
@@ -303,6 +305,10 @@ class Customer < ActiveRecord::Base
   
   def full_name_by_last_name
     "#{self.NameL}, #{self.NameF} "
+  end
+  
+  def member_number
+    account.ActNbr unless account.blank?
   end
   
   #############################

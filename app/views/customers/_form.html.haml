@@ -2,8 +2,13 @@
   = f.error_notification
 
   .form-inputs
+    = f.input :CompanyNumber, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? current_user.company_id : @customer.CompanyNumber}" }
     = f.input :NameF, label: 'First Name'
     = f.input :NameL, label: 'Last Name'
+    = f.simple_fields_for :account do |account_form|
+      = account_form.input :ActNbr, label: 'Member Number'
+      = account_form.input :CompanyNumber, :as => :hidden, :input_html => { :value => "#{account_form.object.new_record? ? current_user.company_id : @customer.CompanyNumber}" }
+      = account_form.input :Balance, :as => :hidden, :input_html => { :value => "#{account_form.object.new_record? ? 0 : account_form.object.Balance}" }
 
   .form-actions
     = link_to 'Cancel', :back, class: 'btn btn-secondary'

@@ -16,11 +16,13 @@
           %thead
             %tr
               %th Name
+              %th Member #
               %th
           %tbody
             - @members.each do |member|
               %tr
                 %td= member.full_name
+                %td= "#{member.member_number.blank? ? 'None' : member.member_number}"
                 %td
                   = link_to "Show", member, class: 'btn btn-secondary'
                   = link_to 'Edit', edit_customer_path(member), class: 'btn btn-primary'

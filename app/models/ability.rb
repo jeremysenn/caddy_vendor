@@ -53,8 +53,13 @@ class Ability
       # Customers
       ############
       can :manage, Customer do |customer|
-        customer.company == user.company
+        unless customer.company.blank? or customer.company.CompanyNumber == 0
+          customer.company == user.company
+        else
+          true
+        end
       end
+      can :create, :customers
       
       # Events
       ############

@@ -5,7 +5,7 @@ class Account < ActiveRecord::Base
   establish_connection :ez_cash
   
   has_many :bill_payments
-  belongs_to :customer
+  belongs_to :customer, :foreign_key => "CustomerID"
   
   attr_accessor :last_4_of_pan
   
