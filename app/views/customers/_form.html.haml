@@ -3,6 +3,8 @@
 
   .form-inputs
     = f.input :CompanyNumber, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? current_user.company_id : @customer.CompanyNumber}" }
+    = f.input :Active, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 1 : @customer.Active}" }
+    = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 14 : @customer.GroupID}" }
     = f.input :NameF, label: 'First Name'
     = f.input :NameL, label: 'Last Name'
     = f.simple_fields_for :account do |account_form|
