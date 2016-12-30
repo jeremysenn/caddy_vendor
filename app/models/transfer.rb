@@ -136,6 +136,26 @@ class Transfer < ApplicationRecord
     data = response.to_hash
   end
   
+  def ezcash_transaction_web_service_call
+    xml_string = "<?xml version='1.0' encoding='UTF-8'?>
+    <SOAP-ENV:Envelope xmlns:SOAP-ENV='http://schemas.xmlsoap.org/soap/envelope/' xmlns:mime='http://schemas.xmlsoap.org/wsdl/mime/' xmlns:ns1='urn:EZCWSIntf' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:soapenc='http://schemas.xmlsoap.org/soap/encoding/' xmlns:tns='http://tempuri.org/' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+       <SOAP-ENV:Body>
+          <mns:EZCashTxn xmlns:mns='urn:EZCWSIntf-IEZCWS' SOAP-ENV:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'>
+             <TxnBlock xsi:type='ns1:TTxnBlock'>
+                <FromActID xsi:type='xs:int'>#{from_account_id}</FromActID>
+                <ToActID xsi:type='xs:int'>#{to_account_id}</ToActID>
+                <Amount xsi:type='xs:double'>#{amount}</Amount>
+                <TranCode xsi:type='xs:string'>TFR</TranCode>
+             </TxnBlock>
+          </mns:EZCashTxn>
+       </SOAP-ENV:Body>
+    </SOAP-ENV:Envelope>"
+    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+    response = client.call(:ez_cash_txn, xml: xml_string)
+    data = response.to_hash
+    puts response
+  end
+  
   def amount_in_dollars
     amount_cents / 100
   end
