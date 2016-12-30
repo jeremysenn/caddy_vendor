@@ -141,12 +141,9 @@ class Transfer < ApplicationRecord
     <SOAP-ENV:Envelope xmlns:SOAP-ENV='http://schemas.xmlsoap.org/soap/envelope/' xmlns:mime='http://schemas.xmlsoap.org/wsdl/mime/' xmlns:ns1='urn:EZCWSIntf' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:soapenc='http://schemas.xmlsoap.org/soap/encoding/' xmlns:tns='http://tempuri.org/' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
        <SOAP-ENV:Body>
           <mns:EZCashTxn xmlns:mns='urn:EZCWSIntf-IEZCWS' SOAP-ENV:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'>
-             <TxnBlock xsi:type='ns1:TTxnBlock'>
-                <FromActID xsi:type='xs:int'>#{from_account_id}</FromActID>
-                <ToActID xsi:type='xs:int'>#{to_account_id}</ToActID>
-                <Amount xsi:type='xs:double'>#{amount}</Amount>
-                <TranCode xsi:type='xs:string'>TFR</TranCode>
-             </TxnBlock>
+            <FromActID xsi:type='xs:int'>#{from_account_id}</FromActID>
+            <ToActID xsi:type='xs:int'>#{to_account_id}</ToActID>
+            <Amount xsi:type='xs:double'>#{amount}</Amount>
           </mns:EZCashTxn>
        </SOAP-ENV:Body>
     </SOAP-ENV:Envelope>"
