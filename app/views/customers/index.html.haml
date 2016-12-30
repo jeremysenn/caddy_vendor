@@ -3,10 +3,11 @@
   %p
     = form_tag customers_path, id: 'customers_form', method: 'get', class: 'form-inline' do |f|
       .input-group
-        = search_field_tag :q, params[:q], :placeholder => "Search members", class: "form-control input-lg"
+        = search_field_tag :q, params[:q], :placeholder => "Search members", class: "form-control input-lg", autofocus: true
         %span.input-group-btn
           %button.btn.btn-secondary{id: 'member_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
             %i.fa.fa-search
+      %small.text-muted Search by first name, last name, or member number.
 
   .card.card-block
     %h4.card-title Members

@@ -9,6 +9,7 @@ class CustomersController < ApplicationController
     unless params[:q].blank?
 #      members = current_user.members.where('NameF or NameL like ?', params[:q])
       members = current_user.members.where("NameF like ? OR NameL like ?", params[:q], params[:q])
+      members = current_user.members.joins(:account).where("accounts.ActNbr like ?", params[:q]) if members.blank?
     else
       members = current_user.members.order(:NameL)
     end
