@@ -22,7 +22,7 @@
             %tr
               %td= caddy.full_name
               %td= link_to caddy.rank_description, caddy.caddy_rank_desc
-              %td= caddy.CheckedIn.in_time_zone('Eastern Time (US & Canada)').strftime("%l:%M %p") if caddy.checkin_today? 
+              %td= caddy.CheckedIn.in_time_zone(current_user.time_zone).strftime("%l:%M %p") if caddy.checkin_today? 
               %td
                 = link_to "Show", caddy, class: 'btn btn-secondary'
                 = link_to 'Edit', edit_caddy_path(caddy), class: 'btn btn-primary'
