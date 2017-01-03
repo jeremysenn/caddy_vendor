@@ -2,15 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/db/migrate/20161209164356_add_user_id_to_clubs.rb</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/layouts/application.html.haml</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/welcome/index.html.haml</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/clubs/_form.html.haml</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/user.rb</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/clubs/index.html.haml</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/controllers/clubs_controller.rb</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/club.rb</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

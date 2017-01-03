@@ -17,21 +17,23 @@
   = f.hidden_field :date_range, class: "date-range-picker"
   = f.hidden_field :start, value: Date.today, class: 'start_hidden'
   = f.hidden_field :end, value: Date.today, class: 'end_hidden'
-  .row.form-group
-    %div{:class => "col-sm-12"}
-      %label.col-sm-2.control-label.lead{for: "event_round"} 
-        Round
-      %div{:class => "col-sm-8"}
-        .btn-group-horizontal{"data-toggle" => "buttons"}
-          %label.btn.btn-secondary{class: "#{(@event.new_record? or @event.eighteen_holes? ) ? 'active' : ''}"}
-            = f.radio_button :round, '18', :checked => @event.new_record?
-            Eighteen
-          %label.btn.btn-secondary{class: "#{@event.nine_holes? ? 'active' : ''}"}
-            = f.radio_button :round, '9'
-            Nine
-      -#
-        %div{:class => "col-sm-4"}
-          = f.select :size, ["Foursome", "Threesome", "Twosome", "Single"], class: 'input-lg form-control', required: true
+  = f.hidden_field :round, value: '18'
+  -#
+    .row.form-group
+      %div{:class => "col-sm-12"}
+        %label.col-sm-2.control-label.lead{for: "event_round"} 
+          Round
+        %div{:class => "col-sm-8"}
+          .btn-group-horizontal{"data-toggle" => "buttons"}
+            %label.btn.btn-secondary{class: "#{(@event.new_record? or @event.eighteen_holes? ) ? 'active' : ''}"}
+              = f.radio_button :round, '18', :checked => @event.new_record?
+              Eighteen
+            %label.btn.btn-secondary{class: "#{@event.nine_holes? ? 'active' : ''}"}
+              = f.radio_button :round, '9'
+              Nine
+        -#
+          %div{:class => "col-sm-4"}
+            = f.select :size, ["Foursome", "Threesome", "Twosome", "Single"], class: 'input-lg form-control', required: true
   .row.form-group
     %div{:class => "col-sm-12"}
       %label.col-sm-2.control-label.lead{for: "event_players"} 

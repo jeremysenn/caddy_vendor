@@ -1,5 +1,5 @@
 class Caddy < ApplicationRecord
-  self.primary_key = 'CustomerID'
+#  self.primary_key = 'CustomerID'
   self.table_name= 'Caddies'
   
   establish_connection :ez_cash
@@ -41,6 +41,20 @@ class Caddy < ApplicationRecord
   
   def rank_description
     caddy_rank_desc.description unless caddy_rank_desc.blank?
+  end
+  
+  def checkin_time_today
+    if checkin_today?
+      self.CheckedIn
+    end
+  end
+  
+  def checkin_today?
+    unless self.CheckedIn.blank?
+      self.CheckedIn.today? 
+    else
+      false
+    end
   end
   
   #############################

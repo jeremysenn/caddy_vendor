@@ -1,6 +1,6 @@
 class CaddiesController < ApplicationController
   before_action :authenticate_user!
-#  before_action :set_caddy, only: [:show, :edit, :update, :destroy]
+  before_action :set_caddy, only: [:show, :edit, :update, :destroy]
   load_and_authorize_resource
 
   # GET /caddies
@@ -12,8 +12,6 @@ class CaddiesController < ApplicationController
   # GET /caddies/1
   # GET /caddies/1.json
   def show
-    # Look up caddy by composite of customer ID and club ID
-    @caddy = Caddy.where(CustomerID: params[:id], ClubCompanyNbr: params[:club_id]).first
     @club = @caddy.club
   end
 
@@ -24,8 +22,6 @@ class CaddiesController < ApplicationController
 
   # GET /caddies/1/edit
   def edit
-    # Look up caddy by composite of customer ID and club ID
-    @caddy = Caddy.where(CustomerID: params[:id], ClubCompanyNbr: params[:club_id]).first
     @club = @caddy.club
   end
 
@@ -36,7 +32,7 @@ class CaddiesController < ApplicationController
 
     respond_to do |format|
       if @caddy.save
-        format.html { redirect_to caddy_path(@caddy, club_id: @caddy.club.id), notice: 'Caddy was successfully created.' }
+        format.html { redirect_to @caddy, notice: 'Caddy was successfully created.' }
         format.json { render :show, status: :created, location: @caddy }
       else
         format.html { render :new }
@@ -50,7 +46,7 @@ class CaddiesController < ApplicationController
   def update
     respond_to do |format|
       if @caddy.update(caddy_params)
-        format.html { redirect_to caddy_path(@caddy, club_id: @caddy.club.id), notice: 'Caddy was successfully updated.' }
+        format.html { redirect_to @caddy, notice: 'Caddy was successfully updated.' }
         format.json { render :show, status: :ok, location: @caddy }
       else
         format.html { render :edit }
@@ -77,6 +73,6 @@ class CaddiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def caddy_params
-      params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym, :RankingID)
+      params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym, :RankingID, :CheckedIn, :ClubCompanyNbr)
     end
 end
