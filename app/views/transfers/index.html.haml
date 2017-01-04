@@ -1,19 +1,30 @@
-%h1 Listing transfers
-
-%table
-  %thead
-    %tr
-      %th
-      %th
-      %th
-
-  %tbody
-    - @transfers.each do |transfer|
-      %tr
-        %td= link_to 'Show', transfer
-        %td= link_to 'Edit', edit_transfer_path(transfer)
-        %td= link_to 'Destroy', transfer, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-%br
-
-= link_to 'New Transfer', new_transfer_path
+.container
+  %br
+  - @clubs.each do |club|
+    .card.card-block
+      %h4.card-title= "#{club.name} Transfers"
+      - unless club.transfers.blank?
+        .table-responsive
+          %table.table.table-striped
+            %thead
+              %tr
+                %th Tran ID
+                %th From
+                %th To
+                %th Fee
+                %th Tip
+                %th Total
+                %th
+            %tbody
+              - club.transfers.each do |transfer|
+                %tr
+                  %td= "#{transfer.ez_cash_tran_id.blank? ? 'None' : transfer.ez_cash_tran_id}"
+                  %td= transfer.customer.full_name unless transfer.customer.blank?
+                  %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
+                  %td= number_to_currency(transfer.caddy_fee)
+                  %td= number_to_currency(transfer.caddy_tip)
+                  %td= number_to_currency(transfer.amount)
+                  %td
+                    = link_to "Show", transfer, class: 'btn btn-secondary'
+      - else
+        %p.lead None

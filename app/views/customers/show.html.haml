@@ -10,6 +10,33 @@
     %p.lead
       Member Number:
       = "#{@customer.member_number.blank? ? 'None' : @customer.member_number}"
-
     = link_to 'Members', customers_path, class: 'btn btn-secondary'
     = link_to 'Edit', edit_customer_path(@customer), class: 'btn btn-primary'
+
+  %br
+
+  .card.card-block
+    %h4.card-title Payments
+    - unless @transfers.blank?
+      .table-responsive
+        %table.table.table-striped
+          %thead
+            %tr
+              %th Payee
+              %th Fee
+              %th Tip
+              %th Total
+              %th
+          %tbody
+            - @transfers.each do |transfer|
+              %tr
+                %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
+                %td= number_to_currency(transfer.caddy_fee)
+                %td= number_to_currency(transfer.caddy_tip)
+                %td= number_to_currency(transfer.amount)
+                %td
+                  = link_to "Show", transfer, class: 'btn btn-secondary'
+    - else
+      %p.lead None
+
+  

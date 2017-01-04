@@ -4,6 +4,7 @@ class Transfer < ApplicationRecord
   
 #  after_create :transfer_web_service_call
   after_create :update_player
+  after_create :ezcash_transaction_web_service_call
   
 #  validates :from_account, :to_account, :amount, :fee, presence: true
 #  validate :amount_not_greater_than_available
@@ -136,7 +137,7 @@ class Transfer < ApplicationRecord
     data = response.to_hash
   end
   
-  def ezcash_transaction_web_service_call
+  def ezcash_transaction_web_service_call_xml
     xml_string = "<?xml version='1.0' encoding='UTF-8'?>
     <SOAP-ENV:Envelope xmlns:SOAP-ENV='http://schemas.xmlsoap.org/soap/envelope/' xmlns:mime='http://schemas.xmlsoap.org/wsdl/mime/' xmlns:ns1='urn:TranactIntf' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:soapenc='http://schemas.xmlsoap.org/soap/encoding/' xmlns:tns='http://tempuri.org/' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
        <SOAP-ENV:Body>
@@ -150,6 +151,22 @@ class Transfer < ApplicationRecord
     client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
     response = client.call(:ez_cash_txn, xml: xml_string)
     data = response.to_hash
+  end
+  
+  def ezcash_transaction_web_service_call
+    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+    response = client.call(:ez_cash_txn, message: { FromActID: from_account_id, ToActID: to_account_id, Amount: amount })
+    Rails.logger.debug "Response body: #{response.body}"
+    if response.success?
+      unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
+        self.ez_cash_tran_id = response.body[:ez_cash_txn_response][:tran_id]
+        self.save
+      else
+        return nil
+      end
+    else
+      return nil
+    end
   end
   
   def amount_in_dollars
@@ -170,6 +187,14 @@ class Transfer < ApplicationRecord
       # Payment has been processed for all players
       player.event.update_attribute(:color, 'green')
     end
+  end
+  
+  def to_account
+    Account.where(ActID: to_account_id).first
+  end
+  
+  def to_customer
+    to_account.customer unless to_account.blank?
   end
   
   #############################

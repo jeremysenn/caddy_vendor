@@ -135,7 +135,7 @@
   .row.form-group
     %div{:class => "col-sm-12"}
       %button.btn.btn-secondary{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button", onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"} Cancel
-      = f.submit "Pay", :class => 'btn btn-success', name: 'pay', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();" if @event.not_paid?
+      = f.submit "Pay", :class => 'btn btn-success', name: 'pay', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();" if @event.new_record? or @event.not_paid?
       = f.submit "Save", :class => 'btn btn-primary', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"
       = link_to 'Delete',                      |
             event,                                 |

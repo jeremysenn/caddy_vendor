@@ -1,7 +1,7 @@
 class Player < ApplicationRecord
   
   belongs_to :member, :foreign_key => "member_id", :class_name => 'Customer'
-#  belongs_to :caddy
+  belongs_to :caddy
   belongs_to :event, optional: true
   has_one :transfer
   
@@ -10,10 +10,6 @@ class Player < ApplicationRecord
   #############################
   #     Instance Methods      #
   #############################
-  
-  def caddy
-    Caddy.where(CustomerID: caddy_id, ClubCompanyNbr: club.id).first
-  end
   
   def club
     event.club
@@ -62,7 +58,7 @@ class Player < ApplicationRecord
   end
   
   def caddy_pay_rate
-   pay_rate = CaddyPayRate.where(ClubCompanyID: club.id, RankingAcronym: caddy.RankingAcronym, Type: caddy_type, NbrHoles: round).first
+   pay_rate = CaddyPayRate.where(ClubCompanyID: club.id, RankingAcronym: caddy.acronym, Type: caddy_type, NbrHoles: round).first
    unless pay_rate.blank?
      pay_rate.Payrate
    else

@@ -3,6 +3,7 @@ class Event < ApplicationRecord
   
   has_many :players, :dependent => :destroy
   accepts_nested_attributes_for :players, allow_destroy: true, limit: 5
+  has_many :transfers, through: :players
   
 #  validates :title, presence: true
   attr_accessor :date_range

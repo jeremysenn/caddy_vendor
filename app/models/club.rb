@@ -9,8 +9,7 @@ class Club < ApplicationRecord
   has_many :caddies, :foreign_key => "ClubCompanyNbr"
   has_many :caddy_pay_rates, :foreign_key => "ClubCompanyID"
   has_many :caddy_rank_descs, :foreign_key => "ClubCompanyID"
-#  has_and_belongs_to_many :members
-#  has_and_belongs_to_many :caddies
+  has_many :transfers, through: :events
 
   #############################
   #     Instance Methods      #

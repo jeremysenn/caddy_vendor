@@ -7,6 +7,7 @@ class Caddy < ApplicationRecord
   belongs_to :club, :foreign_key => "ClubCompanyNbr"
   belongs_to :customer, :foreign_key => "CustomerID"
   belongs_to :caddy_rank_desc, :foreign_key => "RankingID"
+  has_many :players
   
 #  has_and_belongs_to_many :clubs
 

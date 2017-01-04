@@ -6,12 +6,15 @@ class TransfersController < ApplicationController
   # GET /transfers
   # GET /transfers.json
   def index
-    @transfers = Transfer.all
+#    @transfers = Transfer.all
+    @clubs = current_user.company.clubs
   end
 
   # GET /transfers/1
   # GET /transfers/1.json
   def show
+    @from = @transfer.customer
+    @to = @transfer.to_customer
   end
 
   # GET /transfers/new
