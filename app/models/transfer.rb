@@ -206,6 +206,10 @@ class Transfer < ApplicationRecord
     to_account.customer unless to_account.blank?
   end
   
+  def reversable?
+    not ez_cash_tran_id.blank? and not reversed?
+  end
+  
   #############################
   #     Class Methods         #
   #############################
