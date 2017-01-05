@@ -1,0 +1,23 @@
+.container
+  %br
+  .card.card-block
+    -#
+      %p.lead
+        Tran ID:
+        = "#{@transfer.ez_cash_tran_id.blank? ? 'None' : @transfer.ez_cash_tran_id}"
+      %p.lead
+        Member:
+        = @from.first_name unless @from.blank?
+      %p.lead
+        Payee:
+        = @to.full_name unless @to.blank?
+      %p.lead
+        Fee:
+        = number_to_currency(@transfer.caddy_fee)
+      %p.lead
+        Tip:
+        = number_to_currency(@transfer.caddy_tip)
+      %p.lead
+        Total:
+        = number_to_currency(@transfer.amount)
+  = link_to 'Back', :back, class: 'btn btn-secondary'
