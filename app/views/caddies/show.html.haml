@@ -14,8 +14,41 @@
       Ranking:
       = link_to @caddy.rank_description, @caddy.caddy_rank_desc
     %p.lead
-      Checked In:
+      Checked In Today:
       = @caddy.CheckedIn.in_time_zone(current_user.time_zone).strftime("%l:%M %p") if @caddy.checkin_today? 
+    = simple_form_for(@caddy) do |f|
+      = f.error_notification
+      .form-inputs
+        = f.input :CheckedIn, as: :hidden, input_html: {value: DateTime.now}
+        = link_to 'Edit', edit_caddy_path(@caddy), class: 'btn btn-primary'
+        = f.button :submit, "Check In", class: 'btn btn-success'
 
-    = link_to 'Caddies', caddies_path, class: 'btn btn-secondary'
-    = link_to 'Edit', edit_caddy_path(@caddy), class: 'btn btn-primary'
+  %br
+
+  .card.card-block
+    %h4.card-title Transfers
+    - unless @transfers.blank?
+      .table-responsive
+        %table.table.table-striped
+          %thead
+            %tr
+              %th Tran ID
+              %td Date/Time
+              %th From
+              %th Fee
+              %th Tip
+              %th Total
+              %th
+          %tbody
+            - @transfers.each do |transfer|
+              %tr
+                %td= "#{transfer.ez_cash_tran_id.blank? ? 'None' : transfer.ez_cash_tran_id}"
+                %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                %td= transfer.customer.full_name unless transfer.customer.blank?
+                %td= number_to_currency(transfer.caddy_fee)
+                %td= number_to_currency(transfer.caddy_tip)
+                %td= number_to_currency(transfer.amount)
+                %td
+                  = link_to "Show", transfer, class: 'btn btn-secondary'
+    - else
+      %p.lead None

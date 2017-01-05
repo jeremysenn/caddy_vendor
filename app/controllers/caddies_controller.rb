@@ -15,6 +15,7 @@ class CaddiesController < ApplicationController
   # GET /caddies/1.json
   def show
     @club = @caddy.club
+    @transfers = @caddy.transfers
   end
 
   # GET /caddies/new

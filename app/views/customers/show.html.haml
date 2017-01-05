@@ -10,19 +10,20 @@
     %p.lead
       Member Number:
       = "#{@customer.member_number.blank? ? 'None' : @customer.member_number}"
-    = link_to 'Members', customers_path, class: 'btn btn-secondary'
     = link_to 'Edit', edit_customer_path(@customer), class: 'btn btn-primary'
 
   %br
 
   .card.card-block
-    %h4.card-title Payments
+    %h4.card-title Transfers
     - unless @transfers.blank?
       .table-responsive
         %table.table.table-striped
           %thead
             %tr
-              %th Payee
+              %th Tran ID
+              %td Date/Time
+              %th To
               %th Fee
               %th Tip
               %th Total
@@ -30,6 +31,8 @@
           %tbody
             - @transfers.each do |transfer|
               %tr
+                %td= "#{transfer.ez_cash_tran_id.blank? ? 'None' : transfer.ez_cash_tran_id}"
+                %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
                 %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
                 %td= number_to_currency(transfer.caddy_fee)
                 %td= number_to_currency(transfer.caddy_tip)
