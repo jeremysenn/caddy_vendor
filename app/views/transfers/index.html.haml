@@ -1,30 +1,40 @@
 .container
+  - unless current_club.blank?
+    - if current_user.clubs.count <= 1
+      %br
+      %p.lead
+        = current_club.name
+    - else
+      %p
+        = form_tag transfers_path, id: 'clubs_form', method: 'get', class: 'form-inline' do |f|
+          = select_tag :club_id, options_from_collection_for_select(current_user.clubs, "id", "name", @club.id), onchange: "$(this).parent('form').submit();", class: "form-control"
   %br
-  - @clubs.each do |club|
-    .card.card-block
-      %h4.card-title= "#{club.name} Transfers"
-      - unless club.transfers.blank?
-        .table-responsive
-          %table.table.table-striped
-            %thead
+  .card.card-block
+    %h4.card-title Transfers
+    - unless @transfers.blank?
+      .table-responsive
+        %table.table.table-striped
+          %thead
+            %tr
+              %th Tran ID
+              %td Date/Time
+              %th From
+              %th To
+              %th Fee
+              %th Tip
+              %th Total
+              %th
+          %tbody
+            - @transfers.each do |transfer|
               %tr
-                %th Tran ID
-                %th From
-                %th To
-                %th Fee
-                %th Tip
-                %th Total
-                %th
-            %tbody
-              - club.transfers.each do |transfer|
-                %tr
-                  %td= "#{transfer.ez_cash_tran_id.blank? ? 'None' : transfer.ez_cash_tran_id}"
-                  %td= transfer.customer.full_name unless transfer.customer.blank?
-                  %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
-                  %td= number_to_currency(transfer.caddy_fee)
-                  %td= number_to_currency(transfer.caddy_tip)
-                  %td= number_to_currency(transfer.amount)
-                  %td
-                    = link_to "Show", transfer, class: 'btn btn-secondary'
-      - else
-        %p.lead None
+                %td= "#{transfer.ez_cash_tran_id.blank? ? 'None' : transfer.ez_cash_tran_id}"
+                %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                %td= transfer.customer.full_name unless transfer.customer.blank?
+                %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
+                %td= number_to_currency(transfer.caddy_fee)
+                %td= number_to_currency(transfer.caddy_tip)
+                %td= number_to_currency(transfer.amount)
+                %td
+                  = link_to "Show", transfer, class: 'btn btn-secondary'
+    - else
+      %p.lead None

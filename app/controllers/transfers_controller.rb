@@ -7,7 +7,14 @@ class TransfersController < ApplicationController
   # GET /transfers.json
   def index
 #    @transfers = Transfer.all
-    @clubs = current_user.company.clubs
+#    @clubs = current_user.company.clubs
+    unless params[:club_id].blank?
+      @club = Club.where(ClubCourseID: params[:club_id]).first
+      @club = current_club.blank? ? current_user.company.clubs.first : current_club if @club.blank?
+    else
+      @club = current_club.blank? ? current_user.company.clubs.first : current_club
+    end
+    @transfers = @club.transfers.reverse
   end
 
   # GET /transfers/1
