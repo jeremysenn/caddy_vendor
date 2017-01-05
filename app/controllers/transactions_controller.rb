@@ -12,8 +12,6 @@ class TransactionsController < ApplicationController
   # GET /transactions/1
   # GET /transactions/1.json
   def show
-    @from = @transaction.customer
-    @to = @transaction.to_customer
   end
 
   # GET /transactions/new
