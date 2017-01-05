@@ -11,6 +11,8 @@
               %th DateTime
               %th from_acct_id
               %th to_acct_id
+              %th Tran Code
+              %th Sec Tran Code
               %th Amount
               %th Description
               %th
@@ -21,6 +23,8 @@
                 %td= transaction.date_time
                 %td= transaction.from_acct_id
                 %td= transaction.to_acct_id
+                %td= transaction.tran_code
+                %td= transaction.sec_tran_code
                 %td= number_to_currency(transaction.amt_auth)
                 %td= transaction.Description
                 %td

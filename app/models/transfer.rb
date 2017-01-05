@@ -5,6 +5,7 @@ class Transfer < ApplicationRecord
 #  after_create :transfer_web_service_call
   after_create :update_player
   after_create :ezcash_transaction_web_service_call
+  after_update :ezcash_transaction_reversal_web_service_call
   
 #  validates :from_account, :to_account, :amount, :fee, presence: true
 #  validate :amount_not_greater_than_available
@@ -166,6 +167,14 @@ class Transfer < ApplicationRecord
       end
     else
       return nil
+    end
+  end
+  
+  def ezcash_transaction_reversal_web_service_call
+    if reversed?
+      client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+      response = client.call(:ez_cash_txn, message: { TranID: ez_cash_tran_id })
+      Rails.logger.debug "Response body: #{response.body}"
     end
   end
   

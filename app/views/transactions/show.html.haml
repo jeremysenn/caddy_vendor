@@ -14,6 +14,12 @@
       To Acct ID:
       = @transaction.to_acct_id
     %p.lead
+      Tran Code:
+      = @transaction.tran_code
+    %p.lead
+      Sec Tran Code:
+      = @transaction.sec_tran_code
+    %p.lead
       Amount:
       = number_to_currency(@transaction.amt_auth)
     %p.lead
