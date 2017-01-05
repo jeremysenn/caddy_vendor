@@ -14,7 +14,7 @@ class TransfersController < ApplicationController
     else
       @club = current_club.blank? ? current_user.company.clubs.first : current_club
     end
-    @transfers = @club.transfers.reverse
+    @transfers = @club.transfers.order(created_at: :desc).page(params[:page]).per(20)
   end
 
   # GET /transfers/1

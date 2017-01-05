@@ -6,7 +6,7 @@ class TransactionsController < ApplicationController
   # GET /transactions
   # GET /transactions.json
   def index
-    @transactions = Transaction.last(30).reverse
+    @transactions = Transaction.all.order(date_time: :desc).page(params[:page]).per(20)
   end
 
   # GET /transactions/1

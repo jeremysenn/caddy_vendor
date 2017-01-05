@@ -58,7 +58,7 @@ class Player < ApplicationRecord
   end
   
   def caddy_pay_rate
-   pay_rate = CaddyPayRate.where(ClubCompanyID: club.id, RankingAcronym: caddy.acronym, Type: caddy_type, NbrHoles: round).first
+   pay_rate = CaddyPayRate.where(ClubCompanyID: club.id, RankingID: caddy.caddy_rank_desc.id, Type: caddy_type, NbrHoles: round).first
    unless pay_rate.blank?
      pay_rate.Payrate
    else

@@ -27,3 +27,5 @@
                   = link_to "Show", transaction, class: 'btn btn-secondary'
     - else
       %p.lead None
+
+  = paginate @transactions
