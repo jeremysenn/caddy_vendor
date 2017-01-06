@@ -6,6 +6,7 @@ class Account < ActiveRecord::Base
   
   has_many :bill_payments
   belongs_to :customer, :foreign_key => "CustomerID"
+  has_many :transactions
   
   attr_accessor :last_4_of_pan
   
@@ -16,8 +17,12 @@ class Account < ActiveRecord::Base
   #     Instance Methods      #
   #############################
   
-  def customer
-    Customer.find(self.CustomerID)
+#  def customer
+#    Customer.find(self.CustomerID)
+#  end
+
+  def company
+    customer.company
   end
   
   def transactions

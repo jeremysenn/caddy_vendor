@@ -12,6 +12,7 @@ class Company < ActiveRecord::Base
   has_many :caddy_pay_rates, :through => :clubs
   has_many :caddy_rank_descs, :through => :clubs
   has_many :events, through: :clubs
+  has_many :accounts, through: :customers
   
   #############################
   #     Instance Methods      #

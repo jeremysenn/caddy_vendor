@@ -1,7 +1,7 @@
 .container
   %br
   .card.card-block
-    %h4.card-title Transactions
+    %h4.card-title Withdrawals
     - unless @transactions.blank?
       .table-responsive
         %table.table.table-striped
@@ -9,24 +9,18 @@
             %tr
               %th Tran ID
               %th DateTime
-              %th from_acct_id
-              %th to_acct_id
-              %th Tran Code
-              %th Sec Tran Code
+              %th Code
+              %th Status
               %th Amount
-              %th Description
               %th
           %tbody
             - @transactions.each do |transaction|
               %tr{class: "#{transaction.reversal? ? 'table-danger' : '' }"}
                 %td= transaction.id
-                %td= transaction.date_time
-                %td= transaction.from_acct_id
-                %td= transaction.to_acct_id
-                %td= transaction.tran_code
-                %td= transaction.sec_tran_code
+                %td= transaction.date_time.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                %td= transaction.error_code_description
+                %td= transaction.status_description
                 %td= number_to_currency(transaction.amt_auth)
-                %td= transaction.Description
                 %td
                   = link_to "Show", transaction, class: 'btn btn-secondary'
     - else

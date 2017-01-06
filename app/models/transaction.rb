@@ -4,10 +4,49 @@ class Transaction < ActiveRecord::Base
   
   establish_connection :ez_cash
   belongs_to :device, :foreign_key => :dev_id
+  belongs_to :account, :foreign_key => :from_acct_id # Assume from account is the main account
+  
+  scope :withdrawals, -> { where(tran_code: "WDL", sec_tran_code: ["TFR", ""]) }
   
   #############################
   #     Instance Methods      #
   #############################
+  
+  def error_code_description
+    error_desc = ErrorDesc.find_by_error_code(error_code)
+    unless error_desc.blank?
+      return error_desc.short_desc
+    else
+      return "N/A"
+    end
+  end
+  
+  def error_code_long_description
+    error_desc = ErrorDesc.find_by_error_code(error_code)
+    unless error_desc.blank?
+      return error_desc.long_desc
+    else
+      return "Not Applicable"
+    end
+  end
+  
+  def status_description
+    tran_status_desc = TranStatusDesc.find_by_tran_status(tran_status)
+    unless tran_status_desc.blank?
+      return tran_status_desc.short_desc
+    else
+      return "N/A"
+    end
+  end
+  
+  def status_long_description
+    tran_status_desc = TranStatusDesc.find_by_tran_status(tran_status)
+    unless tran_status_desc.blank?
+      return tran_status_desc.long_desc
+    else
+      return "Not Applicable"
+    end
+  end
   
   def type
     unless tran_code.blank? or sec_tran_code.blank?
@@ -21,7 +60,7 @@ class Transaction < ActiveRecord::Base
         return "Money Order"
       elsif (tran_code.strip == "WDL" and sec_tran_code.strip == "REVT")
         return "Reverse Withdrawal"
-      elsif (tran_code.strip == "WDL" and sec_tran_code.strip == "TFR")
+      elsif (tran_code.strip == "WDL")
         return "Withdrawal"
       elsif (tran_code.strip == "CARD" and sec_tran_code.strip == "TFR")
         return "Card Transfer"
@@ -145,10 +184,10 @@ class Transaction < ActiveRecord::Base
     type == "Account Credit"
   end
   
-  def account
-#    Account.where(ActID: self.ActID).last
-    Account.where(ActID: card_nbr).last
-  end
+#  def account
+##    Account.where(ActID: self.ActID).last
+#    Account.where(ActID: card_nbr).last
+#  end
   
   def images
     images = Image.where(ticket_nbr: id.to_s)
@@ -178,7 +217,12 @@ class Transaction < ActiveRecord::Base
   end
   
   def customer
-    Customer.find(self.custID)
+#    Customer.find(self.custID)
+    account.customer unless account.blank?
+  end
+  
+  def company
+    customer.company unless customer.blank?
   end
   
   def amount_with_fee
