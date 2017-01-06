@@ -41,7 +41,7 @@
               %th
           %tbody
             - @transfers.each do |transfer|
-              %tr
+              %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
                 %td= "#{transfer.ez_cash_tran_id.blank? ? 'None' : transfer.ez_cash_tran_id}"
                 %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
                 %td= transfer.customer.full_name unless transfer.customer.blank?
@@ -49,6 +49,8 @@
                 %td= number_to_currency(transfer.caddy_tip)
                 %td= number_to_currency(transfer.amount)
                 %td
+                  - if transfer.reversed?
+                    .text-danger Reversed
                   = link_to "Show", transfer, class: 'btn btn-secondary'
     - else
       %p.lead None
