@@ -1,6 +1,7 @@
 class Transfer < ApplicationRecord
   belongs_to :customer
   belongs_to :player
+  belongs_to :ez_cash_transaction, class_name: "Transaction", :foreign_key => "ezcash_tran_id"
   
 #  after_create :transfer_web_service_call
   after_create :update_player

@@ -5,6 +5,7 @@ class Transaction < ActiveRecord::Base
   establish_connection :ez_cash
   belongs_to :device, :foreign_key => :dev_id
   belongs_to :account, :foreign_key => :from_acct_id # Assume from account is the main account
+  has_one :transfer
   
   scope :withdrawals, -> { where(tran_code: "WDL", sec_tran_code: ["TFR", ""]) }
   

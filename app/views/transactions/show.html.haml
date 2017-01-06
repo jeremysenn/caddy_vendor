@@ -5,24 +5,22 @@
       Tran ID:
       = @transaction.id
     %p.lead
-      Date/Time:
-      = @transaction.date_time
+      Device ID:
+      = @transaction.dev_id
     %p.lead
-      From Acct ID:
-      = @transaction.from_acct_id
+      DateTime:
+      = @transaction.date_time.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
     %p.lead
-      To Acct ID:
-      = @transaction.to_acct_id
+      Code:
+      = @transaction.error_code_long_description
     %p.lead
-      Tran Code:
-      = @transaction.tran_code
-    %p.lead
-      Sec Tran Code:
-      = @transaction.sec_tran_code
+      Status:
+      = @transaction.status_long_description
     %p.lead
       Amount:
       = number_to_currency(@transaction.amt_auth)
     %p.lead
       Description:
       = @transaction.Description
+
   = link_to 'Back', :back, class: 'btn btn-secondary'

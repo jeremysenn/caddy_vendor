@@ -31,7 +31,11 @@
           %tbody
             - @transfers.each do |transfer|
               %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                %td= "#{transfer.ez_cash_tran_id.blank? ? 'None' : transfer.ez_cash_tran_id}"
+                %td
+                  - unless transfer.ez_cash_tran_id.blank?
+                    = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
+                  - else
+                    None
                 %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
                 %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
                 %td= number_to_currency(transfer.caddy_fee)
