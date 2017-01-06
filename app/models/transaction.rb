@@ -10,28 +10,34 @@ class Transaction < ActiveRecord::Base
   #############################
   
   def type
-    if (tran_code.strip == "CHK" and sec_tran_code.strip == "TFR")
-      return "Check Cashed"
-    elsif (tran_code.strip == "CHKP" and sec_tran_code.strip == "TFR")
-      return "Positive Check Cashed"
-    elsif (tran_code.strip == "CASH" and sec_tran_code.strip == "TFR")
-      return "Cash Deposit"
-    elsif (tran_code.strip == "MON" and sec_tran_code.strip == "ORD")
-      return "Money Order"
-    elsif (tran_code.strip == "WDL" and sec_tran_code.strip == "REVT")
-      return "Reverse Withdrawal"
-    elsif (tran_code.strip == "WDL" and sec_tran_code.strip == "TFR")
-      return "Withdrawal"
-    elsif (tran_code.strip == "CARD" and sec_tran_code.strip == "TFR")
-      return "Card Transfer"
-    elsif (tran_code.strip == "BILL" and sec_tran_code.strip == "PAY")
-      return "Bill Pay"
-    elsif (tran_code.strip == "POS" and sec_tran_code.strip == "TFR")
-      return "Purchase"
-    elsif (tran_code.strip == "PUT" and sec_tran_code.strip == "TFR")
-      return "Wire Transfer"
-    elsif (tran_code.strip == "FUND" and sec_tran_code.strip == "TFR")
-      return "Fund Transfer"
+    unless tran_code.blank? or sec_tran_code.blank?
+      if (tran_code.strip == "CHK" and sec_tran_code.strip == "TFR")
+        return "Check Cashed"
+      elsif (tran_code.strip == "CHKP" and sec_tran_code.strip == "TFR")
+        return "Positive Check Cashed"
+      elsif (tran_code.strip == "CASH" and sec_tran_code.strip == "TFR")
+        return "Cash Deposit"
+      elsif (tran_code.strip == "MON" and sec_tran_code.strip == "ORD")
+        return "Money Order"
+      elsif (tran_code.strip == "WDL" and sec_tran_code.strip == "REVT")
+        return "Reverse Withdrawal"
+      elsif (tran_code.strip == "WDL" and sec_tran_code.strip == "TFR")
+        return "Withdrawal"
+      elsif (tran_code.strip == "CARD" and sec_tran_code.strip == "TFR")
+        return "Card Transfer"
+      elsif (tran_code.strip == "BILL" and sec_tran_code.strip == "PAY")
+        return "Bill Pay"
+      elsif (tran_code.strip == "POS" and sec_tran_code.strip == "TFR")
+        return "Purchase"
+      elsif (tran_code.strip == "PUT" and sec_tran_code.strip == "TFR")
+        return "Wire Transfer"
+      elsif (tran_code.strip == "FUND" and sec_tran_code.strip == "TFR")
+        return "Fund Transfer"
+      elsif (tran_code.strip == "CRED" and sec_tran_code.strip == "TFR")
+        return "Account Credit"
+      else
+        return "Unknown"
+      end
     end
   end
   
@@ -133,6 +139,10 @@ class Transaction < ActiveRecord::Base
   
   def fund_transfer_out?(account_id)
     fund_transfer? and from_acct_id == account_id
+  end
+  
+  def reversal?
+    type == "Account Credit"
   end
   
   def account
