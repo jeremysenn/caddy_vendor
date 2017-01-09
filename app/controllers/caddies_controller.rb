@@ -8,7 +8,12 @@ class CaddiesController < ApplicationController
   # GET /caddies
   # GET /caddies.json
   def index
-    @caddies = current_user.caddies
+    unless params[:q].blank?
+      caddies = current_user.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", params[:q], params[:q])
+    else
+      caddies = current_user.caddies
+    end
+    @caddies = caddies.page(params[:page]).per(50)
   end
 
   # GET /caddies/1

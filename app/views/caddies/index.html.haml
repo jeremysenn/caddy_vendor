@@ -1,5 +1,14 @@
 .container
   %br
+  %p
+    = form_tag caddies_path, id: 'caddies_form', method: 'get', class: 'form-inline' do |f|
+      .input-group
+        = search_field_tag :q, params[:q], :placeholder => "Search caddies", class: "form-control input-lg", autofocus: true
+        %span.input-group-btn
+          %button.btn.btn-secondary{id: 'caddy_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
+            %i.fa.fa-search
+      %small.text-muted Search by first name or last name
+
   .card.card-block
     %h4.card-title Caddies
     .table-responsive
@@ -21,28 +30,4 @@
               %td
                 = link_to "Show", caddy, class: 'btn btn-secondary'
                 = link_to 'Edit', edit_caddy_path(caddy), class: 'btn btn-primary'
-
--#
-  %h1 Listing caddies
-
-  %table
-    %thead
-      %tr
-        %th First name
-        %th Last name
-        %th
-        %th
-        %th
-
-    %tbody
-      - @caddies.each do |caddy|
-        %tr
-          %td= caddy.first_name
-          %td= caddy.last_name
-          %td= link_to 'Show', caddy
-          %td= link_to 'Edit', edit_caddy_path(caddy)
-          %td= link_to 'Destroy', caddy, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-  %br
-
-  = link_to 'New Caddy', new_caddy_path
+  = paginate @caddies
