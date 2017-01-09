@@ -12,6 +12,8 @@ class CaddyRankDescsController < ApplicationController
   # GET /caddy_rank_descs/1
   # GET /caddy_rank_descs/1.json
   def show
+    @caddies = @caddy_rank_desc.caddies
+    @caddy_pay_rates = @caddy_rank_desc.caddy_pay_rates
   end
 
   # GET /caddy_rank_descs/new

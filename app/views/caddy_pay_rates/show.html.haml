@@ -16,6 +16,6 @@
     %p.lead
       Rate:
       = number_to_currency(@caddy_pay_rate.Payrate)
-
-    = link_to 'Caddy Pay Rates', caddy_pay_rates_path, class: 'btn btn-secondary'
+  %p
     = link_to 'Edit', edit_caddy_pay_rate_path(@caddy_pay_rate), class: 'btn btn-primary'
+    = link_to 'Delete', @caddy_pay_rate, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }

@@ -24,4 +24,5 @@
                 %td
                   = link_to 'Show', caddy_pay_rate, class: 'btn btn-secondary'
                   = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate), class: 'btn btn-primary'
+                  = link_to 'Delete', caddy_pay_rate, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }
       .card-link= link_to "New #{club.name} caddy pay rate", new_caddy_pay_rate_path(club_id: club.id), class: 'btn btn-primary'

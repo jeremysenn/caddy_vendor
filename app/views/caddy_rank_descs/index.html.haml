@@ -1,6 +1,6 @@
 .container
   %br
-  %h3 Caddy Rank Descriptions
+  %h3 Caddy Ranks
   %br
 
   - @caddy_rank_descs.group_by{|crd| crd.club}.each do |club, caddy_rank_descs|
@@ -21,4 +21,9 @@
                 %td
                   = link_to 'Show', caddy_rank_desc, class: 'btn btn-secondary'
                   = link_to 'Edit', edit_caddy_rank_desc_path(caddy_rank_desc), class: 'btn btn-primary'
+                  - if caddy_rank_desc.caddies.blank? and caddy_rank_desc.caddy_pay_rates.blank?
+                    = link_to 'Delete', caddy_rank_desc, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }
+                  - else
+                    %button.btn.btn-danger{"data-content" => "You must first remove this Caddy Rank from all Caddies and Caddy Pay Rates.", "data-toggle" => "popover", :title => "Delete Caddy Rank", "data-placement" => "top", :type => "button"} Delete
+
       .card-link= link_to "New #{club.name} caddy rank desc", new_caddy_rank_desc_path(club_id: club.id), class: 'btn btn-primary'

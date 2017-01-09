@@ -18,6 +18,14 @@
           %i.fa.fa-vcard-o
           Caddies
       %li.nav-item
+        %a.nav-link{:href => caddy_rank_descs_path, :class => (params[:controller] == 'caddy_rank_descs') ? "active" : ""} 
+          %i.fa.fa-certificate
+          Ranks
+      %li.nav-item
+        %a.nav-link{:href => caddy_pay_rates_path, :class => (params[:controller] == 'caddy_pay_rates') ? "active" : ""} 
+          %i.fa.fa-credit-card-alt
+          Rates
+      %li.nav-item
         %a.nav-link{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active" : ""} 
           %i.fa.fa-dollar
           Transfers

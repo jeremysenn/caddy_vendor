@@ -5,17 +5,59 @@
       Ranking:
       = @caddy_rank_desc.RankingAcronym
     %p.lead
-      Club:
-      = link_to @caddy_rank_desc.club.name, @caddy_rank_desc.club
-    %p.lead
       Description:
       = @caddy_rank_desc.RankingDescription
     %p.lead
-      Caddies:
-      - @caddy_rank_desc.caddies.each do |caddy|
-        %br
-        = link_to caddy.full_name, caddy_path(caddy, club_id: caddy.club.id)
-        
-    = link_to 'Caddy Rank Descriptions', caddy_rank_descs_path, class: 'btn btn-secondary'
+      Club:
+      = link_to @caddy_rank_desc.club.name, @caddy_rank_desc.club
+  
+  %br
+  .card.card-block
+    %h4.card-title Caddies with this ranking
+    - unless @caddies.blank?
+      .table-responsive
+        %table.table.table-striped
+          %thead
+            %tr
+              %th Name
+              %th
+          %tbody
+            - @caddies.each do |caddy|
+              %tr
+                %td= caddy.full_name
+                %td
+                  = link_to "Show", caddy, class: 'btn btn-secondary'
+                  = link_to 'Edit', edit_caddy_path(caddy), class: 'btn btn-primary'
+    - else
+      %p.lead None
+  %br
+  .card.card-block
+    %h4.card-title Caddy Pay Rates with this ranking
+    - unless @caddy_pay_rates.blank?
+      .table-responsive
+        %table.table.table-striped
+          %thead
+            %tr
+              %th Type
+              %th Holes
+              %th Rate
+              %th
+          %tbody
+            - @caddy_pay_rates.each do |caddy_pay_rate|
+              %tr
+                %td= caddy_pay_rate.Type
+                %td= caddy_pay_rate.NbrHoles
+                %td= number_to_currency(caddy_pay_rate.Payrate)
+                %td
+                  = link_to 'Show', caddy_pay_rate, class: 'btn btn-secondary'
+                  = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate), class: 'btn btn-primary'
+    - else
+      %p.lead None
+  %p   
     = link_to 'Edit', edit_caddy_rank_desc_path(@caddy_rank_desc), class: 'btn btn-primary'
+    - if @caddies.blank? and @caddy_pay_rates.blank?
+      = link_to 'Delete', @caddy_rank_desc, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }
+    - else
+      %button.btn.btn-danger{"data-content" => "You must first remove this Caddy Rank from all Caddies and Caddy Pay Rates.", "data-toggle" => "popover", :title => "Delete Caddy Rank", "data-placement" => "top", :type => "button"} Delete
+
     
