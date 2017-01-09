@@ -15,12 +15,11 @@
           %hr.intro-divider/
           - if user_signed_in?
             %ul.list-inline.text-xs-center
-              -#
-                %li.list-inline-item
-                  .col-xs-12
-                    %a.btn.btn-secondary.btn-lg.btn-block{:href => events_path, :role => "button"}
-                      %i.fa.fa-calendar
-                      Calendar
+              %li.list-inline-item
+                .col-xs-12
+                  %a.btn.btn-secondary.btn-lg.btn-block{:href => events_path, :role => "button"}
+                    %i.fa.fa-calendar
+                    Calendar
               %li.list-inline-item
                 .col-xs-12
                   %a.btn.btn-secondary.btn-lg.btn-block{:href => clubs_path, :role => "button"}
