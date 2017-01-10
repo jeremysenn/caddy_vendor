@@ -1,50 +1,20 @@
 = form_for @event, :html => {class: 'form-horizontal event_form', role: 'form'}, remote: true do |f|
-  -#
-    .row.form-group
-      %div{:class => "col-sm-12"}
-        %label.col-sm-2.control-label.lead{for: "event_title"} 
-          Title
-        .col-sm-10
-          = f.text_field :title, placeholder:'Title', class: 'input-lg form-control', autofocus: true, required: true
-  -#
-    .row.form-group
-      %div{:class => "col-sm-12"}
-        %label.col-sm-2.control-label.lead{for: "event_club_id"} 
-          Club
-        %div{:class => "col-sm-4"}
-          = f.collection_select :club_id, current_user.clubs, :id, :name, required: true
   = f.hidden_field :club_id, value: current_club.id
   = f.hidden_field :date_range, class: "date-range-picker"
   = f.hidden_field :start, value: Date.today, class: 'start_hidden'
   = f.hidden_field :end, value: Date.today, class: 'end_hidden'
   = f.hidden_field :round, value: '18'
-  -#
-    .row.form-group
-      %div{:class => "col-sm-12"}
-        %label.col-sm-2.control-label.lead{for: "event_round"} 
-          Round
-        %div{:class => "col-sm-8"}
-          .btn-group-horizontal{"data-toggle" => "buttons"}
-            %label.btn.btn-secondary{class: "#{(@event.new_record? or @event.eighteen_holes? ) ? 'active' : ''}"}
-              = f.radio_button :round, '18', :checked => @event.new_record?
-              Eighteen
-            %label.btn.btn-secondary{class: "#{@event.nine_holes? ? 'active' : ''}"}
-              = f.radio_button :round, '9'
-              Nine
-        -#
-          %div{:class => "col-sm-4"}
-            = f.select :size, ["Foursome", "Threesome", "Twosome", "Single"], class: 'input-lg form-control', required: true
   .row.form-group
     %div{:class => "col-sm-12"}
       %label.col-sm-2.control-label.lead{for: "event_players"} 
         Players
       %div{:class => "col-sm-10"}
         = f.nested_fields_for :players do |ff|
-          -#
-            .card.player_fields{class: "#{ff.object.paid? ? 'card-inverse card-success' : ''}" }
-          .card.player_fields
+          .card.player_fields{class: "#{ff.object.payment_reversed? ? 'card-outline-danger' : ''}" }
             - if ff.object.paid?
-              %h4.card-header Paid
+              %p.card-header.lead Paid
+            - if ff.object.payment_reversed?
+              %p.card-header.lead.text-danger Payment Reversed
             .card-block
               - unless ff.object.paid?
                 .row.form-group
@@ -57,56 +27,40 @@
               - else
                 .row.form-group
                   .col-sm-6
-                    %p.card-blockquote= ff.object.member.full_name
+                    %p.lead= ff.object.member.full_name
                   .col-sm-6
-                    %p.card-blockquote= ff.object.caddy.full_name
+                    %p.lead= ff.object.caddy.full_name
               .row.form-group
                 - unless ff.object.paid?
                   .col-sm-6
-                    .btn-group-horizontal{"data-toggle" => "buttons"}
-                      %label.btn.btn-secondary{class: "#{(ff.object.new_record? or ff.object.eighteen_holes? ) ? 'active' : ''}"}
-                        = ff.radio_button :round, 18, :checked => ff.object.new_record?
-                        Eighteen
-                      %label.btn.btn-secondary{class: "#{ff.object.nine_holes? ? 'active' : ''}"}
-                        = ff.radio_button :round, 9
-                        Nine
+                    = ff.select :round, [["Eighteen holes", 18], ["Nine holes", 9]], {required: true, include_blank: false}, class: "form-control"
+                    -#
+                      .btn-group-horizontal{"data-toggle" => "buttons"}
+                        %label.btn.btn-secondary{class: "#{(ff.object.new_record? or ff.object.eighteen_holes? ) ? 'active' : ''}"}
+                          = ff.radio_button :round, 18, :checked => ff.object.new_record?
+                          Eighteen
+                        %label.btn.btn-secondary{class: "#{ff.object.nine_holes? ? 'active' : ''}"}
+                          = ff.radio_button :round, 9
+                          Nine
                   .col-sm-6
-                    .btn-group-horizontal{"data-toggle" => "buttons"}
-                      %label.btn.btn-secondary{class: "#{(ff.object.new_record? or ff.object.carry? ) ? 'active' : ''}"}
-                        = ff.radio_button :caddy_type, 'Carry', :checked => ff.object.new_record?
-                        Carry
-                      %label.btn.btn-secondary{class: "#{(ff.object.chase? ) ? 'active' : ''}"}
-                        = ff.radio_button :caddy_type, 'Chase'
-                        Chase
+                    = ff.select :caddy_type, ["Carry", "Chase"], {required: true, include_blank: false}, class: "form-control"
+                    -#
+                      .btn-group-horizontal{"data-toggle" => "buttons"}
+                        %label.btn.btn-secondary{class: "#{(ff.object.new_record? or ff.object.carry? ) ? 'active' : ''}"}
+                          = ff.radio_button :caddy_type, 'Carry', :checked => ff.object.new_record?
+                          Carry
+                        %label.btn.btn-secondary{class: "#{(ff.object.chase? ) ? 'active' : ''}"}
+                          = ff.radio_button :caddy_type, 'Chase'
+                          Chase
                   .col-sm-6
+                    %br
                     = ff.remove_nested_fields_link 'x', class: 'btn btn-sm btn-danger', role: 'button', data: { confirm: 'Are you sure you want to delete?' }
                 - else
                   .col-sm-6
-                    %p.card-blockquote= ff.object.round_as_string
+                    %p.lead= ff.object.round_as_string
                   .col-sm-6
-                    %p.card-blockquote= ff.object.caddy_type
+                    %p.lead= ff.object.caddy_type
                 
-              -#
-                - unless ff.object.paid?
-                  .row.form-group
-                    .col-sm-12
-                      .btn-group-horizontal{"data-toggle" => "buttons"}
-                        %label.btn.btn-secondary{class: "#{(ff.object.new_record? or ff.object.open? ) ? 'active' : ''}"}
-                          = ff.radio_button :status, 'open', :checked => ff.object.new_record?
-                          Open
-                        %label.btn.btn-secondary{class: "#{ff.object.closed? ? 'active' : ''}"}
-                          = ff.radio_button :status, 'closed'
-                          = 'Close' unless ff.object.closed?
-                          = 'Closed' if ff.object.closed?
-                        %label.btn.btn-secondary{class: "#{ff.object.paid? ? 'active' : ''}", onclick: "alert('hi');"}
-                          = ff.radio_button :status, 'paid'
-                          = 'Pay' unless ff.object.paid?
-                          = 'Paid' if ff.object.paid?
-              
-              - else
-                .row.form-group
-                  .col-sm-6
-                    = link_to 'View details', ff.object, class: 'btn btn-warning'
         = f.add_nested_fields_link :players
   .row.form-group
     %div{:class => "col-sm-12"}
@@ -114,28 +68,11 @@
         Notes
       .col-sm-10
         = f.text_area :notes, placeholder:'Notes', class: 'input-lg form-control'
-  -#
-    .row.form-group
-      %div{:class => "col-sm-12"}
-        %label.col-sm-2.control-label.lead{for: "event_status"} 
-          Status
-        %div{:class => "col-sm-8"}
-          .btn-group-horizontal{"data-toggle" => "buttons"}
-            %label.btn.btn-secondary{class: "#{(@event.new_record? or @event.open? ) ? 'active' : ''}"}
-              = f.radio_button :status, 'open', :checked => @event.new_record?
-              Open
-            %label.btn.btn-secondary{class: "#{@event.closed? ? 'active' : ''}"}
-              = f.radio_button :status, 'closed'
-              = 'Close' unless @event.closed?
-              = 'Closed' if @event.closed?
-            %label.btn.btn-secondary{class: "#{@event.paid? ? 'active' : ''}"}
-              = f.radio_button :status, 'paid'
-              = 'Pay' unless @event.paid?
-              = 'Paid' if @event.paid?
+  
   .row.form-group
     %div{:class => "col-sm-12"}
       %button.btn.btn-secondary{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button", onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"} Cancel
-      = f.submit "Pay", :class => 'btn btn-success', name: 'pay', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();" if @event.new_record? or @event.not_paid?
+      = f.submit "Payment", :class => 'btn btn-success', name: 'pay', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();" #if @event.new_record? or @event.not_paid?
       = f.submit "Save", :class => 'btn btn-primary', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"
       = link_to 'Delete',                      |
             event,                                 |

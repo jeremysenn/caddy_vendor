@@ -15,7 +15,19 @@ class Event < ApplicationRecord
   def player_names
     names = ''
     players.each do |player|
-      names = names + ' ' + player.member.full_name
+      unless player.member.blank?
+        names = names + ' ' + player.member.full_name
+      end
+    end
+    return names
+  end
+  
+  def player_names_with_caddy_names
+    names = ''
+    players.each do |player|
+      unless player.member.blank? or player.caddy.blank?
+        names = names + ' ' + player.member.full_name + ' (' + player.caddy.full_name + ')'
+      end
     end
     return names
   end

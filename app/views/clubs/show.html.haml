@@ -49,6 +49,7 @@
               %td
                 = link_to 'Show', caddy_pay_rate, class: 'btn btn-secondary'
                 = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate), class: 'btn btn-primary'
+                = link_to 'Delete', caddy_pay_rate, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }
     .card-link= link_to "New caddy pay rate", new_caddy_pay_rate_path(club_id: @club.id), class: 'btn btn-primary'
 
   .card.card-block
@@ -68,7 +69,11 @@
               %td
                 = link_to 'Show', caddy_rank_desc, class: 'btn btn-secondary'
                 = link_to 'Edit', edit_caddy_rank_desc_path(caddy_rank_desc), class: 'btn btn-primary'
-    .card-link= link_to "New caddy rank description", new_caddy_rank_desc_path(club_id: @club.id), class: 'btn btn-primary'
+                - if caddy_rank_desc.caddies.blank? and caddy_rank_desc.caddy_pay_rates.blank?
+                  = link_to 'Delete', caddy_rank_desc, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }
+                - else
+                  %button.btn.btn-danger{"data-content" => "You must first remove this Caddy Rank from all Caddies and Caddy Pay Rates.", "data-toggle" => "popover", :title => "Delete Caddy Rank", "data-placement" => "top", :type => "button"} Delete
 
-  = link_to 'Clubs', clubs_path, class: 'btn btn-secondary'
-  = link_to 'Edit club', edit_club_path(@club), class: 'btn btn-primary'
+    .card-link= link_to "New caddy rank description", new_caddy_rank_desc_path(club_id: @club.id), class: 'btn btn-primary'
+  %p
+    = link_to 'Edit club', edit_club_path(@club), class: 'btn btn-primary'

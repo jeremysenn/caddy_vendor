@@ -29,6 +29,10 @@ class Caddy < ApplicationRecord
     "#{first_name} #{last_name}"
   end
   
+  def cell_phone_number
+    customer.blank? ? '' : customer.PhoneMobile
+  end
+  
 #  def customer
 #    Customer.where(CustomerID: self.CustomerID).first
 #  end

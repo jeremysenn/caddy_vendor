@@ -9,6 +9,7 @@ class Customer < ActiveRecord::Base
   has_many :bill_payments
   has_many :transfers
   has_one :account, :foreign_key => "CustomerID"
+  has_many :transactions, :through => :account
   
   scope :members, -> { where(GroupID: 14) }
   

@@ -6,7 +6,7 @@ class Account < ActiveRecord::Base
   
   has_many :bill_payments
   belongs_to :customer, :foreign_key => "CustomerID"
-  has_many :transactions
+  has_many :transactions, :foreign_key => :from_acct_id
   
   attr_accessor :last_4_of_pan
   

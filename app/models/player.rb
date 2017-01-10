@@ -3,7 +3,8 @@ class Player < ApplicationRecord
   belongs_to :member, :foreign_key => "member_id", :class_name => 'Customer'
   belongs_to :caddy
   belongs_to :event, optional: true
-  has_one :transfer
+#  has_one :transfer
+  has_many :transfers
   
 #  validates :tip, numericality: { :greater_than_or_equal_to => 0 }
   
@@ -37,8 +38,16 @@ class Player < ApplicationRecord
     status == 'closed'
   end
   
+#  def paid?
+#    status == 'paid' and not payment_reversed?
+#  end
+  
   def paid?
-    status == 'paid'
+    transfer.present? and not payment_reversed?
+  end
+  
+  def payment_reversed?
+    transfer.reversed? unless transfer.blank?
   end
   
   def eighteen_holes?
@@ -68,6 +77,10 @@ class Player < ApplicationRecord
   
   def member
     Customer.find(member_id)
+  end
+  
+  def transfer
+    transfers.last unless transfers.blank?
   end
   
   #############################

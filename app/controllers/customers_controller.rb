@@ -18,7 +18,7 @@ class CustomersController < ApplicationController
   # GET /customers/1
   # GET /customers/1.json
   def show
-    @transfers = @customer.transfers
+    @transfers = @customer.transfers.order(created_at: :desc)
   end
 
   # GET /customers/new

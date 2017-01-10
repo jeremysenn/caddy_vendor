@@ -108,6 +108,16 @@ class Ability
       end
       can :create, :caddy_rank_descs
       
+      # Transactions
+      ############
+      can :manage, Transaction do |transaction|
+        unless transaction.company.blank?
+          transaction.company == user.company 
+        else
+          false
+        end
+      end
+      
     end
     
   end

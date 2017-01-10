@@ -8,6 +8,9 @@
       Last name:
       = @customer.last_name
     %p.lead
+      Cell phone:
+      = @customer.PhoneMobile
+    %p.lead
       Member Number:
       = "#{@customer.member_number.blank? ? 'None' : @customer.member_number}"
     = link_to 'Edit', edit_customer_path(@customer), class: 'btn btn-primary'

@@ -1,12 +1,13 @@
 class TransactionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_transaction, only: [:show, :edit, :update, :destroy]
-#  load_and_authorize_resource
+  load_and_authorize_resource
 
   # GET /transactions
   # GET /transactions.json
   def index
-    @transactions = Transaction.withdrawals.order(date_time: :desc).page(params[:page]).per(20)
+#    @transactions = Transaction.withdrawals.order(date_time: :desc).page(params[:page]).per(20)
+    @transactions = current_user.company.transactions.withdrawals.order(date_time: :desc).page(params[:page]).per(20)
   end
 
   # GET /transactions/1

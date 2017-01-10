@@ -20,7 +20,7 @@
             %th
         %tbody
           - @event.players.each do |player|
-            %tr
+            %tr{class: "#{(player.transfer and player.transfer.reversed?) ? 'table-danger' : '' }"}
               %td= player.member.full_name
               %td= player.caddy.full_name
               %td= player.caddy_type
@@ -50,9 +50,11 @@
                     = f.hidden_field :amount, value: player.total, class: 'amount'
                     = f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure you want to pay this?' } unless player.paid?
                 = "No account for Caddy" if player.caddy.account.blank?
-                - if player.paid? and player.transfer.reversable?
+                - if player.paid? and (player.transfer and player.transfer.reversable?)
                   = form_for player.transfer, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
                     = f.hidden_field :reversed, value: true
                     = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }
+                - if (player.transfer and player.transfer.reversed?)
+                  .text-danger Reversed
                 =# "Paid" if player.paid?
     .card-link= link_to "Done", events_path, class: 'btn btn-primary'
