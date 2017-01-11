@@ -3,6 +3,7 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 jQuery ->
+
   $('.tip_field').on 'keyup', ->
     caddy_fee = $(this).closest('.modal').find('#transfer_caddy_fee').val()
     caddy_tip = $(this).val()
@@ -53,5 +54,4 @@ jQuery ->
         #msg will be shown in editable form
         return
     return
-  return
   ### End Edit in place ###

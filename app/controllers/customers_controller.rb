@@ -6,13 +6,24 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
-    unless params[:q].blank?
-      members = current_user.members.where("NameF like ? OR NameL like ?", params[:q], params[:q])
-      members = current_user.members.joins(:account).where("accounts.ActNbr like ?", params[:q]) if members.blank?
-    else
-      members = current_user.members.order(:NameL)
+    respond_to do |format|
+      format.html {
+        unless params[:q].blank?
+          members = current_user.members.where("NameF like ? OR NameL like ?", params[:q], params[:q])
+          members = current_user.members.joins(:account).where("accounts.ActNbr like ?", params[:q]) if members.blank?
+        else
+          members = current_user.members.order(:NameL)
+        end
+        @members = members.page(params[:page]).per(50)
+      }
+      format.json {
+        members = current_user.members.where("NameF like ? OR NameL like ?", params[:q], params[:q])
+        members = current_user.members.joins(:account).where("accounts.ActNbr like ?", params[:q]) if members.blank?
+        @members = members.collect{ |member| {id: member.id, text: "#{member.full_name}"} }
+        render json: {results: @members}
+      }
     end
-    @members = members.page(params[:page]).per(50)
+    
   end
 
   # GET /customers/1

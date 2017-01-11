@@ -77,6 +77,9 @@ gem 'cancancan'
 # Pagination: https://github.com/amatsuda/kaminari
 gem 'kaminari'
 
+# Integrate Select2 javascript library with Rails asset pipeline https://github.com/argerim/select2-rails
+gem "select2-rails"
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri

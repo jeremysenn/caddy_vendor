@@ -8,12 +8,23 @@ class CaddiesController < ApplicationController
   # GET /caddies
   # GET /caddies.json
   def index
-    unless params[:q].blank?
-      caddies = current_user.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", params[:q], params[:q])
-    else
-      caddies = current_user.caddies
+    respond_to do |format|
+      format.html {
+        unless params[:q].blank?
+          caddies = current_user.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", params[:q], params[:q])
+        else
+          caddies = current_user.caddies
+        end
+        @caddies = caddies.page(params[:page]).per(50)
+      }
+      format.json {
+#        caddies = current_club.caddies
+        caddies = current_club.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", params[:q], params[:q])
+        @caddies = caddies.collect{ |caddy| {id: caddy.id, text: "#{caddy.full_name}"} }
+        render json: {results: @caddies}
+      }
     end
-    @caddies = caddies.page(params[:page]).per(50)
+    
   end
 
   # GET /caddies/1

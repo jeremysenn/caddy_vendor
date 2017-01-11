@@ -20,4 +20,5 @@
 //= require fullcalendar
 //= require daterangepicker
 //= require nested_form_fields
+//= require select2
 //= require_tree .
