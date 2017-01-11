@@ -13,8 +13,11 @@
           .card.player_fields{class: "#{ff.object.payment_reversed? ? 'card-outline-danger' : ''}" }
             - if ff.object.paid?
               %p.card-header.lead Paid
-            - if ff.object.payment_reversed?
+            - elsif ff.object.payment_reversed?
               %p.card-header.lead.text-danger Payment Reversed
+            - else
+              %p.card-header
+                = ff.remove_nested_fields_link "<i class='fa fa-trash-o'></i>".html_safe, class: 'btn btn-sm btn-danger', role: 'button', data: { confirm: 'Are you sure you want to delete?' }
             .card-block
               - unless ff.object.paid?
                 .row.form-group
@@ -56,16 +59,17 @@
                         %label.btn.btn-secondary{class: "#{(ff.object.chase? ) ? 'active' : ''}"}
                           = ff.radio_button :caddy_type, 'Chase'
                           Chase
-                  .col-sm-6
-                    %br
-                    = ff.remove_nested_fields_link 'x', class: 'btn btn-sm btn-danger', role: 'button', data: { confirm: 'Are you sure you want to delete?' }
+                  -#
+                    .col-sm-6
+                      %br
+                      = ff.remove_nested_fields_link 'x', class: 'btn btn-sm btn-danger', role: 'button', data: { confirm: 'Are you sure you want to delete?' }
                 - else
                   .col-sm-6
                     %p.lead= ff.object.round_as_string
                   .col-sm-6
                     %p.lead= ff.object.caddy_type
                 
-        = f.add_nested_fields_link :players, "Add Player", class: 'more_players_link'
+        = f.add_nested_fields_link :players, "<i class='fa fa-trash-o'></i> Add Player".html_safe, class: 'more_players_link btn btn-warning'
   .row.form-group
     %div{:class => "col-sm-12"}
       %label.col-sm-2.control-label.lead{for: "event_notes"} 
