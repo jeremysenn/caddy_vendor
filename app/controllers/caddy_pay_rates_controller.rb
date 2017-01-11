@@ -13,7 +13,6 @@ class CaddyPayRatesController < ApplicationController
       @club = current_club.blank? ? current_user.company.clubs.first : current_club
     end
     @caddy_pay_rates = @club.caddy_pay_rates.sort_by {|cpr| cpr.acronym}
-#    @caddy_pay_rates = @club.caddy_pay_rates.joins(:caddy_rank_desc).order("caddy_rank_descs.RankingAcronym")
   end
 
   # GET /caddy_pay_rates/1

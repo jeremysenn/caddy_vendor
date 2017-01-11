@@ -1,11 +1,21 @@
 .container
   %br
-  %h3 Caddy Ranks
-  %br
+  - unless current_club.blank?
+    - if current_user.clubs.count <= 1
+      %br
+      %p.lead
+        - unless current_club.blank?
+          = current_club.name 
+        - else
+          = current_user.clubs.first.name unless current_user.clubs.blank?
+    - else
+      %p
+        = form_tag caddy_rank_descs_path, id: 'clubs_form', method: 'get', class: 'form-inline' do |f|
+          = select_tag :club_id, options_from_collection_for_select(current_user.clubs, "id", "name", @club.id), onchange: "$(this).parent('form').submit();", class: "form-control"
 
   - @caddy_rank_descs.group_by{|crd| crd.club}.each do |club, caddy_rank_descs|
     .card.card-block
-      %h4.card-title= link_to club.name, club
+      %h4.card-title Caddy Ranks
       .table-responsive
         %table.table.table-striped
           %thead
@@ -26,4 +36,4 @@
                   - else
                     %button.btn.btn-danger{"data-content" => "You must first remove this Caddy Rank from all Caddies and Caddy Pay Rates.", "data-toggle" => "popover", :title => "Delete Caddy Rank", "data-placement" => "top", :type => "button"} Delete
 
-      .card-link= link_to "New #{club.name} caddy rank desc", new_caddy_rank_desc_path(club_id: club.id), class: 'btn btn-primary'
+    = link_to "New #{club.name} caddy rank desc", new_caddy_rank_desc_path(club_id: club.id), class: 'btn btn-primary'

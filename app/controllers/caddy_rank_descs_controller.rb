@@ -6,7 +6,13 @@ class CaddyRankDescsController < ApplicationController
   # GET /caddy_rank_descs
   # GET /caddy_rank_descs.json
   def index
-    @caddy_rank_descs = current_user.caddy_rank_descs
+    unless params[:club_id].blank?
+      @club = Club.where(ClubCourseID: params[:club_id]).first
+      @club = current_club.blank? ? current_user.company.clubs.first : current_club if @club.blank?
+    else
+      @club = current_club.blank? ? current_user.company.clubs.first : current_club
+    end
+    @caddy_rank_descs = @club.caddy_rank_descs.order(:RankingAcronym)
   end
 
   # GET /caddy_rank_descs/1
