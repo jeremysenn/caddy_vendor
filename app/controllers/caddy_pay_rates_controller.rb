@@ -6,7 +6,14 @@ class CaddyPayRatesController < ApplicationController
   # GET /caddy_pay_rates
   # GET /caddy_pay_rates.json
   def index
-    @caddy_pay_rates = current_user.caddy_pay_rates
+    unless params[:club_id].blank?
+      @club = Club.where(ClubCourseID: params[:club_id]).first
+      @club = current_club.blank? ? current_user.company.clubs.first : current_club if @club.blank?
+    else
+      @club = current_club.blank? ? current_user.company.clubs.first : current_club
+    end
+    @caddy_pay_rates = @club.caddy_pay_rates.sort_by {|cpr| cpr.acronym}
+#    @caddy_pay_rates = @club.caddy_pay_rates.joins(:caddy_rank_desc).order("caddy_rank_descs.RankingAcronym")
   end
 
   # GET /caddy_pay_rates/1

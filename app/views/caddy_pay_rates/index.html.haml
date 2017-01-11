@@ -1,10 +1,21 @@
 .container
   %br
-  %h3 CaddyPayRates
-  %br
+  - unless current_club.blank?
+    - if current_user.clubs.count <= 1
+      %br
+      %p.lead
+        - unless current_club.blank?
+          = current_club.name 
+        - else
+          = current_user.clubs.first.name unless current_user.clubs.blank?
+    - else
+      %p
+        = form_tag caddy_pay_rates_path, id: 'clubs_form', method: 'get', class: 'form-inline' do |f|
+          = select_tag :club_id, options_from_collection_for_select(current_user.clubs, "id", "name", @club.id), onchange: "$(this).parent('form').submit();", class: "form-control"
+
   - @caddy_pay_rates.group_by{|cpr| cpr.club}.each do |club, caddy_pay_rates|
     .card.card-block
-      %h4.card-title= club.name
+      %h4.card-title CaddyPayRates
       .table-responsive
         %table.table.table-striped
           %thead
@@ -25,4 +36,4 @@
                   = link_to 'Show', caddy_pay_rate, class: 'btn btn-secondary'
                   = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate), class: 'btn btn-primary'
                   = link_to 'Delete', caddy_pay_rate, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }
-      .card-link= link_to "New #{club.name} caddy pay rate", new_caddy_pay_rate_path(club_id: club.id), class: 'btn btn-primary'
+    %p= link_to "New #{club.name} caddy pay rate", new_caddy_pay_rate_path(club_id: club.id), class: 'btn btn-primary'

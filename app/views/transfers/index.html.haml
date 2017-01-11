@@ -1,14 +1,18 @@
 .container
+  %br
   - unless current_club.blank?
     - if current_user.clubs.count <= 1
       %br
       %p.lead
-        = current_club.name
+        - unless current_club.blank?
+          = current_club.name 
+        - else
+          = current_user.clubs.first.name unless current_user.clubs.blank?
     - else
       %p
         = form_tag transfers_path, id: 'clubs_form', method: 'get', class: 'form-inline' do |f|
           = select_tag :club_id, options_from_collection_for_select(current_user.clubs, "id", "name", @club.id), onchange: "$(this).parent('form').submit();", class: "form-control"
-  %br
+
   .card.card-block
     %h4.card-title Transfers
     - unless @transfers.blank?

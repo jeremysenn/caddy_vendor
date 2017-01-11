@@ -1,9 +1,13 @@
 .container
+  %br
   - unless current_club.blank?
     - if current_user.clubs.count <= 1
       %br
       %p.lead
-        = current_club.name
+        - unless current_club.blank?
+          = current_club.name 
+        - else
+          = current_user.clubs.first.name unless current_user.clubs.blank?
     - else
       %p
         = form_tag events_path, id: 'clubs_form', method: 'get', class: 'form-inline' do |f|
