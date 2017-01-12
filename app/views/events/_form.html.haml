@@ -30,7 +30,7 @@
                     =# ff.select :caddy_id, current_club.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "form-control"
                     =# ff.select :caddy_id, current_club.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "js-example-basic-single form-control"
                     =# ff.select :caddy_id, current_club.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
-                    = ff.select :caddy_id, grouped_options_for_select(current_club.grouped_caddies_for_select), {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
+                    = ff.select :caddy_id, grouped_options_for_select(current_club.grouped_caddies_for_select, ff.object.caddy_id), {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
 
               - else
                 .row.form-group
