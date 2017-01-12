@@ -20,6 +20,7 @@
             %th Ranking
             %th Checked In
             %th
+            %th
         %tbody
           - @caddies.each do |caddy|
             %tr
@@ -30,4 +31,12 @@
               %td
                 = link_to "Show", caddy, class: 'btn btn-secondary'
                 = link_to 'Edit', edit_caddy_path(caddy), class: 'btn btn-primary'
+              %td
+                = simple_form_for(caddy) do |f|
+                  - if caddy.checkin_today? 
+                    = f.input_field :CheckedIn, as: :hidden, value: nil
+                    = f.button :submit, "Check Out", class: 'btn btn-warning'
+                  - else
+                    = f.input_field :CheckedIn, as: :hidden, value: DateTime.now
+                    = f.button :submit, "Check In", class: 'btn btn-success'
   = paginate @caddies

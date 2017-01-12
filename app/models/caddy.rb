@@ -66,4 +66,5 @@ class Caddy < ApplicationRecord
   #############################
   #     Class Methods         #
   #############################
+  
 end

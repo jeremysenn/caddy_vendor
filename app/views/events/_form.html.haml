@@ -29,7 +29,8 @@
                     =# ff.collection_select :caddy_id, current_club.caddies, :id, :full_name, class: 'input-lg form-control', required: true
                     =# ff.select :caddy_id, current_club.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "form-control"
                     =# ff.select :caddy_id, current_club.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "js-example-basic-single form-control"
-                    = ff.select :caddy_id, current_club.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
+                    =# ff.select :caddy_id, current_club.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
+                    = ff.select :caddy_id, grouped_options_for_select(current_club.grouped_caddies_for_select), {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
 
               - else
                 .row.form-group
@@ -110,54 +111,24 @@
 
   // Apply select2 to existing player caddy selects
   $('.caddy_select').select2({
-    theme: 'bootstrap',
-    minimumInputLength: 3,
-    ajax: {
-      url: '/caddies',
-      dataType: 'json',
-      delay: 250,
-      placeholder: 'Select a caddy',
-      allowClear: true
-    }
+    theme: 'bootstrap'
   });
 
   // Apply select2 to dynamically added player caddy selects
   $("body").on("click",".more_players_link", function(){
     $('.caddy_select').select2({
       theme: 'bootstrap',
-      minimumInputLength: 3,
-      ajax: {
-        url: '/caddies',
-        dataType: 'json',
-        delay: 250,
-        placeholder: 'Select a caddy'
-      }
     });
   });
 
   // Apply select2 to existing player member selects
   $('.member_select').select2({
     theme: 'bootstrap',
-    minimumInputLength: 3,
-    ajax: {
-      url: '/customers',
-      dataType: 'json',
-      delay: 250,
-      placeholder: 'Select a member',
-      allowClear: true
-    }
   });
 
   // Apply select2 to dynamically added player member selects
   $("body").on("click",".more_players_link", function(){
     $('.member_select').select2({
       theme: 'bootstrap',
-      minimumInputLength: 3,
-      ajax: {
-        url: '/customers',
-        dataType: 'json',
-        delay: 250,
-        placeholder: 'Select a member'
-      }
     });
   });

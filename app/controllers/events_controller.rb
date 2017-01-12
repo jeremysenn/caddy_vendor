@@ -11,6 +11,8 @@ class EventsController < ApplicationController
       @events = current_club.events
     else
       @events = Event.all
+#      @checked_in_caddies = current_club.caddies.select{|caddy| caddy.checkin_today?}
+#      @checked_out_caddies = current_club.caddies.select{|caddy| not caddy.checkin_today?}
     end
   end
 

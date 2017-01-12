@@ -7,7 +7,8 @@ class TransactionsController < ApplicationController
   # GET /transactions.json
   def index
 #    @transactions = Transaction.withdrawals.order(date_time: :desc).page(params[:page]).per(20)
-    @transactions = current_user.company.transactions.withdrawals.order(date_time: :desc).page(params[:page]).per(20)
+#    @transactions = current_user.company.transactions.withdrawals.order(date_time: :desc).page(params[:page]).per(20)
+    @transactions = current_user.company.transactions.order(date_time: :desc).page(params[:page]).per(20)
   end
 
   # GET /transactions/1

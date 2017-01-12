@@ -22,9 +22,13 @@
     = simple_form_for(@caddy) do |f|
       = f.error_notification
       .form-inputs
-        = f.input :CheckedIn, as: :hidden, input_html: {value: DateTime.now}
         = link_to 'Edit', edit_caddy_path(@caddy), class: 'btn btn-primary'
-        = f.button :submit, "Check In", class: 'btn btn-success'
+        - if @caddy.checkin_today? 
+          = f.input_field :CheckedIn, as: :hidden, value: nil
+          = f.button :submit, "Check Out", class: 'btn btn-warning'
+        - else
+          = f.input_field :CheckedIn, as: :hidden, value: DateTime.now
+          = f.button :submit, "Check In", class: 'btn btn-success'
 
   %br
 
