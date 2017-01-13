@@ -17,5 +17,8 @@
       Rate:
       = number_to_currency(@caddy_pay_rate.Payrate)
   %p
+    %a{href: caddy_pay_rates_path, class: 'btn btn-secondary'}
+      %i.fa.fa-credit-card-alt
+      Rates
     = link_to 'Edit', edit_caddy_pay_rate_path(@caddy_pay_rate), class: 'btn btn-primary'
     = link_to 'Delete', @caddy_pay_rate, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }

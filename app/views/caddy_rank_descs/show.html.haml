@@ -54,6 +54,9 @@
     - else
       %p.lead None
   %p   
+    %a{href: caddy_rank_descs_path, class: 'btn btn-secondary'}
+      %i.fa.fa-certificate
+      Ranks
     = link_to 'Edit', edit_caddy_rank_desc_path(@caddy_rank_desc), class: 'btn btn-primary'
     - if @caddies.blank? and @caddy_pay_rates.blank?
       = link_to 'Delete', @caddy_rank_desc, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }

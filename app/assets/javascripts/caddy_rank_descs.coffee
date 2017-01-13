@@ -3,5 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $ ->
-  $('[data-toggle="popover"]').popover()
-  return
+  $(document).on 'turbolinks:load', ->
+    $('[data-toggle="popover"]').popover()
+    return
