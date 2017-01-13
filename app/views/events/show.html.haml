@@ -15,6 +15,7 @@
             %th Caddy
             %th Type
             %th Round
+            %th Note
             %th Fee
             %th Tip
             %th
@@ -25,6 +26,7 @@
               %td= player.caddy.full_name
               %td= player.caddy_type
               %td= player.round
+              %td= player.note
               %td
                 =# "#{player.fee.blank? ? number_to_currency(player.caddy_pay_rate) : number_to_currency(player.fee)}"
                 $

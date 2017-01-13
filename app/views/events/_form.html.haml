@@ -69,6 +69,9 @@
                     %p.lead= ff.object.round_as_string
                   .col-sm-6
                     %p.lead= ff.object.caddy_type
+              .row.form-group
+                .col-sm-12
+                  = ff.text_field :note, placeholder: 'Player note', class: 'input-lg form-control'
                 
         = f.add_nested_fields_link :players, "<i class='fa fa-trash-o'></i> Add Player".html_safe, class: 'more_players_link btn btn-warning'
   .row.form-group

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170105213425) do
+ActiveRecord::Schema.define(version: 20170113153729) do
 
   create_table "events", force: :cascade do |t|
     t.string   "title"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20170105213425) do
     t.decimal  "tip",        precision: 7, scale: 2
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
+    t.string   "note"
     t.index ["caddy_id"], name: "index_players_on_caddy_id"
     t.index ["event_id"], name: "index_players_on_event_id"
     t.index ["member_id"], name: "index_players_on_member_id"
