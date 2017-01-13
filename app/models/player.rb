@@ -6,6 +6,9 @@ class Player < ApplicationRecord
 #  has_one :transfer
   has_many :transfers
   
+  after_create :check_caddy_out
+#  before_destroy :check_caddy_in
+  
 #  validates :tip, numericality: { :greater_than_or_equal_to => 0 }
   
   #############################
@@ -81,6 +84,14 @@ class Player < ApplicationRecord
   
   def transfer
     transfers.last unless transfers.blank?
+  end
+  
+  def check_caddy_out
+    caddy.update_attribute(:CheckedIn, nil)
+  end
+  
+  def check_caddy_in
+    caddy.update_attribute(:CheckedIn, DateTime.now)
   end
   
   #############################

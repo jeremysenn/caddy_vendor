@@ -17,11 +17,14 @@
       Ranking:
       = link_to @caddy.rank_description, @caddy.caddy_rank_desc
     %p.lead
-      Checked In Today:
+      Checked In:
       = @caddy.CheckedIn.in_time_zone(current_user.time_zone).strftime("%l:%M %p") if @caddy.checkin_today? 
     = simple_form_for(@caddy) do |f|
       = f.error_notification
       .form-inputs
+        %a{href: caddies_path, class: 'btn btn-secondary'}
+          %i.fa.fa-vcard
+          Caddies
         = link_to 'Edit', edit_caddy_path(@caddy), class: 'btn btn-primary'
         - if @caddy.checkin_today? 
           = f.input_field :CheckedIn, as: :hidden, value: nil
