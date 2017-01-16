@@ -2,6 +2,8 @@ class TransfersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_transfer, only: [:show, :edit, :update, :destroy]
   load_and_authorize_resource
+  
+  helper_method :transfers_sort_column, :transfers_sort_direction
 
   # GET /transfers
   # GET /transfers.json
@@ -84,5 +86,15 @@ class TransfersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def transfer_params
       params.require(:transfer).permit(:amount, :caddy_fee, :caddy_tip, :to_account, :from_account, :fee, :customer_id, :player_id, :reversed)
+    end
+    
+    ### Secure the transfers sort direction ###
+    def transfers_sort_direction
+      %w[asc desc].include?(params[:transfers_direction]) ?  params[:transfers_direction] : "desc"
+    end
+
+    ### Secure the transfers sort column name ###
+    def transfers_sort_column
+      ["ez_cash_tran_id", "created_at", "from_account_id", "to_account_id", "caddy_fee_cents", "caddy_tip_cents", "amount_cents"].include?(params[:transfers_sort]) ? params[:transfers_sort] : "ez_cash_tran_id"
     end
 end

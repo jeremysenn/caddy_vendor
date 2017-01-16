@@ -11,9 +11,9 @@ class CaddiesController < ApplicationController
     respond_to do |format|
       format.html {
         unless params[:q].blank?
-          caddies = current_user.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", params[:q], params[:q])
+          caddies = current_user.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", params[:q], params[:q]).order("customer.NameL")
         else
-          caddies = current_user.caddies
+          caddies = current_user.caddies.joins(:customer).order("customer.NameL")
         end
         @caddies = caddies.page(params[:page]).per(50)
       }
@@ -92,7 +92,7 @@ class CaddiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def caddy_params
-      params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym, :RankingID, :CheckedIn, :ClubCompanyNbr)
+      params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym, :RankingID, :CheckedIn, :ClubCompanyNbr, :active)
     end
     
     def set_time_zone(&block)

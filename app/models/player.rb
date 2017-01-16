@@ -78,9 +78,9 @@ class Player < ApplicationRecord
    end
   end
   
-  def member
-    Customer.find(member_id)
-  end
+#  def member
+#    Customer.find(member_id)
+#  end
   
   def transfer
     transfers.last unless transfers.blank?
