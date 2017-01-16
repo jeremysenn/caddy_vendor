@@ -9,6 +9,8 @@
             %i.fa.fa-search
       %small.text-muted Search by first name, last name, or member number.
 
+  %p= link_to 'New member', new_customer_path, class: 'btn btn-primary'
+
   .card.card-block
     %h4.card-title Members
     - unless @members.blank?
@@ -17,12 +19,14 @@
           %thead
             %tr
               %th Name
+              %th Phone
               %th Member #
               %th
           %tbody
             - @members.each do |member|
               %tr
                 %td= member.full_name
+                %td= member.PhoneMobile
                 %td= "#{member.member_number.blank? ? 'None' : member.member_number}"
                 %td
                   = link_to "Show", member, class: 'btn btn-secondary'
@@ -31,4 +35,4 @@
       %p.lead No members found
 
     = paginate @members
-    = link_to 'New member', new_customer_path, class: 'btn btn-primary'
+  = link_to 'New member', new_customer_path, class: 'btn btn-primary'

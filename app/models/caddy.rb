@@ -12,6 +12,10 @@ class Caddy < ApplicationRecord
   
 #  has_and_belongs_to_many :clubs
 
+  accepts_nested_attributes_for :customer
+  
+  scope :active, -> { where(active: true) }
+
   
   #############################
   #     Instance Methods      #
@@ -61,6 +65,10 @@ class Caddy < ApplicationRecord
     else
       false
     end
+  end
+  
+  def inactive?
+    not active?
   end
   
   #############################

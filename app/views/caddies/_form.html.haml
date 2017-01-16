@@ -5,10 +5,13 @@
     = f.input :ClubCompanyNbr, as: :hidden, :input_html => {:value => @club.id}
     = f.input :first_name, disabled: true
     = f.input :last_name, disabled: true
+    = f.simple_fields_for :customer do |customer_form|
+      = customer_form.input :PhoneMobile, label: 'Phone'
     =# f.input :RankingAcronym, collection: @club.caddy_rankings_array, include_blank: false
     =# f.input :RankingAcronym, collection: current_user.company.caddy_rank_descs, :id, include_blank: false
     = f.association :caddy_rank_desc, collection: @club.caddy_rank_descs, label_method: :RankingAcronym, value_method: :id, include_blank: false
     =# f.input :CheckedIn, as: :time, :minute_step => 15, :ampm => true, :default => nil
+    = f.input :active, inline_label: 'Active'
 
   .form-actions
     = link_to 'Cancel', :back, class: 'btn btn-secondary'

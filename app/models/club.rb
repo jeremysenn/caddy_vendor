@@ -29,8 +29,8 @@ class Club < ApplicationRecord
   
   def grouped_caddies_for_select
     [
-      ['Checked In',  caddies.select{|caddy| caddy.checkin_today?}.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }],
-      ['Checked Out',  caddies.select{|caddy| not caddy.checkin_today?}.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }]
+      ['Checked In',  caddies.active.select{|caddy| caddy.checkin_today?}.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }],
+      ['Checked Out',  caddies.active.select{|caddy| not caddy.checkin_today?}.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }]
     ]
   end
   

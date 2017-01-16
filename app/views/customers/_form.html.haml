@@ -7,7 +7,7 @@
     = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 14 : @customer.GroupID}" }
     = f.input :NameF, label: 'First Name'
     = f.input :NameL, label: 'Last Name'
-    = f.input :PhoneMobile, label: 'Cell phone'
+    = f.input :PhoneMobile, label: 'Phone'
     = f.simple_fields_for :account do |account_form|
       = account_form.input :ActNbr, label: 'Member Number'
       = account_form.input :CompanyNumber, :as => :hidden, :input_html => { :value => "#{account_form.object.new_record? ? current_user.company_id : @customer.CompanyNumber}" }
