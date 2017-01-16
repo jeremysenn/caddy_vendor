@@ -21,19 +21,19 @@
           %thead
             %tr
               -# %th Tran ID
-              %th= sort_link 'ez_cash_tran_id', "Tran ID"
+              %th= transfers_sort_link 'ez_cash_tran_id', "Tran ID"
               -# %th Date/Time
-              %th= sort_link 'created_at', "Date/Time"
+              %th= transfers_sort_link 'created_at', "Date/Time"
               -# %th From
-              %th= sort_link 'from_account_id', "From"
+              %th= transfers_sort_link 'from_account_id', "From"
               -# %th To
-              %th= sort_link 'to_account_id', "To"
+              %th= transfers_sort_link 'to_account_id', "To"
               -# %th Fee
-              %th= sort_link 'caddy_fee_cents', "Fee"
+              %th= transfers_sort_link 'caddy_fee_cents', "Fee"
               -# %th Tip
-              %th= sort_link 'caddy_tip_cents', "Tip"
+              %th= transfers_sort_link 'caddy_tip_cents', "Tip"
               -# %th Total
-              %th= sort_link 'amount_cents', "Total"
+              %th= transfers_sort_link 'amount_cents', "Total"
               %th
           %tbody
             - @transfers.each do |transfer|

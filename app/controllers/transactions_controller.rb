@@ -2,13 +2,15 @@ class TransactionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_transaction, only: [:show, :edit, :update, :destroy]
   load_and_authorize_resource
+  
+  helper_method :transactions_sort_column, :transactions_sort_direction
 
   # GET /transactions
   # GET /transactions.json
   def index
 #    @transactions = Transaction.withdrawals.order(date_time: :desc).page(params[:page]).per(20)
 #    @transactions = current_user.company.transactions.withdrawals.order(date_time: :desc).page(params[:page]).per(20)
-    @transactions = current_user.company.transactions.order(date_time: :desc).page(params[:page]).per(20)
+    @transactions = current_user.company.transactions.order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
   end
 
   # GET /transactions/1
@@ -76,5 +78,15 @@ class TransactionsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def transaction_params
       params.require(:transaction).permit(:amount, :caddy_fee, :caddy_tip, :to_account, :from_account, :fee, :customer_id, :player_id)
+    end
+    
+    ### Secure the transactions sort direction ###
+    def transactions_sort_direction
+      %w[asc desc].include?(params[:transactions_direction]) ?  params[:transactions_direction] : "desc"
+    end
+
+    ### Secure the transactions sort column name ###
+    def transactions_sort_column
+      ["tranID", "dev_id", "date_time", "error_code", "tran_status", "amt_auth"].include?(params[:transactions_column]) ? params[:transactions_column] : "tranID"
     end
 end
