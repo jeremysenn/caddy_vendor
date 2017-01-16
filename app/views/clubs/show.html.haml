@@ -2,6 +2,8 @@
   %br
   %h3
     = @club.name
+  %p.lead= "Transaction Fee: #{number_to_currency(@club.transaction_fee)}"
+    
   %p
     %a{href: events_path, class: 'btn btn-warning'}
       %i.fa.fa-calendar

@@ -3,6 +3,7 @@
 
   .form-inputs
     = f.input :CourseName, as: :string
+    = f.input :transaction_fee
 
   .form-actions
-    = f.button :submit
+    = f.button :submit, class: 'btn btn-primary'

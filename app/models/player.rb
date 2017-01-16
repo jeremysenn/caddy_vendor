@@ -30,7 +30,8 @@ class Player < ApplicationRecord
   def total
     player_tip = tip.blank? ? 0 : tip
     player_fee = fee.blank? ? caddy_pay_rate : fee
-    return (player_fee + player_tip)
+    transaction_fee =  club.transaction_fee
+    return (player_fee + player_tip + transaction_fee)
   end
   
   def open?

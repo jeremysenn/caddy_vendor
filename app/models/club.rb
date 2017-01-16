@@ -10,6 +10,8 @@ class Club < ApplicationRecord
   has_many :caddy_pay_rates, :foreign_key => "ClubCompanyID"
   has_many :caddy_rank_descs, :foreign_key => "ClubCompanyID"
   has_many :transfers, through: :events
+  
+  attr_accessor :transaction_fee
 
   #############################
   #     Instance Methods      #
@@ -33,6 +35,16 @@ class Club < ApplicationRecord
       ['Checked Out',  caddies.active.select{|caddy| not caddy.checkin_today?}.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }]
     ]
   end
+  
+  ### Start Virtual Attributes ###
+  def transaction_fee # Getter
+    transaction_fee_cents.to_d / 100 if transaction_fee_cents
+  end
+  
+  def transaction_fee=(dollars) # Setter
+    self.transaction_fee_cents = dollars.to_d * 100 if dollars.present?
+  end
+  ### End Virtual Attributes ###
   
   #############################
   #     Class Methods         #
