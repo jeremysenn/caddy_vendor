@@ -16,7 +16,9 @@
     %p.lead
       Active:
       = "#{@customer.active? ? 'Yes' : 'No'}"
-
+    %a{href: customers_path, class: 'btn btn-secondary'}
+      %i.fa.fa-user-circle-o
+      Members
     = link_to 'Edit', edit_customer_path(@customer), class: 'btn btn-primary'
     
   %br

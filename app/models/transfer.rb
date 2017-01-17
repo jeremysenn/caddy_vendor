@@ -140,6 +140,10 @@ class Transfer < ApplicationRecord
     not ez_cash_tran_id.blank? and not reversed?
   end
   
+  def note
+    player.note
+  end
+  
   #############################
   #     Class Methods         #
   #############################

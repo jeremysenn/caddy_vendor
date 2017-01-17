@@ -14,6 +14,9 @@
       To:
       = @to.full_name unless @to.blank?
     %p.lead
+      Note:
+      = @transfer.note
+    %p.lead
       Caddy Fee:
       = number_to_currency(@transfer.caddy_fee)
     %p.lead
