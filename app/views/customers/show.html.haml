@@ -13,8 +13,12 @@
     %p.lead
       Member Number:
       = "#{@customer.member_number.blank? ? 'None' : @customer.member_number}"
-    = link_to 'Edit', edit_customer_path(@customer), class: 'btn btn-primary'
+    %p.lead
+      Active:
+      = "#{@customer.active? ? 'Yes' : 'No'}"
 
+    = link_to 'Edit', edit_customer_path(@customer), class: 'btn btn-primary'
+    
   %br
 
   .card.card-block

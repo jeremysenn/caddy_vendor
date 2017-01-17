@@ -29,9 +29,10 @@
               -# %th To
               %th= transfers_sort_link 'to_account_id', "To"
               -# %th Fee
-              %th= transfers_sort_link 'caddy_fee_cents', "Fee"
+              %th= transfers_sort_link 'caddy_fee_cents', "Caddy Fee"
               -# %th Tip
               %th= transfers_sort_link 'caddy_tip_cents', "Tip"
+              %th= transfers_sort_link 'fee_cents', "Transaction Fee"
               -# %th Total
               %th= transfers_sort_link 'amount_cents', "Total"
               %th
@@ -48,6 +49,7 @@
                 %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
                 %td= number_to_currency(transfer.caddy_fee)
                 %td= number_to_currency(transfer.caddy_tip)
+                %td= number_to_currency(transfer.fee)
                 %td= number_to_currency(transfer.amount)
                 %td
                   - if transfer.reversed?

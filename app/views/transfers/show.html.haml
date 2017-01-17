@@ -5,7 +5,7 @@
       Tran ID:
       = "#{@transfer.ez_cash_tran_id.blank? ? 'None' : @transfer.ez_cash_tran_id}"
     %p.lead
-      Date/Time:
+      DateTime:
       = @transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
     %p.lead
       From:
@@ -14,11 +14,14 @@
       To:
       = @to.full_name unless @to.blank?
     %p.lead
-      Fee:
+      Caddy Fee:
       = number_to_currency(@transfer.caddy_fee)
     %p.lead
       Tip:
       = number_to_currency(@transfer.caddy_tip)
+    %p.lead
+      Transaction Fee:
+      = number_to_currency(@transfer.fee)
     %p.lead
       Total:
       = number_to_currency(@transfer.amount)

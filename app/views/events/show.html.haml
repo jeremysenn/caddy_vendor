@@ -41,7 +41,7 @@
                 - else
                   = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 2)
               %td
-                = number_to_currency(current_club.transaction_fee)
+                = number_to_currency("#{player.transfer_transaction_fee.blank? ? current_club.transaction_fee : player.transfer_transaction_fee}")
               %td
                 - unless player.caddy.account.blank?
                   = form_for Transfer.new, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|

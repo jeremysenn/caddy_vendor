@@ -21,13 +21,15 @@
               %th Name
               %th Phone
               %th Member #
+              %th Active
               %th
           %tbody
             - @members.each do |member|
-              %tr
+              %tr{class: "#{member.inactive? ? 'table-danger' : ''}"}
                 %td= member.full_name
                 %td= member.PhoneMobile
                 %td= "#{member.member_number.blank? ? 'None' : member.member_number}"
+                %td= "#{member.active? ? 'Yes' : 'No'}"
                 %td
                   = link_to "Show", member, class: 'btn btn-secondary'
                   = link_to 'Edit', edit_customer_path(member), class: 'btn btn-primary'

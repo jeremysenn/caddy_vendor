@@ -3,7 +3,6 @@
 
   .form-inputs
     = f.input :CompanyNumber, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? current_user.company_id : @customer.CompanyNumber}" }
-    = f.input :Active, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 1 : @customer.Active}" }
     = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 14 : @customer.GroupID}" }
     = f.input :NameF, label: 'First Name'
     = f.input :NameL, label: 'Last Name'
@@ -12,6 +11,8 @@
       = account_form.input :ActNbr, label: 'Member Number'
       = account_form.input :CompanyNumber, :as => :hidden, :input_html => { :value => "#{account_form.object.new_record? ? current_user.company_id : @customer.CompanyNumber}" }
       = account_form.input :Balance, :as => :hidden, :input_html => { :value => "#{account_form.object.new_record? ? 0 : account_form.object.Balance}" }
+      = account_form.input :Active, as: :hidden, :input_html => { :value => "#{account_form.object.new_record? ? 1 : account_form.object.Active}" }
+    = f.input :Active, as: :boolean, :input_html => { :value => "#{@customer.new_record? ? 1 : @customer.Active}" }, inline_label: 'Active'
 
   .form-actions
     = link_to 'Cancel', :back, class: 'btn btn-secondary'

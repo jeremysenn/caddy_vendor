@@ -34,6 +34,14 @@ class Player < ApplicationRecord
     return (player_fee + player_tip + transaction_fee)
   end
   
+  def transfer_transaction_fee
+    unless transfer.blank?
+      transfer.fee
+    else
+      nil
+    end
+  end
+  
   def open?
     status == 'open'
   end

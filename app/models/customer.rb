@@ -12,9 +12,11 @@ class Customer < ActiveRecord::Base
   has_many :transactions, :through => :account
   
   scope :members, -> { where(GroupID: 14) }
+  scope :active, -> { where(Active: true) }
   
   attr_accessor :password
   before_save :encrypt_all_security_question_answers, :prepare_password
+  after_save :match_account_active_status
   
   accepts_nested_attributes_for :account
   
@@ -322,6 +324,24 @@ class Customer < ActiveRecord::Base
   
   def parent_customer
     Customer.where(CustomerID: self.ParentCustID).first unless primary?
+  end
+  
+  def active?
+    self.Active?
+  end
+  
+  def inactive?
+    not active?
+  end
+  
+  def match_account_active_status
+    unless account.blank?
+      if self.Active == account.Active
+        nil
+      else
+        account.update_attribute(:Active, self.Active)
+      end
+    end
   end
   
   #############################
