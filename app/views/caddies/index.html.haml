@@ -27,7 +27,7 @@
           - @caddies.each do |caddy|
             %tr{class: "#{caddy.inactive? ? 'table-danger' : ''}"}
               %td= caddy.full_name
-              %td= link_to caddy.club.name, caddy.club
+              %td= link_to truncate(caddy.club.name, length: 7), caddy.club
               %td
                 %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => caddy.average_rating, "data-rateit-readonly" => "true" }
               %td= link_to caddy.rank_description, caddy.caddy_rank_desc
