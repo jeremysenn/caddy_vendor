@@ -1,0 +1,36 @@
+.container
+  %br
+  %p
+    = form_tag caddy_ratings_path, id: 'caddies_form', method: 'get', class: 'form-inline' do |f|
+      = select_tag :caddy_id, options_from_collection_for_select(current_user.caddies, "id", "full_name_and_club", params[:caddy_id]), prompt: 'All caddies', onchange: "$(this).parent('form').submit();", class: "form-control"
+  - unless @caddy_ratings.blank?
+    - @caddy_ratings.group_by{|cr| cr.caddy}.each do |caddy, caddy_ratings|
+      .card.card-block
+        .card-title
+          %h4= link_to caddy.full_name, caddy
+          %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => caddy.average_rating, "data-rateit-readonly" => "true" }
+          %small
+            = "#{caddy.caddy_ratings.size} ratings"
+            %br
+            .text-muted= "#{number_with_precision(caddy.average_rating, precision: 1)} out of 5 stars"
+        .table-responsive
+          %table.table.table-striped
+            %thead
+              %tr
+                %th Rating
+                %th Date
+                %th User
+                %th Comment
+                %th
+            %tbody
+              - caddy_ratings.each do |caddy_rating|
+                %tr
+                  %td
+                    %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => caddy_rating.score, "data-rateit-readonly" => "true" }
+                  %td= caddy_rating.created_at.strftime("%-m/%-d/%y")
+                  %td= caddy_rating.user.email
+                  %td= caddy_rating.comment
+                  %td
+                    = link_to 'Show', caddy_rating, class: 'btn btn-secondary'
+  - else
+    %p.lead No caddy ratings

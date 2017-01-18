@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  caddy: one
+  user: one
+  comment: MyString
+  score: 1
+  default: MyString
+  0: MyString
+
+two:
+  caddy: two
+  user: two
+  comment: MyString
+  score: 1
+  default: MyString
+  0: MyString

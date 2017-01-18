@@ -9,6 +9,7 @@ class Caddy < ApplicationRecord
   belongs_to :caddy_rank_desc, :foreign_key => "RankingID"
   has_many :players
   has_many :transfers, through: :players
+  has_many :caddy_ratings
   
 #  has_and_belongs_to_many :clubs
 
@@ -31,6 +32,10 @@ class Caddy < ApplicationRecord
   
   def full_name
     "#{first_name} #{last_name}"
+  end
+  
+  def full_name_and_club
+    "#{first_name} #{last_name} - #{club.name}"
   end
   
   def cell_phone_number
@@ -69,6 +74,14 @@ class Caddy < ApplicationRecord
   
   def inactive?
     not active?
+  end
+  
+  def average_rating
+    unless caddy_ratings.blank?
+      caddy_ratings.sum(:score) / caddy_ratings.size.round(2)
+    else
+      0
+    end
   end
   
   #############################

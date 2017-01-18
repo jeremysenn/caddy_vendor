@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
        
   belongs_to :company
+  has_many :caddy_ratings
   
   #############################
   #     Instance Methods      #

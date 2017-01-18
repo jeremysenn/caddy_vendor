@@ -118,6 +118,17 @@ class Ability
         end
       end
       
+      # CaddyRatings
+      ############
+      can :manage, CaddyRating do |caddy_rating|
+        unless caddy_rating.caddy.blank?
+          caddy_rating.caddy.club.company == user.company 
+        else
+          true
+        end
+      end
+      can :create, :caddy_ratings
+      
     end
     
   end

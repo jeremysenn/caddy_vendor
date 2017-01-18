@@ -1,15 +1,22 @@
 .container
   %br
   .card.card-block
-    %p.lead
-      Club:
-      = link_to @caddy.club.name, @caddy.club
+    %p.lead 
+      %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => @caddy.average_rating, "data-rateit-readonly" => "true" }
+      %small
+        = link_to "#{@caddy.caddy_ratings.size} ratings", caddy_ratings_path(caddy_id: @caddy.id)
+        %br
+        .text-muted= "#{number_with_precision(@caddy.average_rating, precision: 1)} out of 5 stars"
+            
     %p.lead
       First name:
       = @caddy.first_name
     %p.lead
       Last name:
       = @caddy.last_name
+    %p.lead
+      Club:
+      = link_to @caddy.club.name, @caddy.club
     %p.lead
       Cell phone:
       = @caddy.cell_phone_number
@@ -22,6 +29,7 @@
     %p.lead
       Active:
       = "#{@caddy.active? ? 'Yes' : 'No'}"
+    
     = simple_form_for(@caddy) do |f|
       = f.error_notification
       .form-inputs
@@ -35,6 +43,8 @@
         - else
           = f.input_field :CheckedIn, as: :hidden, value: DateTime.now
           = f.button :submit, "Check In", class: 'btn btn-success'
+        = link_to 'Rate caddy', new_caddy_rating_path(caddy_id: @caddy.id), class: 'btn btn-warning'
+    
 
   %br
 

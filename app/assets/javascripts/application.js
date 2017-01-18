@@ -21,4 +21,5 @@
 //= require daterangepicker
 //= require nested_form_fields
 //= require select2
+//= require jquery.rateit.min.js
 //= require_tree .

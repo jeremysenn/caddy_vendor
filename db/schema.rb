@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170113153729) do
+ActiveRecord::Schema.define(version: 20170117192816) do
+
+  create_table "caddy_ratings", force: :cascade do |t|
+    t.integer  "caddy_id"
+    t.integer  "user_id"
+    t.string   "comment"
+    t.integer  "score",      default: 0
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.index ["caddy_id"], name: "index_caddy_ratings_on_caddy_id"
+    t.index ["user_id"], name: "index_caddy_ratings_on_user_id"
+  end
 
   create_table "events", force: :cascade do |t|
     t.string   "title"

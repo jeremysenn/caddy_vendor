@@ -1,0 +1,18 @@
+.container
+  %br
+  %div{:class => "col-sm-6"}
+    .card.card-block
+      %h4.card-title= @caddy.full_name
+      = simple_form_for(@caddy_rating) do |f|
+        = f.error_notification
+        %p.lead 
+          %div.rateit{"data-rateit-resetable" => "false", "data-rateit-mode" => "font", :style => "font-size:50px", "data-rateit-backingfld" => "#caddy_rating_score"}
+        .form-inputs
+          = f.input :caddy_id, as: :hidden, :input_html => {:value => @caddy.id}
+          = f.input :user_id, as: :hidden, :input_html => {:value => current_user.id}
+          = f.input :score, collection: 1..5, as: :select, label: false
+          = f.input :comment, as: :text
+        .form-actions
+          = link_to 'Cancel', :back, class: 'btn btn-secondary'
+          = f.button :submit, "Submit", class: 'btn btn-primary'
+        

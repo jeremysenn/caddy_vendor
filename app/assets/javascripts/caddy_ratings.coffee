@@ -3,6 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 jQuery ->
-  $(document).on "turbolinks:load", ->
+  $(document).on 'turbolinks:load', ->
     if !$('.rateit-range').length
       $('.rateit').rateit()

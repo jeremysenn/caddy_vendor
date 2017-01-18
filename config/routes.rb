@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   resources :caddy_pay_rates
   resources :caddy_rank_descs
   
+  resources :caddy_ratings
+  
   get 'welcome/index'
   root 'welcome#index'
 end
