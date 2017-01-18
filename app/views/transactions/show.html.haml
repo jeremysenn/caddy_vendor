@@ -20,6 +20,9 @@
       Amount:
       = number_to_currency(@transaction.amt_auth)
     %p.lead
+      Fee:
+      = number_to_currency(@transaction.ChpFee)
+    %p.lead
       Description:
       = @transaction.Description
 

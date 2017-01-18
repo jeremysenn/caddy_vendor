@@ -12,7 +12,7 @@
               -# %th Tran ID
               %th= transaction_sort_link 'tranID', "Tran ID"
               -# %th Device ID
-              %th= transaction_sort_link 'dev_id', "Device ID"
+              %th= transaction_sort_link 'dev_id', "Device"
               -# %th DateTime
               %th= transaction_sort_link 'date_time', "DateTime"
               -# %th Code
@@ -21,6 +21,7 @@
               %th= transaction_sort_link 'tran_status', "Status"
               -# %th Amount
               %th= transaction_sort_link 'amt_auth', "Amount"
+              %th= transaction_sort_link 'ChpFee', "Fee"
               %th
           %tbody
             - @transactions.each do |transaction|
@@ -31,6 +32,7 @@
                 %td= transaction.error_code_description
                 %td= transaction.status_description
                 %td= number_to_currency(transaction.amt_auth)
+                %td= number_to_currency(transaction.ChpFee)
                 %td
                   = link_to "Show", transaction, class: 'btn btn-secondary'
     - else
