@@ -6,7 +6,7 @@ class Player < ApplicationRecord
 #  has_one :transfer
   has_many :transfers
   
-  after_create :check_caddy_out
+  after_create :check_caddy_out, :clear_event_color
 #  before_destroy :check_caddy_in
   
 #  validates :tip, numericality: { :greater_than_or_equal_to => 0 }
@@ -28,6 +28,12 @@ class Player < ApplicationRecord
   end
   
   def total
+    player_tip = tip.blank? ? 0 : tip
+    player_fee = fee.blank? ? caddy_pay_rate : fee
+    return (player_fee + player_tip)
+  end
+  
+  def total_with_fee
     player_tip = tip.blank? ? 0 : tip
     player_fee = fee.blank? ? caddy_pay_rate : fee
     transaction_fee =  club.transaction_fee
@@ -101,6 +107,10 @@ class Player < ApplicationRecord
   
   def check_caddy_in
     caddy.update_attribute(:CheckedIn, DateTime.now)
+  end
+  
+  def clear_event_color
+    event.update_attribute(:color, nil)
   end
   
   #############################

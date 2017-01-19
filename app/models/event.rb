@@ -56,6 +56,14 @@ class Event < ApplicationRecord
     return total
   end
   
+  def players_total_with_fee
+    total = 0
+    players.each do |player|
+      total = total + player.total_with_fee
+    end
+    return total
+  end
+  
   def not_paid?
     players.where(status: [nil, 'open', 'closed']).count > 0
   end

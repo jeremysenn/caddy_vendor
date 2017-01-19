@@ -7,11 +7,11 @@ jQuery ->
   $('.tip_field').on 'keyup', ->
     caddy_fee = $(this).closest('.modal').find('#transfer_caddy_fee').val()
     caddy_tip = $(this).val()
-    transaction_fee = $(this).closest('.modal').find('#transfer_fee').val()
+    #transaction_fee = $(this).closest('.modal').find('#transfer_fee').val()
     if caddy_tip > 0
-      sum = parseFloat(caddy_fee) + parseFloat(caddy_tip) + parseFloat(transaction_fee)
+      sum = parseFloat(caddy_fee) + parseFloat(caddy_tip)
     else
-      sum = parseFloat(caddy_fee) + parseFloat(transaction_fee)
+      sum = parseFloat(caddy_fee)
     $(this).closest(".modal").find('#transfer_amount').val sum
     return
 
@@ -47,9 +47,14 @@ jQuery ->
         caddy_tip = parseFloat(newValue)
         transaction_fee = parseFloat($(this).closest('tr').find('#transfer_fee:first').val())
         $(this).closest('tr').find('#transfer_caddy_tip:first').val caddy_tip
-        $(this).closest('tr').find('#transfer_amount:first').val caddy_fee + caddy_tip + transaction_fee
+        $(this).closest('tr').find('#transfer_amount:first').val caddy_fee + caddy_tip
         sum = 0
+        # Add up all the amounts
         $('.amount').each ->
+          sum += Number($(this).val())
+          return
+        # Add up all the transaction fees
+        $('.transaction_fee').each ->
           sum += Number($(this).val())
           return
         $('#player_total').text '$' + sum.toFixed(2)
