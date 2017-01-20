@@ -8,6 +8,12 @@
       Device ID:
       = @transaction.dev_id
     %p.lead
+      From Account:
+      = @transaction.from_acct_id
+    %p.lead
+      To Account:
+      = @transaction.to_acct_id
+    %p.lead
       DateTime:
       = @transaction.date_time.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
     %p.lead

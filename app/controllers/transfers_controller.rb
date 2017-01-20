@@ -96,6 +96,6 @@ class TransfersController < ApplicationController
 
     ### Secure the transfers sort column name ###
     def transfers_sort_column
-      ["ez_cash_tran_id", "created_at", "from_account_id", "to_account_id", "caddy_fee_cents", "caddy_tip_cents", "amount_cents", "fee_cents"].include?(params[:transfers_column]) ? params[:transfers_column] : "ez_cash_tran_id"
+      ["ez_cash_tran_id", "created_at", "from_account_id", "to_account_id", "caddy_fee_cents", "caddy_tip_cents", "amount_cents", "fee_cents", "fee_to_account_id"].include?(params[:transfers_column]) ? params[:transfers_column] : "ez_cash_tran_id"
     end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170117192816) do
+ActiveRecord::Schema.define(version: 20170120161848) do
 
   create_table "caddy_ratings", force: :cascade do |t|
     t.integer  "caddy_id"
@@ -64,10 +64,11 @@ ActiveRecord::Schema.define(version: 20170117192816) do
     t.integer  "caddy_tip_cents"
     t.integer  "amount_cents"
     t.integer  "fee_cents"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.string   "ez_cash_tran_id"
-    t.boolean  "reversed",        default: false
+    t.boolean  "reversed",          default: false
+    t.integer  "fee_to_account_id"
   end
 
   create_table "users", force: :cascade do |t|

@@ -46,6 +46,10 @@ class Club < ApplicationRecord
   end
   ### End Virtual Attributes ###
   
+  def account
+    Account.where(CompanyNumber: id, CustomerID: nil).first
+  end
+  
   #############################
   #     Class Methods         #
   #############################
