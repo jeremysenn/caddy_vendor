@@ -5,7 +5,7 @@ json.title event.player_names_with_caddy_names
 json.start event.start.strftime(date_format)
 json.end event.end.strftime(date_format)
 
-json.color event.color unless event.color.blank?
+json.color event.color unless event.color.blank? or event.not_paid?
 json.allDay event.all_day_event? ? true : false
 
 json.status event.status
