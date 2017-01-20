@@ -49,35 +49,38 @@
   %br
 
   .card.card-block
-    %h4.card-title Transfers
-    - unless @transfers.blank?
-      .table-responsive
-        %table.table.table-striped
-          %thead
-            %tr
-              %th Tran ID
-              %td Date/Time
-              %th From
-              %th Fee
-              %th Tip
-              %th Total
-              %th
-          %tbody
-            - @transfers.each do |transfer|
-              %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                %td
-                  - unless transfer.ez_cash_tran_id.blank?
-                    = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
-                  - else
-                    None
-                %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
-                %td= transfer.customer.full_name unless transfer.customer.blank?
-                %td= number_to_currency(transfer.caddy_fee)
-                %td= number_to_currency(transfer.caddy_tip)
-                %td= number_to_currency(transfer.amount)
-                %td
-                  - if transfer.reversed?
-                    .text-danger Reversed
-                  = link_to "Show", transfer, class: 'btn btn-secondary'
-    - else
-      %p.lead None
+    %h4.card-title
+      %a{"aria-controls" => "collapseExample", "aria-expanded" => "false", "data-toggle" => "collapse", :href => "#caddy_transfers"}
+        Transfers
+    #caddy_transfers.collapse
+      - unless @transfers.blank?
+        .table-responsive
+          %table.table.table-striped
+            %thead
+              %tr
+                %th Tran ID
+                %td Date/Time
+                %th From
+                %th Fee
+                %th Tip
+                %th Total
+                %th
+            %tbody
+              - @transfers.each do |transfer|
+                %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
+                  %td
+                    - unless transfer.ez_cash_tran_id.blank?
+                      = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
+                    - else
+                      None
+                  %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                  %td= transfer.customer.full_name unless transfer.customer.blank?
+                  %td= number_to_currency(transfer.caddy_fee)
+                  %td= number_to_currency(transfer.caddy_tip)
+                  %td= number_to_currency(transfer.amount)
+                  %td
+                    - if transfer.reversed?
+                      .text-danger Reversed
+                    = link_to "Show", transfer, class: 'btn btn-secondary'
+      - else
+        %p.lead None
