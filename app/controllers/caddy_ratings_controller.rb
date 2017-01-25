@@ -1,7 +1,7 @@
 class CaddyRatingsController < ApplicationController
 #  before_action :authenticate_user!
   before_action :set_caddy_rating, only: [:show, :edit, :update, :destroy]
-  load_and_authorize_resource
+  load_and_authorize_resource except: [:new, :create]
   
   # GET /caddy_ratings
   # GET /caddy_ratings.json
@@ -38,7 +38,8 @@ class CaddyRatingsController < ApplicationController
     
     respond_to do |format|
       if @caddy_rating.save
-        format.html { redirect_to @caddy_rating.caddy, notice: 'CaddyRating was successfully created.' }
+#        format.html { redirect_to @caddy_rating.caddy, notice: 'CaddyRating was successfully created.' }
+        format.html { redirect_to root_path, notice: 'Thank you! CaddyRating was successfully created.' }
         format.json { render :show, status: :created, location: @caddy_rating }
       else
         format.html { render :new }
