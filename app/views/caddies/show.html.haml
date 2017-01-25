@@ -43,7 +43,7 @@
         - else
           = f.input_field :CheckedIn, as: :hidden, value: DateTime.now
           = f.button :submit, "Check In", class: 'btn btn-success'
-        = link_to 'Rate caddy', new_caddy_rating_path(caddy_id: @caddy.id), class: 'btn btn-warning'
+        =# link_to 'Rate caddy', new_caddy_rating_path(caddy_id: @caddy.id), class: 'btn btn-warning'
     
 
   %br

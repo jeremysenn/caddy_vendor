@@ -344,6 +344,10 @@ class Customer < ActiveRecord::Base
     end
   end
   
+  def phone
+    self.PhoneMobile
+  end
+  
   #############################
   #     Class Methods      #
   #############################

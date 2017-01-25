@@ -8,18 +8,34 @@
       .card.card-block
         .card-title
           %h4= link_to caddy.full_name, caddy
-          %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => caddy.average_rating, "data-rateit-readonly" => "true" }
-          %small
-            = "#{caddy.caddy_ratings.size} ratings"
-            %br
-            .text-muted= "#{number_with_precision(caddy.average_rating, precision: 1)} out of 5 stars"
+          .col-sm-4
+            %p.lead
+              Overall
+              %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => caddy.average_rating, "data-rateit-readonly" => "true" }
+              %small
+                .text-muted= "#{number_with_precision(caddy.average_rating, precision: 1)} out of 5 stars"  
+          .col-sm-4
+            %p.lead
+              Appearance
+              %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => caddy.average_appearance_rating, "data-rateit-readonly" => "true" }
+              %small
+                .text-muted= "#{number_with_precision(caddy.average_appearance_rating, precision: 1)} out of 5 stars"
+          .col-sm-4
+            %p.lead
+              Enthusiasm
+              %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => caddy.average_enthusiasm_rating, "data-rateit-readonly" => "true" }
+              %small
+                .text-muted= "#{number_with_precision(caddy.average_enthusiasm_rating, precision: 1)} out of 5 stars"
+          .col-sm-4
+            %small
+              .text-muted= "#{caddy.caddy_ratings.size} ratings"
         .table-responsive
           %table.table.table-striped
             %thead
               %tr
                 %th Rating
                 %th Date
-                %th User
+                %th Member
                 %th Comment
                 %th
             %tbody
@@ -28,7 +44,7 @@
                   %td
                     %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => caddy_rating.score, "data-rateit-readonly" => "true" }
                   %td= caddy_rating.created_at.strftime("%-m/%-d/%y")
-                  %td= caddy_rating.user.email
+                  %td= caddy_rating.member.full_name unless caddy_rating.member.blank?
                   %td= caddy_rating.comment
                   %td
                     = link_to 'Show', caddy_rating, class: 'btn btn-secondary'

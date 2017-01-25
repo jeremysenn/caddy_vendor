@@ -8,16 +8,27 @@ class CaddyRatingsController < ApplicationController
   def index
     unless params[:caddy_id].blank?
       @caddy = Caddy.where(id: params[:caddy_id]).first
-      @caddy_ratings = @caddy.blank? ? current_user.company.caddy_ratings : @caddy.caddy_ratings
+      @caddy_ratings = @caddy.blank? ? current_user.company.caddy_ratings.order(created_at: :desc) : @caddy.caddy_ratings.order(created_at: :desc)
     else
-      @caddy_ratings = current_user.company.caddy_ratings
+      @caddy_ratings = current_user.company.caddy_ratings.order(created_at: :desc)
     end
+  end
+  
+  def show
+    @player = @caddy_rating.player
   end
   
   # GET /caddy_ratings/new
   def new
-    @caddy = Caddy.where(id: params[:caddy_id]).first
-    @caddy_rating = CaddyRating.new
+    @player = Player.where(id: params[:player_id]).first
+#    @caddy = Caddy.where(id: params[:caddy_id]).first
+    if @player.caddy_rating.blank?
+      @caddy = @player.caddy unless @player.blank?
+      @caddy_rating = CaddyRating.new
+    else
+      redirect_to root_path, notice: 'Caddy has already been rated for this round.'
+    end
+    
   end
   
   # POST /caddy_ratings
@@ -70,6 +81,6 @@ class CaddyRatingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def caddy_rating_params
-      params.require(:caddy_rating).permit(:score, :comment, :caddy_id, :user_id)
+      params.require(:caddy_rating).permit(:score, :comment, :caddy_id, :user_id, :player_id, :appearance_score, :enthusiasm_score)
     end
 end

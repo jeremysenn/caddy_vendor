@@ -5,12 +5,26 @@
       %h4.card-title= @caddy.full_name
       = simple_form_for(@caddy_rating) do |f|
         = f.error_notification
-        %p.lead 
-          %div.rateit{"data-rateit-resetable" => "false", "data-rateit-mode" => "font", :style => "font-size:50px", "data-rateit-backingfld" => "#caddy_rating_score"}
         .form-inputs
-          = f.input :caddy_id, as: :hidden, :input_html => {:value => @caddy.id}
-          = f.input :user_id, as: :hidden, :input_html => {:value => current_user.id}
+          = f.input :player_id, as: :hidden, :input_html => {:value => @player.id} unless @player.blank?
+          = f.input :caddy_id, as: :hidden, :input_html => {:value => @caddy.id} unless @caddy.blank?
+          = f.input :user_id, as: :hidden, :input_html => {:value => current_user.id} unless current_user.blank?
+
+          = f.input :appearance_score, collection: 1..5, as: :select, label: false
+          %p.lead
+            Appearance
+            %div.rateit{"data-rateit-resetable" => "false", "data-rateit-mode" => "font", :style => "font-size:50px", "data-rateit-backingfld" => "#caddy_rating_appearance_score"}
+          
+          = f.input :enthusiasm_score, collection: 1..5, as: :select, label: false
+          %p.lead
+            Enthusiasm
+            %div.rateit{"data-rateit-resetable" => "false", "data-rateit-mode" => "font", :style => "font-size:50px", "data-rateit-backingfld" => "#caddy_rating_enthusiasm_score"}
+
           = f.input :score, collection: 1..5, as: :select, label: false
+          %p.lead 
+            Overall
+            %div.rateit{"data-rateit-resetable" => "false", "data-rateit-mode" => "font", :style => "font-size:50px", "data-rateit-backingfld" => "#caddy_rating_score"}
+
           = f.input :comment, as: :text
         .form-actions
           = link_to 'Cancel', :back, class: 'btn btn-secondary'

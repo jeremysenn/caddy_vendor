@@ -84,6 +84,22 @@ class Caddy < ApplicationRecord
     end
   end
   
+  def average_appearance_rating
+    unless caddy_ratings.blank?
+      caddy_ratings.sum(:appearance_score) / caddy_ratings.size.round(2)
+    else
+      0
+    end
+  end
+  
+  def average_enthusiasm_rating
+    unless caddy_ratings.blank?
+      caddy_ratings.sum(:enthusiasm_score) / caddy_ratings.size.round(2)
+    else
+      0
+    end
+  end
+  
   #############################
   #     Class Methods         #
   #############################

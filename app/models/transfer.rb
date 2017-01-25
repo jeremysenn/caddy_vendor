@@ -7,6 +7,7 @@ class Transfer < ApplicationRecord
   after_save :update_player
   
   after_create :ezcash_payment_transaction_web_service_call
+  after_create :ezcash_send_sms_web_service_call
   after_update :ezcash_reverse_transaction_web_service_call
   
 #  validates :from_account, :to_account, :amount, :fee, presence: true
@@ -103,6 +104,16 @@ class Transfer < ApplicationRecord
     end
   end
   
+  def ezcash_send_sms_web_service_call
+    unless member.blank? or member.phone.blank?
+      unless caddy.blank?
+        client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+        response = client.call(:send_sms, message: { Phone: member.phone, Msg: "Hi #{member.first_name}, please rate your caddy by going here: #{Rails.application.routes.url_helpers.new_caddy_rating_url(player_id: player.id)}"})
+        Rails.logger.debug "Response body: #{response.body}"
+      end
+    end
+  end
+  
   def amount_in_dollars
     amount_cents / 100
   end
@@ -142,6 +153,14 @@ class Transfer < ApplicationRecord
   
   def note
     player.note
+  end
+  
+  def member
+    player.member unless player.blank?
+  end
+  
+  def caddy
+    player.caddy unless player.blank?
   end
   
   #############################

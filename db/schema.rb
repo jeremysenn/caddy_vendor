@@ -10,15 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170120161848) do
+ActiveRecord::Schema.define(version: 20170125160717) do
 
   create_table "caddy_ratings", force: :cascade do |t|
     t.integer  "caddy_id"
     t.integer  "user_id"
     t.string   "comment"
-    t.integer  "score",      default: 0
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "score",            default: 0
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "player_id"
+    t.integer  "appearance_score", default: 0
+    t.integer  "enthusiasm_score", default: 0
     t.index ["caddy_id"], name: "index_caddy_ratings_on_caddy_id"
     t.index ["user_id"], name: "index_caddy_ratings_on_user_id"
   end

@@ -1,16 +1,28 @@
 .container
   %br
   .card.card-block
-    %p.lead 
-      %div.rateit{"data-rateit-resetable" => "false", "data-rateit-mode" => "font", :style => "font-size:50px", "data-rateit-value" => @caddy_rating.score, "data-rateit-readonly" => "true" }
     %p.lead
       = link_to @caddy_rating.caddy.full_name, @caddy_rating.caddy
     %p.lead
       = @caddy_rating.created_at.strftime("%B %e, %Y")
+    %p.lead 
+      Appearance
+      %div.rateit{"data-rateit-resetable" => "false", "data-rateit-mode" => "font", :style => "font-size:50px", "data-rateit-value" => @caddy_rating.appearance_score, "data-rateit-readonly" => "true" }
+    %p.lead 
+      Enthusiasm
+      %div.rateit{"data-rateit-resetable" => "false", "data-rateit-mode" => "font", :style => "font-size:50px", "data-rateit-value" => @caddy_rating.enthusiasm_score, "data-rateit-readonly" => "true" }
+    %p.lead 
+      Overall
+      %div.rateit{"data-rateit-resetable" => "false", "data-rateit-mode" => "font", :style => "font-size:50px", "data-rateit-value" => @caddy_rating.score, "data-rateit-readonly" => "true" }
     %p.lead
       Comment:
       = @caddy_rating.comment
-    %p.lead
-      User:
-      = @caddy_rating.user.email
+    - unless @player.blank?
+      %p.lead
+        Member:
+        = link_to @player.member.full_name, @player.member
+    -#
+      %p.lead
+        User:
+        = @caddy_rating.user.email
   %p= link_to 'Back', :back, class: 'btn btn-secondary'

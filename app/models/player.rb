@@ -5,6 +5,7 @@ class Player < ApplicationRecord
   belongs_to :event, optional: true
 #  has_one :transfer
   has_many :transfers
+  has_one :caddy_rating
   
   after_create :check_caddy_out, :clear_event_color
 #  before_destroy :check_caddy_in
