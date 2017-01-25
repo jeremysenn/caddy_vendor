@@ -2,9 +2,9 @@
   .homepage-intro-header
     .container
       .col-lg-12
-        - flash.each do |name, msg|
-          %p= content_tag(:div, msg, class: "alert alert-info")
         .intro-message
+          - flash.each do |name, msg|
+            %p= content_tag(:div, msg, class: "alert alert-info")
           - if user_signed_in?
             .row.form-group
               .col-xs-12.col-sm-6
