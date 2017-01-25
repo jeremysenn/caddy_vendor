@@ -5,27 +5,50 @@
         - flash.each do |name, msg|
           %p= content_tag(:div, msg, class: "alert alert-info")
         .intro-message
-          %h1 Caddy Master
-          %br
-          %h3 
-            Easy payment processing of members and caddies.
-            %br
-            No more cash • Fully automated
-          -# %img.img-responsive{:alt => "", :src => image_path('logo_transparent_261x190.png')}
-          %hr.intro-divider/
           - if user_signed_in?
-            %ul.list-inline.text-xs-center
-              %li.list-inline-item
-                .col-xs-12
-                  %a.btn.btn-secondary.btn-lg.btn-block{:href => events_path, :role => "button"}
-                    %i.fa.fa-calendar
-                    Calendar
-              %li.list-inline-item
-                .col-xs-12
-                  %a.btn.btn-secondary.btn-lg.btn-block{:href => clubs_path, :role => "button"}
-                    %i.fa.fa-tree
-                    Clubs
+            .row.form-group
+              .col-xs-12.col-sm-6
+                %a.btn.btn-secondary.btn-lg.btn-block{:href => events_path, :role => "button"}
+                  %i.fa.fa-calendar
+                  Calendar
+              .col-xs-12.col-sm-6
+                %a.btn.btn-secondary.btn-lg.btn-block{:href => clubs_path, :role => "button"}
+                  %i.fa.fa-tree
+                  Clubs 
+            .row.form-group
+              .col-xs-12.col-sm-6
+                %a.btn.btn-secondary.btn-lg.btn-block{:href => customers_path, :role => "button"}
+                  %i.fa.fa-user-circle-o
+                  Members
+              .col-xs-12.col-sm-6
+                %a.btn.btn-secondary.btn-lg.btn-block{:href => caddies_path, :role => "button"}
+                  %i.fa.fa-vcard-o
+                  Caddies
+            .row.form-group
+              .col-xs-12.col-sm-6
+                %a.btn.btn-secondary.btn-lg.btn-block{:href => caddy_rank_descs_path, :role => "button"}
+                  %i.fa.fa-certificate
+                  Ranks
+              .col-xs-12.col-sm-6
+                %a.btn.btn-secondary.btn-lg.btn-block{:href => caddy_pay_rates_path, :role => "button"}
+                  %i.fa.fa-credit-card-alt
+                  Rates
+            .row.form-group
+              .col-xs-12.col-sm-6
+                %a.btn.btn-secondary.btn-lg.btn-block{:href => transfers_path, :role => "button"}
+                  %i.fa.fa-dollar
+                  Transfers
+              .col-xs-12.col-sm-6
+                %a.btn.btn-secondary.btn-lg.btn-block{:href => transactions_path, :role => "button"}
+                  %i.fa.fa-bolt
+                  EZCash
           - else
+            %h1 Caddy Master
+            %br
+            %h3 
+              Easy payment processing of members and caddies.
+              %br
+              No more cash • Fully automated
             %ul.list-inline.text-xs-center
               %li.list-inline-item
                 .col-xs-12
