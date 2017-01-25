@@ -5,38 +5,39 @@
     %a.navbar-brand{:href => root_path} 
       Caddy Vend
     %ul.nav.navbar-nav  
-      %li.nav-item
-        %a.nav-link{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
-          %i.fa.fa-calendar
-          Calendar
-      %li.nav-item
-        %a.nav-link{:href => clubs_path, :class => (params[:controller] == 'clubs') ? "active" : ""} 
-          %i.fa.fa-tree
-          Clubs
-      %li.nav-item
-        %a.nav-link{:href => customers_path, :class => (params[:controller] == 'customers') ? "active" : ""} 
-          %i.fa.fa-user-circle-o
-          Members
-      %li.nav-item
-        %a.nav-link{:href => caddies_path, :class => (params[:controller] == 'caddies') ? "active" : ""} 
-          %i.fa.fa-vcard-o
-          Caddies
-      %li.nav-item
-        %a.nav-link{:href => caddy_rank_descs_path, :class => (params[:controller] == 'caddy_rank_descs') ? "active" : ""} 
-          %i.fa.fa-certificate
-          Ranks
-      %li.nav-item
-        %a.nav-link{:href => caddy_pay_rates_path, :class => (params[:controller] == 'caddy_pay_rates') ? "active" : ""} 
-          %i.fa.fa-credit-card-alt
-          Rates
-      %li.nav-item
-        %a.nav-link{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active" : ""} 
-          %i.fa.fa-dollar
-          Transfers
-      %li.nav-item
-        %a.nav-link{:href => transactions_path, :class => (params[:controller] == 'transactions') ? "active" : ""} 
-          %i.fa.fa-bolt
-          EZCash
+      - unless current_user.blank?
+        %li.nav-item
+          %a.nav-link{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
+            %i.fa.fa-calendar
+            Calendar
+        %li.nav-item
+          %a.nav-link{:href => clubs_path, :class => (params[:controller] == 'clubs') ? "active" : ""} 
+            %i.fa.fa-tree
+            Clubs
+        %li.nav-item
+          %a.nav-link{:href => customers_path, :class => (params[:controller] == 'customers') ? "active" : ""} 
+            %i.fa.fa-user-circle-o
+            Members
+        %li.nav-item
+          %a.nav-link{:href => caddies_path, :class => (params[:controller] == 'caddies') ? "active" : ""} 
+            %i.fa.fa-vcard-o
+            Caddies
+        %li.nav-item
+          %a.nav-link{:href => caddy_rank_descs_path, :class => (params[:controller] == 'caddy_rank_descs') ? "active" : ""} 
+            %i.fa.fa-certificate
+            Ranks
+        %li.nav-item
+          %a.nav-link{:href => caddy_pay_rates_path, :class => (params[:controller] == 'caddy_pay_rates') ? "active" : ""} 
+            %i.fa.fa-credit-card-alt
+            Rates
+        %li.nav-item
+          %a.nav-link{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active" : ""} 
+            %i.fa.fa-dollar
+            Transfers
+        %li.nav-item
+          %a.nav-link{:href => transactions_path, :class => (params[:controller] == 'transactions') ? "active" : ""} 
+            %i.fa.fa-bolt
+            EZCash
       -#
         %li.nav-item
           %a.nav-link{:href => '#'} About

@@ -129,6 +129,13 @@ class Ability
       end
       can :create, :caddy_ratings
       
+    else
+      # No logged in user
+      # CaddyRatings
+      ############
+      
+      can :create, :caddy_ratings
+    
     end
     
   end
