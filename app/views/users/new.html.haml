@@ -1,0 +1,19 @@
+.container
+  %div{:class => "col-sm-5"}
+    %br
+    %h3 New user
+    %br
+    .card.card-block
+      = simple_form_for(@user, url: users_admin_index_path)  do |f|
+        = f.error_notification
+
+        .form-inputs
+          = f.input :company_id, as: :hidden, :input_html => {:value => current_user.company.id}
+          = f.input :email, required: true
+          = f.input :admin, inline_label: 'Admin'
+          = f.input :active, inline_label: 'Active'
+          = f.input :password, autocomplete: "off", required: true
+
+        .form-actions
+          = link_to 'Cancel', :back, class: 'btn btn-secondary'
+          = f.button :submit, class: 'btn btn-primary'

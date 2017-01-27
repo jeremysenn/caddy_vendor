@@ -1,0 +1,43 @@
+%nav.navbar.navbar-fixed-top.navbar-dark.bg-inverse
+  %button.navbar-toggler.hidden-sm-up{"data-target" => "#exCollapsingNavbar2", "data-toggle" => "collapse", :type => "button"}
+    \☰
+  #exCollapsingNavbar2.collapse.navbar-toggleable-xs
+    %a.navbar-brand{:href => root_path} 
+      Caddy Vend
+    %ul.nav.navbar-nav  
+      %li.nav-item
+        %a.nav-link{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
+          %i.fa.fa-calendar
+          Calendar
+      %li.nav-item
+        %a.nav-link{:href => clubs_path, :class => (params[:controller] == 'clubs') ? "active" : ""} 
+          %i.fa.fa-tree
+          Clubs
+      %li.nav-item
+        %a.nav-link{:href => customers_path, :class => (params[:controller] == 'customers') ? "active" : ""} 
+          %i.fa.fa-user-circle-o
+          Members
+      %li.nav-item
+        %a.nav-link{:href => caddies_path, :class => (params[:controller] == 'caddies') ? "active" : ""} 
+          %i.fa.fa-vcard-o
+          Caddies
+      %li.nav-item
+        %a.nav-link{:href => caddy_rank_descs_path, :class => (params[:controller] == 'caddy_rank_descs') ? "active" : ""} 
+          %i.fa.fa-certificate
+          Ranks
+      %li.nav-item
+        %a.nav-link{:href => caddy_pay_rates_path, :class => (params[:controller] == 'caddy_pay_rates') ? "active" : ""} 
+          %i.fa.fa-credit-card-alt
+          Rates
+      %li.nav-item
+        %a.nav-link{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active" : ""} 
+          %i.fa.fa-dollar
+          Transfers
+      %li.nav-item
+        %a.nav-link{:href => transactions_path, :class => (params[:controller] == 'transactions') ? "active" : ""} 
+          %i.fa.fa-bolt
+          EZCash
+      .float-xs-right
+        %li.nav-item= link_to current_user.company.CompanyName, current_user.company, class: "nav-link #{params[:controller] == 'companies' ? 'active' : ''} "
+        %li.nav-item= link_to current_user.email, edit_user_registration_path(current_user), class: "nav-link #{current_page?(edit_user_registration_path(current_user)) ? 'active' : ''}"
+        %li.nav-item= link_to 'Log out', destroy_user_session_path, method: :delete, data: { confirm: 'Are you sure you want to sign out?' }, class: 'btn btn-outline-danger nav-link'
