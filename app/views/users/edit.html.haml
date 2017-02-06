@@ -1,0 +1,18 @@
+.container
+  %div{:class => "col-sm-5"}
+    %br
+    %h3 Editing user
+    %br
+    .card.card-block
+      = simple_form_for(@user, url: users_admin_path(@user), html: { method: :put })  do |f|
+        = f.error_notification
+
+        .form-inputs
+          = f.input :company_id, as: :hidden, :input_html => {:value => current_user.company.id}
+          = f.input :email, disabled: true
+          = f.input :admin, inline_label: 'Admin'
+          = f.input :active, inline_label: 'Active'
+
+        .form-actions
+          = link_to 'Cancel', :back, class: 'btn btn-secondary'
+          = f.button :submit, class: 'btn btn-primary'

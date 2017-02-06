@@ -2,7 +2,6 @@
   %br
   %h3
     = @company.CompanyName
-    %p.lead.pull-right= link_to current_user.email, edit_user_registration_path(current_user)
   %br
   .card.card-block
     %h4.card-title Clubs
@@ -48,6 +47,25 @@
               %td
                 = link_to "Show", caddy, class: 'btn btn-secondary'
                 = link_to 'Edit', edit_caddy_path(caddy), class: 'btn btn-primary'
+
+  .card.card-block
+    %h4.card-title Users
+    .table-responsive
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Email
+            %th Admin
+            %th Active
+            %th
+        %tbody
+          - @company.users.each do |user|
+            %tr
+              %td= user.email
+              %td= "#{user.admin? ? 'Yes' : 'No'}"
+              %td= "#{user.active? ? 'Yes' : 'No'}"
+              %td
+                = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary'
   
   =# link_to 'Companies', companies_path, class: 'btn btn-secondary'
   %p= link_to 'Edit company', edit_company_path(@company), class: 'btn btn-primary'

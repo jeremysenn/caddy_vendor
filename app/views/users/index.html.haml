@@ -1,0 +1,22 @@
+.container
+  %br
+  .card.card-block
+    %h4.card-title Users
+    .table-responsive
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Email
+            %th Admin
+            %th Active
+            %th
+        %tbody
+          - @users.each do |user|
+            %tr
+              %td= user.email
+              %td= "#{user.admin? ? 'Yes' : 'No'}"
+              %td= "#{user.active? ? 'Yes' : 'No'}"
+              %td
+                = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary'
+
+  = link_to 'New user', new_users_admin_path, class: 'btn btn-primary'

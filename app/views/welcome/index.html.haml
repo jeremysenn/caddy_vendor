@@ -6,44 +6,14 @@
           - flash.each do |name, msg|
             %p= content_tag(:div, msg, class: "alert alert-info")
           - if user_signed_in?
-            .row.form-group
-              .col-xs-12.col-sm-6
-                %a.btn.btn-secondary.btn-lg.btn-block{:href => events_path, :role => "button"}
-                  %i.fa.fa-calendar
-                  Calendar
-              .col-xs-12.col-sm-6
-                %a.btn.btn-secondary.btn-lg.btn-block{:href => clubs_path, :role => "button"}
-                  %i.fa.fa-tree
-                  Clubs 
-            .row.form-group
-              .col-xs-12.col-sm-6
-                %a.btn.btn-secondary.btn-lg.btn-block{:href => customers_path, :role => "button"}
-                  %i.fa.fa-user-circle-o
-                  Members
-              .col-xs-12.col-sm-6
-                %a.btn.btn-secondary.btn-lg.btn-block{:href => caddies_path, :role => "button"}
-                  %i.fa.fa-vcard-o
-                  Caddies
-            .row.form-group
-              .col-xs-12.col-sm-6
-                %a.btn.btn-secondary.btn-lg.btn-block{:href => caddy_rank_descs_path, :role => "button"}
-                  %i.fa.fa-certificate
-                  Ranks
-              .col-xs-12.col-sm-6
-                %a.btn.btn-secondary.btn-lg.btn-block{:href => caddy_pay_rates_path, :role => "button"}
-                  %i.fa.fa-credit-card-alt
-                  Rates
-            .row.form-group
-              .col-xs-12.col-sm-6
-                %a.btn.btn-secondary.btn-lg.btn-block{:href => transfers_path, :role => "button"}
-                  %i.fa.fa-dollar
-                  Transfers
-              .col-xs-12.col-sm-6
-                %a.btn.btn-secondary.btn-lg.btn-block{:href => transactions_path, :role => "button"}
-                  %i.fa.fa-bolt
-                  EZCash
+            - if current_user.admin?
+              = render 'welcome/admin_start_page_options'
+            - else
+              = render 'welcome/non_admin_start_page_options'
           - else
-            %h1 Caddy Master
+            %h1 
+              %i.fa.fa-flag
+              CaddyVend
             %br
             %h3 
               Easy payment processing of members and caddies.
@@ -58,12 +28,13 @@
                 .col-xs-12
                   %a.btn.btn-success.btn-lg.btn-block{:href => new_user_registration_path, :role => "button"}
                     Sign Up
--#
-  .row
-    .intro-next
-      .container
-        .col-lg-12
-          .intro-next-message
+
+.row
+  .intro-next
+    .container
+      .col-lg-12
+        .intro-next-message
+          -#
             %h2
               Lorem ipsum dolor sit amet, quaestio iracundia cum ex, numquam vocibus deserunt mel id, vix ea nemore scripserit. Vix an ipsum blandit, pri ei recteque explicari.
             %br

@@ -29,7 +29,7 @@ class Ability
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
     
-    if user.admin?
+    if user.admin? and user.active?
       
       # Companies
       ############
@@ -129,12 +129,26 @@ class Ability
       end
       can :create, :caddy_ratings
       
-    else
-      # No logged in user
-      # CaddyRatings
+      # Users
       ############
+      can :manage, User do |user|
+        user.company == user.company 
+      end
+      can :create, :users
       
-      can :create, :caddy_ratings
+    elsif not user.admin? and user.active?
+      # Non-admin, active user
+      # 
+      # Events
+      ############
+      can :manage, Event do |event|
+        unless event.club.blank?
+          event.club.company == user.company
+        else
+          true
+        end
+      end
+      can :create, :events
     
     end
     

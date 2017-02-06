@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   resources :caddy_rank_descs
   
   resources :caddy_ratings
+#  resources :users
+  resources :users_admin, :controller => 'users'
   
   get 'welcome/index'
   root 'welcome#index'

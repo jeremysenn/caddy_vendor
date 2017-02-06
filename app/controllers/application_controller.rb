@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
 
   # Permit additional parameters for Devise user
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:account_update, keys: [:time_zone])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:time_zone, :admin, :active])
   end
   
 end
