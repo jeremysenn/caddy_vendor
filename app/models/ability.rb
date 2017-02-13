@@ -141,13 +141,13 @@ class Ability
       # 
       # Events
       ############
-      can :manage, Event do |event|
-        unless event.club.blank?
-          event.club.company == user.company
-        else
-          true
-        end
-      end
+#      can :manage, Event do |event|
+#        unless event.club.blank?
+#          event.club.company == user.company
+#        else
+#          true
+#        end
+#      end
       can :create, :events
     
     end
