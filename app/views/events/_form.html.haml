@@ -73,7 +73,7 @@
                 .col-sm-12
                   = ff.text_field :note, placeholder: 'Player note', class: 'input-lg form-control'
                 
-        = f.add_nested_fields_link :players, "<i class='fa fa-trash-o'></i> Add Player".html_safe, class: 'more_players_link btn btn-warning'
+        = f.add_nested_fields_link :players, "<i class='fa fa-plus'></i> Add Player".html_safe, class: 'more_players_link btn btn-warning'
   .row.form-group
     %div{:class => "col-sm-12"}
       %label.col-sm-2.control-label.lead{for: "event_notes"} 
