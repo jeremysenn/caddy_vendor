@@ -163,7 +163,53 @@ class Transfer < ApplicationRecord
     player.caddy unless player.blank?
   end
   
+  
+  ### Start methods for use with generating CSV file ###
+  def date_of_play
+    player.event.start.to_date unless player.blank? or player.event.blank?
+  end
+  
+  def member_number
+    player.member_id unless player.blank?
+  end
+  
+  def member_name
+    player.member.full_name unless player.blank? or player.member.blank?
+  end
+  
+  def amount_paid_to_caddy
+    fee = caddy_fee.blank? ? 0 : caddy_fee
+    tip = caddy_tip.blank? ? 0 : caddy_tip
+    return fee + tip
+  end
+  
+  def date_caddy_was_paid
+    created_at.to_date
+  end
+  
+  def caddy_name
+    player.caddy.full_name unless player.blank? or player.caddy.blank?
+  end
+  
+  def reference_number
+    ez_cash_tran_id
+  end
+  ### End methods for use with generating CSV file ###
+  
   #############################
   #     Class Methods         #
   #############################
+  
+  def self.to_csv
+    require 'csv'
+    attributes = %w{date_of_play member_number member_name amount_paid_to_caddy date_caddy_was_paid caddy_name reference_number}
+    
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |transfer|
+        csv << attributes.map{ |attr| transfer.send(attr) }
+      end
+    end
+  end
 end

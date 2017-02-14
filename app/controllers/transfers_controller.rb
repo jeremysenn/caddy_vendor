@@ -8,16 +8,17 @@ class TransfersController < ApplicationController
   # GET /transfers
   # GET /transfers.json
   def index
-#    @transfers = Transfer.all
-#    @clubs = current_user.company.clubs
     unless params[:club_id].blank?
       @club = Club.where(ClubCourseID: params[:club_id]).first
       @club = current_club.blank? ? current_user.company.clubs.first : current_club if @club.blank?
     else
       @club = current_club.blank? ? current_user.company.clubs.first : current_club
     end
-#    @transfers = @club.transfers.order(created_at: :desc).page(params[:page]).per(20)
     @transfers = @club.transfers.order("#{transfers_sort_column} #{transfers_sort_direction}").page(params[:page]).per(20)
+    respond_to do |format|
+      format.html {}
+      format.csv { send_data @transfers.to_csv, filename: "transfers-#{Date.today}.csv" }
+    end
   end
 
   # GET /transfers/1
