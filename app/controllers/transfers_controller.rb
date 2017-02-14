@@ -14,10 +14,14 @@ class TransfersController < ApplicationController
     else
       @club = current_club.blank? ? current_user.company.clubs.first : current_club
     end
-    @transfers = @club.transfers.order("#{transfers_sort_column} #{transfers_sort_direction}").page(params[:page]).per(20)
     respond_to do |format|
-      format.html {}
-      format.csv { send_data @transfers.to_csv, filename: "transfers-#{Date.today}.csv" }
+      format.html {
+        @transfers = @club.transfers.order("#{transfers_sort_column} #{transfers_sort_direction}").page(params[:page]).per(20)
+      }
+      format.csv { 
+        @transfers = @club.transfers.where(created_at: Date.today.beginning_of_day..Date.today.end_of_day)
+        send_data @transfers.to_csv, filename: "transfers-#{Date.today}.csv" 
+        }
     end
   end
 
