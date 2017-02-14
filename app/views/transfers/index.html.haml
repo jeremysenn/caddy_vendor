@@ -1,15 +1,18 @@
 .container
   %br
-  - unless current_club.blank?
-    - if current_user.clubs.count <= 1
-      %br
-      %p.lead
+  %p.lead
+    .pull-right
+      %a{href: transfers_path(format: "csv", club_id: @club.id), class: 'btn btn-primary'}
+        %i.fa.fa-download
+        Today's Report
+    - unless current_club.blank?
+      - if current_user.clubs.count <= 1
+        %br
         - unless current_club.blank?
           = current_club.name 
         - else
           = current_user.clubs.first.name unless current_user.clubs.blank?
-    - else
-      %p
+      - else
         = form_tag transfers_path, id: 'clubs_form', method: 'get', class: 'form-inline' do |f|
           = select_tag :club_id, options_from_collection_for_select(current_user.clubs, "id", "name", @club.id), onchange: "$(this).parent('form').submit();", class: "form-control"
 

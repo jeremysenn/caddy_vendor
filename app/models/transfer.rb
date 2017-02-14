@@ -86,12 +86,15 @@ class Transfer < ApplicationRecord
     Rails.logger.debug "Response body: #{response.body}"
     if response.success?
       unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
-        self.ez_cash_tran_id = response.body[:ez_cash_txn_response][:tran_id]
-        self.save
+        self.update_attribute(:ez_cash_tran_id, response.body[:ez_cash_txn_response][:tran_id])
+#        self.ez_cash_tran_id = response.body[:ez_cash_txn_response][:tran_id]
+#        self.save
       else
+        raise ActiveRecord::Rollback
         return nil
       end
     else
+      raise ActiveRecord::Rollback
       return nil
     end
   end
@@ -105,7 +108,7 @@ class Transfer < ApplicationRecord
   end
   
   def ezcash_send_sms_web_service_call
-    unless member.blank? or member.phone.blank?
+    unless member.blank? or member.phone.blank? or ez_cash_tran_id.blank?
       unless caddy.blank?
         client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
         response = client.call(:send_sms, message: { Phone: member.phone, Msg: "Hi #{member.first_name}, please rate your caddy by going here: #{Rails.application.routes.url_helpers.new_caddy_rating_url(player_id: player.id)}"})
@@ -163,7 +166,53 @@ class Transfer < ApplicationRecord
     player.caddy unless player.blank?
   end
   
+  
+  ### Start methods for use with generating CSV file ###
+  def date_of_play
+    player.event.start.to_date unless player.blank? or player.event.blank?
+  end
+  
+  def member_number
+    player.member_id unless player.blank?
+  end
+  
+  def member_name
+    player.member.full_name unless player.blank? or player.member.blank?
+  end
+  
+  def amount_paid_to_caddy
+    fee = caddy_fee.blank? ? 0 : caddy_fee
+    tip = caddy_tip.blank? ? 0 : caddy_tip
+    return fee + tip
+  end
+  
+  def date_caddy_was_paid
+    created_at.to_date
+  end
+  
+  def caddy_name
+    player.caddy.full_name unless player.blank? or player.caddy.blank?
+  end
+  
+  def reference_number
+    ez_cash_tran_id
+  end
+  ### End methods for use with generating CSV file ###
+  
   #############################
   #     Class Methods         #
   #############################
+  
+  def self.to_csv
+    require 'csv'
+    attributes = %w{date_of_play member_number member_name amount_paid_to_caddy date_caddy_was_paid caddy_name reference_number}
+    
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |transfer|
+        csv << attributes.map{ |attr| transfer.send(attr) }
+      end
+    end
+  end
 end
