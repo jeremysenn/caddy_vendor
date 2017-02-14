@@ -7,7 +7,6 @@
         Today's Report
     - unless current_club.blank?
       - if current_user.clubs.count <= 1
-        %br
         - unless current_club.blank?
           = current_club.name 
         - else
