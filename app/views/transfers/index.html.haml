@@ -1,5 +1,9 @@
 .container
   %br
+  .pull-right
+    %a{href: transfers_path(format: "csv", club_id: @club.id), class: 'btn btn-primary'}
+      %i.fa.fa-download
+      Today's Report
   - unless current_club.blank?
     - if current_user.clubs.count <= 1
       %br
