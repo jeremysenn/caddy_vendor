@@ -4,7 +4,7 @@
 # http://en.wikipedia.org/wiki/Cron
 
 set :output, "#{path}/log/cron.log"
-set :environment, 'development'
+set :environment, 'production'
 
 # Example:
 #
