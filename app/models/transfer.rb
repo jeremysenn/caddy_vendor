@@ -86,12 +86,15 @@ class Transfer < ApplicationRecord
     Rails.logger.debug "Response body: #{response.body}"
     if response.success?
       unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
-        self.ez_cash_tran_id = response.body[:ez_cash_txn_response][:tran_id]
-        self.save
+        self.update_attribute(:ez_cash_tran_id, response.body[:ez_cash_txn_response][:tran_id])
+#        self.ez_cash_tran_id = response.body[:ez_cash_txn_response][:tran_id]
+#        self.save
       else
+        raise ActiveRecord::Rollback
         return nil
       end
     else
+      raise ActiveRecord::Rollback
       return nil
     end
   end
@@ -105,7 +108,7 @@ class Transfer < ApplicationRecord
   end
   
   def ezcash_send_sms_web_service_call
-    unless member.blank? or member.phone.blank?
+    unless member.blank? or member.phone.blank? or ez_cash_tran_id.blank?
       unless caddy.blank?
         client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
         response = client.call(:send_sms, message: { Phone: member.phone, Msg: "Hi #{member.first_name}, please rate your caddy by going here: #{Rails.application.routes.url_helpers.new_caddy_rating_url(player_id: player.id)}"})

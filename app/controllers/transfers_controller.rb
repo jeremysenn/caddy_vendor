@@ -50,10 +50,19 @@ class TransfersController < ApplicationController
       if @transfer.save
 #        format.html { redirect_to @transfer, notice: 'Transfer was successfully created.' }
 #        format.html { redirect_to :back, notice: 'Transfer was successfully created.' }
-        format.html { redirect_back fallback_location: root_path, notice: 'Transfer was successfully created.' }
+        format.html { 
+          unless @transfer.ez_cash_tran_id.blank?
+            redirect_back fallback_location: root_path, notice: 'Transfer was successfully created.' 
+          else
+            redirect_back fallback_location: root_path, alert: 'There was a problem connecting to EZcash.' 
+          end
+          }
         format.json { render :show, status: :created, location: @transfer }
       else
-        format.html { render :new }
+        format.html { 
+#          render :new 
+          redirect_back fallback_location: root_path, alert: 'There was a problem connecting to EZcash.'
+          }
         format.json { render json: @transfer.errors, status: :unprocessable_entity }
       end
     end
@@ -101,6 +110,6 @@ class TransfersController < ApplicationController
 
     ### Secure the transfers sort column name ###
     def transfers_sort_column
-      ["ez_cash_tran_id", "created_at", "from_account_id", "to_account_id", "caddy_fee_cents", "caddy_tip_cents", "amount_cents", "fee_cents", "fee_to_account_id"].include?(params[:transfers_column]) ? params[:transfers_column] : "ez_cash_tran_id"
+      ["ez_cash_tran_id", "created_at", "from_account_id", "to_account_id", "caddy_fee_cents", "caddy_tip_cents", "amount_cents", "fee_cents", "fee_to_account_id"].include?(params[:transfers_column]) ? params[:transfers_column] : "created_at"
     end
 end
