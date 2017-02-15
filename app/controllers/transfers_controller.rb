@@ -19,7 +19,7 @@ class TransfersController < ApplicationController
         @transfers = @club.transfers.order("#{transfers_sort_column} #{transfers_sort_direction}").page(params[:page]).per(20)
       }
       format.csv { 
-        @transfers = @club.transfers.where(created_at: Date.today.beginning_of_day..Date.today.end_of_day)
+        @transfers = @club.transfers.where(created_at: Date.today.beginning_of_day..Date.today.end_of_day, reversed: false)
         send_data @transfers.to_csv, filename: "transfers-#{Date.today}.csv" 
         }
     end
