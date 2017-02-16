@@ -136,6 +136,10 @@ class Ability
       end
       can :create, :users
       
+      # Reports
+      ############
+      can :index, :reports
+      
     elsif not user.admin? and user.active?
       # Non-admin, active user
       # 

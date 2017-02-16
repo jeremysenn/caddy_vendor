@@ -57,6 +57,12 @@ class Account < ActiveRecord::Base
     return transactions
   end
   
+  def withdrawal_all_transactions
+#    transactions = Transaction.where(from_acct_id: decrypted_account_number, tran_code: 'WDL') + Transaction.where(to_acct_id: decrypted_account_number, tran_code: 'WDL')
+    transactions = Transaction.where(from_acct_id: id, tran_code: 'ALL') + Transaction.where(to_acct_id: id, tran_code: 'ALL')
+    return transactions
+  end
+  
   def credit_transactions
 #    transactions = Transaction.where(from_acct_id: decrypted_account_number, tran_code: 'CRED') + Transaction.where(to_acct_id: decrypted_account_number, tran_code: 'CRED')
     transactions = Transaction.where(from_acct_id: id, tran_code: 'CRED') + Transaction.where(to_acct_id: id, tran_code: 'CRED')
@@ -87,7 +93,7 @@ class Account < ActiveRecord::Base
   end
   
   def displayable_transactions
-    check_transactions + check_payment_transactions + put_transactions + withdrawal_transactions + credit_transactions + fund_transfer_transactions + transfer_transactions + wire_transactions + purchase_transactions
+    check_transactions + check_payment_transactions + put_transactions + withdrawal_transactions + withdrawal_all_transactions + credit_transactions + fund_transfer_transactions + transfer_transactions + wire_transactions + purchase_transactions
   end
   
   def account_number_with_leading_zeros

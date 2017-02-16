@@ -100,7 +100,7 @@ class TransfersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def transfer_params
-      params.require(:transfer).permit(:amount, :caddy_fee, :caddy_tip, :to_account, :from_account, :fee, :customer_id, :player_id, :reversed)
+      params.require(:transfer).permit(:amount, :caddy_fee, :caddy_tip, :to_account, :from_account, :fee, :customer_id, :player_id, :reversed, :fee_to_account_id)
     end
     
     ### Secure the transfers sort direction ###
