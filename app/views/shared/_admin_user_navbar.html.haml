@@ -30,14 +30,7 @@
         %a.nav-link{:href => caddy_pay_rates_path, :class => (params[:controller] == 'caddy_pay_rates') ? "active" : ""} 
           %i.fa.fa-credit-card-alt
           Rates
-      %li.nav-item
-        %a.nav-link{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active" : ""} 
-          %i.fa.fa-dollar
-          Transfers
-      %li.nav-item
-        %a.nav-link{:href => transactions_path, :class => (params[:controller] == 'transactions') ? "active" : ""} 
-          %i.fa.fa-bolt
-          EZCash
+      
       %li.nav-item
         %a.nav-link{:href => reports_path, :class => (params[:controller] == 'reports') ? "active" : ""} 
           %i.fa.fa-file-text-o
@@ -46,11 +39,17 @@
         %li.nav-item.dropdown
           %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
             %i.fa.fa-gear
-            Settings
+            More
             %b.caret
           %div.dropdown-menu
             = link_to current_user.company.CompanyName, current_user.company, class: "dropdown-item"
             = link_to current_user.email, edit_user_registration_path(current_user), class: "dropdown-item"
+            %a{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active dropdown-item" : "dropdown-item"} 
+              %i.fa.fa-dollar
+              Transfers
+            %a{:href => transactions_path, :class => (params[:controller] == 'transactions') ? "active dropdown-item" : "dropdown-item"} 
+              %i.fa.fa-bolt
+              EZCash
         -#
           %li.nav-item= link_to current_user.company.CompanyName, current_user.company, class: "nav-link #{params[:controller] == 'companies' ? 'active' : ''} "
           %li.nav-item= link_to current_user.email, edit_user_registration_path(current_user), class: "nav-link #{current_page?(edit_user_registration_path(current_user)) ? 'active' : ''}"
