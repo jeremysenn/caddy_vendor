@@ -25,9 +25,9 @@
 
   .card.card-block
     %h4.card-title 
-      %a{"aria-controls" => "collapseExample", "aria-expanded" => "false", "data-toggle" => "collapse", :href => "#member_transfers"}
+      %a{"aria-controls" => "collapseExample", "data-toggle" => "collapse", :href => "#member_transfers"}
         Transfers
-    #member_transfers.collapse
+    #member_transfers.collapse.show.in{"aria-expanded" => "true"}
       - unless @transfers.blank?
         .table-responsive
           %table.table.table-striped

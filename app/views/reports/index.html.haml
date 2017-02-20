@@ -52,10 +52,10 @@
                     %td= transfer.date_of_play
                     %td= link_to transfer.reference_number, transaction_path(transfer.ez_cash_tran_id)
                     %td= transfer.member_number
-                    %td= transfer.member_name
+                    %td= link_to transfer.member_name, transfer.member
                     %td= number_to_currency(transfer.amount_paid_to_caddy)
                     %td= transfer.date_caddy_was_paid
-                    %td= transfer.caddy_name
+                    %td= link_to transfer.caddy_name, transfer.caddy
                     %td= link_to "Show", transfer, class: 'btn btn-secondary'
         - else
           %p.lead None
