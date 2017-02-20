@@ -24,11 +24,10 @@
         = text_field_tag 'report[end_date]', nil, :placeholder => "End Date", value: "#{@end_date.blank? ? Date.today : @end_date}", class: "form-control input-lg", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
       = button_tag(:type => 'submit', :class => 'btn btn-primary', data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}) do
         %i.fa.fa-search
-  %p.lead.text-muted
-    = "#{pluralize(@transfers.count, 'transfer')} and #{pluralize(@transactions.count, 'transaction')} found"
 
   .row
     .col-sm-6
+      %p.lead.text-muted= "#{pluralize(@transfers.count, 'transfer')} found"
       .card.card-block.card-outline-primary
         %h4.card-title.text-primary
           Transfers
@@ -64,6 +63,7 @@
           %p.lead None
 
     .col-sm-6
+      %p.lead.text-muted= "#{pluralize(@transactions.count, 'transaction')} found"
       .card.card-block.card-outline-success
         %h4.card-title.text-success
           EZcash Transactions

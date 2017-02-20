@@ -22,12 +22,12 @@ class ReportsController < ApplicationController
         @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, ''])
         @transfers_total = 0
         @transfers.each do |transfer|
-          @transfers_total = @transfers_total + transfer.amount
+          @transfers_total = @transfers_total + transfer.amount unless transfer.amount.blank?
         end
         @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).where.not(tran_code: ['FEE', 'FEE '])
         @transactions_total = 0
         @transactions.each do |transaction|
-          @transactions_total = @transactions_total + transaction.amt_auth
+          @transactions_total = @transactions_total + transaction.amt_auth unless transaction.amt_auth.blank?
         end
       }
       format.csv { 
