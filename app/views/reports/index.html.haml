@@ -39,26 +39,24 @@
               %thead
                 %tr
                   %th Date
+                  %th= "Reference#"
                   %th= "Member#"
                   %th Member
                   %th Amount
                   %th Date paid
                   %th Caddy
-                  %th= "Reference#"
                   %th
               %tbody
                 - @transfers.each do |transfer|
                   %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
                     %td= transfer.date_of_play
+                    %td= link_to transfer.reference_number, transaction_path(transfer.ez_cash_tran_id)
                     %td= transfer.member_number
                     %td= transfer.member_name
                     %td= number_to_currency(transfer.amount_paid_to_caddy)
                     %td= transfer.date_caddy_was_paid
                     %td= transfer.caddy_name
-                    %td
-                      = link_to transfer.reference_number, transaction_path(transfer.ez_cash_tran_id)
-                    %td
-                      = link_to "Show", transfer, class: 'btn btn-secondary'
+                    %td= link_to "Show", transfer, class: 'btn btn-secondary'
         - else
           %p.lead None
 
