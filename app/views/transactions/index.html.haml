@@ -1,9 +1,22 @@
 .container
   %br
+  %p
+    = form_tag transactions_path, :method => 'get', :class => "form-inline" do
+      .form-group
+        = text_field_tag 'transaction[start_date]', nil, :placeholder => "Start Date", value: "#{@start_date.blank? ? Date.today : @start_date}", class: "form-control input-lg", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
+      To
+      .form-group
+        = text_field_tag 'transaction[end_date]', nil, :placeholder => "End Date", value: "#{@end_date.blank? ? Date.today : @end_date}", class: "form-control input-lg", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
+      = button_tag(:type => 'submit', :class => 'btn btn-primary', data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}) do
+        %i.fa.fa-search
+  %p.lead.text-muted= "#{pluralize(@transactions.count, 'transaction')} found"
+
   .card.card-block
     %h4.card-title 
       -# Withdrawals
-      Transactions
+      EZcash Transactions
+      .pull-right
+        = number_to_currency(@transactions_total)
     - unless @transactions.blank?
       .table-responsive
         %table.table.table-striped

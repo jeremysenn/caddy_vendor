@@ -2,7 +2,7 @@
   %br
   %p.lead
     .pull-right
-      %a{href: transfers_path(format: "csv", club_id: @club.id, 'report[start_date]' => @start_date, 'report[end_date]' => @end_date), class: 'btn btn-primary'}
+      %a{href: reports_path(format: "csv", club_id: @club.id, 'report[start_date]' => @start_date, 'report[end_date]' => @end_date), class: 'btn btn-primary'}
         %i.fa.fa-download
         Download CSV Report
     - unless current_club.blank?
@@ -24,65 +24,73 @@
         = text_field_tag 'report[end_date]', nil, :placeholder => "End Date", value: "#{@end_date.blank? ? Date.today : @end_date}", class: "form-control input-lg", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
       = button_tag(:type => 'submit', :class => 'btn btn-primary', data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}) do
         %i.fa.fa-search
+  %p.lead.text-muted
+    = "#{pluralize(@transfers.count, 'transfer')} and #{pluralize(@transactions.count, 'transaction')} found"
 
-  .card.card-block
-    %h4.card-title 
-      Transfers
-      .pull-right
-        = number_to_currency(@total)
-    - unless @transfers.blank?
-      .table-responsive
-        %table.table.table-striped
-          %thead
-            %tr
-              %th Date of play
-              %th Member number
-              %th Member name
-              %th Amount paid to caddy
-              %th Date caddy was paid
-              %th Caddy name
-              %th Reference number
-              -#
-                %th= reports_sort_link 'ez_cash_tran_id', "Tran ID"
-                %th= reports_sort_link 'created_at', "Date/Time"
-                %th= reports_sort_link 'from_account_id', "From"
-                %th= reports_sort_link 'to_account_id', "To"
-                %th= reports_sort_link 'caddy_fee_cents', "Caddy Fee"
-                %th= reports_sort_link 'caddy_tip_cents', "Tip"
-                %th= reports_sort_link 'fee_cents', "Transaction Fee"
-                %th= reports_sort_link 'amount_cents', "Total"
-              %th
-          %tbody
-            - @transfers.each do |transfer|
-              %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                %td= transfer.date_of_play
-                %td= transfer.member_number
-                %td= transfer.member_name
-                %td= number_to_currency(transfer.amount_paid_to_caddy)
-                %td= transfer.date_caddy_was_paid
-                %td= transfer.caddy_name
-                %td
-                  = link_to transfer.reference_number, transaction_path(transfer.ez_cash_tran_id)
-                  -#
-                    %a{"aria-controls" => "collapseOne", "aria-expanded" => "true", "data-toggle" => "collapse", :href => "#collapse_transaction_#{transfer.reference_number}"}
-                      = transfer.reference_number
-                    .collapse.show{id: "collapse_transaction_#{transfer.reference_number}", "aria-labelledby" => "headingOne", :role => "tabpanel"}
-                      .card-block
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+  .row
+    .col-sm-6
+      .card.card-block.card-outline-primary
+        %h4.card-title.text-primary
+          Transfers
+          .pull-right
+            = number_to_currency(@transfers_total)
+        - unless @transfers.blank?
+          .table-responsive
+            %table.table.table-striped
+              %thead
+                %tr
+                  %th Date
+                  %th= "Member#"
+                  %th Member
+                  %th Amount
+                  %th Date paid
+                  %th Caddy
+                  %th= "Reference#"
+                  %th
+              %tbody
+                - @transfers.each do |transfer|
+                  %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
+                    %td= transfer.date_of_play
+                    %td= transfer.member_number
+                    %td= transfer.member_name
+                    %td= number_to_currency(transfer.amount_paid_to_caddy)
+                    %td= transfer.date_caddy_was_paid
+                    %td= transfer.caddy_name
+                    %td
+                      = link_to transfer.reference_number, transaction_path(transfer.ez_cash_tran_id)
+                    %td
+                      = link_to "Show", transfer, class: 'btn btn-secondary'
+        - else
+          %p.lead None
 
-
-                -#
-                  %td= link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
-                  %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
-                  %td= transfer.customer.full_name unless transfer.customer.blank?
-                  %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
-                  %td= number_to_currency(transfer.caddy_fee)
-                  %td= number_to_currency(transfer.caddy_tip)
-                  %td= number_to_currency(transfer.fee)
-                  %td= number_to_currency(transfer.amount)
-                %td
-                  = link_to "Show", transfer, class: 'btn btn-secondary'
-    - else
-      %p.lead None
-
-  = paginate @transfers
+    .col-sm-6
+      .card.card-block.card-outline-success
+        %h4.card-title.text-success
+          EZcash Transactions
+          .pull-right
+            = number_to_currency(@transactions_total)
+        - unless @transactions.blank?
+          .table-responsive
+            %table.table.table-striped
+              %thead
+                %tr
+                  %th ID
+                  %th DateTime
+                  %th Code
+                  %th Status
+                  %th Amount
+                  %th Fee
+                  %th
+              %tbody
+                - @transactions.each do |transaction|
+                  %tr{class: "#{transaction.reversal? ? 'table-danger' : '' }"}
+                    %td= transaction.id
+                    %td= transaction.date_time.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                    %td= transaction.error_code_description
+                    %td= transaction.status_description
+                    %td= number_to_currency(transaction.amt_auth)
+                    %td= number_to_currency(transaction.ChpFee)
+                    %td
+                      = link_to "Show", transaction, class: 'btn btn-secondary'
+        - else
+          %p.lead None

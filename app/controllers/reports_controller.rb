@@ -16,17 +16,22 @@ class ReportsController < ApplicationController
     else
       @club = current_club.blank? ? current_user.company.clubs.first : current_club
     end
-    
     respond_to do |format|
       format.html {
-        @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("#{reports_sort_column} #{reports_sort_direction}").page(params[:page]).per(20)
-        @total = 0
+#        @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("#{reports_sort_column} #{reports_sort_direction}").page(params[:page]).per(20)
+        @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, ''])
+        @transfers_total = 0
         @transfers.each do |transfer|
-          @total = @total + transfer.amount
+          @transfers_total = @transfers_total + transfer.amount
+        end
+        @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).where.not(tran_code: ['FEE', 'FEE '])
+        @transactions_total = 0
+        @transactions.each do |transaction|
+          @transactions_total = @transactions_total + transaction.amt_auth
         end
       }
       format.csv { 
-        @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@start_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, ''])
+        @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, ''])
         send_data @transfers.to_csv, filename: "transfers-#{Date.today}.csv" 
         }
     end
