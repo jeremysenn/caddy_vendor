@@ -50,9 +50,9 @@
 
   .card.card-block
     %h4.card-title
-      %a{"aria-controls" => "collapseExample", "aria-expanded" => "false", "data-toggle" => "collapse", :href => "#caddy_transfers"}
+      %a{"aria-controls" => "collapseExample", "data-toggle" => "collapse", :href => "#caddy_transfers"}
         Transfers
-    #caddy_transfers.collapse
+    #caddy_transfers.collapse.show.in{"aria-expanded" => "true"}
       - unless @transfers.blank?
         .table-responsive
           %table.table.table-striped
