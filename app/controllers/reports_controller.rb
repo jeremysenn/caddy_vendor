@@ -24,7 +24,7 @@ class ReportsController < ApplicationController
         @transfers.each do |transfer|
           @transfers_total = @transfers_total + transfer.amount unless transfer.amount.blank?
         end
-        @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil, 0])
+        @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, tran_code: 'CARD', sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil, 0])
         @transactions_total = 0
         @transactions.each do |transaction|
           @transactions_total = @transactions_total + transaction.amt_auth unless transaction.amt_auth.blank?
