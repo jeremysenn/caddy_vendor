@@ -8,9 +8,16 @@ class TransactionsController < ApplicationController
   # GET /transactions
   # GET /transactions.json
   def index
+    @start_date = transaction_params[:start_date] ||= Date.today.to_s
+    @end_date = transaction_params[:end_date] ||= Date.today.to_s
 #    @transactions = Transaction.withdrawals.order(date_time: :desc).page(params[:page]).per(20)
 #    @transactions = current_user.company.transactions.withdrawals.order(date_time: :desc).page(params[:page]).per(20)
-    @transactions = current_user.company.transactions.order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
+    
+    @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
+    @transactions_total = 0
+    @transactions.each do |transaction|
+      @transactions_total = @transactions_total + transaction.amt_auth
+    end
   end
 
   # GET /transactions/1
@@ -77,7 +84,7 @@ class TransactionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def transaction_params
-      params.require(:transaction).permit(:amount, :caddy_fee, :caddy_tip, :to_account, :from_account, :fee, :customer_id, :player_id)
+      params.fetch(:transaction, {}).permit(:start_date, :end_date)
     end
     
     ### Secure the transactions sort direction ###
