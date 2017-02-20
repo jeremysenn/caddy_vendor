@@ -26,7 +26,10 @@
         %i.fa.fa-search
 
   .card.card-block
-    %h4.card-title Transfers
+    %h4.card-title 
+      Transfers
+      .pull-right
+        = number_to_currency(@total)
     - unless @transfers.blank?
       .table-responsive
         %table.table.table-striped

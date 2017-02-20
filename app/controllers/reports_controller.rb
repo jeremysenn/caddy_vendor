@@ -20,6 +20,10 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html {
         @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("#{reports_sort_column} #{reports_sort_direction}").page(params[:page]).per(20)
+        @total = 0
+        @transfers.each do |transfer|
+          @total = @total + transfer.amount
+        end
       }
       format.csv { 
         @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@start_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, ''])
