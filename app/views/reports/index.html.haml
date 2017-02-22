@@ -29,6 +29,7 @@
       %p.lead.text-muted= "#{pluralize(@transfers.count, 'member')} found"
       .card.card-block.card-outline-warning
         %h4.card-title.text-warning
+          %i.fa.fa-user-circle-o
           Members
           .pull-right
             = number_to_currency(@members_balance_total)
@@ -52,6 +53,7 @@
       %p.lead.text-muted= "#{pluralize(@transfers.count, 'transfer')} found"
       .card.card-block.card-outline-primary
         %h4.card-title.text-primary
+          %i.fa.fa-dollar
           Transfers
           .pull-right
             = number_to_currency(@transfers_total)
@@ -80,6 +82,7 @@
       %p.lead.text-muted= "#{pluralize(@transactions.count, 'transaction')} found"
       .card.card-block.card-outline-success
         %h4.card-title.text-success
+          %i.fa.fa-bolt
           EZcash Transactions
           .pull-right
             = number_to_currency(@transactions_total)
