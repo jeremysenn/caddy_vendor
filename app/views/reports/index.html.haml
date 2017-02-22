@@ -69,12 +69,7 @@
                 - @transfers.each do |transfer|
                   %tr
                     %td= transfer.created_at.strftime("%-m/%-d/%y")
-                    %td
-                      Member:
-                      = link_to transfer.member_name, transfer.member
-                      %br
-                      Caddy:
-                      = link_to transfer.caddy_name, transfer.caddy
+                    %td= "Transfer - #{transfer.member_name} to #{transfer.caddy_name}"
                     %td= number_to_currency(transfer.amount_paid_to_caddy)
                     %td= number_to_currency(transfer.fee_in_dollars)
                     %td= link_to "Show", transfer, class: 'btn btn-secondary'
