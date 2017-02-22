@@ -27,8 +27,8 @@
   .row
     .col-sm-4
       %p.lead.text-muted= "#{pluralize(@transfers.count, 'member')} found"
-      .card.card-block.card-outline-primary
-        %h4.card-title.text-primary
+      .card.card-block.card-outline-warning
+        %h4.card-title.text-warning
           Members
           .pull-right
             = number_to_currency(@members_balance_total)
