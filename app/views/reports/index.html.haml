@@ -46,6 +46,8 @@
                     %td= link_to transfer.customer.full_name, transfer.customer unless transfer.customer.blank?
                     %td= number_to_currency(transfer.player.member.account.Balance) unless transfer.customer.blank? or transfer.customer.account.blank?
                     %td= link_to "Show", transfer, class: 'btn btn-secondary'
+        - else
+          %p.lead None
     .col-sm-4
       %p.lead.text-muted= "#{pluralize(@transfers.count, 'transfer')} found"
       .card.card-block.card-outline-primary
