@@ -2,10 +2,16 @@
   %br
   .card.card-block
     %p.lead
-      Tran ID:
-      = "#{@transfer.ez_cash_tran_id.blank? ? 'None' : @transfer.ez_cash_tran_id}"
+      EZcash Tran ID:
+      - unless @transfer.ez_cash_tran_id.blank?
+        = link_to @transfer.ez_cash_tran_id, transaction_path(@transfer.ez_cash_tran_id)
+      - else
+        None
     %p.lead
-      DateTime:
+      DateTime of round:
+      = @transfer.player.event.start.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+    %p.lead
+      DateTime of transfer:
       = @transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
     %p.lead
       From:
