@@ -256,6 +256,16 @@ class Transaction < ActiveRecord::Base
     end
   end
   
+  def total
+    unless amt_auth.blank?
+      unless self.ChpFee.blank?
+        return amt_auth + self.ChpFee
+      else
+        return amt_auth
+      end
+    end
+  end
+  
   #############################
   #     Class Methods         #
   #############################

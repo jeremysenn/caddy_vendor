@@ -118,15 +118,16 @@ class Transfer < ApplicationRecord
   end
   
   def amount_in_dollars
-    amount_cents / 100
+    amount_cents / 100.0
   end
   
   def fee_in_dollars
-    fee_cents / 100
+    fee_cents / 100.0
   end
   
   def total
-    (amount_cents - fee_cents) / 100
+#    (amount_cents - fee_cents) / 100
+    (amount_cents + fee_cents) / 100.0 unless amount_cents.blank? or fee_cents.blank?
   end
   
   def update_player
