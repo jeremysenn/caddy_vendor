@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   
-  resources :reports
+  get 'reports' => 'reports#index'
+  get 'reports/clear_member_balances' => 'reports#clear_member_balances'
+  
+#  resources :reports
   resources :transactions
   resources :customers
   resources :transfers

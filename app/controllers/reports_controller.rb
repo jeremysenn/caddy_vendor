@@ -1,6 +1,6 @@
 class ReportsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_report, only: [:show, :edit, :update, :destroy]
+#  before_action :set_report, only: [:show, :edit, :update, :destroy]
 #  load_and_authorize_resource
 
   helper_method :reports_sort_column, :reports_sort_direction
@@ -40,6 +40,23 @@ class ReportsController < ApplicationController
         }
     end
     
+  end
+  
+  def clear_member_balances
+    @start_date = report_params[:start_date] ||= Date.today.to_s
+    @end_date = report_params[:end_date] ||= Date.today.to_s
+    @club = Club.where(ClubCourseID: report_params[:club_id]).first
+    @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
+    @transfers.each do |transfer|
+      unless transfer.customer.blank? or transfer.customer.account.blank?
+        if transfer.customer.account.ezcash_clear_balance_transaction_web_service_call 
+          flash[:notice] = "Member balances successfully cleared by EZcash."
+        else
+          flash[:alert] = "There was a problem clearing member balances with EZcash."
+        end
+      end
+    end
+    redirect_back(fallback_location: root_path)
   end
 
   private
