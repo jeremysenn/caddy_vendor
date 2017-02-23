@@ -200,6 +200,21 @@ class Account < ActiveRecord::Base
     end
   end
   
+  def ezcash_clear_balance_transaction_web_service_call
+    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+    response = client.call(:ez_cash_txn, message: { ToActID: self.ActID, Amount: self.Balance.abs})
+    Rails.logger.debug "Response body: #{response.body}"
+    if response.success?
+      unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
+        return true
+      else
+        return nil
+      end
+    else
+      return nil
+    end
+  end
+  
   #############################
   #     Class Methods         #
   #############################
