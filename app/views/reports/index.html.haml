@@ -78,15 +78,13 @@
                   %th Date
                   %th Description
                   %th Amount
-                  %th Fee
                   %th
               %tbody
                 - @transfers.each do |transfer|
                   %tr
                     %td= transfer.created_at.strftime("%-m/%-d/%y")
                     %td= "Transfer - #{transfer.member_name} to #{transfer.caddy_name}"
-                    %td= number_to_currency(transfer.amount_paid_to_caddy)
-                    %td= number_to_currency(transfer.fee_in_dollars)
+                    %td= number_to_currency(transfer.amount_paid_total)
                     %td= link_to "Show", transfer, class: 'btn btn-secondary'
         - else
           %p.lead None
@@ -107,15 +105,13 @@
                   %th Date
                   %th Description
                   %th Amount
-                  %th Fee
                   %th
               %tbody
                 - @transactions.each do |transaction|
                   %tr{class: "#{transaction.reversal? ? 'table-danger' : '' }"}
                     %td= transaction.date_time.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y")
                     %td= transaction.Description
-                    %td= number_to_currency(transaction.amt_auth)
-                    %td= number_to_currency(transaction.ChpFee)
+                    %td= number_to_currency(transaction.total)
                     %td
                       = link_to "Show", transaction, class: 'btn btn-secondary'
         - else

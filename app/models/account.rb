@@ -69,6 +69,11 @@ class Account < ActiveRecord::Base
     return transactions
   end
   
+  def one_sided_credit_transactions
+    transactions = Transaction.where(from_acct_id: id, tran_code: 'DEP ', sec_tran_code: 'REFD') + Transaction.where(to_acct_id: id, tran_code: 'DEP ', sec_tran_code: 'REFD')
+    return transactions
+  end
+  
   def transfer_transactions
 #    transactions = Transaction.where(from_acct_id: decrypted_account_number, tran_code: 'CASH', sec_tran_code: 'TFR') + Transaction.where(to_acct_id: decrypted_account_number, tran_code: 'CASH', sec_tran_code: 'TFR')
     transactions = Transaction.where(from_acct_id: id, tran_code: 'CASH', sec_tran_code: 'TFR') + Transaction.where(to_acct_id: id, tran_code: 'CASH', sec_tran_code: 'TFR')
