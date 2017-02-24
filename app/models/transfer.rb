@@ -187,6 +187,13 @@ class Transfer < ApplicationRecord
     return fee + tip
   end
   
+  def amount_paid_total
+    fee = caddy_fee.blank? ? 0 : caddy_fee
+    tip = caddy_tip.blank? ? 0 : caddy_tip
+    trans_fee = transaction_fee.blank? ? 0 : transaction_fee
+    return fee + tip + trans_fee
+  end
+  
   def date_caddy_was_paid
     created_at.to_date
   end
@@ -210,7 +217,7 @@ class Transfer < ApplicationRecord
   
   def self.to_csv
     require 'csv'
-    attributes = %w{date_of_play member_number member_name amount_paid_to_caddy date_caddy_was_paid caddy_name transaction_fee reference_number}
+    attributes = %w{date_of_play member_number member_name amount_paid_total date_caddy_was_paid caddy_name reference_number}
     
     CSV.generate(headers: true) do |csv|
       csv << attributes
