@@ -9,6 +9,27 @@
       %i.fa.fa-calendar
       Calendar
   %br
+
+  .card.card-block
+    %h4.card-title Cut Transactions
+    - unless @cut_transactions.blank?
+      .table-responsive
+        %table.table.table-striped
+          %thead
+            %tr
+              %th DateTime
+              %th Amount
+              %th
+          %tbody
+            - @cut_transactions.each do |cut_transaction|
+              %tr
+                %td= cut_transaction.date_time.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                %td= number_to_currency(cut_transaction.amt_auth)
+                %td
+                  = link_to "Show", cut_transaction, class: 'btn btn-secondary'
+    - else
+      %p.lead None
+
   .card.card-block
     %h4.card-title Caddies
     .table-responsive

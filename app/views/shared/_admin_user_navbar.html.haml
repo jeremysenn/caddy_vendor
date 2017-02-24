@@ -30,11 +30,23 @@
         %a.nav-link{:href => caddy_pay_rates_path, :class => (params[:controller] == 'caddy_pay_rates') ? "active" : ""} 
           %i.fa.fa-credit-card-alt
           Rates
-      
-      %li.nav-item
-        %a.nav-link{:href => reports_path, :class => (params[:controller] == 'reports') ? "active" : ""} 
+      -#
+        %li.nav-item
+          %a.nav-link{:href => reports_path, :class => (params[:controller] == 'reports') ? "active" : ""} 
+            %i.fa.fa-file-text-o
+            Reports
+      %li.nav-item.dropdown
+        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'reports') ? "active" : ""}
           %i.fa.fa-file-text-o
-          Reports
+          Reporting
+          %b.caret
+        %div.dropdown-menu
+          %a.dropdown-item{:href => reports_path, :class => (params[:controller] == 'reports' and params[:action] == 'index') ? "active" : ""} 
+            %i.fa.fa-file-text-o
+            CSV Report
+          %a.dropdown-item{:href => reports_clear_member_balances_path, :class => (params[:controller] == 'reports' and params[:action] == 'clear_member_balances') ? "active" : ""} 
+            %i.fa.fa-refresh
+            Clear Balances
       .float-xs-right
         %li.nav-item.dropdown
           %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}

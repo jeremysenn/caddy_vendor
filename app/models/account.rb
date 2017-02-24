@@ -69,6 +69,11 @@ class Account < ActiveRecord::Base
     return transactions
   end
   
+  def one_sided_credit_transactions
+    transactions = Transaction.where(from_acct_id: id, tran_code: 'DEP ', sec_tran_code: 'REFD') + Transaction.where(to_acct_id: id, tran_code: 'DEP ', sec_tran_code: 'REFD')
+    return transactions
+  end
+  
   def transfer_transactions
 #    transactions = Transaction.where(from_acct_id: decrypted_account_number, tran_code: 'CASH', sec_tran_code: 'TFR') + Transaction.where(to_acct_id: decrypted_account_number, tran_code: 'CASH', sec_tran_code: 'TFR')
     transactions = Transaction.where(from_acct_id: id, tran_code: 'CASH', sec_tran_code: 'TFR') + Transaction.where(to_acct_id: id, tran_code: 'CASH', sec_tran_code: 'TFR')
@@ -203,6 +208,21 @@ class Account < ActiveRecord::Base
   def ezcash_clear_balance_transaction_web_service_call
     client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
     response = client.call(:ez_cash_txn, message: { ToActID: self.ActID, Amount: self.Balance.abs})
+    Rails.logger.debug "Response body: #{response.body}"
+    if response.success?
+      unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
+        return true
+      else
+        return nil
+      end
+    else
+      return nil
+    end
+  end
+  
+  def ezcash_one_sided_credit_transaction_web_service_call(amount)
+    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+    response = client.call(:ez_cash_txn, message: { ToActID: self.ActID, Amount: amount})
     Rails.logger.debug "Response body: #{response.body}"
     if response.success?
       unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0

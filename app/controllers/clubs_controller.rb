@@ -16,6 +16,7 @@ class ClubsController < ApplicationController
     @caddies = @club.caddies
     @caddy_pay_rates = @club.caddy_pay_rates
     @caddy_rank_descs = @club.caddy_rank_descs
+    @cut_transactions = @club.account.one_sided_credit_transactions unless @club.account.blank?
   end
 
   # GET /clubs/new

@@ -43,20 +43,43 @@ class ReportsController < ApplicationController
   end
   
   def clear_member_balances
-    @start_date = report_params[:start_date] ||= Date.today.to_s
-    @end_date = report_params[:end_date] ||= Date.today.to_s
-    @club = Club.where(ClubCourseID: report_params[:club_id]).first
-    @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
-    @transfers.each do |transfer|
-      unless transfer.customer.blank? or transfer.customer.account.blank?
-        if transfer.customer.account.ezcash_clear_balance_transaction_web_service_call 
-          flash[:notice] = "Member balances successfully cleared by EZcash."
-        else
-          flash[:alert] = "There was a problem clearing member balances with EZcash."
-        end
-      end
+    unless report_params[:club_id].blank?
+      @club = Club.where(ClubCourseID: report_params[:club_id]).first
+      @club = current_club.blank? ? current_user.company.clubs.first : current_club if @club.blank?
+    else
+      @club = current_club.blank? ? current_user.company.clubs.first : current_club
     end
-    redirect_back(fallback_location: root_path)
+    
+    @start_date = @club.date_of_last_one_sided_credit_transaction
+    @start_date = Date.today.to_s if @start_date.blank?
+    @end_date = Date.today.to_s
+    
+    @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
+    @transfers_total = 0
+    @transfers.each do |transfer|
+      @transfers_total = @transfers_total + transfer.total unless transfer.total.blank?
+    end
+    @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, tran_code: 'CARD', sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil, 0]).order("date_time DESC")
+    @transactions_total = 0
+    @transactions.each do |transaction|
+      @transactions_total = @transactions_total + transaction.total unless transaction.total.blank?
+    end
+    @members_balance_total = 0
+    @transfers.each do |transfer|
+      @members_balance_total = @members_balance_total + transfer.customer.account.Balance unless transfer.customer.blank? or transfer.customer.account.blank?
+    end
+#    @transfers.each do |transfer|
+#      unless transfer.customer.blank? or transfer.customer.account.blank?
+#        if transfer.customer.account.ezcash_clear_balance_transaction_web_service_call 
+#          @total = @total + transfer.amount_paid_total
+#          flash[:notice] = "Member balances successfully cleared by EZcash."
+#        else
+#          @total = 0
+#          flash[:alert] = "There was a problem clearing member balances with EZcash."
+#        end
+#      end
+#    end
+#    redirect_back(fallback_location: root_path)
   end
 
   private

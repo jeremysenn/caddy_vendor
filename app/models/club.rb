@@ -50,6 +50,14 @@ class Club < ApplicationRecord
     Account.where(CompanyNumber: id, CustomerID: nil).first
   end
   
+  def last_one_sided_credit_transaction
+    account.one_sided_credit_transactions.last unless account.blank?
+  end
+  
+  def date_of_last_one_sided_credit_transaction
+    last_one_sided_credit_transaction.date_time.to_date.to_s unless last_one_sided_credit_transaction.blank?
+  end
+  
   #############################
   #     Class Methods         #
   #############################

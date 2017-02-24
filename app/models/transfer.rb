@@ -99,6 +99,23 @@ class Transfer < ApplicationRecord
     end
   end
   
+  def ezcash_rebalance_transaction_web_service_call
+    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+    response = client.call(:ez_cash_txn, message: { FromActID: club.id, ToActID: from_account_id, Amount: amount_paid_total})
+    Rails.logger.debug "Response body: #{response.body}"
+    if response.success?
+      unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
+        self.update_attribute(:ez_cash_tran_id, response.body[:ez_cash_txn_response][:tran_id])
+      else
+        raise ActiveRecord::Rollback
+        return nil
+      end
+    else
+      raise ActiveRecord::Rollback
+      return nil
+    end
+  end
+  
   def ezcash_reverse_transaction_web_service_call
     if reversed?
       client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
@@ -167,6 +184,9 @@ class Transfer < ApplicationRecord
     player.caddy unless player.blank?
   end
   
+  def club
+    player.club unless player.blank?
+  end
   
   ### Start methods for use with generating CSV file ###
   def date_of_play
