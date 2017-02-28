@@ -51,10 +51,10 @@ class ReportsController < ApplicationController
     end
     
     @start_date = @club.date_of_last_one_sided_credit_transaction
-    @start_date = Date.today.to_s if @start_date.blank?
-    @end_date = Date.today.to_s
+    @start_date = Date.today.beginning_of_day.to_s if @start_date.blank?
+    @end_date = Date.today.end_of_day.to_s
     
-    @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
+    @transfers = @club.transfers.where(created_at: @start_date.to_datetime..@end_date.to_datetime, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
     @transfers_total = 0
     @transfers.each do |transfer|
       @transfers_total = @transfers_total + transfer.total unless transfer.total.blank?

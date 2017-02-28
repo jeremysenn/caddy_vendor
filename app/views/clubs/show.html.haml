@@ -23,7 +23,7 @@
               %th Amount
               %th
           %tbody
-            - @cut_transactions.each do |cut_transaction|
+            - @cut_transactions.reverse.each do |cut_transaction|
               %tr
                 %td= cut_transaction.date_time.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
                 %td= number_to_currency(cut_transaction.amt_auth)
