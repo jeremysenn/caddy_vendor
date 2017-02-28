@@ -57,7 +57,8 @@ class Club < ApplicationRecord
   
   def date_of_last_one_sided_credit_transaction
 #    last_one_sided_credit_transaction.date_time.to_date.to_s unless last_one_sided_credit_transaction.blank?
-    last_one_sided_credit_transaction.date_time.to_s unless last_one_sided_credit_transaction.blank?
+    # Add five hours to be equivalent of UTC time, since stored in database as east coast time
+    last_one_sided_credit_transaction.date_time unless last_one_sided_credit_transaction.blank?
   end
   
   def perform_one_sided_credit_transaction(amount)

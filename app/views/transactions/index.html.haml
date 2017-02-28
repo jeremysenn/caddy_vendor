@@ -15,8 +15,9 @@
     %h4.card-title 
       -# Withdrawals
       EZcash Transactions
-      .pull-right
-        = number_to_currency(@transactions_total)
+      -#
+        .pull-right
+          = number_to_currency(@transactions_total)
     - unless @transactions.blank?
       .table-responsive
         %table.table.table-striped
@@ -24,14 +25,20 @@
             %tr
               -# %th Tran ID
               %th= transaction_sort_link 'tranID', "Tran ID"
-              -# %th Device ID
-              %th= transaction_sort_link 'dev_id', "Device"
+              -#
+                -# %th Device ID
+                %th= transaction_sort_link 'dev_id', "Device"
+              %th= transaction_sort_link 'from_acct_id', "From"
+              %th= transaction_sort_link 'to_acct_id', "To"
               -# %th DateTime
               %th= transaction_sort_link 'date_time', "DateTime"
-              -# %th Code
-              %th= transaction_sort_link 'error_code', "Code"
-              -# %th Status
-              %th= transaction_sort_link 'tran_status', "Status"
+              -#
+                -# %th Code
+                %th= transaction_sort_link 'error_code', "Code"
+                -# %th Status
+                %th= transaction_sort_link 'tran_status', "Status"
+              %th= transaction_sort_link 'tran_code', "Tran Code"
+              %th= transaction_sort_link 'sec_tran_code', "Sec Tran Code"
               -# %th Amount
               %th= transaction_sort_link 'amt_auth', "Amount"
               %th= transaction_sort_link 'ChpFee', "Fee"
@@ -40,10 +47,16 @@
             - @transactions.each do |transaction|
               %tr{class: "#{transaction.reversal? ? 'table-danger' : '' }"}
                 %td= transaction.id
-                %td= transaction.dev_id
-                %td= transaction.date_time.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
-                %td= transaction.error_code_description
-                %td= transaction.status_description
+                -#
+                  %td= transaction.dev_id
+                %td= transaction.from_acct_id
+                %td= transaction.to_acct_id
+                %td= transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
+                -#
+                  %td= transaction.error_code_description
+                  %td= transaction.status_description
+                %td= transaction.tran_code
+                %td= transaction.sec_tran_code
                 %td= number_to_currency(transaction.amt_auth)
                 %td= number_to_currency(transaction.ChpFee)
                 %td

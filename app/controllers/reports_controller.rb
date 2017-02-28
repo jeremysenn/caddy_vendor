@@ -50,15 +50,17 @@ class ReportsController < ApplicationController
       @club = current_club.blank? ? current_user.company.clubs.first : current_club
     end
     
-    @start_date = @club.date_of_last_one_sided_credit_transaction
+    @start_date = @club.date_of_last_one_sided_credit_transaction.to_s
     @start_date = Date.today.beginning_of_day.to_s if @start_date.blank?
     @end_date = Date.today.end_of_day.to_s
     
-    @transfers = @club.transfers.where(created_at: @start_date.to_datetime..@end_date.to_datetime, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
+    # Need to add 5 hours to because the transaction's date_time in stored as Eastern time
+    @transfers = @club.transfers.where(created_at: (@start_date.to_datetime + 5.hours)..@end_date.to_datetime, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
     @transfers_total = 0
     @transfers.each do |transfer|
       @transfers_total = @transfers_total + transfer.total unless transfer.total.blank?
     end
+    # Use current user's time zone since transactions are stored in east coast time
     @transactions = current_user.company.transactions.where(date_time: @start_date.to_datetime..@end_date.to_datetime, tran_code: 'CARD', sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil]).order("date_time DESC")
     @transactions_total = 0
     @transactions.each do |transaction|
@@ -70,15 +72,24 @@ class ReportsController < ApplicationController
     end
     unless report_params[:clear_member_balances].blank?
       @club.perform_one_sided_credit_transaction(@transfers_total)
+      member_balances_cleared = true
       @transfers.each do |transfer|
         unless transfer.customer.blank? or transfer.customer.account.blank?
-          if transfer.customer.account.ezcash_clear_balance_transaction_web_service_call 
-            transfer.ezcash_rebalance_transaction_web_service_call
-            flash[:notice] = "Member balances successfully cleared by EZcash."
-          else
-            flash[:notice] = "There was a problem clearing member balances with EZcash."
+          unless transfer.ezcash_rebalance_transaction_web_service_call
+            member_balances_cleared = false
           end
+#          if transfer.customer.account.ezcash_clear_balance_transaction_web_service_call 
+#            flash[:notice] = "Member balances successfully cleared by EZcash."
+#          else
+#            flash[:notice] = "There was a problem clearing member balances with EZcash."
+#          end
         end
+      end
+      if member_balances_cleared
+        @members_balance_total = 0
+        flash[:notice] = "Member balances successfully cleared by EZcash."
+      else
+        flash[:alert] = "There was a problem clearing member balances with EZcash."
       end
     end
 #    redirect_back(fallback_location: root_path)

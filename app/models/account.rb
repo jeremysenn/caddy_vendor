@@ -7,7 +7,8 @@ class Account < ActiveRecord::Base
   has_many :bill_payments
   belongs_to :customer, :foreign_key => "CustomerID"
   has_many :transactions, :foreign_key => :from_acct_id
-  belongs_to :club, :foreign_key => "CompanyNumber"
+#  belongs_to :club, :foreign_key => "CompanyNumber"
+  belongs_to :company, :foreign_key => "CompanyNumber"
   
   attr_accessor :last_4_of_pan
   
@@ -22,13 +23,9 @@ class Account < ActiveRecord::Base
 #    Customer.find(self.CustomerID)
 #  end
 
-  def company
-    unless customer.blank?
-      customer.company 
-    else
-      club.company
-    end
-  end
+#  def company
+#    customer.company unless customer.blank?
+#  end
   
   def transactions
 #    transactions = Transaction.where(from_acct_id: decrypted_account_number) + Transaction.where(to_acct_id: decrypted_account_number)
@@ -207,21 +204,6 @@ class Account < ActiveRecord::Base
     if entity.present?
       self.ButtonText = entity.name 
       self.save
-    end
-  end
-  
-  def ezcash_clear_balance_transaction_web_service_call
-    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
-    response = client.call(:ez_cash_txn, message: { ToActID: self.ActID, Amount: self.Balance.abs})
-    Rails.logger.debug "Response body: #{response.body}"
-    if response.success?
-      unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
-        return true
-      else
-        return nil
-      end
-    else
-      return nil
     end
   end
   
