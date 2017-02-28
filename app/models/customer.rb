@@ -170,6 +170,10 @@ class Customer < ActiveRecord::Base
 #    primary_account.available_balance
   end
   
+  def balance
+    account.Balance unless account.blank?
+  end
+  
   def lang_obj_text_1
     LangObjText.find_by_LangObjID_and_LangID(self.LangObjID1, self.LangID)
   end

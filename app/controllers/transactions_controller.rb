@@ -16,7 +16,7 @@ class TransactionsController < ApplicationController
     @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
     @transactions_total = 0
     @transactions.each do |transaction|
-      @transactions_total = @transactions_total + transaction.amt_auth
+      @transactions_total = @transactions_total + transaction.amt_auth unless transaction.amt_auth.blank?
     end
   end
 

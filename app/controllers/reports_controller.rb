@@ -24,7 +24,7 @@ class ReportsController < ApplicationController
         @transfers.each do |transfer|
           @transfers_total = @transfers_total + transfer.total unless transfer.total.blank?
         end
-        @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, tran_code: 'CARD', sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil, 0]).order("date_time DESC")
+        @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, tran_code: 'CARD', sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil]).order("date_time DESC")
         @transactions_total = 0
         @transactions.each do |transaction|
           @transactions_total = @transactions_total + transaction.total unless transaction.total.blank?
@@ -59,7 +59,7 @@ class ReportsController < ApplicationController
     @transfers.each do |transfer|
       @transfers_total = @transfers_total + transfer.total unless transfer.total.blank?
     end
-    @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, tran_code: 'CARD', sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil, 0]).order("date_time DESC")
+    @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, tran_code: 'CARD', sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil]).order("date_time DESC")
     @transactions_total = 0
     @transactions.each do |transaction|
       @transactions_total = @transactions_total + transaction.total unless transaction.total.blank?
@@ -68,17 +68,19 @@ class ReportsController < ApplicationController
     @transfers.each do |transfer|
       @members_balance_total = @members_balance_total + transfer.customer.account.Balance unless transfer.customer.blank? or transfer.customer.account.blank?
     end
-#    @transfers.each do |transfer|
-#      unless transfer.customer.blank? or transfer.customer.account.blank?
-#        if transfer.customer.account.ezcash_clear_balance_transaction_web_service_call 
-#          @total = @total + transfer.amount_paid_total
-#          flash[:notice] = "Member balances successfully cleared by EZcash."
-#        else
-#          @total = 0
-#          flash[:alert] = "There was a problem clearing member balances with EZcash."
-#        end
-#      end
-#    end
+    unless report_params[:clear_member_balances].blank?
+      @club.perform_one_sided_credit_transaction(@transfers_total)
+      @transfers.each do |transfer|
+        unless transfer.customer.blank? or transfer.customer.account.blank?
+          if transfer.customer.account.ezcash_clear_balance_transaction_web_service_call 
+            transfer.ezcash_rebalance_transaction_web_service_call
+            flash[:notice] = "Member balances successfully cleared by EZcash."
+          else
+            flash[:notice] = "There was a problem clearing member balances with EZcash."
+          end
+        end
+      end
+    end
 #    redirect_back(fallback_location: root_path)
   end
 
@@ -87,7 +89,7 @@ class ReportsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def report_params
 #      params.require(:report).permit(:start_date, :end_date, :type)
-      params.fetch(:report, {}).permit(:start_date, :end_date, :type, :club_id)
+      params.fetch(:report, {}).permit(:start_date, :end_date, :type, :club_id, :clear_member_balances)
     end
     
     ### Secure the reports sort direction ###

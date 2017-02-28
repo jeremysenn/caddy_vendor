@@ -7,6 +7,7 @@
           = hidden_field_tag 'report[club_id]', @club.id
           = hidden_field_tag 'report[start_date]', @start_date
           = hidden_field_tag 'report[end_date]', @end_date
+          = hidden_field_tag 'report[clear_member_balances]', true
           = button_tag(:type => 'submit', :class => "btn btn-danger #{(@transfers_total != @transactions_total or @transfers_total != @members_balance_total.abs) ? 'disabled' : ''} ", :data => { :confirm => 'Are you sure you want to clear these member balances? This action cannot be undone.' }) do
             %i.fa.fa-exclamation-triangle
             Clear Balances
@@ -26,11 +27,10 @@
 
   .row
     .col-sm-4
-      %p.lead.text-muted= "#{pluralize(@transfers.count, 'member')} found"
       .card.card-block.card-outline-warning
         %h4.card-title.text-warning
           %i.fa.fa-user-circle-o
-          Members
+          = "Members (#{@transfers.count})"
           .pull-right
             = number_to_currency(@members_balance_total)
         - unless @transfers.blank?
@@ -50,11 +50,10 @@
         - else
           %p.lead None
     .col-sm-4
-      %p.lead.text-muted= "#{pluralize(@transfers.count, 'transfer')} found"
       .card.card-block.card-outline-primary
         %h4.card-title.text-primary
           %i.fa.fa-dollar
-          Transfers
+          = "Transfers (#{@transfers.count})"
           .pull-right
             = number_to_currency(@transfers_total)
         - unless @transfers.blank?
@@ -77,11 +76,10 @@
           %p.lead None
 
     .col-sm-4
-      %p.lead.text-muted= "#{pluralize(@transactions.count, 'transaction')} found"
       .card.card-block.card-outline-success
         %h4.card-title.text-success
           %i.fa.fa-bolt
-          EZcash Transactions
+          = "EZcash Transactions (#{@transactions.count})"
           .pull-right
             = number_to_currency(@transactions_total)
         - unless @transactions.blank?

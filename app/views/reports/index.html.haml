@@ -40,11 +40,10 @@
 
   .row
     .col-sm-4
-      %p.lead.text-muted= "#{pluralize(@transfers.count, 'member')} found"
       .card.card-block.card-outline-warning
         %h4.card-title.text-warning
           %i.fa.fa-user-circle-o
-          Members
+          = "Members (#{@transfers.count})"
           .pull-right
             = number_to_currency(@members_balance_total)
         - unless @transfers.blank?
@@ -64,11 +63,10 @@
         - else
           %p.lead None
     .col-sm-4
-      %p.lead.text-muted= "#{pluralize(@transfers.count, 'transfer')} found"
       .card.card-block.card-outline-primary
         %h4.card-title.text-primary
           %i.fa.fa-dollar
-          Transfers
+          = "Transfers (#{@transfers.count})"
           .pull-right
             = number_to_currency(@transfers_total)
         - unless @transfers.blank?
@@ -91,11 +89,10 @@
           %p.lead None
 
     .col-sm-4
-      %p.lead.text-muted= "#{pluralize(@transactions.count, 'transaction')} found"
       .card.card-block.card-outline-success
         %h4.card-title.text-success
           %i.fa.fa-bolt
-          EZcash Transactions
+          = "EZcash Transactions (#{@transactions.count})"
           .pull-right
             = number_to_currency(@transactions_total)
         - unless @transactions.blank?
