@@ -10,6 +10,7 @@ class Club < ApplicationRecord
   has_many :caddy_pay_rates, :foreign_key => "ClubCompanyID"
   has_many :caddy_rank_descs, :foreign_key => "ClubCompanyID"
   has_many :transfers, through: :events
+  has_many :accounts
   
   attr_accessor :transaction_fee
 
@@ -56,6 +57,14 @@ class Club < ApplicationRecord
   
   def date_of_last_one_sided_credit_transaction
     last_one_sided_credit_transaction.date_time.to_date.to_s unless last_one_sided_credit_transaction.blank?
+  end
+  
+  def perform_one_sided_credit_transaction(amount)
+    account.ezcash_one_sided_credit_transaction_web_service_call(amount) unless account.blank?
+  end
+  
+  def balance
+    account.Balance unless account.blank?
   end
   
   #############################

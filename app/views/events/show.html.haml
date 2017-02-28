@@ -43,7 +43,7 @@
               %td
                 = number_to_currency("#{player.transfer_transaction_fee.blank? ? current_club.transaction_fee : player.transfer_transaction_fee}")
               %td
-                - unless player.caddy.account.blank?
+                - unless player.caddy.account.blank? or player.member.account.blank?
                   = form_for Transfer.new, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
                     = f.hidden_field :customer_id, value: player.member_id
                     = f.hidden_field :player_id, value: player.id

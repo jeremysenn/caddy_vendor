@@ -33,7 +33,7 @@
       = number_to_currency(@transfer.fee)
     %p.lead
       Total:
-      = number_to_currency(@transfer.amount)
+      = number_to_currency(@transfer.amount_paid_total)
     - if @transfer.reversed?
       %p.lead.text-danger
         Reversed

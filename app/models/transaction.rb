@@ -223,7 +223,15 @@ class Transaction < ActiveRecord::Base
   end
   
   def company
-    customer.company unless customer.blank?
+    unless customer.blank?
+      customer.company
+    else
+      unless from_account.blank?  
+        from_account.company 
+      else
+        to_account.company
+      end
+    end
   end
   
   def amount_with_fee
@@ -264,6 +272,14 @@ class Transaction < ActiveRecord::Base
         return amt_auth
       end
     end
+  end
+  
+  def to_account
+    Account.where(ActID: to_acct_id).first
+  end
+  
+  def from_account
+    Account.where(ActID: from_acct_id).first
   end
   
   #############################
