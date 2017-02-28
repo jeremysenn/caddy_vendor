@@ -92,7 +92,7 @@
       .card.card-block.card-outline-success
         %h4.card-title.text-success
           %i.fa.fa-bolt
-          = "EZcash Transactions (#{@transactions.count})"
+          = "EZcash (#{@transactions.count})"
           .pull-right
             = number_to_currency(@transactions_total)
         - unless @transactions.blank?

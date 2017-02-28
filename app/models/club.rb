@@ -56,7 +56,8 @@ class Club < ApplicationRecord
   end
   
   def date_of_last_one_sided_credit_transaction
-    last_one_sided_credit_transaction.date_time.to_date.to_s unless last_one_sided_credit_transaction.blank?
+#    last_one_sided_credit_transaction.date_time.to_date.to_s unless last_one_sided_credit_transaction.blank?
+    last_one_sided_credit_transaction.date_time.to_s unless last_one_sided_credit_transaction.blank?
   end
   
   def perform_one_sided_credit_transaction(amount)
