@@ -14,7 +14,8 @@ class Company < ActiveRecord::Base
   has_many :caddy_rank_descs, :through => :clubs
   has_many :events, through: :clubs
 #  has_many :accounts, through: :customers
-  has_many :accounts, through: :clubs
+#  has_many :accounts, through: :clubs
+  has_many :accounts
   has_many :caddy_ratings, through: :users
   
   #############################

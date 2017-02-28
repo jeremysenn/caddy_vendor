@@ -31,6 +31,26 @@
                   = link_to "Show", cut_transaction, class: 'btn btn-secondary'
     - else
       %p.lead None
+  -#
+    .card.card-block
+      %h4.card-title Transactions
+      - unless @transactions.blank?
+        .table-responsive
+          %table.table.table-striped
+            %thead
+              %tr
+                %th DateTime
+                %th Amount
+                %th
+            %tbody
+              - @transactions.reverse.each do |transaction|
+                %tr
+                  %td= transaction.date_time.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                  %td= number_to_currency(transaction.amt_auth)
+                  %td
+                    = link_to "Show", transaction, class: 'btn btn-secondary'
+      - else
+        %p.lead None
 
   .card.card-block
     %h4.card-title Caddies
