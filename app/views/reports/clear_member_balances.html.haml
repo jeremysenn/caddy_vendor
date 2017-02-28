@@ -8,10 +8,9 @@
           = hidden_field_tag 'report[start_date]', @start_date
           = hidden_field_tag 'report[end_date]', @end_date
           = hidden_field_tag 'report[clear_member_balances]', true
-          %p
-            = button_tag(:type => 'submit', :class => "btn btn-danger #{(@transfers_total != @transactions_total or @transfers_total != @members_balance_total.abs) ? 'disabled' : ''} ", :data => { :confirm => 'Are you sure you want to clear these member balances? This action cannot be undone.' }) do
-              %i.fa.fa-exclamation-triangle
-              Clear Balances
+          = button_tag(:type => 'submit', :class => "btn btn-danger #{(@transfers_total != @transactions_total or @transfers_total != @members_balance_total.abs) ? 'disabled' : ''} ", :data => { :confirm => 'Are you sure you want to clear these member balances? This action cannot be undone.' }) do
+            %i.fa.fa-exclamation-triangle
+            Clear Balances
   %p.lead
     = form_tag reports_clear_member_balances_path, :method => 'get', :class => "form-inline" do
       - unless current_club.blank?
