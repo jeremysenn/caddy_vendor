@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+  
   get 'reports' => 'reports#index'
   get 'reports/clear_member_balances' => 'reports#clear_member_balances'
   

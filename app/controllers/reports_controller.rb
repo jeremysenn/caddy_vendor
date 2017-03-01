@@ -31,7 +31,7 @@ class ReportsController < ApplicationController
         end
         @members_balance_total = 0
         @transfers.each do |transfer|
-          @members_balance_total = @members_balance_total + transfer.customer.account.Balance unless transfer.customer.blank? or transfer.customer.account.blank?
+          @members_balance_total = @members_balance_total + transfer.customer.account.Balance unless transfer.customer.blank? or transfer.customer.account.blank? or transfer.member_balance_cleared
         end
       }
       format.csv { 
@@ -55,7 +55,7 @@ class ReportsController < ApplicationController
     @end_date = Date.today.end_of_day.to_s
     
     # Need to add 5 hours to because the transaction's date_time in stored as Eastern time
-    @transfers = @club.transfers.where(created_at: (@start_date.to_datetime + 5.hours)..@end_date.to_datetime, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
+    @transfers = @club.transfers.where(created_at: (@start_date.to_datetime + 5.hours)..@end_date.to_datetime, reversed: false, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
     @transfers_total = 0
     @transfers.each do |transfer|
       @transfers_total = @transfers_total + transfer.total unless transfer.total.blank?
@@ -68,29 +68,17 @@ class ReportsController < ApplicationController
     end
     @members_balance_total = 0
     @transfers.each do |transfer|
-      @members_balance_total = @members_balance_total + transfer.customer.account.Balance unless transfer.customer.blank? or transfer.customer.account.blank?
+      @members_balance_total = @members_balance_total + transfer.customer.account.Balance unless transfer.customer.blank? or transfer.customer.account.blank? or transfer.member_balance_cleared
     end
-    unless report_params[:clear_member_balances].blank?
+    unless params[:clearing_member_balances].blank? or @transfers_total.zero?
       @club.perform_one_sided_credit_transaction(@transfers_total)
-      member_balances_cleared = true
       @transfers.each do |transfer|
         unless transfer.customer.blank? or transfer.customer.account.blank?
-          unless transfer.ezcash_rebalance_transaction_web_service_call
-            member_balances_cleared = false
-          end
-#          if transfer.customer.account.ezcash_clear_balance_transaction_web_service_call 
-#            flash[:notice] = "Member balances successfully cleared by EZcash."
-#          else
-#            flash[:notice] = "There was a problem clearing member balances with EZcash."
-#          end
+          ClearMemberBalanceWorker.perform_async(transfer.id) # Clear transfer member's balance with sidekiq background process
         end
       end
-      if member_balances_cleared
-        @members_balance_total = 0
-        flash[:notice] = "Member balances successfully cleared by EZcash."
-      else
-        flash[:alert] = "There was a problem clearing member balances with EZcash."
-      end
+      flash[:notice] = "Request to clear member balances submitted to EZcash."
+      redirect_to reports_path
     end
 #    redirect_back(fallback_location: root_path)
   end
