@@ -105,7 +105,7 @@ class Transfer < ApplicationRecord
     Rails.logger.debug "Response body: #{response.body}"
     if response.success?
       unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
-        self.update_attribute(:ez_cash_tran_id, response.body[:ez_cash_txn_response][:tran_id])
+        return true
       else
         raise ActiveRecord::Rollback
         return nil

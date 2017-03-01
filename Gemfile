@@ -83,6 +83,9 @@ gem "select2-rails"
 # Provide a clear syntax for writing and deploying cron jobs.
 gem 'whenever', :require => false
 
+# Background jobs
+gem 'sidekiq'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri

@@ -1,13 +1,13 @@
 .container-fluid
   %br
   %p.lead
-    - unless @transfers.blank?
+    - unless @transfers.blank? or params[:clearing_member_balances].present?
       .pull-right
         = form_tag reports_clear_member_balances_path, :method => 'get', :class => "form-inline" do
           = hidden_field_tag 'report[club_id]', @club.id
           = hidden_field_tag 'report[start_date]', @start_date
           = hidden_field_tag 'report[end_date]', @end_date
-          = hidden_field_tag 'report[clear_member_balances]', true
+          = hidden_field_tag :clearing_member_balances, true
           = button_tag(:type => 'submit', :class => "btn btn-danger #{(@transfers_total != @transactions_total or @transfers_total != @members_balance_total.abs) ? 'disabled' : ''} ", :data => { :confirm => 'Are you sure you want to clear these member balances? This action cannot be undone.' }) do
             %i.fa.fa-exclamation-triangle
             Clear Balances
