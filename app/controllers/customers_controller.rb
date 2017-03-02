@@ -62,6 +62,7 @@ class CustomersController < ApplicationController
   # PATCH/PUT /customers/1.json
   def update
     respond_to do |format|
+      Rails.logger.debug "***************customer params: #{customer_params[:account_attributes][:Active]}"
       if @customer.update(customer_params)
         format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
         format.json { render :show, status: :ok, location: @customer }
@@ -90,6 +91,7 @@ class CustomersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def customer_params
-      params.require(:customer).permit(:CompanyNumber, :Active, :GroupID, :NameF, :NameL, :PhoneMobile, account_attributes:[:CustomerID, :ActNbr, :_destroy,:id])
+      params.require(:customer).permit(:CompanyNumber, :Active, :GroupID, :NameF, :NameL, :PhoneMobile, 
+        account_attributes:[:CompanyNumber, :Balance, :MinBalance, :Active, :CustomerID, :ActNbr, :_destroy,:id])
     end
 end

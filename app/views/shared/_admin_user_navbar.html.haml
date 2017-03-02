@@ -11,10 +11,6 @@
           %i.fa.fa-calendar
           Calendar
       %li.nav-item
-        %a.nav-link{:href => clubs_path, :class => (params[:controller] == 'clubs') ? "active" : ""} 
-          %i.fa.fa-tree
-          Clubs
-      %li.nav-item
         %a.nav-link{:href => customers_path, :class => (params[:controller] == 'customers') ? "active" : ""} 
           %i.fa.fa-user-circle-o
           Members
@@ -23,6 +19,10 @@
           %i.fa.fa-vcard-o
           Caddies
       %li.nav-item
+        %a.nav-link{:href => clubs_path, :class => (params[:controller] == 'clubs') ? "active" : ""} 
+          %i.fa.fa-tree
+          Clubs
+      %li.nav-item
         %a.nav-link{:href => caddy_rank_descs_path, :class => (params[:controller] == 'caddy_rank_descs') ? "active" : ""} 
           %i.fa.fa-certificate
           Ranks
@@ -30,23 +30,23 @@
         %a.nav-link{:href => caddy_pay_rates_path, :class => (params[:controller] == 'caddy_pay_rates') ? "active" : ""} 
           %i.fa.fa-credit-card-alt
           Rates
-      -#
-        %li.nav-item
-          %a.nav-link{:href => reports_path, :class => (params[:controller] == 'reports') ? "active" : ""} 
-            %i.fa.fa-file-text-o
-            Reports
-      %li.nav-item.dropdown
-        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'reports') ? "active" : ""}
+      %li.nav-item
+        %a.nav-link{:href => reports_path, :class => (params[:controller] == 'reports') ? "active" : ""} 
           %i.fa.fa-file-text-o
           Reporting
-          %b.caret
-        %div.dropdown-menu
-          %a.dropdown-item{:href => reports_path, :class => (params[:controller] == 'reports' and params[:action] == 'index') ? "active" : ""} 
+      -#
+        %li.nav-item.dropdown
+          %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'reports') ? "active" : ""}
             %i.fa.fa-file-text-o
-            CSV Report
-          %a.dropdown-item{:href => reports_clear_member_balances_path, :class => (params[:controller] == 'reports' and params[:action] == 'clear_member_balances') ? "active" : ""} 
-            %i.fa.fa-refresh
-            Clear Balances
+            Reporting
+            %b.caret
+          %div.dropdown-menu
+            %a.dropdown-item{:href => reports_path, :class => (params[:controller] == 'reports' and params[:action] == 'index') ? "active" : ""} 
+              %i.fa.fa-file-text-o
+              CSV Report
+            %a.dropdown-item{:href => reports_clear_member_balances_path, :class => (params[:controller] == 'reports' and params[:action] == 'clear_member_balances') ? "active" : ""} 
+              %i.fa.fa-refresh
+              Clear Balances
       .float-xs-right
         %li.nav-item.dropdown
           %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
@@ -54,8 +54,15 @@
             More
             %b.caret
           %div.dropdown-menu
-            = link_to current_user.company.CompanyName, current_user.company, class: "dropdown-item"
-            = link_to current_user.email, edit_user_registration_path(current_user), class: "dropdown-item"
+            %a{:href => company_path(current_user.company.id), :class => (params[:controller] == 'companies') ? "active dropdown-item" : "dropdown-item"} 
+              %i.fa.fa-building
+              = current_user.company.CompanyName
+            %a{:href => edit_user_registration_path(current_user), :class => "dropdown-item"} 
+              %i.fa.fa-user
+              = current_user.email
+            %a{:href => users_admin_index_path, :class => (params[:controller] == 'users') ? "active dropdown-item" : "dropdown-item"} 
+              %i.fa.fa-users
+              Users
             %a{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active dropdown-item" : "dropdown-item"} 
               %i.fa.fa-dollar
               Transfers

@@ -145,14 +145,31 @@ class Ability
       # 
       # Events
       ############
-#      can :manage, Event do |event|
-#        unless event.club.blank?
-#          event.club.company == user.company
-#        else
-#          true
-#        end
-#      end
+      can :manage, Event do |event|
+        unless event.club.blank?
+          event.club.company == user.company
+        else
+          true
+        end
+      end
       can :create, :events
+      
+      # Caddies
+      ############
+      can :manage, Caddy do |caddy|
+        caddy.club.company == user.company
+      end
+      
+      # Customers
+      ############
+      can :manage, Customer do |customer|
+        unless customer.company.blank? or customer.company.CompanyNumber == 0
+          customer.company == user.company
+        else
+          true
+        end
+      end
+      can :create, :customers
     
     end
     
