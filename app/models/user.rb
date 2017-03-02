@@ -31,6 +31,10 @@ class User < ApplicationRecord
     company.caddy_rank_descs
   end
   
+  def not_admin?
+    not admin?
+  end
+  
   #############################
   #     Class Methods         #
   #############################

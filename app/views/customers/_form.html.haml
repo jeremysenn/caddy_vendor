@@ -6,13 +6,18 @@
     = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 14 : @customer.GroupID}" }
     = f.input :NameF, label: 'First Name'
     = f.input :NameL, label: 'Last Name'
-    = f.input :PhoneMobile, label: 'Phone'
+    = f.input :PhoneMobile, label: 'Phone' if current_user.admin?
     = f.simple_fields_for :account do |account_form|
       = account_form.input :ActNbr, label: 'Member Number'
-      = account_form.input :CompanyNumber, :as => :hidden, :input_html => { :value => "#{account_form.object.new_record? ? current_user.company_id : @customer.CompanyNumber}" }
-      = account_form.input :Balance, :as => :hidden, :input_html => { :value => "#{account_form.object.new_record? ? 0 : account_form.object.Balance}" }
-      = account_form.input :Active, as: :hidden, :input_html => { :value => "#{account_form.object.new_record? ? 1 : account_form.object.Active}" }
-    = f.input :Active, as: :boolean, :input_html => { :value => "#{@customer.new_record? ? 1 : @customer.Active}" }, inline_label: 'Active'
+      - if account_form.object.new_record?
+        = account_form.input :CompanyNumber, :as => :hidden, :input_html => { :value => current_user.company_id }
+        = account_form.input :Balance, :as => :hidden, :input_html => { :value => 0 }
+        = account_form.input :MinBalance, :as => :hidden, :input_html => { :value => -1000 }
+      -#
+        - unless current_user.not_admin? and not account_form.object.active?
+          = account_form.input :Active, as: :boolean, inline_label: 'Account Active'
+    - unless current_user.not_admin? and not @customer.active?
+      = f.input :Active, as: :boolean, inline_label: 'Active'
 
   .form-actions
     = link_to 'Cancel', :back, class: 'btn btn-secondary'
