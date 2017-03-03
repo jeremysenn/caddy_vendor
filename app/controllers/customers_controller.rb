@@ -29,6 +29,7 @@ class CustomersController < ApplicationController
   # GET /customers/1
   # GET /customers/1.json
   def show
+    @family_members = Customer.where(ParentCustID: @customer.id)
     @transfers = @customer.transfers.order(created_at: :desc)
   end
 
@@ -46,10 +47,16 @@ class CustomersController < ApplicationController
   # POST /customers.json
   def create
     @customer = Customer.new(customer_params)
-
+    
     respond_to do |format|
       if @customer.save
-        format.html { redirect_to @customer, notice: 'Customer was successfully created.' }
+        format.html { 
+          unless customer_params[:ParentCustID].blank?
+            redirect_back fallback_location: @customer, notice: 'Family member was successfully created.'
+          else
+            redirect_to @customer, notice: 'Member was successfully created.' 
+          end
+          }
         format.json { render :show, status: :created, location: @customer }
       else
         format.html { render :new }
@@ -64,7 +71,7 @@ class CustomersController < ApplicationController
     respond_to do |format|
       Rails.logger.debug "***************customer params: #{customer_params[:account_attributes][:Active]}"
       if @customer.update(customer_params)
-        format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
+        format.html { redirect_to @customer, notice: 'Member was successfully updated.' }
         format.json { render :show, status: :ok, location: @customer }
       else
         format.html { render :edit }
@@ -78,7 +85,7 @@ class CustomersController < ApplicationController
   def destroy
     @customer.destroy
     respond_to do |format|
-      format.html { redirect_to customers_url, notice: 'Customer was successfully destroyed.' }
+      format.html { redirect_to customers_url, notice: 'Member was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -91,7 +98,7 @@ class CustomersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def customer_params
-      params.require(:customer).permit(:CompanyNumber, :Active, :GroupID, :NameF, :NameL, :PhoneMobile, 
+      params.require(:customer).permit(:ParentCustID, :CompanyNumber, :Active, :GroupID, :NameF, :NameL, :PhoneMobile, 
         account_attributes:[:CompanyNumber, :Balance, :MinBalance, :Active, :CustomerID, :ActNbr, :_destroy,:id])
     end
 end

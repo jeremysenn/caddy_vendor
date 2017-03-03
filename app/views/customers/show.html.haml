@@ -13,9 +13,25 @@
     %p.lead
       Member Number:
       = "#{@customer.member_number.blank? ? 'None' : @customer.member_number}"
+    - if @customer.primary?
+      %p.lead
+        Family Members:
+        - unless @family_members.blank?
+          - @family_members.each do |family_member|
+            = link_to family_member.full_name, family_member
+        - else
+          None
+        %br
+        %a{class: 'btn btn-secondary btn-sm', "data-toggle" => "modal", "data-target" => "#add_family_member"}
+          Add family member
     %p.lead
       Active:
       = "#{@customer.active? ? 'Yes' : 'No'}"
+    - if @customer.primary?
+      %p.lead
+        Balance:
+        = number_to_currency(@customer.account.balance)
+
     %p= link_to 'Edit', edit_customer_path(@customer), class: 'btn btn-primary'
     
   %br
@@ -58,3 +74,26 @@
         %p.lead None
 
   
+#add_family_member.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog.modal-sm{:role => "document"}
+    .modal-content
+      .modal-header
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+        .modal-title
+          %h4 Family Member
+      .modal-body
+        = simple_form_for(Customer.new) do |f|
+          = f.error_notification
+          .form-inputs
+            = f.input :ParentCustID, :as => :hidden, :input_html => { :value => @customer.id }
+            = f.input :CompanyNumber, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? current_user.company_id : @customer.CompanyNumber}" }
+            = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 14 : @customer.GroupID}" }
+            = f.input :NameF, label: 'First Name'
+            = f.input :NameL, label: 'Last Name'
+            = f.input :PhoneMobile, label: 'Phone' if current_user.admin?
+            - unless current_user.not_admin? and not @customer.active?
+              = f.input :Active, as: :boolean, inline_label: 'Active'
+          .modal-footer
+            %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
+            = f.button :submit, 'Save', class: 'btn btn-primary'

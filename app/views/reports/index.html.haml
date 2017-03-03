@@ -57,8 +57,16 @@
               %tbody
                 - @transfers.each do |transfer|
                   %tr
-                    %td= link_to transfer.customer.full_name, transfer.customer unless transfer.customer.blank?
-                    %td= number_to_currency(transfer.player.member.account.Balance) unless transfer.customer.blank? or transfer.customer.account.blank?
+                    %td
+                      = link_to transfer.customer.full_name, transfer.customer unless transfer.customer.blank?
+                      - unless transfer.customer.parent_customer.blank?
+                        %br
+                        = link_to "(#{transfer.customer.parent_customer.full_name})", transfer.customer.parent_customer
+                    %td
+                      = number_to_currency(transfer.customer.account.balance) unless transfer.customer.blank? or transfer.customer.account.blank?
+                      - unless transfer.customer.parent_customer.blank?
+                        %br
+                        = "#{number_to_currency(transfer.customer.parent_customer.account.balance)}"
                     %td= link_to "Show", transfer, class: 'btn btn-secondary'
         - else
           %p.lead None

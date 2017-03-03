@@ -24,7 +24,7 @@ jQuery ->
   $(document).on 'turbolinks:load', ->
     $('#players').editable
       selector: '.tip'
-
+      tpl: "<input type='text' style='width: 75px'>"
       title: 'Tip'
       name: 'tip'
       #placeholder: 'Required'
