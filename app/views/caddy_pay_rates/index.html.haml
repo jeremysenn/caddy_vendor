@@ -28,7 +28,7 @@
           %tbody
             - caddy_pay_rates.each do |caddy_pay_rate|
               %tr
-                %td= caddy_pay_rate.RankingAcronym
+                %td= caddy_pay_rate.acronym
                 %td= caddy_pay_rate.Type
                 %td= caddy_pay_rate.NbrHoles
                 %td= number_to_currency(caddy_pay_rate.Payrate)
