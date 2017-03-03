@@ -60,12 +60,14 @@ class ReportsController < ApplicationController
     @transfers.each do |transfer|
       @transfers_total = @transfers_total + transfer.total unless transfer.total.blank?
     end
+    
     # Use current user's time zone since transactions are stored in east coast time
-    @transactions = current_user.company.transactions.where(date_time: @start_date.to_datetime..@end_date.to_datetime, tran_code: 'CARD', sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil]).order("date_time DESC")
-    @transactions_total = 0
-    @transactions.each do |transaction|
-      @transactions_total = @transactions_total + transaction.total unless transaction.total.blank?
-    end
+#    @transactions = current_user.company.transactions.where(date_time: @start_date.to_datetime..@end_date.to_datetime, tran_code: 'CARD', sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil]).order("date_time DESC")
+#    @transactions_total = 0
+#    @transactions.each do |transaction|
+#      @transactions_total = @transactions_total + transaction.total unless transaction.total.blank?
+#    end
+    
     @members_balance_total = 0
     @transfers.each do |transfer|
       @members_balance_total = @members_balance_total + transfer.from_account_record.balance unless transfer.customer.blank? or transfer.from_account_record.blank? or transfer.member_balance_cleared?

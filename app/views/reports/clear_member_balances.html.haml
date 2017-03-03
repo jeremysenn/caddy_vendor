@@ -8,7 +8,8 @@
           = hidden_field_tag 'report[start_date]', @start_date
           = hidden_field_tag 'report[end_date]', @end_date
           = hidden_field_tag :clearing_member_balances, true
-          = button_tag(:type => 'submit', :class => "btn btn-danger #{(@transfers_total != @transactions_total or @transfers_total != @members_balance_total.abs) ? 'disabled' : ''} ", :data => { :confirm => 'Are you sure you want to clear these member balances? This action cannot be undone.' }) do
+          =# button_tag(:type => 'submit', :class => "btn btn-danger #{(@transfers_total != @transactions_total or @transfers_total != @members_balance_total.abs) ? 'disabled' : ''} ", :data => { :confirm => 'Are you sure you want to clear these member balances? This action cannot be undone.' }) do
+          = button_tag(:type => 'submit', :class => "btn btn-danger #{(@transfers_total != @members_balance_total.abs) ? 'disabled' : ''} ", :data => { :confirm => 'Are you sure you want to clear these member balances? This action cannot be undone.' }) do
             %i.fa.fa-exclamation-triangle
             Clear Balances
   %p.lead
@@ -27,7 +28,7 @@
       = @end_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p")
 
   .row
-    .col-sm-4
+    .col-sm-6
       .card.card-block.card-outline-warning
         %h4.card-title.text-warning
           %i.fa.fa-user-circle-o
@@ -58,7 +59,7 @@
                     %td= link_to "Show", transfer, class: 'btn btn-secondary'
         - else
           %p.lead None
-    .col-sm-4
+    .col-sm-6
       .card.card-block.card-outline-primary
         %h4.card-title.text-primary
           %i.fa.fa-dollar
@@ -83,30 +84,30 @@
                     %td= link_to "Show", transfer, class: 'btn btn-secondary'
         - else
           %p.lead None
-
-    .col-sm-4
-      .card.card-block.card-outline-success
-        %h4.card-title.text-success
-          %i.fa.fa-bolt
-          = "EZcash (#{@transactions.count})"
-          .pull-right
-            = number_to_currency(@transactions_total)
-        - unless @transactions.blank?
-          .table-responsive
-            %table.table.table-striped
-              %thead
-                %tr
-                  %th Date
-                  %th Description
-                  %th Amount
-                  %th
-              %tbody
-                - @transactions.each do |transaction|
-                  %tr{class: "#{transaction.reversal? ? 'table-danger' : '' }"}
-                    %td= transaction.date_time.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y")
-                    %td= transaction.Description
-                    %td= number_to_currency(transaction.total)
-                    %td
-                      = link_to "Show", transaction, class: 'btn btn-secondary'
-        - else
-          %p.lead None
+    -#
+      .col-sm-4
+        .card.card-block.card-outline-success
+          %h4.card-title.text-success
+            %i.fa.fa-bolt
+            = "EZcash (#{@transactions.count})"
+            .pull-right
+              = number_to_currency(@transactions_total)
+          - unless @transactions.blank?
+            .table-responsive
+              %table.table.table-striped
+                %thead
+                  %tr
+                    %th Date
+                    %th Description
+                    %th Amount
+                    %th
+                %tbody
+                  - @transactions.each do |transaction|
+                    %tr{class: "#{transaction.reversal? ? 'table-danger' : '' }"}
+                      %td= transaction.date_time.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y")
+                      %td= transaction.Description
+                      %td= number_to_currency(transaction.total)
+                      %td
+                        = link_to "Show", transaction, class: 'btn btn-secondary'
+          - else
+            %p.lead None
