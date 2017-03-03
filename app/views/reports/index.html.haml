@@ -59,7 +59,7 @@
                   %tr
                     %td
                       = link_to transfer.customer.full_name, transfer.customer unless transfer.customer.blank?
-                      - unless ttransfer.customer.blank? or ransfer.customer.parent_customer.blank?
+                      - unless transfer.customer.blank? or ransfer.customer.parent_customer.blank?
                         %br
                         = link_to "(#{transfer.customer.parent_customer.full_name})", transfer.customer.parent_customer
                     %td
