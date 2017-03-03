@@ -56,7 +56,7 @@
                   = f.hidden_field :amount, value: player.total, class: 'amount'
                   = f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure you want to pay this?' } unless player.paid?
                 = "No account for Caddy" if player.caddy.account.blank?
-                - if player.paid? and (player.transfer and player.transfer.reversable?)
+                - if player.paid? and (player.transfer and player.transfer.reversable?) and not player.transfer.member_balance_cleared?
                   = form_for player.transfer, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
                     = f.hidden_field :reversed, value: true
                     = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }

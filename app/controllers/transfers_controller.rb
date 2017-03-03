@@ -73,7 +73,10 @@ class TransfersController < ApplicationController
   def update
     respond_to do |format|
       if @transfer.update(transfer_params)
-        format.html { redirect_to @transfer, notice: 'Transfer was successfully updated.' }
+        format.html { 
+#          redirect_to @transfer, notice: 'Transfer was successfully updated.' 
+          redirect_back fallback_location: @transfer, notice: 'Transfer was successfully updated.' 
+          }
         format.json { render :show, status: :ok, location: @transfer }
       else
         format.html { render :edit }
