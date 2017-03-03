@@ -222,6 +222,10 @@ class Account < ActiveRecord::Base
     end
   end
   
+  def balance
+    self.Balance
+  end
+  
   #############################
   #     Class Methods         #
   #############################

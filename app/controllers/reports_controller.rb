@@ -31,7 +31,7 @@ class ReportsController < ApplicationController
         end
         @members_balance_total = 0
         @transfers.each do |transfer|
-          @members_balance_total = @members_balance_total + transfer.customer.account.Balance unless transfer.customer.blank? or transfer.customer.account.blank? or transfer.member_balance_cleared
+          @members_balance_total = @members_balance_total + transfer.from_account_record.balance unless transfer.customer.blank? or transfer.from_account_record.blank? or transfer.member_balance_cleared?
         end
       }
       format.csv { 
@@ -68,7 +68,7 @@ class ReportsController < ApplicationController
     end
     @members_balance_total = 0
     @transfers.each do |transfer|
-      @members_balance_total = @members_balance_total + transfer.customer.account.Balance unless transfer.customer.blank? or transfer.customer.account.blank? or transfer.member_balance_cleared
+      @members_balance_total = @members_balance_total + transfer.from_account_record.balance unless transfer.customer.blank? or transfer.from_account_record.blank? or transfer.member_balance_cleared?
     end
     unless params[:clearing_member_balances].blank? or @transfers_total.zero?
       @club.perform_one_sided_credit_transaction(@transfers_total)
