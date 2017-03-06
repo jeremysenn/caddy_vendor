@@ -56,7 +56,7 @@
                   %th
               %tbody
                 - @transfers.each do |transfer|
-                  %tr{class: "#{transfer.customer.parent_customer.blank? ? '' : 'table-warning'}" }
+                  %tr{class: "#{(transfer.customer and transfer.customer.parent_customer.blank?) ? '' : 'table-warning'}" }
                     %td
                       = link_to transfer.customer.full_name, transfer.customer unless transfer.customer.blank?
                       - unless transfer.customer.blank? or transfer.customer.parent_customer.blank?
