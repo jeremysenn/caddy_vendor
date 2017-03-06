@@ -1,15 +1,16 @@
 .container
   %br
-  %p
-    = form_tag customers_path, id: 'customers_form', method: 'get', class: 'form-inline' do |f|
-      .input-group
-        = search_field_tag :q, params[:q], :placeholder => "Search members", class: "form-control input-lg", autofocus: true
-        %span.input-group-btn
-          %button.btn.btn-secondary{id: 'member_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
-            %i.fa.fa-search
-      %small.text-muted Search by first name, last name, or member number.
+  - if params[:balances].blank?
+    %p
+      = form_tag customers_path, id: 'customers_form', method: 'get', class: 'form-inline' do |f|
+        .input-group
+          = search_field_tag :q, params[:q], :placeholder => "Search members", class: "form-control input-lg", autofocus: true
+          %span.input-group-btn
+            %button.btn.btn-secondary{id: 'member_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
+              %i.fa.fa-search
+        %small.text-muted Search by first name, last name, or member number.
 
-  %p= link_to 'New member', new_customer_path, class: 'btn btn-primary'
+    %p= link_to 'New member', new_customer_path, class: 'btn btn-primary'
 
   .card.card-block
     %h4.card-title Members
@@ -22,6 +23,7 @@
               %th Phone
               %th Member #
               %th Active
+              %th Balance
               %th
           %tbody
             - @members.each do |member|
@@ -30,6 +32,7 @@
                 %td= member.PhoneMobile
                 %td= "#{member.member_number.blank? ? 'None' : member.member_number}"
                 %td= "#{member.active? ? 'Yes' : 'No'}"
+                %td= "#{member.account.blank? ? 'None' : number_to_currency(member.account.balance)}"
                 %td
                   = link_to "Show", member, class: 'btn btn-secondary'
                   = link_to 'Edit', edit_customer_path(member), class: 'btn btn-primary'
@@ -37,4 +40,4 @@
       %p.lead No members found
 
     = paginate @members
-  = link_to 'New member', new_customer_path, class: 'btn btn-primary'
+  = link_to 'New member', new_customer_path, class: 'btn btn-primary' if params[:balances].blank?

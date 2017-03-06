@@ -1,20 +1,23 @@
 .container
   %br
-  %p
-    = form_tag transactions_path, :method => 'get', :class => "form-inline" do
-      .form-group
-        = text_field_tag 'transaction[start_date]', nil, :placeholder => "Start Date", value: "#{@start_date.blank? ? Date.today : @start_date}", class: "form-control input-lg", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
-      To
-      .form-group
-        = text_field_tag 'transaction[end_date]', nil, :placeholder => "End Date", value: "#{@end_date.blank? ? Date.today : @end_date}", class: "form-control input-lg", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
-      = button_tag(:type => 'submit', :class => 'btn btn-primary', data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}) do
-        %i.fa.fa-search
-  %p.lead.text-muted= "#{pluralize(@transactions.count, 'transaction')} found"
+  - if params[:withdrawals].blank?
+    %p
+      = form_tag transactions_path, :method => 'get', :class => "form-inline" do
+        .form-group
+          = text_field_tag 'transaction[start_date]', nil, :placeholder => "Start Date", value: "#{@start_date.blank? ? Date.today : @start_date}", class: "form-control input-lg", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
+        To
+        .form-group
+          = text_field_tag 'transaction[end_date]', nil, :placeholder => "End Date", value: "#{@end_date.blank? ? Date.today : @end_date}", class: "form-control input-lg", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
+        = button_tag(:type => 'submit', :class => 'btn btn-primary', data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}) do
+          %i.fa.fa-search
+  %p.lead.text-muted= "#{pluralize(@transactions.total_count, 'transaction')} found"
 
   .card.card-block
     %h4.card-title 
-      -# Withdrawals
-      EZcash Transactions
+      - unless params[:withdrawals].blank?
+        EZcash Withdrawals
+      - else
+        EZcash Transactions
       -#
         .pull-right
           = number_to_currency(@transactions_total)
@@ -32,15 +35,15 @@
               %th= transaction_sort_link 'to_acct_id', "To"
               -# %th DateTime
               %th= transaction_sort_link 'date_time', "DateTime"
-              -#
-                -# %th Code
-                %th= transaction_sort_link 'error_code', "Code"
-                -# %th Status
-                %th= transaction_sort_link 'tran_status', "Status"
+              -# %th Code
+              %th= transaction_sort_link 'error_code', "Code"
+              -# %th Status
+              %th= transaction_sort_link 'tran_status', "Status"
               %th= transaction_sort_link 'tran_code', "Tran Code"
               %th= transaction_sort_link 'sec_tran_code', "Sec Tran Code"
               -# %th Amount
-              %th= transaction_sort_link 'amt_auth', "Amount"
+              %th= transaction_sort_link 'amt_req', "Requested"
+              %th= transaction_sort_link 'amt_auth', "Authorized"
               %th= transaction_sort_link 'ChpFee', "Fee"
               %th
           %tbody
@@ -52,11 +55,11 @@
                 %td= transaction.from_acct_id
                 %td= transaction.to_acct_id
                 %td= transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
-                -#
-                  %td= transaction.error_code_description
-                  %td= transaction.status_description
+                %td= transaction.error_code_description
+                %td= transaction.status_description
                 %td= transaction.tran_code
                 %td= transaction.sec_tran_code
+                %td= number_to_currency(transaction.amt_req)
                 %td= number_to_currency(transaction.amt_auth)
                 %td= number_to_currency(transaction.ChpFee)
                 %td

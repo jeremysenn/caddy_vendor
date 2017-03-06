@@ -114,7 +114,7 @@ class Ability
         unless transaction.company.blank?
           transaction.company == user.company 
         else
-          false
+          true
         end
       end
       
