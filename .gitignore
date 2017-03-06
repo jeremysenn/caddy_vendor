@@ -24,4 +24,4 @@
 /config/application.yml
 
 # Redis database dump
-dump.rdb
+*.rdb
