@@ -69,7 +69,6 @@ class CustomersController < ApplicationController
   # PATCH/PUT /customers/1.json
   def update
     respond_to do |format|
-      Rails.logger.debug "***************customer params: #{customer_params[:account_attributes][:Active]}"
       if @customer.update(customer_params)
         format.html { redirect_to @customer, notice: 'Member was successfully updated.' }
         format.json { render :show, status: :ok, location: @customer }

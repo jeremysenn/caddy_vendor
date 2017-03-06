@@ -79,7 +79,10 @@ class TransfersController < ApplicationController
           }
         format.json { render :show, status: :ok, location: @transfer }
       else
-        format.html { render :edit }
+        format.html { 
+#          render :edit 
+          redirect_back fallback_location: @transfer, alert: 'There was a problem updating the transfer.' 
+          }
         format.json { render json: @transfer.errors, status: :unprocessable_entity }
       end
     end
