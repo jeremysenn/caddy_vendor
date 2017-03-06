@@ -121,6 +121,17 @@ class Transfer < ApplicationRecord
       client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
       response = client.call(:ez_cash_txn, message: { TranID: ez_cash_tran_id })
       Rails.logger.debug "Response body: #{response.body}"
+      if response.success?
+        unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
+          return true
+        else
+          raise ActiveRecord::Rollback
+          return nil
+        end
+      else
+        raise ActiveRecord::Rollback
+        return nil
+      end
     end
   end
   

@@ -60,6 +60,8 @@
                   = form_for player.transfer, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
                     = f.hidden_field :reversed, value: true
                     = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }
+                - elsif player.paid?
+                  .text-success Paid
                 - if (player.transfer and player.transfer.reversed?)
                   .text-danger Reversed
                 =# "Paid" if player.paid?
