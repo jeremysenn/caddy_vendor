@@ -32,7 +32,10 @@
       Status:
       = @transaction.status_long_description
     %p.lead
-      Amount:
+      Amount Requested:
+      = number_to_currency(@transaction.amt_req)
+    %p.lead
+      Amount Authorized:
       = number_to_currency(@transaction.amt_auth)
     %p.lead
       Fee:

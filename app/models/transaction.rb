@@ -229,7 +229,9 @@ class Transaction < ActiveRecord::Base
       unless from_account.blank?  
         from_account.company 
       else
-        to_account.company
+        unless to_account.blank?
+          to_account.company 
+        end
       end
     end
   end
