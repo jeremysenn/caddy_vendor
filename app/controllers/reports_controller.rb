@@ -20,6 +20,7 @@ class ReportsController < ApplicationController
       format.html {
 #        @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("#{reports_sort_column} #{reports_sort_direction}").page(params[:page]).per(20)
         @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
+        @members = @transfers.map{|t| t.member}.uniq
         @transfers_total = 0
         @transfers.each do |transfer|
           @transfers_total = @transfers_total + transfer.total unless transfer.total.blank?
@@ -30,8 +31,8 @@ class ReportsController < ApplicationController
           @transactions_total = @transactions_total + transaction.total unless transaction.total.blank?
         end
         @members_balance_total = 0
-        @transfers.each do |transfer|
-          @members_balance_total = @members_balance_total + transfer.from_account_record.balance unless transfer.customer.blank? or transfer.from_account_record.blank? or transfer.member_balance_cleared?
+        @members.each do |member|
+          @members_balance_total = @members_balance_total + member.balance
         end
       }
       format.csv { 
@@ -56,6 +57,7 @@ class ReportsController < ApplicationController
     
     # Need to add 5 hours to because the transaction's date_time in stored as Eastern time
     @transfers = @club.transfers.where(created_at: (@start_date.to_datetime + 5.hours)..@end_date.to_datetime, reversed: false, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
+    @members = @transfers.map{|t| t.member}.uniq
     @transfers_total = 0
     @transfers.each do |transfer|
       @transfers_total = @transfers_total + transfer.total unless transfer.total.blank?
@@ -69,8 +71,8 @@ class ReportsController < ApplicationController
 #    end
     
     @members_balance_total = 0
-    @transfers.each do |transfer|
-      @members_balance_total = @members_balance_total + transfer.from_account_record.balance unless transfer.customer.blank? or transfer.from_account_record.blank? or transfer.member_balance_cleared?
+    @members.each do |member|
+      @members_balance_total = @members_balance_total + member.balance
     end
     unless params[:clearing_member_balances].blank? or @transfers_total.zero?
       @club.perform_one_sided_credit_transaction(@transfers_total)
