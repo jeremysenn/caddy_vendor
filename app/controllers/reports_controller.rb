@@ -77,7 +77,7 @@ class ReportsController < ApplicationController
 #    unless params[:clearing_member_balances].blank? or @transfers_total.zero?
     unless params[:clearing_member_balances].blank? or @members_balance_total.zero?
 #      @club.perform_one_sided_credit_transaction(@transfers_total)
-      @club.perform_one_sided_credit_transaction(@members_balance_total)
+      @club.perform_one_sided_credit_transaction(@members_balance_total.abs)
       @transfers.each do |transfer|
         unless transfer.customer.blank? 
           ClearMemberBalanceWorker.perform_async(transfer.id) # Clear transfer member's balance with sidekiq background process
