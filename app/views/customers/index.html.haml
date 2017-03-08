@@ -16,7 +16,7 @@
     %h4.card-title Members
     - unless @members.blank?
       .table-responsive
-        %table.table.table-striped
+        %table.table
           %thead
             %tr
               %th Name
@@ -27,12 +27,12 @@
               %th
           %tbody
             - @members.each do |member|
-              %tr{class: "#{member.inactive? ? 'table-danger' : ''}"}
+              %tr{class: "#{member.primary? ? 'table-active' : ''}"}
                 %td= member.full_name
                 %td= member.PhoneMobile
                 %td= "#{member.member_number.blank? ? 'None' : member.member_number}"
                 %td= "#{member.active? ? 'Yes' : 'No'}"
-                %td= "#{member.account.blank? ? 'None' : number_to_currency(member.account.balance)}"
+                %td= "#{member.account.blank? ? 'N/A' : number_to_currency(member.account.balance)}"
                 %td
                   = link_to "Show", member, class: 'btn btn-secondary'
                   = link_to 'Edit', edit_customer_path(member), class: 'btn btn-primary'

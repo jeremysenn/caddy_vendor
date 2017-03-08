@@ -21,6 +21,7 @@ class Customer < ActiveRecord::Base
   accepts_nested_attributes_for :account
   
 #  validates :NameF, :NameL, :user_name, :PhoneMobile, :Answer1, :Answer2, :Answer3, presence: true
+  validates :NameF, :NameL, presence: true
   
 #  validates_uniqueness_of :user_name
   
