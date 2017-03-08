@@ -101,7 +101,13 @@ class Transfer < ApplicationRecord
   
   def ezcash_rebalance_transaction_web_service_call
     client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
-    response = client.call(:ez_cash_txn, message: { FromActID: player.club.account.id, ToActID: from_account_id, Amount: amount_paid_total})
+    if player.member.balance == amount_paid_total
+      # The totals match
+      response = client.call(:ez_cash_txn, message: { FromActID: player.club.account.id, ToActID: from_account_id, Amount: amount_paid_total})
+    else
+      # The totals don't match, so zero out the member's balance
+      response = client.call(:ez_cash_txn, message: { FromActID: player.club.account.id, ToActID: from_account_id, Amount: player.member.balance})
+    end
     Rails.logger.debug "Response body: #{response.body}"
     if response.success?
       unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
