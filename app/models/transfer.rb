@@ -248,7 +248,7 @@ class Transfer < ApplicationRecord
   
   def self.to_csv
     require 'csv'
-    attributes = %w{date_of_play member_number member_name amount_paid_total date_caddy_was_paid caddy_name reference_number}
+    attributes = %w{date_of_play member_number member_name amount_paid_to_caddy amount_paid_total date_caddy_was_paid caddy_name reference_number}
     
     CSV.generate(headers: true) do |csv|
       csv << attributes

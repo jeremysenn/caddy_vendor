@@ -43,10 +43,10 @@
       .card.card-block.card-outline-warning
         %h4.card-title.text-warning
           %i.fa.fa-user-circle-o
-          = "Members (#{@transfers.count})"
+          = "Members (#{@members.count})"
           .pull-right
             = number_to_currency(@members_balance_total)
-        - unless @transfers.blank?
+        - unless @members.blank?
           .table-responsive
             %table.table.table-striped
               %thead
@@ -55,19 +55,16 @@
                   %th Balance
                   %th
               %tbody
-                - @transfers.each do |transfer|
-                  %tr{class: "#{(transfer.customer and transfer.customer.parent_customer.blank?) ? '' : 'table-warning'}" }
+                - @members.each do |member|
+                  %tr{class: "#{(member.parent_customer.blank?) ? '' : 'table-warning'}" }
                     %td
-                      = link_to transfer.customer.full_name, transfer.customer unless transfer.customer.blank?
-                      - unless transfer.customer.blank? or transfer.customer.parent_customer.blank?
+                      = member.full_name
+                      - unless member.parent_customer.blank?
                         %br
-                        = link_to "(#{transfer.customer.parent_customer.full_name})", transfer.customer.parent_customer
+                        = link_to "(#{member.parent_customer.full_name})", member.parent_customer
                     %td
-                      = number_to_currency(transfer.customer.account.balance) unless transfer.customer.blank? or transfer.customer.account.blank?
-                      - unless transfer.customer.blank? or transfer.customer.parent_customer.blank?
-                        %br
-                        = "#{number_to_currency(transfer.customer.parent_customer.account.balance)}"
-                    %td= link_to "Show", transfer, class: 'btn btn-secondary'
+                      = number_to_currency(member.balance)
+                    %td= link_to "Show", member, class: 'btn btn-secondary'
         - else
           %p.lead None
     .col-sm-6
