@@ -32,7 +32,7 @@ class ReportsController < ApplicationController
         end
         @members_balance_total = 0
         @members.each do |member|
-          @members_balance_total = @members_balance_total + member.balance
+          @members_balance_total = @members_balance_total + member.balance unless member.blank?
         end
       }
       format.csv { 
@@ -72,7 +72,7 @@ class ReportsController < ApplicationController
     
     @members_balance_total = 0
     @members.each do |member|
-      @members_balance_total = @members_balance_total + member.balance
+      @members_balance_total = @members_balance_total + member.balance unless member.blank?
     end
 #    unless params[:clearing_member_balances].blank? or @transfers_total.zero?
     unless params[:clearing_member_balances].blank? or @members_balance_total.zero?
