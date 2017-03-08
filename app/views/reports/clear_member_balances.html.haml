@@ -50,15 +50,16 @@
                   %th
               %tbody
                 - @members.each do |member|
-                  %tr{class: "#{(member.parent_customer.blank?) ? '' : 'table-warning'}" }
-                    %td
-                      = member.full_name
-                      - unless member.parent_customer.blank?
-                        %br
-                        = link_to "(#{member.parent_customer.full_name})", member.parent_customer
-                    %td
-                      = number_to_currency(member.balance)
-                    %td= link_to "Show", member, class: 'btn btn-secondary'
+                  - unless member.blank?
+                    %tr{class: "#{(member.parent_customer.blank?) ? '' : 'table-warning'}" }
+                      %td
+                        = member.full_name
+                        - unless member.parent_customer.blank?
+                          %br
+                          = link_to "(#{member.parent_customer.full_name})", member.parent_customer
+                      %td
+                        = number_to_currency(member.balance)
+                      %td= link_to "Show", member, class: 'btn btn-secondary'
         - else
           %p.lead None
     .col-sm-6
