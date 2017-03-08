@@ -52,7 +52,7 @@
                         %br
                         = link_to "(#{member.parent_customer.full_name})", member.parent_customer
                     %td
-                      = number_to_currency(member.account.balance) unless member.account.blank?
+                      = number_to_currency(member.balance)
                     %td= link_to "Show", member, class: 'btn btn-secondary'
         - else
           %p.lead None
