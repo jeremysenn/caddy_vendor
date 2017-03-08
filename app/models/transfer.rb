@@ -106,7 +106,7 @@ class Transfer < ApplicationRecord
       response = client.call(:ez_cash_txn, message: { FromActID: player.club.account.id, ToActID: from_account_id, Amount: amount_paid_total})
     else
       # The totals don't match, so zero out the member's balance
-      response = client.call(:ez_cash_txn, message: { FromActID: player.club.account.id, ToActID: from_account_id, Amount: player.member.balance})
+      response = client.call(:ez_cash_txn, message: { FromActID: player.club.account.id, ToActID: from_account_id, Amount: player.member.balance.abs})
     end
     Rails.logger.debug "Response body: #{response.body}"
     if response.success?
