@@ -15,7 +15,7 @@ class Customer < ActiveRecord::Base
   scope :active, -> { where(Active: true) }
   
   attr_accessor :password
-  before_save :encrypt_all_security_question_answers, :prepare_password
+#  before_save :encrypt_all_security_question_answers, :prepare_password
   after_save :match_account_active_status
   
   accepts_nested_attributes_for :account

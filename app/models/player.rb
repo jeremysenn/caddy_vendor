@@ -7,7 +7,7 @@ class Player < ApplicationRecord
   has_many :transfers
   has_one :caddy_rating
   
-  after_create :check_caddy_out, :clear_event_color
+  after_create :check_caddy_out, :clear_event_color, :send_sms_notification_to_caddy
 #  before_destroy :check_caddy_in
   
 #  validates :tip, numericality: { :greater_than_or_equal_to => 0 }
@@ -112,6 +112,15 @@ class Player < ApplicationRecord
   
   def clear_event_color
     event.update_attribute(:color, nil)
+  end
+  
+  def send_sms_notification_to_caddy
+    unless caddy.blank? or caddy.cell_phone_number.blank?
+      SendCaddyNewRoundNotificationSmsWorker.perform_async(id)
+#      client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+#      response = client.call(:send_sms, message: { Phone: caddy.cell_phone_number, Msg: "Hey #{caddy.first_name}, you have a new round with #{member.full_name} at #{event.start.strftime('%I:%M%p')}!"})
+#      Rails.logger.debug "Response body: #{response.body}"
+    end
   end
   
   #############################
