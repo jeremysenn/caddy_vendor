@@ -37,6 +37,10 @@ class Club < ApplicationRecord
     ]
   end
   
+  def grouped_caddies_by_rank_for_select
+    caddy_rank_descs.map{|c| c.grouped_for_select}
+  end
+  
   ### Start Virtual Attributes ###
   def transaction_fee # Getter
     transaction_fee_cents.to_d / 100 if transaction_fee_cents
