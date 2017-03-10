@@ -1,7 +1,7 @@
 .container-fluid
   %br
   %p.lead
-    - unless @transfers.blank? or params[:clearing_member_balances].present?
+    - unless params[:clearing_member_balances].present?
       .pull-right
         = form_tag reports_clear_member_balances_path, :method => 'get', :class => "form-inline" do
           = hidden_field_tag 'report[club_id]', @club.id
@@ -51,7 +51,7 @@
               %tbody
                 - @members.each do |member|
                   - unless member.blank?
-                    %tr{class: "#{(member.parent_customer.blank?) ? '' : 'table-warning'}" }
+                    %tr
                       %td
                         = member.full_name
                         - unless member.parent_customer.blank?
