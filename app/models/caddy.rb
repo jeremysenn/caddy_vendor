@@ -38,6 +38,10 @@ class Caddy < ApplicationRecord
     "#{first_name} #{last_name} - #{club.name}"
   end
   
+  def full_name_with_check_in_status
+    "#{first_name} #{last_name} (#{checkin_status})"
+  end
+  
   def cell_phone_number
     customer.blank? ? '' : customer.PhoneMobile
   end
@@ -69,6 +73,14 @@ class Caddy < ApplicationRecord
       self.CheckedIn.today? 
     else
       false
+    end
+  end
+  
+  def checkin_status
+    if checkin_today?
+      "In"
+    else
+      "Out"
     end
   end
   

@@ -21,6 +21,10 @@ class CaddyRankDesc < ApplicationRecord
     self.RankingDescription
   end
   
+  def grouped_for_select
+    [self.RankingAcronym, caddies.active.sort_by {|c| c.last_name}.collect { |c| [ c.full_name_with_check_in_status, c.id ] }]
+  end
+  
   #############################
   #     Class Methods         #
   #############################
