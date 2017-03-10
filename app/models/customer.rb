@@ -15,6 +15,8 @@ class Customer < ActiveRecord::Base
   scope :active, -> { where(Active: true) }
   
   attr_accessor :password
+  attr_accessor :guest
+  
 #  before_save :encrypt_all_security_question_answers, :prepare_password
   after_save :match_account_active_status
   
@@ -174,10 +176,10 @@ class Customer < ActiveRecord::Base
   def balance
     unless account.blank?
       account.Balance 
-    else
-      if not primary?
-        parent_customer.account.Balance unless parent_customer.account.blank?
-      end
+#    else
+#      if not primary?
+#        parent_customer.account.Balance unless parent_customer.account.blank?
+#      end
     end
   end
   
@@ -314,7 +316,7 @@ class Customer < ActiveRecord::Base
   end
   
   def full_name
-    "#{self.NameF} #{self.NameL}"
+    "#{self.NameF} #{self.NameL} #{self.NameS}"
   end
   
   def full_name_by_last_name

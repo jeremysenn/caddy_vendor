@@ -20,7 +20,8 @@ class ReportsController < ApplicationController
       format.html {
 #        @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("#{reports_sort_column} #{reports_sort_direction}").page(params[:page]).per(20)
         @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
-        @members = @transfers.map{|t| t.member}.uniq
+#        @members = @transfers.map{|t| t.member}.uniq
+        @members = current_user.members.joins(:account).where("accounts.Balance != ?", 0)
         @transfers_total = 0
         @transfers.each do |transfer|
           @transfers_total = @transfers_total + transfer.total unless transfer.total.blank?
@@ -30,9 +31,10 @@ class ReportsController < ApplicationController
         @transactions.each do |transaction|
           @transactions_total = @transactions_total + transaction.total unless transaction.total.blank?
         end
+        
         @members_balance_total = 0
         @members.each do |member|
-          @members_balance_total = @members_balance_total + member.balance unless member.blank?
+          @members_balance_total = @members_balance_total + member.balance unless member.blank? or not member.primary?
         end
       }
       format.csv { 
@@ -57,7 +59,8 @@ class ReportsController < ApplicationController
     
     # Need to add 5 hours to because the transaction's date_time in stored as Eastern time
     @transfers = @club.transfers.where(created_at: (@start_date.to_datetime + 5.hours)..@end_date.to_datetime, reversed: false, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
-    @members = @transfers.map{|t| t.member}.uniq
+#    @members = @transfers.map{|t| t.member}.uniq
+    @members = current_user.members.joins(:account).where("accounts.Balance != ?", 0)
     @transfers_total = 0
     @transfers.each do |transfer|
       @transfers_total = @transfers_total + transfer.total unless transfer.total.blank?
@@ -72,17 +75,19 @@ class ReportsController < ApplicationController
     
     @members_balance_total = 0
     @members.each do |member|
-      @members_balance_total = @members_balance_total + member.balance unless member.blank?
+      @members_balance_total = @members_balance_total + member.balance unless member.blank? or not member.primary?
     end
 #    unless params[:clearing_member_balances].blank? or @transfers_total.zero?
     unless params[:clearing_member_balances].blank? or @members_balance_total.zero?
 #      @club.perform_one_sided_credit_transaction(@transfers_total)
       @club.perform_one_sided_credit_transaction(@members_balance_total.abs)
       @transfers.each do |transfer|
-        unless transfer.customer.blank? 
-          ClearMemberBalanceWorker.perform_async(transfer.id) # Clear transfer member's balance with sidekiq background process
-        end
+        transfer.update_attribute(:member_balance_cleared, true)
       end
+      @members.each do |member|
+        ClearMemberBalanceWorker.perform_async(member.account.id, @club.account.id, member.balance) unless member.blank? # Clear member's balance with sidekiq background process
+      end
+      
       flash[:notice] = "Request to clear member balances submitted to EZcash."
       redirect_to reports_path
     end

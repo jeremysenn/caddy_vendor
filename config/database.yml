@@ -5,7 +5,7 @@
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
 default: &default
   adapter: sqlite3
-  pool: 5
+  pool: 41
   timeout: 5000
 
 development:

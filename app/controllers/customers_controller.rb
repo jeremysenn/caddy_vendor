@@ -34,7 +34,7 @@ class CustomersController < ApplicationController
   # GET /customers/1
   # GET /customers/1.json
   def show
-    @family_members = Customer.where(ParentCustID: @customer.id)
+    @add_on_members = Customer.where(ParentCustID: @customer.id)
     @transfers = @customer.transfers.order(created_at: :desc)
   end
 
@@ -102,7 +102,7 @@ class CustomersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def customer_params
-      params.require(:customer).permit(:ParentCustID, :CompanyNumber, :Active, :GroupID, :NameF, :NameL, :PhoneMobile, 
+      params.require(:customer).permit(:ParentCustID, :CompanyNumber, :Active, :GroupID, :NameF, :NameL, :NameS, :PhoneMobile,
         account_attributes:[:CompanyNumber, :Balance, :MinBalance, :Active, :CustomerID, :ActNbr, :_destroy,:id])
     end
 end
