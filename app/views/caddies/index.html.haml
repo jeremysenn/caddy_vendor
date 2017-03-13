@@ -2,12 +2,36 @@
   %br
   %p
     = form_tag caddies_path, id: 'caddies_form', method: 'get', class: 'form-inline' do |f|
-      .input-group
-        = search_field_tag :q, params[:q], :placeholder => "Search caddies", class: "form-control input-lg", autofocus: true
-        %span.input-group-btn
-          %button.btn.btn-secondary{id: 'caddy_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
-            %i.fa.fa-search
+      = select_tag :club_id, options_from_collection_for_select(current_user.clubs, "id", "name", @club.id), class: "form-control"
+      = select_tag :caddy_rank_desc_id, options_from_collection_for_select(@club.caddy_rank_descs, "ID", "RankingAcronym", params[:caddy_rank_desc_id]), prompt: "Choose Rank", class: "form-control"
+      = search_field_tag :q, params[:q], :placeholder => "Search caddies", class: "form-control input-lg", autofocus: true
+      %button.btn.btn-secondary{id: 'caddy_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
+        %i.fa.fa-search
       %small.text-muted Search by first name or last name
+      .pull-right
+        %a{href: '#', class: 'btn btn-secondary', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
+          %i.fa.fa-commenting
+          Text Message
+  #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+    .modal-dialog.modal-sm{:role => "document"}
+      .modal-content
+        .modal-header
+          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span{"aria-hidden" => "true"} ×
+          .modal-title
+            .lead 
+              %i.fa.fa-commenting
+              Text Message
+        .modal-body
+          = form_tag send_group_text_message_caddies_path, id: 'send_caddies_sms_form', method: 'get', class: 'form-inline' do |f|
+            = hidden_field_tag :club_id, params[:club_id]
+            = hidden_field_tag :caddy_rank_desc_id, params[:caddy_rank_desc_id]
+            = hidden_field_tag :q, params[:q]
+            = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 4, style: 'width:100%', autofocus: true
+            .modal-footer
+              %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
+              %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
+                Send
 
   .card.card-block
     %h4.card-title Caddies

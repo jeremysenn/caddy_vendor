@@ -9,17 +9,29 @@ class CaddiesController < ApplicationController
   # GET /caddies.json
   def index
     respond_to do |format|
+      unless params[:club_id].blank?
+        @club = Club.where(ClubCourseID: params[:club_id]).first
+        @club = current_club.blank? ? current_user.company.clubs.first : current_club if @club.blank?
+      else
+        @club = current_club.blank? ? current_user.company.clubs.first : current_club
+      end
       format.html {
         unless params[:q].blank?
-          caddies = current_user.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", params[:q], params[:q]).order("customer.NameL")
+          @query_string = "%#{params[:q]}%"
+          caddies = @club.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string).order("customer.NameL")
         else
-          caddies = current_user.caddies.joins(:customer).order("customer.NameL")
+          caddies = @club.caddies.joins(:customer).order("customer.NameL")
         end
-        @caddies = caddies.page(params[:page]).per(50)
+        unless params[:caddy_rank_desc_id].blank?
+          @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).page(params[:page]).per(50)
+        else
+          @caddies = caddies.page(params[:page]).per(50)
+        end
       }
       format.json {
+        @query_string = "%#{params[:q]}%"
 #        caddies = current_club.caddies
-        caddies = current_club.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", params[:q], params[:q])
+        caddies = @club.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string)
         @caddies = caddies.collect{ |caddy| {id: caddy.id, text: "#{caddy.full_name}"} }
         render json: {results: @caddies}
       }
@@ -32,6 +44,7 @@ class CaddiesController < ApplicationController
   def show
     @club = @caddy.club
     @transfers = @caddy.transfers
+    @text_messages = @caddy.sms_messages
   end
 
   # GET /caddies/new
@@ -72,6 +85,30 @@ class CaddiesController < ApplicationController
         format.json { render json: @caddy.errors, status: :unprocessable_entity }
       end
     end
+  end
+  
+  def send_group_text_message
+    respond_to do |format|
+      format.html {
+        unless params[:q].blank?
+          @query_string = "%#{params[:q]}%"
+          caddies = current_user.caddies.active.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string).order("customer.NameL")
+        else
+          caddies = current_user.caddies.active.joins(:customer).order("customer.NameL")
+        end
+        unless params[:caddy_rank_desc_id].blank?
+          @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id])
+        else
+          @caddies = caddies
+        end
+        @message_body = params[:message_body]
+        @caddies.each do |caddy|
+          caddy.send_sms_notification(@message_body)
+        end
+        redirect_back fallback_location: customers_path, notice: 'Text message sent to caddies.'
+      }
+    end
+    
   end
 
   # DELETE /caddies/1

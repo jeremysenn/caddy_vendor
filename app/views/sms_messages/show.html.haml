@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b To:
+  = @sms_message.to
+%p
+  %b Body:
+  = @sms_message.body
+%p
+  %b Customer:
+  = @sms_message.customer_id
+%p
+  %b Caddy:
+  = @sms_message.caddy_id
+
+= link_to 'Edit', edit_sms_message_path(@sms_message)
+\|
+= link_to 'Back', sms_messages_path

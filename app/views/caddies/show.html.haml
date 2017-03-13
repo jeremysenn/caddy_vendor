@@ -59,7 +59,7 @@
             %thead
               %tr
                 %th Tran ID
-                %td Date/Time
+                %th Date/Time
                 %th From
                 %th Fee
                 %th Tip
@@ -82,5 +82,28 @@
                     - if transfer.reversed?
                       .text-danger Reversed
                     = link_to "Show", transfer, class: 'btn btn-secondary'
+      - else
+        %p.lead None
+
+  %br
+  .card.card-block
+    %h4.card-title
+      %a{"aria-controls" => "collapseExample", "data-toggle" => "collapse", :href => "#caddy_text_messages"}
+        Text Messages
+    #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
+      - unless @text_messages.blank?
+        .table-responsive
+          %table.table.table-striped
+            %thead
+              %tr
+                %th Sent
+                %th Message Body
+                %th
+            %tbody
+              - @text_messages.each do |text_message|
+                %tr
+                  %td= text_message.created_at.strftime("%-m/%-d/%y %l:%M %p")
+                  %td= text_message.body
+                  %td= link_to "Show", text_message, class: 'btn btn-secondary'
       - else
         %p.lead None

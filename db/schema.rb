@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170301172458) do
+ActiveRecord::Schema.define(version: 20170313145320) do
 
   create_table "caddy_ratings", force: :cascade do |t|
     t.integer  "caddy_id"
@@ -56,6 +56,15 @@ ActiveRecord::Schema.define(version: 20170301172458) do
     t.index ["caddy_id"], name: "index_players_on_caddy_id"
     t.index ["event_id"], name: "index_players_on_event_id"
     t.index ["member_id"], name: "index_players_on_member_id"
+  end
+
+  create_table "sms_messages", force: :cascade do |t|
+    t.string   "to"
+    t.text     "body"
+    t.integer  "customer_id"
+    t.integer  "caddy_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "transfers", force: :cascade do |t|

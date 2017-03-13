@@ -1,0 +1,27 @@
+%h1 Listing sms_messages
+
+%table
+  %thead
+    %tr
+      %th To
+      %th Body
+      %th Customer
+      %th Caddy
+      %th
+      %th
+      %th
+
+  %tbody
+    - @sms_messages.each do |sms_message|
+      %tr
+        %td= sms_message.to
+        %td= sms_message.body
+        %td= sms_message.customer_id
+        %td= sms_message.caddy_id
+        %td= link_to 'Show', sms_message
+        %td= link_to 'Edit', edit_sms_message_path(sms_message)
+        %td= link_to 'Destroy', sms_message, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Sms message', new_sms_message_path
