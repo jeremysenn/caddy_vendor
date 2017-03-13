@@ -10,6 +10,7 @@ class Caddy < ApplicationRecord
   has_many :players
   has_many :transfers, through: :players
   has_many :caddy_ratings
+  has_many :sms_messages
   
 #  has_and_belongs_to_many :clubs
 
@@ -109,6 +110,12 @@ class Caddy < ApplicationRecord
       caddy_ratings.sum(:enthusiasm_score) / caddy_ratings.size.round(2)
     else
       0
+    end
+  end
+  
+  def send_sms_notification(message_body)
+    unless cell_phone_number.blank?
+      SendCaddySmsWorker.perform_async(cell_phone_number, id, self.CustomerID, message_body)
     end
   end
   
