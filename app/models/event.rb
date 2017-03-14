@@ -68,6 +68,10 @@ class Event < ApplicationRecord
     players.where(status: [nil, 'open', 'closed']).count > 0
   end
   
+  def contains_paid_players?
+    players.where(status: ['paid']).count > 0
+  end
+  
   def open?
     status == 'open'
   end

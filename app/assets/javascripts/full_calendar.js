@@ -67,7 +67,7 @@ initialize_calendar = function() {
       
       eventAfterRender: function(event, element, view) {
         if (view.name !== 'month') {
-          $(element).css('width','75%'); // Narrower width unless it's calendar view
+          $(element).css('width','25%'); // Narrower width unless it's calendar view
           // view consist Available views:
           // month, basicWeek,basicDay,agendaWeek,agendaDay
         }
