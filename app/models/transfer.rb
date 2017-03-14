@@ -144,9 +144,10 @@ class Transfer < ApplicationRecord
   def ezcash_send_sms_web_service_call
     unless member.blank? or member.phone.blank? or ez_cash_tran_id.blank?
       unless caddy.blank?
-        client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
-        response = client.call(:send_sms, message: { Phone: member.phone, Msg: "Hi #{member.first_name}, please rate your caddy by going here: #{Rails.application.routes.url_helpers.new_caddy_rating_url(player_id: player.id)}"})
-        Rails.logger.debug "Response body: #{response.body}"
+#        client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+#        response = client.call(:send_sms, message: { Phone: member.phone, Msg: "Hi #{member.first_name}, please rate your caddy by going here: #{Rails.application.routes.url_helpers.new_caddy_rating_url(player_id: player.id)}"})
+#        Rails.logger.debug "Response body: #{response.body}"
+        SendCaddyRatingSmsWorker.perform_async(id)
       end
     end
   end
