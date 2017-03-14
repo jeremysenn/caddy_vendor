@@ -3,8 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/Gemfile</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/controllers/reports_controller.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddies/index.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddies/_form.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/player.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/controllers/caddies_controller.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/workers/send_caddy_new_round_notification_sms_worker.rb</file>
         </group>
     </open-files>
 </project-private>

@@ -12,7 +12,7 @@
         = f.nested_fields_for :players do |ff|
           .card.player_fields{class: "#{ff.object.payment_reversed? ? 'card-outline-danger' : ''}" }
             - if ff.object.paid?
-              %p.card-header.lead Paid
+              %p.card-header.lead.text-success Paid
             - elsif ff.object.payment_reversed?
               %p.card-header.lead.text-danger Payment Reversed
             - else
@@ -86,12 +86,13 @@
       %button.btn.btn-secondary{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button", onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"} Cancel
       = f.submit "Payment", :class => 'btn btn-success', name: 'pay', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();" if current_user.admin?
       = f.submit "Save", :class => 'btn btn-primary', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"
-      = link_to 'Delete',                      |
-            event,                                 |
-            method: :delete,                       |
-            class: 'btn btn-danger',               |
-            data: { confirm: 'Are you sure?' },    |
-            remote: true unless @event.new_record? |
+      - unless @event.contains_paid_players?
+        = link_to 'Delete',                      |
+              event,                                 |
+              method: :delete,                       |
+              class: 'btn btn-danger',               |
+              data: { confirm: 'Are you sure?' },    |
+              remote: true unless @event.new_record? |
 
 :javascript
   $('.modal').on('shown.bs.modal', function() {
