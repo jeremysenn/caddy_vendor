@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170313145320) do
+ActiveRecord::Schema.define(version: 20170315195835) do
 
   create_table "caddy_ratings", force: :cascade do |t|
     t.integer  "caddy_id"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 20170313145320) do
     t.boolean  "reversed",               default: false
     t.integer  "fee_to_account_id"
     t.boolean  "member_balance_cleared", default: false
+    t.integer  "club_id"
   end
 
   create_table "users", force: :cascade do |t|

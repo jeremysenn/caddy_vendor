@@ -115,11 +115,11 @@ class CaddiesController < ApplicationController
     member = Customer.where(CustomerID: params[:member_id]).first
     amount = params[:amount].to_f.abs unless params[:amount].blank?
     unless member.blank?
-      Transfer.create(from_account_id: member.account.id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount)
+      Transfer.create(club_id: @caddy.club.id, from_account_id: member.account.id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount)
     else
       club = @caddy.club
       club.perform_one_sided_credit_transaction(amount)
-      Transfer.create(from_account_id: club.account.id, to_account_id: @caddy.account.id, amount: amount)
+      Transfer.create(club_id: club.id, from_account_id: club.account.id, to_account_id: @caddy.account.id, amount: amount)
     end
     redirect_back fallback_location: @caddy, notice: 'Caddy payment submitted.'
   end
