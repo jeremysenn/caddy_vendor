@@ -30,20 +30,29 @@
       Active:
       = "#{@caddy.active? ? 'Yes' : 'No'}"
     
-    = simple_form_for(@caddy) do |f|
-      = f.error_notification
-      .form-inputs
-        %a{href: caddies_path, class: 'btn btn-secondary'}
-          %i.fa.fa-vcard
-          Caddies
-        = link_to 'Edit', edit_caddy_path(@caddy), class: 'btn btn-primary'
-        - if @caddy.checkin_today? 
-          = f.input_field :CheckedIn, as: :hidden, value: nil
-          = f.button :submit, "Check Out", class: 'btn btn-warning'
-        - else
-          = f.input_field :CheckedIn, as: :hidden, value: DateTime.now
-          = f.button :submit, "Check In", class: 'btn btn-success'
-        =# link_to 'Rate caddy', new_caddy_rating_path(caddy_id: @caddy.id), class: 'btn btn-warning'
+    %a{href: edit_caddy_path(@caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
+      %i.fa.fa-edit
+      Edit
+    %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
+      %i.fa.fa-dollar
+      Pay by member
+    %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_club"}
+      %i.fa.fa-dollar
+      Pay by club
+    = render 'pay_caddy_by_member'
+    = render 'pay_caddy_by_club'
+    -#
+      - if @caddy.checkin_today? 
+        = f.input_field :CheckedIn, as: :hidden, value: nil
+        = button_tag(type: 'submit', class: "btn btn-warning", "data-turbolinks" => "false", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check Out" }) do
+          %i.fa.fa-sign-out
+          Check Out
+      - else
+        = f.input_field :CheckedIn, as: :hidden, value: DateTime.now
+        = button_tag(type: 'submit', class: "btn btn-secondary", "data-turbolinks" => "false", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check In" }) do
+          %i.fa.fa-sign-in
+          Check In
+    =# link_to 'Rate caddy', new_caddy_rating_path(caddy_id: @caddy.id), class: 'btn btn-warning'
     
 
   %br

@@ -82,7 +82,11 @@ class Ability
       # Transfers
       ############
       can :manage, Transfer do |transfer|
-        transfer.player.event.club.company == user.company
+        unless transfer.player.blank?
+          transfer.player.event.club.company == user.company
+        else
+          transfer.customer.company == user.company
+        end
       end
       can :create, :transfers
       

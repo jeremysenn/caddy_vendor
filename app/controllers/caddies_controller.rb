@@ -1,6 +1,6 @@
 class CaddiesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_caddy, only: [:show, :edit, :update, :destroy]
+  before_action :set_caddy, only: [:show, :edit, :update, :pay, :destroy]
   load_and_authorize_resource
   around_action :set_time_zone, if: :current_user
 
@@ -43,7 +43,8 @@ class CaddiesController < ApplicationController
   # GET /caddies/1.json
   def show
     @club = @caddy.club
-    @transfers = @caddy.transfers
+#    @transfers = @caddy.transfers
+    @transfers = @caddy.account_transfers.order('created_at DESC')
     @text_messages = @caddy.sms_messages
   end
 
@@ -108,7 +109,19 @@ class CaddiesController < ApplicationController
         redirect_back fallback_location: customers_path, notice: 'Text message sent to caddies.'
       }
     end
-    
+  end
+  
+  def pay
+    member = Customer.where(CustomerID: params[:member_id]).first
+    amount = params[:amount].to_f.abs unless params[:amount].blank?
+    unless member.blank?
+      Transfer.create(from_account_id: member.account.id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount)
+    else
+      club = @caddy.club
+      club.perform_one_sided_credit_transaction(amount)
+      Transfer.create(from_account_id: club.account.id, to_account_id: @caddy.account.id, amount: amount)
+    end
+    redirect_back fallback_location: @caddy, notice: 'Caddy payment submitted.'
   end
 
   # DELETE /caddies/1

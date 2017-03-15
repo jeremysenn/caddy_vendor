@@ -19,6 +19,9 @@ Rails.application.routes.draw do
     end
   end
   resources :caddies do
+    member do
+      get 'pay'
+    end
     collection do
       get 'send_group_text_message'
     end

@@ -288,5 +288,10 @@ class Transaction < ActiveRecord::Base
   #     Class Methods         #
   #############################
   
+  def self.ezcash_payment_transaction_web_service_call(from_account_id, to_account_id, amount)
+    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+    response = client.call(:ez_cash_txn, message: { FromActID: from_account_id, ToActID: to_account_id, Amount: amount})
+    Rails.logger.debug "Response body: #{response.body}"
+  end
   
 end
