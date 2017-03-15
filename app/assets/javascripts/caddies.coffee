@@ -6,3 +6,9 @@ jQuery ->
   $(document).on "turbolinks:load", ->
     if !$('.rateit-range').length
       $('.rateit').rateit()
+
+    ### Re-enable disabled_with buttons for back button ###
+    $.rails.enableElement $('.caddy_spinner_button')
+    return
+
+  $('.member_select').select2 theme: 'bootstrap'

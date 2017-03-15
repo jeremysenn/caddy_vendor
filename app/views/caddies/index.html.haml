@@ -62,15 +62,24 @@
               %td= "#{caddy.checkin_today? ? caddy.CheckedIn.in_time_zone(current_user.time_zone).strftime('%l:%M %p') : 'Not today'}"
               %td= "#{caddy.active? ? 'Yes' : 'No'}"
               %td
-                = link_to "Show", caddy, class: 'btn btn-secondary'
-                = link_to 'Edit', edit_caddy_path(caddy), class: 'btn btn-primary'
+                %a{href: caddy_path(caddy), class: 'btn btn-secondary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Show" }}
+                  %i.fa.fa-vcard-o
+                  Show
+                %a{href: edit_caddy_path(caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
+                  %i.fa.fa-edit
+                  Edit
               %td
                 - unless caddy.inactive?
                   = simple_form_for(caddy) do |f|
                     - if caddy.checkin_today? 
                       = f.input_field :CheckedIn, as: :hidden, value: nil
-                      = f.button :submit, "Check Out", class: 'btn btn-warning'
+                      = button_tag(type: 'submit', class: "btn btn-warning", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check Out" }) do
+                        %i.fa.fa-sign-out
+                        Check Out
                     - else
                       = f.input_field :CheckedIn, as: :hidden, value: DateTime.now
-                      = f.button :submit, "Check In", class: 'btn btn-success'
-  = paginate @caddies
+                      = button_tag(type: 'submit', class: "btn btn-secondary", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check In" }) do
+                        %i.fa.fa-sign-in
+                        Check In
+
+

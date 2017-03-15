@@ -4,10 +4,10 @@ class Transfer < ApplicationRecord
   belongs_to :ez_cash_transaction, class_name: "Transaction", :foreign_key => "ezcash_tran_id"
   
 #  after_create :transfer_web_service_call
-  after_save :update_player
+  after_save :update_player, if: :contains_player?
   
   after_create :ezcash_payment_transaction_web_service_call
-  after_create :ezcash_send_sms_web_service_call
+  after_create :ezcash_send_sms_web_service_call, if: :contains_player?
   after_update :ezcash_reverse_transaction_web_service_call
   
 #  validates :from_account, :to_account, :amount, :fee, presence: true
@@ -157,7 +157,7 @@ class Transfer < ApplicationRecord
   end
   
   def fee_in_dollars
-    fee_cents / 100.0
+    fee_cents / 100.0 unless fee_cents.blank?
   end
   
   def total
@@ -191,7 +191,7 @@ class Transfer < ApplicationRecord
   end
   
   def note
-    player.note
+    player.note unless player.blank?
   end
   
   def member
@@ -248,6 +248,10 @@ class Transfer < ApplicationRecord
     ez_cash_tran_id
   end
   ### End methods for use with generating CSV file ###
+  
+  def contains_player?
+    not player.blank?
+  end
   
   #############################
   #     Class Methods         #
