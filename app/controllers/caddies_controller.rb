@@ -115,7 +115,7 @@ class CaddiesController < ApplicationController
     member = Customer.where(CustomerID: params[:member_id]).first
     amount = params[:amount].to_f.abs unless params[:amount].blank?
     unless member.blank?
-      Transfer.create(club_id: @caddy.club.id, from_account_id: member.account.id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount)
+      Transfer.create(club_id: @caddy.club.id, from_account_id: member.account_id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount)
     else
       club = @caddy.club
       club.perform_one_sided_credit_transaction(amount)

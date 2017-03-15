@@ -361,6 +361,14 @@ class Customer < ActiveRecord::Base
     self.PhoneMobile
   end
   
+  def account_id
+    if primary?
+      account.id
+    else
+      parent_customer.account.id
+    end
+  end
+  
   #############################
   #     Class Methods      #
   #############################
