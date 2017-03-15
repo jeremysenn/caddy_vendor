@@ -27,4 +27,5 @@ every :reboot do
   job_type :application, "cd /usr/local/Ruby/caddy_vendor && :task :output"
   
   application "rails server"
+  application "bundle exec sidekiq -e production"
 end
