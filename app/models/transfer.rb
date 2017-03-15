@@ -259,7 +259,18 @@ class Transfer < ApplicationRecord
   end
   
   def description
-    "#{from_account_record.customer.full_name} to #{to_account_record.customer.full_name}"
+    unless from_account_record.customer.blank?
+      from_name = from_account_record.customer.full_name
+    else
+      from_name = from_account_id
+    end
+    unless to_account_record.customer.blank?
+      to_name = to_account_record.customer.full_name
+    else
+      to_name = to_account_id
+    end
+    
+    return "#{from_name} to #{to_name}"
   end
   
   #############################
