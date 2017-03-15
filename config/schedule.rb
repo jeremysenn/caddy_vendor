@@ -26,5 +26,6 @@ every :reboot do
   # CentOS VM
   job_type :application, "cd /usr/local/Ruby/caddy_vendor && :task :output"
   
-  application "rails server"
+  application "rails server" # Start application server
+  application "bundle exec sidekiq" # Start background workers
 end
