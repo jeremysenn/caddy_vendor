@@ -85,8 +85,8 @@
                 - @transfers.each do |transfer|
                   %tr
                     %td= transfer.created_at.strftime("%-m/%-d/%y")
-                    %td= "Transfer - #{transfer.member_name} to #{transfer.caddy_name}"
-                    %td= number_to_currency(transfer.amount_paid_total)
+                    %td= transfer.description
+                    %td= number_to_currency(transfer.total)
                     %td= link_to "Show", transfer, class: 'btn btn-secondary'
         - else
           %p.lead None

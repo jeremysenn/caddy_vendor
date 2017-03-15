@@ -9,7 +9,7 @@ class Club < ApplicationRecord
   has_many :caddies, :foreign_key => "ClubCompanyNbr"
   has_many :caddy_pay_rates, :foreign_key => "ClubCompanyID"
   has_many :caddy_rank_descs, :foreign_key => "ClubCompanyID"
-  has_many :transfers, through: :events
+  has_many :transfers #, through: :events
   has_many :accounts
   
   attr_accessor :transaction_fee

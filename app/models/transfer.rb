@@ -2,6 +2,7 @@ class Transfer < ApplicationRecord
   belongs_to :customer
   belongs_to :player
   belongs_to :ez_cash_transaction, class_name: "Transaction", :foreign_key => "ezcash_tran_id"
+  belongs_to :club
   
 #  after_create :transfer_web_service_call
   after_save :update_player, if: :contains_player?
@@ -162,7 +163,8 @@ class Transfer < ApplicationRecord
   
   def total
 #    (amount_cents - fee_cents) / 100
-    (amount_cents + fee_cents) / 100.0 unless amount_cents.blank? or fee_cents.blank?
+#    (amount_cents + fee_cents) / 100.0 unless amount_cents.blank? or fee_cents.blank?
+    (amount_cents) / 100.0 unless amount_cents.blank?
   end
   
   def update_player
@@ -202,9 +204,12 @@ class Transfer < ApplicationRecord
     player.caddy unless player.blank?
   end
   
-  def club
-    player.club unless player.blank?
-  end
+#  def club
+#    unless player.blank?
+#      player.club 
+#    else
+#    end
+#  end
   
   ### Start methods for use with generating CSV file ###
   def date_of_play
@@ -251,6 +256,10 @@ class Transfer < ApplicationRecord
   
   def contains_player?
     not player.blank?
+  end
+  
+  def description
+    "#{from_account_record.customer.full_name} to #{to_account_record.customer.full_name}"
   end
   
   #############################

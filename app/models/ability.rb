@@ -43,6 +43,7 @@ class Ability
       can :manage, Club do |club|
         club.company == user.company
       end
+      can :create, :clubs
       
       # Caddies
       ############
