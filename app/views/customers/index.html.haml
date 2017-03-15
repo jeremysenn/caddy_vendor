@@ -13,7 +13,9 @@
     %p= link_to 'New member', new_customer_path, class: 'btn btn-primary'
 
   .card.card-block
-    %h4.card-title Members
+    %h4.card-title 
+      %i.fa.fa-user-circle-o
+      Members
     - unless @members.blank?
       .table-responsive
         %table.table
@@ -34,8 +36,12 @@
                 %td= "#{member.active? ? 'Yes' : 'No'}"
                 %td= "#{member.account.blank? ? 'N/A' : number_to_currency(member.account.balance)}"
                 %td
-                  = link_to "Show", member, class: 'btn btn-secondary'
-                  = link_to 'Edit', edit_customer_path(member), class: 'btn btn-primary'
+                  %a{href: customer_path(member), class: 'btn btn-secondary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> More..." }}
+                    %i.fa.fa-user-circle-o
+                    More...
+                  %a{href: edit_customer_path(member), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
+                    %i.fa.fa-edit
+                    Edit
     - else
       %p.lead No members found
 

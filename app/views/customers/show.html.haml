@@ -1,50 +1,51 @@
 .container
   %br
-  .card.card-block
-    %p.lead
-      First name:
-      = @customer.first_name
-    %p.lead
-      Last name:
-      = @customer.last_name
-    %p.lead
-      Phone:
-      = @customer.PhoneMobile
-    %p.lead
-      Member Number:
-      = "#{@customer.member_number.blank? ? 'None' : @customer.member_number}"
-    - if @customer.primary?
+  .card
+    %h3.card-header
+      %i.fa.fa-user-circle-o
+      = @customer.full_name
+      .pull-right
+        %a{href: edit_customer_path(@customer), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
+          %i.fa.fa-edit
+          Edit
+    .card-block
       %p.lead
-        Add-ons:
-        - unless @add_on_members.blank?
-          - @add_on_members.each do |add_on_member|
-            = link_to add_on_member.full_name, add_on_member
-        - else
-          None
-        %br
-        %a{class: 'btn btn-secondary btn-sm', "data-toggle" => "modal", "data-target" => "#add_family_member"}
-          Add family
-        %a{class: 'btn btn-secondary btn-sm', "data-toggle" => "modal", "data-target" => "#add_guest_member"}
-          Add guest
-    - else
+        Phone:
+        = @customer.PhoneMobile
       %p.lead
-        Primary Member:
-        = link_to @customer.parent_customer.full_name, @customer.parent_customer
-    %p.lead
-      Active:
-      = "#{@customer.active? ? 'Yes' : 'No'}"
-    - if @customer.primary?
+        Member Number:
+        = "#{@customer.member_number.blank? ? 'None' : @customer.member_number}"
+      - if @customer.primary?
+        %p.lead
+          Add-ons:
+          - unless @add_on_members.blank?
+            - @add_on_members.each do |add_on_member|
+              = link_to add_on_member.full_name, add_on_member
+          - else
+            None
+          %br
+          %a{class: 'btn btn-secondary btn-sm', "data-toggle" => "modal", "data-target" => "#add_family_member"}
+            Add family
+          %a{class: 'btn btn-secondary btn-sm', "data-toggle" => "modal", "data-target" => "#add_guest_member"}
+            Add guest
+      - else
+        %p.lead
+          Primary Member:
+          = link_to @customer.parent_customer.full_name, @customer.parent_customer
       %p.lead
-        Balance:
-        = number_to_currency(@customer.account.balance)
-
-    %p= link_to 'Edit', edit_customer_path(@customer), class: 'btn btn-primary'
+        Active:
+        = "#{@customer.active? ? 'Yes' : 'No'}"
+      - if @customer.primary?
+        %p.lead
+          Balance:
+          = number_to_currency(@customer.account.balance)
     
   %br
 
   .card.card-block
     %h4.card-title 
       %a{"aria-controls" => "collapseExample", "data-toggle" => "collapse", :href => "#member_transfers"}
+        %i.fa.fa-dollar
         Transfers
     #member_transfers.collapse.show.in{"aria-expanded" => "true"}
       - unless @transfers.blank?

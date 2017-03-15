@@ -35,7 +35,9 @@
                 Send
 
   .card.card-block
-    %h4.card-title Caddies
+    %h4.card-title 
+      %i.fa.fa-vcard-o
+      Caddies
     .table-responsive
       %table.table.table-striped
         %thead
@@ -63,9 +65,9 @@
               %td= "#{caddy.checkin_today? ? caddy.CheckedIn.in_time_zone(current_user.time_zone).strftime('%l:%M %p') : 'Not today'}"
               %td= "#{caddy.active? ? 'Yes' : 'No'}"
               %td
-                %a{href: caddy_path(caddy), class: 'btn btn-secondary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> More" }}
+                %a{href: caddy_path(caddy), class: 'btn btn-secondary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> More..." }}
                   %i.fa.fa-vcard-o
-                  More
+                  More...
                 %a{href: edit_caddy_path(caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
                   %i.fa.fa-edit
                   Edit
