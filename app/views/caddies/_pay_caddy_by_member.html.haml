@@ -11,7 +11,7 @@
       .modal-body
         = form_tag pay_caddy_path(@caddy), id: 'pay_caddy_by_member_form', method: 'get', class: 'form-inline' do |f|
           .form-group.col-xs-12.col-sm-12.col-md-12
-            %p= select_tag :member_id, options_from_collection_for_select(current_user.members.active.order(:NameL), "id", "full_name"), class: "form-control member_select", style: "width: 100%;", required: true
+            %p= select_tag :member_id, options_from_collection_for_select(current_user.members.active.order(:NameL), "id", "full_name"), prompt: '-- Select member --', class: "form-control member_select", style: "width: 100%;", required: true
           .form-group
             .input-group.col-xs-12.col-sm-12.col-md-12
               %span.input-group-addon
