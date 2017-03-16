@@ -17,9 +17,6 @@
       To:
       = @to.full_name unless @to.blank?
     %p.lead
-      Note:
-      = @transfer.note
-    %p.lead
       Caddy Fee:
       = number_to_currency(@transfer.caddy_fee)
     %p.lead
@@ -28,6 +25,9 @@
     %p.lead
       Transaction Fee:
       = number_to_currency(@transfer.fee)
+    %p.lead
+      Note:
+      = @transfer.note
     %p.lead
       Total:
       = number_to_currency(@transfer.amount)

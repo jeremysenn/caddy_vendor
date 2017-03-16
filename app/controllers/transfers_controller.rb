@@ -107,7 +107,7 @@ class TransfersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def transfer_params
       params.require(:transfer).permit(:amount, :caddy_fee, :caddy_tip, :to_account, :from_account, :fee, :customer_id, :club_id, 
-        :player_id, :reversed, :fee_to_account_id)
+        :player_id, :reversed, :fee_to_account_id, :note)
     end
     
     ### Secure the transfers sort direction ###
@@ -117,6 +117,6 @@ class TransfersController < ApplicationController
 
     ### Secure the transfers sort column name ###
     def transfers_sort_column
-      ["ez_cash_tran_id", "created_at", "from_account_id", "to_account_id", "caddy_fee_cents", "caddy_tip_cents", "amount_cents", "fee_cents", "fee_to_account_id"].include?(params[:transfers_column]) ? params[:transfers_column] : "created_at"
+      ["ez_cash_tran_id", "created_at", "from_account_id", "to_account_id", "caddy_fee_cents", "caddy_tip_cents", "amount_cents", "fee_cents", "fee_to_account_id", "note"].include?(params[:transfers_column]) ? params[:transfers_column] : "created_at"
     end
 end

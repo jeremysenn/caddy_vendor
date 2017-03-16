@@ -18,19 +18,11 @@
               %i.fa.fa-exclamation-triangle
               Clear Balances
   %p.lead
-    = form_tag reports_clear_member_balances_path, :method => 'get', :class => "form-inline" do
-      - unless current_club.blank?
-        - if current_user.clubs.count <= 1
-          - unless current_club.blank?
-            = current_club.name 
-          - else
-            = current_user.clubs.first.name unless current_user.clubs.blank?
-        - else
-          = select_tag 'report[club_id]', options_from_collection_for_select(current_user.clubs, "id", "name", @club.id), class: "form-control", onchange: "$(this).parent('form').submit();"
-      = @start_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p") unless @club.date_of_last_one_sided_credit_transaction.blank?
-      = @start_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p") if @club.date_of_last_one_sided_credit_transaction.blank?
-      To
-      = @end_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p")
+    = @club.name
+    = @start_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p") unless @club.date_of_last_one_sided_credit_transaction.blank?
+    = @start_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p") if @club.date_of_last_one_sided_credit_transaction.blank?
+    To
+    = @end_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p")
 
   .row
     .col-sm-6
@@ -76,6 +68,7 @@
                 %tr
                   %th Date
                   %th Description
+                  %th Note
                   %th Amount
                   %th
               %tbody
@@ -83,6 +76,7 @@
                   %tr
                     %td= transfer.created_at.strftime("%-m/%-d/%y")
                     %td= transfer.description
+                    %td= transfer.note
                     %td= number_to_currency(transfer.total)
                     %td= link_to "Show", transfer, class: 'btn btn-secondary'
         - else
