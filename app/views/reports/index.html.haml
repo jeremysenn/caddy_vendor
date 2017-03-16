@@ -79,6 +79,7 @@
                 %tr
                   %th Date
                   %th Description
+                  %th Note
                   %th Amount
                   %th
               %tbody
@@ -86,6 +87,7 @@
                   %tr
                     %td= transfer.created_at.strftime("%-m/%-d/%y")
                     %td= transfer.description
+                    %td= transfer.note
                     %td= number_to_currency(transfer.total)
                     %td= link_to "Show", transfer, class: 'btn btn-secondary'
         - else
