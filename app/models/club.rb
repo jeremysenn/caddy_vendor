@@ -11,6 +11,7 @@ class Club < ApplicationRecord
   has_many :caddy_rank_descs, :foreign_key => "ClubCompanyID"
   has_many :transfers #, through: :events
   has_many :accounts
+  has_many :players, through: :events
   
   attr_accessor :transaction_fee
 
@@ -71,6 +72,10 @@ class Club < ApplicationRecord
   
   def balance
     account.Balance unless account.blank?
+  end
+  
+  def player_notes
+    players.where.not(note: [nil, '']).collect { |p| [ p.note ] }
   end
   
   #############################

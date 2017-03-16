@@ -18,7 +18,7 @@
       Members
     - unless @members.blank?
       .table-responsive
-        %table.table
+        %table.table.table-striped
           %thead
             %tr
               %th Name
@@ -29,7 +29,7 @@
               %th
           %tbody
             - @members.each do |member|
-              %tr{class: "#{member.primary? ? 'table-active' : ''}"}
+              %tr{class: "#{(not member.primary?) ? 'table-active' : ''}"}
                 %td= member.full_name
                 %td= member.PhoneMobile
                 %td= "#{member.member_number.blank? ? 'None' : member.member_number}"

@@ -1,6 +1,6 @@
 class Transfer < ApplicationRecord
   belongs_to :customer
-  belongs_to :player
+  belongs_to :player, optional: true
   belongs_to :ez_cash_transaction, class_name: "Transaction", :foreign_key => "ezcash_tran_id"
   belongs_to :club
   

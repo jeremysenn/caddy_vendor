@@ -70,8 +70,20 @@
                   .col-sm-6
                     %p.lead= ff.object.caddy_type
               .row.form-group
-                .col-sm-12
-                  = ff.text_field :note, placeholder: 'Player note', class: 'input-lg form-control'
+                .col-sm-4
+                  -#
+                    - if ff.object.note.blank?
+                      %p
+                        %a{"aria-controls" => "collapseExample", "data-toggle" => "collapse", :href => "#note_field", class: 'btn btn-secondary btn-sm'}
+                          Guest
+                    - else
+                      %p.lead Guest
+                  - unless ff.object.note.blank?
+                    %p.lead Guest
+                  -#
+                    #note_field.collapse.show{class: "#{ff.object.note.blank? ? '' : 'in'}"}
+                    =# ff.text_field :note, placeholder: 'Guest', class: 'input-lg form-control'
+                  = ff.select :note, current_club.player_notes, {prompt: 'Guest'},class: "note_select form-control", style: "width: 100%;"
                 
         = f.add_nested_fields_link :players, "<i class='fa fa-plus'></i> Add Player".html_safe, class: 'more_players_link btn btn-warning'
   .row.form-group
@@ -134,5 +146,23 @@
   $("body").on("click",".more_players_link", function(){
     $('.member_select').select2({
       theme: 'bootstrap',
+    });
+  });
+
+  // Apply select2 to existing player guest selects
+  $('.note_select').select2({
+    placeholder: 'Guest',
+    theme: 'bootstrap',
+    tags: true,
+    multiple: false,
+  });
+
+  // Apply select2 to dynamically added player guest selects
+  $("body").on("click",".more_players_link", function(){
+    $('.note_select').select2({
+      placeholder: 'Guest',
+      theme: 'bootstrap',
+      tags: true,
+      multiple: false,
     });
   });
