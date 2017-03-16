@@ -113,8 +113,8 @@ class CaddiesController < ApplicationController
   
   def pay
     member = Customer.where(CustomerID: params[:member_id]).first
-    amount = "%#{params[:amount]}%".to_f.abs unless params[:amount].blank?
-    note = "%#{params[:note]}%"
+    amount = params[:amount].to_f.abs unless params[:amount].blank?
+    note = params[:note]
     unless member.blank?
       Transfer.create(club_id: @caddy.club.id, from_account_id: member.account_id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount, note: note)
     else
