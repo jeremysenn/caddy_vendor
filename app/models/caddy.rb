@@ -24,11 +24,11 @@ class Caddy < ApplicationRecord
   #############################
   
   def first_name
-    customer.blank? ? '' : customer.NameF
+    (customer.blank? or customer.NameF.blank?) ? '' : customer.NameF
   end
   
   def last_name
-    customer.blank? ? '' : customer.NameL
+    (customer.blank? or customer.NameL.blank?) ? '' : customer.NameL
   end
   
   def full_name
