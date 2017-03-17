@@ -86,7 +86,12 @@ class Ability
         unless transfer.player.blank?
           transfer.player.event.club.company == user.company
         else
-          transfer.from_account_record.company == user.company
+          unless transfer.customer.blank?
+            transfer.customer.company == user.company
+          else
+            transfer.from_account_record.company == user.company
+          end
+          
         end
       end
       can :create, :transfers
