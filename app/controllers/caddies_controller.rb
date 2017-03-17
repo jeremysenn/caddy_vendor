@@ -44,7 +44,7 @@ class CaddiesController < ApplicationController
   def show
     @club = @caddy.club
 #    @transfers = @caddy.transfers
-    @transfers = @caddy.account_transfers.order('created_at DESC')
+    @transfers = @caddy.account_transfers.order('created_at DESC') unless account_transfers.blank?
     @text_messages = @caddy.sms_messages
   end
 
