@@ -19,8 +19,7 @@ jQuery ->
   # turn to inline mode
   $.fn.editable.defaults.mode = 'inline';
 
-  # Force all elements submit via PUT method
-  # $.fn.editable.defaults.ajaxOptions = {type: "put"}
+  # Edit in place caddy tip
   $(document).on 'turbolinks:load', ->
     $('#players').editable
       selector: '.tip'
@@ -62,5 +61,48 @@ jQuery ->
         $('#player_total').text '$' + sum.toFixed(2)
         #msg will be shown in editable form
         return
+
+    # Edit in place caddy fee
+    $('#players').editable
+      selector: '.caddy_fee'
+      tpl: "<input type='text' style='width: 75px'>"
+      title: 'Caddy Fee'
+      name: 'caddy fee'
+      #placeholder: 'Required'
+      #display: (value) ->
+      #  $(this).text '$' + value
+      #  return
+      ajaxOptions: 
+        type: 'put'
+        dataType: 'json'
+      validate: (value) ->
+        if $.trim(value) == ''
+          return 'This field is required'
+        if ! $.isNumeric(value) or value < 0
+          return 'Must be a positive number'
+        if value > 199
+          return 'Must be less than $200.'
+        return
+      success: (response, newValue) ->
+        if response.status == 'error'
+          return response.msg
+        caddy_fee = parseFloat(newValue)
+        caddy_tip = parseFloat($(this).closest('tr').find('#transfer_caddy_tip:first').val())
+        transaction_fee = parseFloat($(this).closest('tr').find('#transfer_fee:first').val())
+        $(this).closest('tr').find('#transfer_caddy_tip:first').val caddy_tip
+        $(this).closest('tr').find('#transfer_amount:first').val caddy_fee + caddy_tip
+        sum = 0
+        # Add up all the amounts
+        $('.amount').each ->
+          sum += Number($(this).val())
+          return
+        # Add up all the transaction fees
+        $('.transaction_fee').each ->
+          sum += Number($(this).val())
+          return
+        $('#player_total').text '$' + sum.toFixed(2)
+        #msg will be shown in editable form
+        return  
+
     return
   ### End Edit in place ###

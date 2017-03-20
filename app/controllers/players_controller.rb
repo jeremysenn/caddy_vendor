@@ -67,6 +67,19 @@ class PlayersController < ApplicationController
       end
     end
   end
+  
+  def update_caddy_fee
+    respond_to do |format|
+      if @player.update_attribute(:fee, params[:value])
+        format.html { redirect_to @player, notice: 'Player was successfully updated.' }
+#        render json: {}, status: :ok 
+        format.json { render :show, status: :ok, location: @player }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @player.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # DELETE /players/1
   # DELETE /players/1.json

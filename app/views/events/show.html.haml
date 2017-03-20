@@ -28,10 +28,14 @@
               %td= player.caddy_type
               %td= player.round
               %td= player.note
-              %td
-                =# "#{player.fee.blank? ? number_to_currency(player.caddy_pay_rate) : number_to_currency(player.fee)}"
+              %td{class: "#{player.paid? ? '' : 'text-primary'}"}
                 $
-                = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 2)
+                - unless player.paid?
+                  %a{href: nil, class: 'caddy_fee', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_caddy_fee", "data-value" => player.fee.blank? ? player.caddy_pay_rate : player.fee}
+                    = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 2)
+                  =# "#{player.fee.blank? ? number_to_currency(player.caddy_pay_rate) : number_to_currency(player.fee)}"
+                - else
+                  = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 2)
               %td{class: "#{player.paid? ? '' : 'text-primary'}"}
                 =# number_to_currency("#{player.tip.blank? ? '0' : player.tip}")
                 $

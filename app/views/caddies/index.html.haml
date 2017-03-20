@@ -77,8 +77,8 @@
                     - if caddy.checkin_today? 
                       = f.input_field :CheckedIn, as: :hidden, value: nil
                       = button_tag(type: 'submit', class: "btn btn-warning", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check Out" }) do
-                        %i.fa.fa-sign-out
                         Check Out
+                        %i.fa.fa-sign-out
                     - else
                       = f.input_field :CheckedIn, as: :hidden, value: DateTime.now
                       = button_tag(type: 'submit', class: "btn btn-secondary", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check In" }) do
