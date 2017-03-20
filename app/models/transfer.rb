@@ -227,10 +227,12 @@ class Transfer < ApplicationRecord
   end
   
   def amount_paid_total
-    fee = caddy_fee.blank? ? 0 : caddy_fee
-    tip = caddy_tip.blank? ? 0 : caddy_tip
+#    fee = caddy_fee.blank? ? 0 : caddy_fee
+#    tip = caddy_tip.blank? ? 0 : caddy_tip
+    amount = total
     trans_fee = transaction_fee.blank? ? 0 : transaction_fee
-    return fee + tip + trans_fee
+#    return fee + tip + trans_fee
+    return amount + trans_fee
   end
   
   def date_caddy_was_paid

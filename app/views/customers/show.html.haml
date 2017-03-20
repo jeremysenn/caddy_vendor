@@ -61,6 +61,7 @@
                 %th To
                 %th Fee
                 %th Tip
+                %th Transaction Fee
                 %th Total
                 %th
             %tbody
@@ -75,7 +76,8 @@
                   %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
                   %td= number_to_currency(transfer.caddy_fee)
                   %td= number_to_currency(transfer.caddy_tip)
-                  %td= number_to_currency(transfer.amount)
+                  %td= number_to_currency(transfer.fee)
+                  %td= number_to_currency(transfer.amount_paid_total)
                   %td
                     - if transfer.reversed?
                       .text-danger Reversed
