@@ -69,7 +69,7 @@
       .card.card-block.card-outline-primary
         %h4.card-title.text-primary
           %i.fa.fa-dollar
-          = "Transfers (#{@transfers.count})"
+          = "Round Transfers (#{@transfers.count})"
           .pull-right
             = number_to_currency(@transfers_total)
         - unless @transfers.blank?
