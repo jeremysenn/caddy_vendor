@@ -24,7 +24,7 @@ class ReportsController < ApplicationController
 #        @members = current_user.members.joins(:account).where("accounts.Balance != ?", 0)
         @transfers_total = 0
         @transfers.each do |transfer|
-          @transfers_total = @transfers_total + transfer.total unless transfer.total.blank?
+          @transfers_total = @transfers_total + transfer.amount_paid_total unless transfer.amount_paid_total.blank?
         end
         @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, tran_code: 'CARD', sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil]).order("date_time DESC")
         @transactions_total = 0
@@ -63,7 +63,7 @@ class ReportsController < ApplicationController
 #    @members = current_user.members.joins(:account).where("accounts.Balance != ?", 0)
     @transfers_total = 0
     @transfers.each do |transfer|
-      @transfers_total = @transfers_total + transfer.total unless transfer.total.blank?
+      @transfers_total = @transfers_total + transfer.amount_paid_total unless transfer.amount_paid_total.blank?
     end
     
     # Use current user's time zone since transactions are stored in east coast time

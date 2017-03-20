@@ -88,7 +88,7 @@
                   %td= number_to_currency(transfer.caddy_fee)
                   %td= number_to_currency(transfer.caddy_tip)
                   %td= transfer.note
-                  %td= number_to_currency(transfer.amount)
+                  %td= number_to_currency(transfer.amount_paid_to_caddy)
                   %td
                     - if transfer.reversed?
                       .text-danger Reversed
