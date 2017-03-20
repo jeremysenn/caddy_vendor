@@ -271,6 +271,10 @@ class Transfer < ApplicationRecord
     return "#{from_name} to #{to_name}"
   end
   
+  def from_customer?
+    not customer_id.blank?
+  end
+  
   #############################
   #     Class Methods         #
   #############################

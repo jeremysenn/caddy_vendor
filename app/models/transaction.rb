@@ -7,7 +7,7 @@ class Transaction < ActiveRecord::Base
   belongs_to :account, :foreign_key => :from_acct_id # Assume from account is the main account
   has_one :transfer
   
-  scope :withdrawals, -> { where(tran_code: "WDL", sec_tran_code: ["TFR", ""]) }
+  scope :withdrawals, -> { where(tran_code: ["WDL", "ALL"], sec_tran_code: ["TFR", ""]) }
   
   #############################
   #     Instance Methods      #
@@ -63,6 +63,8 @@ class Transaction < ActiveRecord::Base
         return "Reverse Withdrawal"
       elsif (tran_code.strip == "WDL")
         return "Withdrawal"
+      elsif (tran_code.strip == "ALL" and sec_tran_code.strip == "TFR")
+        return "Withdrawal All"
       elsif (tran_code.strip == "CARD" and sec_tran_code.strip == "TFR")
         return "Card Transfer"
       elsif (tran_code.strip == "BILL" and sec_tran_code.strip == "PAY")
@@ -90,7 +92,7 @@ class Transaction < ActiveRecord::Base
   end
   
   def debit?(account_id)
-    fund_transfer_out?(account_id) or wire_transfer_out?(account_id) or bill_pay? or money_order? or withdrawal? or transfer_out?(account_id) or purchase?
+    fund_transfer_out?(account_id) or wire_transfer_out?(account_id) or bill_pay? or money_order? or withdrawal? or withdrawal_all? or transfer_out?(account_id) or purchase?
   end
   
 #  def debit?(account_number)
@@ -111,6 +113,10 @@ class Transaction < ActiveRecord::Base
   
   def withdrawal?
     type == "Withdrawal"
+  end
+  
+  def withdrawal_all?
+    type == "Withdrawal All"
   end
   
   def reverse_withdrawal?
@@ -282,6 +288,12 @@ class Transaction < ActiveRecord::Base
   
   def from_account
     Account.where(ActID: from_acct_id).first
+  end
+  
+  def reverse
+    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+    response = client.call(:ez_cash_txn, message: { TranID: tranID })
+    Rails.logger.debug "Response body: #{response.body}"
   end
   
   #############################
