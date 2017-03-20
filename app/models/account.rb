@@ -213,7 +213,7 @@ class Account < ActiveRecord::Base
     Rails.logger.debug "Response body: #{response.body}"
     if response.success?
       unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
-        return true
+        return response.body[:ez_cash_txn_response][:tran_id]
       else
         return nil
       end

@@ -67,7 +67,10 @@ class Club < ApplicationRecord
   end
   
   def perform_one_sided_credit_transaction(amount)
-    account.ezcash_one_sided_credit_transaction_web_service_call(amount) unless account.blank?
+    unless account.blank?
+      transaction_id = account.ezcash_one_sided_credit_transaction_web_service_call(amount) 
+      return transaction_id
+    end
   end
   
   def balance
