@@ -19,7 +19,7 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html {
 #        @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("#{reports_sort_column} #{reports_sort_direction}").page(params[:page]).per(20)
-        @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
+        @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, ''], player_id: nil).order("created_at DESC")
         @members = @transfers.map{|t| t.member}.uniq
 #        @members = current_user.members.joins(:account).where("accounts.Balance != ?", 0)
         @transfers_total = 0
@@ -58,7 +58,7 @@ class ReportsController < ApplicationController
     @end_date = Date.today.end_of_day.to_s
     
     # Need to add 5 hours to because the transaction's date_time in stored as Eastern time
-    @transfers = @club.transfers.where(created_at: (@start_date.to_datetime + 5.hours)..@end_date.to_datetime, reversed: false, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
+    @transfers = @club.transfers.where(created_at: (@start_date.to_datetime + 5.hours)..@end_date.to_datetime, reversed: false, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, ''], player_id: nil).order("created_at DESC")
     @members = @transfers.map{|t| t.member}.uniq
 #    @members = current_user.members.joins(:account).where("accounts.Balance != ?", 0)
     @transfers_total = 0
