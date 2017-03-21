@@ -121,7 +121,7 @@ class CaddiesController < ApplicationController
       club = @caddy.club
       transaction_id = club.perform_one_sided_credit_transaction(amount)
       Rails.logger.debug "*********************************Club transaction ID: #{transaction_id}"
-      Transfer.create(club_id: club.id, from_account_id: club.account.id, to_account_id: @caddy.account.id, amount: amount, note: note)
+      Transfer.create(club_id: club.id, from_account_id: club.account.id, to_account_id: @caddy.account.id, amount: amount, note: note, club_credit_transaction_id: transaction_id)
     end
     redirect_back fallback_location: @caddy, notice: 'Caddy payment submitted.'
   end
