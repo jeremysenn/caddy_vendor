@@ -48,7 +48,7 @@
               %th
           %tbody
             - @transactions.each do |transaction|
-              %tr{class: "#{transaction.reversal? ? 'table-danger' : '' }"}
+              %tr{class: "#{transaction.error? ? 'table-danger' : '' }"}
                 %td= transaction.id
                 -#
                   %td= transaction.dev_id
