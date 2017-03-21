@@ -191,6 +191,10 @@ class Transaction < ActiveRecord::Base
     type == "Account Credit"
   end
   
+  def error?
+    error_code > 0
+  end
+  
 #  def account
 ##    Account.where(ActID: self.ActID).last
 #    Account.where(ActID: card_nbr).last
