@@ -69,6 +69,7 @@ class Club < ApplicationRecord
   def perform_one_sided_credit_transaction(amount)
     unless account.blank?
       transaction_id = account.ezcash_one_sided_credit_transaction_web_service_call(amount) 
+      Rails.logger.debug "*************** One-sided EZcash transaction #{transaction_id}"
       return transaction_id
     end
   end

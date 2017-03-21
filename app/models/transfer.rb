@@ -127,9 +127,14 @@ class Transfer < ApplicationRecord
     if reversed?
       client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
       response = client.call(:ez_cash_txn, message: { TranID: ez_cash_tran_id })
-      Rails.logger.debug "Response body: #{response.body}"
+      Rails.logger.debug "****************Response body for reversing transfer: #{response.body}"
       if response.success?
         unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
+          unless club_credit_transaction_id.blank?
+            # Also need to reverse the original one-side club credit transaction if there was one with this transfer
+#            club_credit_transaction = Transaction.find(club_credit_transaction_id)
+            club.perform_one_sided_credit_transaction(-amount_paid_total) # Use negative of transfer's total amount paid
+          end
           return true
         else
           raise ActiveRecord::Rollback

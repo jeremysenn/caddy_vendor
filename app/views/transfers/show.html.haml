@@ -7,6 +7,10 @@
         = link_to @transfer.ez_cash_tran_id, transaction_path(@transfer.ez_cash_tran_id)
       - else
         None
+    - unless @transfer.club_credit_transaction_id.blank?
+      %p.lead
+        One-sided Club Credit EZcash Tran ID:
+        = link_to @transfer.club_credit_transaction_id, transaction_path(@transfer.club_credit_transaction_id)
     %p.lead
       DateTime of transfer:
       = @transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
