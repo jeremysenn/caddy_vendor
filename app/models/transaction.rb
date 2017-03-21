@@ -5,7 +5,7 @@ class Transaction < ActiveRecord::Base
   establish_connection :ez_cash
   belongs_to :device, :foreign_key => :dev_id
   belongs_to :account, :foreign_key => :from_acct_id # Assume from account is the main account
-  has_one :transfer
+  has_one :transfer, :foreign_key => :ez_cash_tran_id
   
   scope :withdrawals, -> { where(tran_code: ["WDL", "ALL"], sec_tran_code: ["TFR", ""]) }
   
@@ -298,6 +298,14 @@ class Transaction < ActiveRecord::Base
     client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
     response = client.call(:ez_cash_txn, message: { TranID: tranID })
     Rails.logger.debug "Response body: #{response.body}"
+  end
+  
+  def credit_transaction_transfer
+    Transfer.where(club_credit_transaction_id: tranID).first
+  end
+  
+  def credit_transaction_for_transfer?
+    not credit_transaction_transfer.blank?
   end
   
   #############################

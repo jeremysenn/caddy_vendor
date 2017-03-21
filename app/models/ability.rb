@@ -121,11 +121,12 @@ class Ability
       # Transactions
       ############
       can :manage, Transaction do |transaction|
-        unless transaction.company.blank?
-          transaction.company == user.company 
-        else
-          true
-        end
+        true
+#        unless transaction.company.blank?
+#          transaction.company == user.company 
+#        else
+#          true
+#        end
       end
       
       # CaddyRatings
