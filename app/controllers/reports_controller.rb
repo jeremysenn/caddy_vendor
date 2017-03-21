@@ -53,7 +53,7 @@ class ReportsController < ApplicationController
       @club = current_club.blank? ? current_user.company.clubs.first : current_club
     end
     
-    @start_date = @club.date_of_last_one_sided_credit_transaction.to_s
+    @start_date = @club.date_of_last_cut_transaction.to_s
     @start_date = Date.today.beginning_of_day.to_s if @start_date.blank?
     @end_date = Date.today.end_of_day.to_s
     

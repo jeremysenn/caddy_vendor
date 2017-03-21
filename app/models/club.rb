@@ -56,14 +56,14 @@ class Club < ApplicationRecord
     Account.where(CompanyNumber: id, CustomerID: nil).first
   end
   
-  def last_one_sided_credit_transaction
-    account.one_sided_credit_transactions.last unless account.blank?
+  def last_cut_transaction
+    account.cut_transactions.last unless account.blank?
   end
   
-  def date_of_last_one_sided_credit_transaction
+  def date_of_last_cut_transaction
 #    last_one_sided_credit_transaction.date_time.to_date.to_s unless last_one_sided_credit_transaction.blank?
     # Add five hours to be equivalent of UTC time, since stored in database as east coast time
-    last_one_sided_credit_transaction.date_time unless last_one_sided_credit_transaction.blank?
+    last_cut_transaction.date_time unless last_cut_transaction.blank?
   end
   
   def perform_one_sided_credit_transaction(amount)

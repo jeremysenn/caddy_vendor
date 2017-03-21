@@ -76,6 +76,11 @@ class Account < ActiveRecord::Base
     return transactions
   end
   
+  def cut_transactions
+    transactions = one_sided_credit_transactions.select{|transaction| (not transaction.credit_transaction_for_transfer? and transaction.amt_auth >= 0)}
+    return transactions
+  end
+  
   def transfer_transactions
 #    transactions = Transaction.where(from_acct_id: decrypted_account_number, tran_code: 'CASH', sec_tran_code: 'TFR') + Transaction.where(to_acct_id: decrypted_account_number, tran_code: 'CASH', sec_tran_code: 'TFR')
     transactions = Transaction.where(from_acct_id: id, tran_code: 'CASH', sec_tran_code: 'TFR') + Transaction.where(to_acct_id: id, tran_code: 'CASH', sec_tran_code: 'TFR')
