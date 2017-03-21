@@ -255,6 +255,10 @@ class Transfer < ApplicationRecord
   def reference_number
     ez_cash_tran_id
   end
+  
+  def member_guest
+    player.note unless player.blank?
+  end
   ### End methods for use with generating CSV file ###
   
   def contains_player?
@@ -286,7 +290,7 @@ class Transfer < ApplicationRecord
   
   def self.to_csv
     require 'csv'
-    attributes = %w{date_of_play member_number member_name amount_paid_to_caddy amount_paid_total date_caddy_was_paid caddy_name reference_number}
+    attributes = %w{date_of_play member_number member_name member_guest amount_paid_to_caddy amount_paid_total date_caddy_was_paid caddy_name reference_number}
     
     CSV.generate(headers: true) do |csv|
       csv << attributes
