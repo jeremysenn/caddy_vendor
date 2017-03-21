@@ -77,7 +77,7 @@ class Account < ActiveRecord::Base
   end
   
   def cut_transactions
-    transactions = one_sided_credit_transactions.select{|transaction| (not transaction.credit_transaction_for_transfer? and transaction.amt_auth >= 0)}
+    transactions = one_sided_credit_transactions.select{|transaction| ( (not transaction.credit_transaction_for_transfer?) and (transaction.amt_req >= 0) )}
     return transactions
   end
   
