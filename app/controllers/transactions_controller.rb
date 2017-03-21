@@ -9,12 +9,12 @@ class TransactionsController < ApplicationController
   # GET /transactions.json
   def index
     unless params[:withdrawals].blank?
-      @transactions = Transaction.withdrawals.order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
+      @transactions = current_user.company.transactions.withdrawals.order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
     else
       @start_date = transaction_params[:start_date] ||= Date.today.to_s
       @end_date = transaction_params[:end_date] ||= Date.today.to_s
       
-      @transactions = Transaction.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
+      @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
     end
     
 #    @transactions = Transaction.withdrawals.order(date_time: :desc).page(params[:page]).per(20)
