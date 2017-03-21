@@ -19,8 +19,8 @@
               Clear Balances
   %p.lead
     = @club.name
-    = @start_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p") unless @club.date_of_last_one_sided_credit_transaction.blank?
-    = @start_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p") if @club.date_of_last_one_sided_credit_transaction.blank?
+    = @start_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p") unless @club.date_of_last_cut_transaction.blank?
+    = @start_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p") if @club.date_of_last_cut_transaction.blank?
     To
     = @end_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p")
 
