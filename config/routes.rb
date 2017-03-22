@@ -28,7 +28,7 @@ Rails.application.routes.draw do
     end
   end
   resources :members
-  resources :clubs
+  resources :courses
   resources :events
   resources :caddy_pay_rates
   resources :caddy_rank_descs

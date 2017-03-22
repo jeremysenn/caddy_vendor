@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170321144434) do
+ActiveRecord::Schema.define(version: 20170322152652) do
 
   create_table "caddy_ratings", force: :cascade do |t|
     t.integer  "caddy_id"
@@ -35,10 +35,10 @@ ActiveRecord::Schema.define(version: 20170321144434) do
     t.string   "round"
     t.string   "status",     default: "open"
     t.text     "notes"
-    t.integer  "club_id"
+    t.integer  "course_id"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
-    t.index ["club_id"], name: "index_events_on_club_id"
+    t.index ["course_id"], name: "index_events_on_course_id"
   end
 
   create_table "players", force: :cascade do |t|
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 20170321144434) do
     t.boolean  "reversed",                   default: false
     t.integer  "fee_to_account_id"
     t.boolean  "member_balance_cleared",     default: false
-    t.integer  "club_id"
+    t.integer  "company_id"
     t.string   "note"
     t.integer  "club_credit_transaction_id"
   end

@@ -6,13 +6,13 @@ class CaddyPayRatesController < ApplicationController
   # GET /caddy_pay_rates
   # GET /caddy_pay_rates.json
   def index
-    unless params[:club_id].blank?
-      @club = Club.where(ClubCourseID: params[:club_id]).first
-      @club = current_club.blank? ? current_user.company.clubs.first : current_club if @club.blank?
+    unless params[:course_id].blank?
+      @course = Course.where(ClubCourseID: params[:course_id]).first
+      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
     else
-      @club = current_club.blank? ? current_user.company.clubs.first : current_club
+      @course = current_course.blank? ? current_user.company.courses.first : current_course
     end
-    @caddy_pay_rates = @club.caddy_pay_rates.sort_by {|cpr| cpr.acronym}
+    @caddy_pay_rates = @course.caddy_pay_rates.sort_by {|cpr| cpr.acronym}
   end
 
   # GET /caddy_pay_rates/1
@@ -23,12 +23,12 @@ class CaddyPayRatesController < ApplicationController
   # GET /caddy_pay_rates/new
   def new
     @caddy_pay_rate = CaddyPayRate.new
-    @club = Club.find(params[:club_id])
+    @course = Course.find(params[:course_id])
   end
 
   # GET /caddy_pay_rates/1/edit
   def edit
-    @club = @caddy_pay_rate.club
+    @course = @caddy_pay_rate.course
   end
 
   # POST /caddy_pay_rates

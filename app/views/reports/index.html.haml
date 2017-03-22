@@ -3,12 +3,12 @@
   %p.lead
     .pull-right
       - unless @transfers.blank?
-        %a{href: reports_path(format: "csv", club_id: @club.id, 'report[start_date]' => @start_date, 'report[end_date]' => @end_date), class: 'btn btn-primary'}
+        %a{href: reports_path(format: "csv", 'report[start_date]' => @start_date, 'report[end_date]' => @end_date), class: 'btn btn-primary'}
           %i.fa.fa-download
           CSV Report
       -#
         = form_tag reports_clear_member_balances_path, :method => 'get', :class => "form-inline" do
-          = hidden_field_tag 'report[club_id]', @club.id
+          = hidden_field_tag 'report[course_id]', @course.id
           = hidden_field_tag 'report[start_date]', @start_date
           = hidden_field_tag 'report[end_date]', @end_date
           -# = button_tag(:type => 'submit', :class => "btn btn-danger", :data => { :confirm => 'Are you sure you want to clear these member balances? This action cannot be undone.' }) do
@@ -16,20 +16,21 @@
             %i.fa.fa-exclamation-triangle
             Clear Balances
       - unless @members_balance_total.zero?
-        %a{href: reports_clear_member_balances_path(club_id: @club.id), class: "btn btn-warning"}
+        %a{href: reports_clear_member_balances_path, class: "btn btn-warning"}
           %i.fa.fa-refresh
           Clear Member Balances
   %p
     = form_tag reports_path, :method => 'get', :class => "form-inline" do
       =# hidden_field_tag 'report[type]', @type
-      - unless current_club.blank?
-        - if current_user.clubs.count <= 1
-          - unless current_club.blank?
-            = current_club.name 
+      -#
+        - unless current_course.blank?
+          - if current_user.courses.count <= 1
+            - unless current_course.blank?
+              = current_course.name 
+            - else
+              = current_user.courses.first.name unless current_user.courses.blank?
           - else
-            = current_user.clubs.first.name unless current_user.clubs.blank?
-        - else
-          = select_tag 'report[club_id]', options_from_collection_for_select(current_user.clubs, "id", "name", @club.id), class: "form-control"
+            = select_tag 'report[course_id]', options_from_collection_for_select(current_user.courses, "id", "name", @course.id), class: "form-control"
       .form-group
         = text_field_tag 'report[start_date]', nil, :placeholder => "Start Date", value: "#{@start_date.blank? ? Date.today : @start_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
       To
@@ -60,6 +61,9 @@
                     %tr
                       %td
                         = member.full_name
+                        - unless member.parent_customer.blank?
+                          %br
+                          = link_to "(#{member.parent_customer.full_name})", member.parent_customer
                       %td
                         = number_to_currency(member.balance)
                       %td= link_to "Show", member, class: 'btn btn-secondary'
@@ -69,7 +73,7 @@
       .card.card-block.card-outline-primary
         %h4.card-title.text-primary
           %i.fa.fa-dollar
-          = "Round Transfers (#{@transfers.count})"
+          = "Transfers (#{@transfers.count})"
           .pull-right
             = number_to_currency(@transfers_total)
         - unless @transfers.blank?

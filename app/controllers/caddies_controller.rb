@@ -9,18 +9,18 @@ class CaddiesController < ApplicationController
   # GET /caddies.json
   def index
     respond_to do |format|
-      unless params[:club_id].blank?
-        @club = Club.where(ClubCourseID: params[:club_id]).first
-        @club = current_club.blank? ? current_user.company.clubs.first : current_club if @club.blank?
+      unless params[:course_id].blank?
+        @course = Course.where(ClubCourseID: params[:course_id]).first
+        @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
       else
-        @club = current_club.blank? ? current_user.company.clubs.first : current_club
+        @course = current_course.blank? ? current_user.company.courses.first : current_course
       end
       format.html {
         unless params[:q].blank?
           @query_string = "%#{params[:q]}%"
-          caddies = @club.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string).order("customer.NameL")
+          caddies = @course.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string).order("customer.NameL")
         else
-          caddies = @club.caddies.joins(:customer).order("customer.NameL")
+          caddies = @course.caddies.joins(:customer).order("customer.NameL")
         end
         unless params[:caddy_rank_desc_id].blank?
           @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).page(params[:page]).per(50)
@@ -30,8 +30,8 @@ class CaddiesController < ApplicationController
       }
       format.json {
         @query_string = "%#{params[:q]}%"
-#        caddies = current_club.caddies
-        caddies = @club.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string)
+#        caddies = current_course.caddies
+        caddies = @course.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string)
         @caddies = caddies.collect{ |caddy| {id: caddy.id, text: "#{caddy.full_name}"} }
         render json: {results: @caddies}
       }
@@ -42,7 +42,7 @@ class CaddiesController < ApplicationController
   # GET /caddies/1
   # GET /caddies/1.json
   def show
-    @club = @caddy.club
+    @course = @caddy.course
 #    @transfers = @caddy.transfers
     @transfers = @caddy.account_transfers.order('created_at DESC') unless @caddy.account_transfers.blank?
     @text_messages = @caddy.sms_messages
@@ -55,7 +55,7 @@ class CaddiesController < ApplicationController
 
   # GET /caddies/1/edit
   def edit
-    @club = @caddy.club
+    @course = @caddy.course
   end
 
   # POST /caddies
@@ -116,12 +116,12 @@ class CaddiesController < ApplicationController
     amount = params[:amount].to_f.abs unless params[:amount].blank?
     note = params[:note]
     unless member.blank?
-      Transfer.create(club_id: @caddy.club.id, from_account_id: member.account_id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount, note: note)
+      Transfer.create(company_id: current_user.company.id, from_account_id: member.account_id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount, note: note)
     else
-      club = @caddy.club
-      transaction_id = club.perform_one_sided_credit_transaction(amount)
+      course = @caddy.course
+      transaction_id = course.perform_one_sided_credit_transaction(amount)
       Rails.logger.debug "*********************************Club transaction ID: #{transaction_id}"
-      Transfer.create(club_id: club.id, from_account_id: club.account.id, to_account_id: @caddy.account.id, amount: amount, note: note, club_credit_transaction_id: transaction_id)
+      Transfer.create(company_id: current_user.company.id, from_account_id: current_user.company.account.id, to_account_id: @caddy.account.id, amount: amount, note: note, club_credit_transaction_id: transaction_id)
     end
     redirect_back fallback_location: @caddy, notice: 'Caddy payment submitted.'
   end

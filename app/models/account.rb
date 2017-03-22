@@ -7,7 +7,7 @@ class Account < ActiveRecord::Base
   has_many :bill_payments
   belongs_to :customer, :foreign_key => "CustomerID"
   has_many :transactions, :foreign_key => :from_acct_id
-#  belongs_to :club, :foreign_key => "CompanyNumber"
+#  belongs_to :course, :foreign_key => "CompanyNumber"
   belongs_to :company, :foreign_key => "CompanyNumber"
   
   attr_accessor :last_4_of_pan

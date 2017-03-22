@@ -4,7 +4,7 @@
     - unless params[:clearing_member_balances].present?
       .pull-right
         = form_tag reports_clear_member_balances_path, :method => 'get', :class => "form-inline" do
-          = hidden_field_tag 'report[club_id]', @club.id
+          =# hidden_field_tag 'report[course_id]', @course.id
           = hidden_field_tag 'report[start_date]', @start_date
           = hidden_field_tag 'report[end_date]', @end_date
           = hidden_field_tag :clearing_member_balances, true
@@ -18,9 +18,8 @@
               %i.fa.fa-exclamation-triangle
               Clear Balances
   %p.lead
-    = @club.name
-    = @start_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p") unless @club.date_of_last_cut_transaction.blank?
-    = @start_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p") if @club.date_of_last_cut_transaction.blank?
+    =# @course.name
+    = @start_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p")
     To
     = @end_date.to_datetime.strftime("%-m/%-d/%y %l:%M %p")
 
@@ -58,7 +57,7 @@
       .card.card-block.card-outline-primary
         %h4.card-title.text-primary
           %i.fa.fa-dollar
-          = "Round Transfers (#{@transfers.count})"
+          = "Transfers (#{@transfers.count})"
           .pull-right
             = number_to_currency(@transfers_total)
         - unless @transfers.blank?

@@ -1,4 +1,4 @@
-class Club < ApplicationRecord
+class Course < ApplicationRecord
   self.primary_key = 'ClubCourseID'
   self.table_name= 'CaddyCourses'
   
@@ -9,7 +9,7 @@ class Club < ApplicationRecord
   has_many :caddies, :foreign_key => "ClubCompanyNbr"
   has_many :caddy_pay_rates, :foreign_key => "ClubCompanyID"
   has_many :caddy_rank_descs, :foreign_key => "ClubCompanyID"
-  has_many :transfers #, through: :events
+#  has_many :transfers #, through: :events
   has_many :accounts
   has_many :players, through: :events
   
@@ -53,7 +53,7 @@ class Club < ApplicationRecord
   ### End Virtual Attributes ###
   
   def account
-    Account.where(CompanyNumber: id, CustomerID: nil).first
+    Account.where(CompanyNumber: company.id, CustomerID: nil).first
   end
   
   def last_cut_transaction
@@ -61,8 +61,6 @@ class Club < ApplicationRecord
   end
   
   def date_of_last_cut_transaction
-#    last_one_sided_credit_transaction.date_time.to_date.to_s unless last_one_sided_credit_transaction.blank?
-    # Add five hours to be equivalent of UTC time, since stored in database as east coast time
     last_cut_transaction.date_time unless last_cut_transaction.blank?
   end
   

@@ -1,36 +1,16 @@
 .container
   %br
   %h3
-    = @club.name
+    = @course.name
   %p
     %a{href: events_path, class: 'btn btn-warning'}
       %i.fa.fa-calendar
       Calendar
   .card.card-block    
-    %p.lead= "Transaction Fee: #{number_to_currency(@club.transaction_fee)}"
-    %p.lead= "Balance: #{number_to_currency(@club.balance)}"
+    %p.lead= "Transaction Fee: #{number_to_currency(@course.transaction_fee)}"
   
   %br
 
-  .card.card-block
-    %h4.card-title Cut Transactions
-    - unless @cut_transactions.blank?
-      .table-responsive
-        %table.table.table-striped
-          %thead
-            %tr
-              %th DateTime
-              %th Amount
-              %th
-          %tbody
-            - @cut_transactions.reverse.each do |cut_transaction|
-              %tr
-                %td= cut_transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
-                %td= number_to_currency(cut_transaction.amt_auth)
-                %td
-                  = link_to "Show", cut_transaction, class: 'btn btn-secondary'
-    - else
-      %p.lead None
   -#
     .card.card-block
       %h4.card-title Transactions
@@ -95,7 +75,7 @@
                 = link_to 'Show', caddy_pay_rate, class: 'btn btn-secondary'
                 = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate), class: 'btn btn-primary'
                 = link_to 'Delete', caddy_pay_rate, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }
-    .card-link= link_to "New caddy pay rate", new_caddy_pay_rate_path(club_id: @club.id), class: 'btn btn-primary'
+    .card-link= link_to "New caddy pay rate", new_caddy_pay_rate_path(course_id: @course.id), class: 'btn btn-primary'
 
   .card.card-block
     %h4.card-title Caddy Rank Descriptions
@@ -119,6 +99,6 @@
                 - else
                   %button.btn.btn-danger{"data-content" => "You must first remove this Caddy Rank from all Caddies and Caddy Pay Rates.", "data-toggle" => "popover", :title => "Delete Caddy Rank", "data-placement" => "top", :type => "button"} Delete
 
-    .card-link= link_to "New caddy rank description", new_caddy_rank_desc_path(club_id: @club.id), class: 'btn btn-primary'
+    .card-link= link_to "New caddy rank description", new_caddy_rank_desc_path(course_id: @course.id), class: 'btn btn-primary'
   %p
-    = link_to 'Edit club', edit_club_path(@club), class: 'btn btn-primary'
+    = link_to 'Edit course', edit_course_path(@course), class: 'btn btn-primary'

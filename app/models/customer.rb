@@ -176,10 +176,10 @@ class Customer < ActiveRecord::Base
   def balance
     unless account.blank?
       account.Balance 
-#    else
-#      if not primary?
-#        parent_customer.account.Balance unless parent_customer.account.blank?
-#      end
+    else
+      if not primary?
+        parent_customer.account.Balance unless parent_customer.account.blank?
+      end
     end
   end
   

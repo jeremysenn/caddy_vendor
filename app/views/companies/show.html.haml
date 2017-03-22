@@ -2,9 +2,32 @@
   %br
   %h3
     = @company.CompanyName
+  %p.lead= "Balance: #{number_to_currency(@company.balance)}"
+
   %br
+  
   .card.card-block
-    %h4.card-title Clubs
+    %h4.card-title Cut Transactions
+    - unless @cut_transactions.blank?
+      .table-responsive
+        %table.table.table-striped
+          %thead
+            %tr
+              %th DateTime
+              %th Amount
+              %th
+          %tbody
+            - @cut_transactions.reverse.each do |cut_transaction|
+              %tr
+                %td= cut_transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
+                %td= number_to_currency(cut_transaction.amt_auth)
+                %td
+                  = link_to "Show", cut_transaction, class: 'btn btn-secondary'
+    - else
+      %p.lead None
+
+  .card.card-block
+    %h4.card-title Courses
     .table-responsive
       %table.table.table-striped
         %thead
@@ -12,12 +35,12 @@
             %th Name
             %th
         %tbody
-          - @company.clubs.each do |club|
+          - @company.courses.each do |course|
             %tr
-              %td= club.name
+              %td= course.name
               %td
-                = link_to "Show", club, class: 'btn btn-secondary'
-                = link_to 'Edit', edit_club_path(club), class: 'btn btn-primary'
+                = link_to "Show", course, class: 'btn btn-secondary'
+                = link_to 'Edit', edit_course_path(course), class: 'btn btn-primary'
   -#
     .card.card-block
       %h4.card-title Members
@@ -33,7 +56,7 @@
         %thead
           %tr
             %th Name
-            %th Club
+            %th Course
             %th Ranking
             %th Checked In
             %th
@@ -41,7 +64,7 @@
           - @company.caddies.each do |caddy|
             %tr
               %td= caddy.full_name
-              %td= link_to caddy.club.name, caddy.club
+              %td= link_to caddy.course.name, caddy.course
               %td= link_to caddy.rank_description, caddy.caddy_rank_desc
               %td= caddy.CheckedIn.in_time_zone(current_user.time_zone).strftime("%l:%M %p") if caddy.checkin_today? 
               %td

@@ -6,13 +6,13 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    session[:club_id] = params[:club_id] unless params[:club_id].blank?
-    unless current_club.blank?
-      @events = current_club.events
+    session[:course_id] = params[:course_id] unless params[:course_id].blank?
+    unless current_course.blank?
+      @events = current_course.events
     else
       @events = Event.all
-#      @checked_in_caddies = current_club.caddies.select{|caddy| caddy.checkin_today?}
-#      @checked_out_caddies = current_club.caddies.select{|caddy| not caddy.checkin_today?}
+#      @checked_in_caddies = current_course.caddies.select{|caddy| caddy.checkin_today?}
+#      @checked_out_caddies = current_course.caddies.select{|caddy| not caddy.checkin_today?}
     end
   end
 
@@ -89,7 +89,7 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:title, :date_range, :start, :end, :color, :size, :round, :status, :notes, :club_id, 
+      params.require(:event).permit(:title, :date_range, :start, :end, :color, :size, :round, :status, :notes, :course_id, 
         players_attributes:[:event_id, :member_id, :caddy_id, :caddy_type, :fee, :tip, :round, :status, :_destroy, :id, :note])
     end
 end

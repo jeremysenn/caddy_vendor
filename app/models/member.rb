@@ -1,5 +1,5 @@
 class Member < ApplicationRecord
-  has_and_belongs_to_many :clubs
+  has_and_belongs_to_many :courses
   
   #############################
   #     Instance Methods      #
@@ -10,9 +10,9 @@ class Member < ApplicationRecord
   #     Class Methods         #
   #############################
   
-  def self.ezcash_rebalance_transaction_web_service_call(member_account_id, club_account_id, balance)
+  def self.ezcash_rebalance_transaction_web_service_call(member_account_id, course_account_id, balance)
     client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
-    response = client.call(:ez_cash_txn, message: { FromActID: club_account_id, ToActID: member_account_id, Amount: balance.to_f.abs})
+    response = client.call(:ez_cash_txn, message: { FromActID: course_account_id, ToActID: member_account_id, Amount: balance.to_f.abs})
     
     Rails.logger.debug "Response body: #{response.body}"
     if response and response.success?

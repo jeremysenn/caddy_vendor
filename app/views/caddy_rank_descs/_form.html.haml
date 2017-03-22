@@ -2,8 +2,8 @@
   = f.error_notification
 
   .form-inputs
-    =# f.collection_select :ClubCompanyID, current_user.clubs.order(:CourseName), :ClubCourseID, :CourseName, {selected: params[:club_id]}
-    = f.input :ClubCompanyID, :as => :hidden, :input_html => { :value => "#{@caddy_rank_desc.new_record? ? @club.id : @caddy_rank_desc.club.id}" }
+    =# f.collection_select :ClubCompanyID, current_user.courses.order(:CourseName), :ClubCourseID, :CourseName, {selected: params[:course_id]}
+    = f.input :ClubCompanyID, :as => :hidden, :input_html => { :value => "#{@caddy_rank_desc.new_record? ? @course.id : @caddy_rank_desc.course.id}" }
     = f.input :RankingAcronym, as: :string
     = f.input :RankingDescription, as: :text
 

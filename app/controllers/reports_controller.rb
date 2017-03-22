@@ -10,35 +10,35 @@ class ReportsController < ApplicationController
   def index
     @start_date = report_params[:start_date] ||= Date.today.to_s
     @end_date = report_params[:end_date] ||= Date.today.to_s
-    unless report_params[:club_id].blank?
-      @club = Club.where(ClubCourseID: report_params[:club_id]).first
-      @club = current_club.blank? ? current_user.company.clubs.first : current_club if @club.blank?
-    else
-      @club = current_club.blank? ? current_user.company.clubs.first : current_club
-    end
+#    unless report_params[:course_id].blank?
+#      @course = Course.where(ClubCourseID: report_params[:course_id]).first
+#      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
+#    else
+#      @course = current_course.blank? ? current_user.company.courses.first : current_course
+#    end
     respond_to do |format|
       format.html {
-#        @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("#{reports_sort_column} #{reports_sort_direction}").page(params[:page]).per(20)
-        @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, ''], player_id: nil).order("created_at DESC")
+#        @transfers = @course.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("#{reports_sort_column} #{reports_sort_direction}").page(params[:page]).per(20)
+        @transfers = current_user.company.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
         @members = @transfers.map{|t| t.member}.uniq
 #        @members = current_user.members.joins(:account).where("accounts.Balance != ?", 0)
         @transfers_total = 0
         @transfers.each do |transfer|
           @transfers_total = @transfers_total + transfer.amount_paid_total unless transfer.amount_paid_total.blank?
         end
-        @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, tran_code: 'CARD', sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil]).order("date_time DESC")
-        @transactions_total = 0
-        @transactions.each do |transaction|
-          @transactions_total = @transactions_total + transaction.total unless transaction.total.blank?
-        end
+#        @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, tran_code: 'CARD', sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil]).order("date_time DESC")
+#        @transactions_total = 0
+#        @transactions.each do |transaction|
+#          @transactions_total = @transactions_total + transaction.total unless transaction.total.blank?
+#        end
         
         @members_balance_total = 0
         @members.each do |member|
-          @members_balance_total = @members_balance_total + member.balance unless member.blank? or not member.primary?
+          @members_balance_total = @members_balance_total + member.balance unless member.blank? #or not member.primary?
         end
       }
       format.csv { 
-        @transfers = @club.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, ''])
+        @transfers = current_user.company.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, ''])
         send_data @transfers.to_csv, filename: "transfers-#{Date.today}.csv" 
         }
     end
@@ -46,19 +46,19 @@ class ReportsController < ApplicationController
   end
   
   def clear_member_balances
-    unless report_params[:club_id].blank?
-      @club = Club.where(ClubCourseID: report_params[:club_id]).first
-      @club = current_club.blank? ? current_user.company.clubs.first : current_club if @club.blank?
-    else
-      @club = current_club.blank? ? current_user.company.clubs.first : current_club
-    end
+#    unless report_params[:course_id].blank?
+#      @course = Course.where(ClubCourseID: report_params[:course_id]).first
+#      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
+#    else
+#      @course = current_course.blank? ? current_user.company.courses.first : current_course
+#    end
     
-    @start_date = @club.date_of_last_cut_transaction.to_s
+    @start_date = current_user.company.date_of_last_cut_transaction.to_s
     @start_date = Date.today.beginning_of_day.to_s if @start_date.blank?
     @end_date = Date.today.end_of_day.to_s
     
     # Need to add 5 hours to because the transaction's date_time in stored as Eastern time
-    @transfers = @club.transfers.where(created_at: (@start_date.to_datetime + 5.hours)..@end_date.to_datetime, reversed: false, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
+    @transfers = current_user.company.transfers.where(created_at: (@start_date.to_datetime + 5.hours)..@end_date.to_datetime, reversed: false, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
     @members = @transfers.map{|t| t.member}.uniq
 #    @members = current_user.members.joins(:account).where("accounts.Balance != ?", 0)
     @transfers_total = 0
@@ -75,17 +75,17 @@ class ReportsController < ApplicationController
     
     @members_balance_total = 0
     @members.each do |member|
-      @members_balance_total = @members_balance_total + member.balance unless member.blank? or not member.primary?
+      @members_balance_total = @members_balance_total + member.balance unless member.blank? #or not member.primary?
     end
 #    unless params[:clearing_member_balances].blank? or @transfers_total.zero?
     unless params[:clearing_member_balances].blank? or @transfers_total.zero?
-      @club.perform_one_sided_credit_transaction(@transfers_total)
-#      @club.perform_one_sided_credit_transaction(@members_balance_total.abs)
+      current_user.company.perform_one_sided_credit_transaction(@transfers_total)
+#      @course.perform_one_sided_credit_transaction(@members_balance_total.abs)
       @transfers.each do |transfer|
         transfer.update_attribute(:member_balance_cleared, true)
       end
       @members.each do |member|
-        ClearMemberBalanceWorker.perform_async(member.account_id, @club.account.id, member.balance) unless member.blank? # Clear member's balance with sidekiq background process
+        ClearMemberBalanceWorker.perform_async(member.account_id, current_user.company.account.id, member.balance) unless member.blank? # Clear member's balance with sidekiq background process
       end
       
       flash[:notice] = "Request to clear member balances submitted to EZcash."
@@ -99,7 +99,7 @@ class ReportsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def report_params
 #      params.require(:report).permit(:start_date, :end_date, :type)
-      params.fetch(:report, {}).permit(:start_date, :end_date, :type, :club_id, :clear_member_balances)
+      params.fetch(:report, {}).permit(:start_date, :end_date, :type, :course_id, :clear_member_balances)
     end
     
     ### Secure the reports sort direction ###

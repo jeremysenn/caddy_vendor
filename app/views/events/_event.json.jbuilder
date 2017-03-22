@@ -10,7 +10,7 @@ json.allDay event.all_day_event? ? true : false
 
 json.status event.status
 
-json.club_id event.club
+json.course_id event.course
 
 json.update_url event_path(event, method: :patch)
 json.edit_url edit_event_path(event)

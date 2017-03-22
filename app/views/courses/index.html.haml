@@ -1,0 +1,21 @@
+.container
+  %br
+  .card.card-block
+    %h4.card-title Courses
+    .table-responsive
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Name
+            %th
+        %tbody
+          - @courses.each do |course|
+            %tr
+              %td= course.name
+              %td
+                %a{href: events_path(course_id: course.id), class: 'btn btn-warning'}
+                  %i.fa.fa-calendar
+                  Calendar
+                = link_to "Show", course, class: 'btn btn-secondary'
+                = link_to 'Edit', edit_course_path(course), class: 'btn btn-primary'
+    .card-link= link_to "New course", new_course_path, class: 'btn btn-primary'

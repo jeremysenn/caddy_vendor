@@ -2,7 +2,7 @@
   %br
   %p
     = form_tag caddy_ratings_path, id: 'caddies_form', method: 'get', class: 'form-inline' do |f|
-      = select_tag :caddy_id, options_from_collection_for_select(current_user.caddies, "id", "full_name_and_club", params[:caddy_id]), prompt: 'All caddies', onchange: "$(this).parent('form').submit();", class: "form-control"
+      = select_tag :caddy_id, options_from_collection_for_select(current_user.caddies, "id", "full_name_and_course", params[:caddy_id]), prompt: 'All caddies', onchange: "$(this).parent('form').submit();", class: "form-control"
   - unless @caddy_ratings.blank?
     - @caddy_ratings.group_by{|cr| cr.caddy}.each do |caddy, caddy_ratings|
       .card.card-block

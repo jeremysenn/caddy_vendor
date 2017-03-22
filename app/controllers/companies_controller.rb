@@ -13,6 +13,7 @@ class CompaniesController < ApplicationController
   # GET /companies/1.json
   def show
     @members = @company.members.order(:NameL).page(params[:page]).per(240)
+    @cut_transactions = @company.account.cut_transactions unless @company.account.blank?
   end
 
   # GET /companies/new

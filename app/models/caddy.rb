@@ -4,7 +4,7 @@ class Caddy < ApplicationRecord
   
   establish_connection :ez_cash
   
-  belongs_to :club, :foreign_key => "ClubCompanyNbr"
+  belongs_to :course, :foreign_key => "ClubCompanyNbr"
   belongs_to :customer, :foreign_key => "CustomerID"
   belongs_to :caddy_rank_desc, :foreign_key => "RankingID"
   has_many :players
@@ -12,7 +12,7 @@ class Caddy < ApplicationRecord
   has_many :caddy_ratings
   has_many :sms_messages
   
-#  has_and_belongs_to_many :clubs
+#  has_and_belongs_to_many :courses
 
   accepts_nested_attributes_for :customer
   
@@ -35,8 +35,8 @@ class Caddy < ApplicationRecord
     "#{first_name} #{last_name}"
   end
   
-  def full_name_and_club
-    "#{first_name} #{last_name} - #{club.name}"
+  def full_name_and_course
+    "#{first_name} #{last_name} - #{course.name}"
   end
   
   def full_name_with_check_in_status

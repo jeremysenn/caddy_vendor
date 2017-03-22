@@ -1,5 +1,5 @@
 class Event < ApplicationRecord
-  belongs_to :club
+  belongs_to :course
   
   has_many :players, :dependent => :destroy
   accepts_nested_attributes_for :players, allow_destroy: true, limit: 5

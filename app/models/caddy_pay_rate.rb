@@ -4,7 +4,7 @@ class CaddyPayRate < ApplicationRecord
   
   establish_connection :ez_cash
   
-  belongs_to :club, :foreign_key => "ClubCompanyID"
+  belongs_to :course, :foreign_key => "ClubCompanyID"
   belongs_to :caddy_rank_desc, :foreign_key => "RankingID"
     
   #############################
