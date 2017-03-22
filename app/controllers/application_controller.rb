@@ -2,24 +2,24 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
   
-  helper_method :current_club
+  helper_method :current_course
   
   rescue_from CanCan::AccessDenied do |exception|
     flash[:danger] = exception.message
     redirect_to root_url
   end
   
-  def current_club=(club)
-    session[:club_id] = club.id
+  def current_course=(course)
+    session[:course_id] = course.id
   end
   
-  def current_club_id
-    session[:club_id]
+  def current_course_id
+    session[:course_id]
   end
   
-  # If i don't find a club from session I return the current_user company's first club.
-  def current_club
-    Club.find_by(ClubCourseID: session[:club_id]) || current_user.company.clubs.first
+  # If i don't find a course from session I return the current_user company's first course.
+  def current_course
+    Course.find_by(ClubCourseID: session[:course_id]) || current_user.company.courses.first
   end
   
   protected

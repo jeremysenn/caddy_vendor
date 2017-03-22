@@ -1,5 +1,5 @@
 = form_for @event, :html => {class: 'form-horizontal event_form', role: 'form'}, remote: true do |f|
-  = f.hidden_field :club_id, value: current_club.id
+  = f.hidden_field :course_id, value: current_course.id
   = f.hidden_field :date_range, class: "date-range-picker"
   = f.hidden_field :start, value: Date.today, class: 'start_hidden'
   = f.hidden_field :end, value: Date.today, class: 'end_hidden'
@@ -26,11 +26,11 @@
                     =# ff.select :member_id, current_user.members.order(:NameL).collect { |m| [ m.full_name_by_last_name, m.id ] }, {required: true, include_blank: false}, class: "form-control"
                     = ff.select :member_id, current_user.members.active.order(:NameL).collect { |m| [ m.full_name, m.id ] }, {prompt: '-- Select member --'}, required: true, class: "member_select form-control", style: "width: 100%;"
                   .col-sm-6
-                    =# ff.collection_select :caddy_id, current_club.caddies, :id, :full_name, class: 'input-lg form-control', required: true
-                    =# ff.select :caddy_id, current_club.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "form-control"
-                    =# ff.select :caddy_id, current_club.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "js-example-basic-single form-control"
-                    =# ff.select :caddy_id, current_club.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
-                    = ff.select :caddy_id, grouped_options_for_select(current_club.grouped_caddies_by_rank_for_select, ff.object.caddy_id), {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
+                    =# ff.collection_select :caddy_id, current_course.caddies, :id, :full_name, class: 'input-lg form-control', required: true
+                    =# ff.select :caddy_id, current_course.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "form-control"
+                    =# ff.select :caddy_id, current_course.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "js-example-basic-single form-control"
+                    =# ff.select :caddy_id, current_course.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
+                    = ff.select :caddy_id, grouped_options_for_select(current_course.grouped_caddies_by_rank_for_select, ff.object.caddy_id), {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
 
               - else
                 .row.form-group
@@ -83,7 +83,7 @@
                   -#
                     #note_field.collapse.show{class: "#{ff.object.note.blank? ? '' : 'in'}"}
                     =# ff.text_field :note, placeholder: 'Guest', class: 'input-lg form-control'
-                  = ff.select :note, current_club.player_notes, {prompt: 'Guest'},class: "note_select form-control", style: "width: 100%;"
+                  = ff.select :note, current_course.player_notes, {prompt: 'Guest'},class: "note_select form-control", style: "width: 100%;"
                 
         = f.add_nested_fields_link :players, "<i class='fa fa-plus'></i> Add Player".html_safe, class: 'more_players_link btn btn-warning'
   .row.form-group

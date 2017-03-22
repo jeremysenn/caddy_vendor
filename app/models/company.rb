@@ -5,18 +5,19 @@ class Company < ActiveRecord::Base
   establish_connection :ez_cash
   
   has_many :users
-  has_many :clubs, :foreign_key => "ClubCompanyNumber"
+  has_many :courses, :foreign_key => "ClubCompanyNumber"
   has_many :members, -> { members }, :foreign_key => "CompanyNumber", :class_name => 'Customer' # Use 'members' scope in Customer
-  has_many :caddies, :through => :clubs
+  has_many :caddies, :through => :courses
   has_many :customers, :foreign_key => "CompanyNumber"
   has_many :transactions, :through => :customers
-  has_many :caddy_pay_rates, :through => :clubs
-  has_many :caddy_rank_descs, :through => :clubs
-  has_many :events, through: :clubs
+  has_many :caddy_pay_rates, :through => :courses
+  has_many :caddy_rank_descs, :through => :courses
+  has_many :events, through: :courses
 #  has_many :accounts, through: :customers
-#  has_many :accounts, through: :clubs
+#  has_many :accounts, through: :courses
   has_many :accounts
   has_many :caddy_ratings, through: :users
+  has_many :transfers
   
   #############################
   #     Instance Methods      #
@@ -37,6 +38,26 @@ class Company < ActiveRecord::Base
 #  def members
 #    customers.where(groupID: 14)
 #  end
+
+  def perform_one_sided_credit_transaction(amount)
+    unless account.blank?
+      transaction_id = account.ezcash_one_sided_credit_transaction_web_service_call(amount) 
+      Rails.logger.debug "*************** Company One-sided EZcash transaction #{transaction_id}"
+      return transaction_id
+    end
+  end
+  
+  def balance
+    account.Balance unless account.blank?
+  end
+  
+  def last_cut_transaction
+    account.cut_transactions.last unless account.blank?
+  end
+  
+  def date_of_last_cut_transaction
+    last_cut_transaction.date_time unless last_cut_transaction.blank?
+  end
   
   #############################
   #     Class Methods      #

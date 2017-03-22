@@ -1,4 +1,4 @@
-#pay_caddy_by_club.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog"}
+#pay_caddy_by_company.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog"}
   .modal-dialog.modal-sm{:role => "document"}
     .modal-content
       .modal-header
@@ -9,7 +9,7 @@
             %i.fa.fa-dollar
             = "Pay #{@caddy.full_name}"
       .modal-body
-        = form_tag pay_caddy_path(@caddy), id: 'pay_caddy_by_club_form', method: 'get', class: 'form-inline' do |f|
+        = form_tag pay_caddy_path(@caddy), id: 'pay_caddy_by_company_form', method: 'get', class: 'form-inline' do |f|
           %p
             .input-group
               %span.input-group-addon
@@ -19,6 +19,6 @@
 
           .modal-footer
             %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
-            %button.btn.btn-success{id: 'pay_by_club_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Pay"}} 
+            %button.btn.btn-success{id: 'pay_by_company_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Pay"}} 
               %i.fa.fa-dollar
               Pay

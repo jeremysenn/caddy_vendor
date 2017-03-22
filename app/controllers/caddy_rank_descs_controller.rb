@@ -6,13 +6,13 @@ class CaddyRankDescsController < ApplicationController
   # GET /caddy_rank_descs
   # GET /caddy_rank_descs.json
   def index
-    unless params[:club_id].blank?
-      @club = Club.where(ClubCourseID: params[:club_id]).first
-      @club = current_club.blank? ? current_user.company.clubs.first : current_club if @club.blank?
+    unless params[:course_id].blank?
+      @course = Course.where(ClubCourseID: params[:course_id]).first
+      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
     else
-      @club = current_club.blank? ? current_user.company.clubs.first : current_club
+      @course = current_course.blank? ? current_user.company.courses.first : current_course
     end
-    @caddy_rank_descs = @club.caddy_rank_descs.order(:RankingAcronym)
+    @caddy_rank_descs = @course.caddy_rank_descs.order(:RankingAcronym)
   end
 
   # GET /caddy_rank_descs/1
@@ -25,12 +25,12 @@ class CaddyRankDescsController < ApplicationController
   # GET /caddy_rank_descs/new
   def new
     @caddy_rank_desc = CaddyRankDesc.new
-    @club = Club.find(params[:club_id])
+    @course = Course.find(params[:course_id])
   end
 
   # GET /caddy_rank_descs/1/edit
   def edit
-    @club = @caddy_rank_desc.club
+    @course = @caddy_rank_desc.course
   end
 
   # POST /caddy_rank_descs

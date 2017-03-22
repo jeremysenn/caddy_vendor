@@ -7,10 +7,10 @@
   %b Last name:
   = @member.last_name
 %p
-  %b Clubs:
+  %b Courses:
   %br
-  - @member.clubs.each do |club|
-    = link_to club.name, club
+  - @member.courses.each do |course|
+    = link_to course.name, course
     %br
 
 = link_to 'Edit', edit_member_path(@member)

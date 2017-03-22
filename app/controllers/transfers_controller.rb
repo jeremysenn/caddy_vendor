@@ -8,18 +8,18 @@ class TransfersController < ApplicationController
   # GET /transfers
   # GET /transfers.json
   def index
-    unless params[:club_id].blank?
-      @club = Club.where(ClubCourseID: params[:club_id]).first
-      @club = current_club.blank? ? current_user.company.clubs.first : current_club if @club.blank?
+    unless params[:course_id].blank?
+      @course = Course.where(ClubCourseID: params[:course_id]).first
+      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
     else
-      @club = current_club.blank? ? current_user.company.clubs.first : current_club
+      @course = current_course.blank? ? current_user.company.courses.first : current_course
     end
     respond_to do |format|
       format.html {
-        @transfers = @club.transfers.order("#{transfers_sort_column} #{transfers_sort_direction}").page(params[:page]).per(20)
+        @transfers = current_user.company.transfers.order("#{transfers_sort_column} #{transfers_sort_direction}").page(params[:page]).per(20)
       }
       format.csv { 
-        @transfers = @club.transfers.where(created_at: Date.today.beginning_of_day..Date.today.end_of_day, reversed: false)
+        @transfers = current_user.company.transfers.where(created_at: Date.today.beginning_of_day..Date.today.end_of_day, reversed: false)
         send_data @transfers.to_csv, filename: "transfers-#{Date.today}.csv" 
         }
     end
@@ -106,7 +106,7 @@ class TransfersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def transfer_params
-      params.require(:transfer).permit(:amount, :caddy_fee, :caddy_tip, :to_account, :from_account, :fee, :customer_id, :club_id, 
+      params.require(:transfer).permit(:amount, :caddy_fee, :caddy_tip, :to_account, :from_account, :fee, :customer_id, :company_id, 
         :player_id, :reversed, :fee_to_account_id, :note)
     end
     

@@ -16,8 +16,8 @@ class Player < ApplicationRecord
   #     Instance Methods      #
   #############################
   
-  def club
-    event.club
+  def course
+    event.course
   end
   
   def carry?
@@ -37,7 +37,7 @@ class Player < ApplicationRecord
   def total_with_fee
     player_tip = tip.blank? ? 0 : tip
     player_fee = fee.blank? ? caddy_pay_rate : fee
-    transaction_fee =  club.transaction_fee
+    transaction_fee =  course.transaction_fee
     return (player_fee + player_tip + transaction_fee)
   end
   
@@ -86,7 +86,7 @@ class Player < ApplicationRecord
   end
   
   def caddy_pay_rate
-   pay_rate = CaddyPayRate.where(ClubCompanyID: club.id, RankingID: caddy.caddy_rank_desc.id, Type: caddy_type, NbrHoles: round).first
+   pay_rate = CaddyPayRate.where(ClubCompanyID: course.id, RankingID: caddy.caddy_rank_desc.id, Type: caddy_type, NbrHoles: round).first
    unless pay_rate.blank?
      pay_rate.Payrate
    else

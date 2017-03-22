@@ -11,8 +11,8 @@ class User < ApplicationRecord
   #     Instance Methods      #
   #############################
   
-  def clubs
-    company.clubs
+  def courses
+    company.courses
   end
   
   def members

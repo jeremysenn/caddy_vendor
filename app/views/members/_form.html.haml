@@ -4,7 +4,7 @@
   .form-inputs
     = f.input :first_name
     = f.input :last_name
-    = f.collection_select :club_ids, Club.order(:name), :id, :name, {}, {multiple: true} 
+    = f.collection_select :course_ids, Course.order(:name), :id, :name, {}, {multiple: true} 
 
   .form-actions
     = f.button :submit

@@ -2,7 +2,7 @@ class Transfer < ApplicationRecord
   belongs_to :customer
   belongs_to :player, optional: true
   belongs_to :ez_cash_transaction, class_name: "Transaction", :foreign_key => "ezcash_tran_id"
-  belongs_to :club
+  belongs_to :company
   
 #  after_create :transfer_web_service_call
   after_save :update_player, if: :contains_player?
@@ -104,10 +104,10 @@ class Transfer < ApplicationRecord
     client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
     if player.member.balance == amount_paid_total
       # The totals match
-      response = client.call(:ez_cash_txn, message: { FromActID: player.club.account.id, ToActID: from_account_id, Amount: amount_paid_total})
+      response = client.call(:ez_cash_txn, message: { FromActID: player.course.account.id, ToActID: from_account_id, Amount: amount_paid_total})
     else
       # The totals don't match, so zero out the member's balance
-      response = client.call(:ez_cash_txn, message: { FromActID: player.club.account.id, ToActID: from_account_id, Amount: player.member.balance.abs})
+      response = client.call(:ez_cash_txn, message: { FromActID: player.course.account.id, ToActID: from_account_id, Amount: player.member.balance.abs})
     end
     Rails.logger.debug "Response body: #{response.body}"
     if response.success?
@@ -131,9 +131,9 @@ class Transfer < ApplicationRecord
       if response.success?
         unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
           unless club_credit_transaction_id.blank?
-            # Also need to reverse the original one-side club credit transaction if there was one with this transfer
+            # Also need to reverse the original one-side course credit transaction if there was one with this transfer
 #            club_credit_transaction = Transaction.find(club_credit_transaction_id)
-            club.perform_one_sided_credit_transaction(-amount_paid_total) # Use negative of transfer's total amount paid
+            current_user.company.perform_one_sided_credit_transaction(-amount_paid_total) # Use negative of transfer's total amount paid
           end
           return true
         else
@@ -198,19 +198,24 @@ class Transfer < ApplicationRecord
   end
   
   def member
-    player.member unless player.blank?
+    unless player.blank?
+      player.member 
+    else
+      unless customer.blank?
+        customer
+      end
+    end
   end
   
   def caddy
     player.caddy unless player.blank?
   end
   
-#  def club
-#    unless player.blank?
-#      player.club 
-#    else
-#    end
-#  end
+  def course
+    unless player.blank?
+      player.course
+    end
+  end
   
   ### Start methods for use with generating CSV file ###
   def date_of_play
@@ -255,6 +260,10 @@ class Transfer < ApplicationRecord
   def reference_number
     ez_cash_tran_id
   end
+  
+  def member_guest
+    player.note unless player.blank?
+  end
   ### End methods for use with generating CSV file ###
   
   def contains_player?
@@ -286,7 +295,7 @@ class Transfer < ApplicationRecord
   
   def self.to_csv
     require 'csv'
-    attributes = %w{date_of_play member_number member_name amount_paid_to_caddy amount_paid_total date_caddy_was_paid caddy_name reference_number}
+    attributes = %w{date_of_play member_number member_name member_guest amount_paid_to_caddy amount_paid_total date_caddy_was_paid caddy_name reference_number}
     
     CSV.generate(headers: true) do |csv|
       csv << attributes

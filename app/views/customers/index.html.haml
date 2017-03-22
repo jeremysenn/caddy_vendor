@@ -16,6 +16,8 @@
     %h4.card-title 
       %i.fa.fa-user-circle-o
       Members
+      - unless params[:balances].blank?
+        with a balance
     - unless @members.blank?
       .table-responsive
         %table.table.table-striped
