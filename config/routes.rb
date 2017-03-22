@@ -9,7 +9,11 @@ Rails.application.routes.draw do
   
 #  resources :reports
   resources :transactions
-  resources :customers
+  resources :customers do
+    member do
+      get :clear_account_balance
+    end
+  end
   resources :transfers
   resources :companies
   devise_for :users

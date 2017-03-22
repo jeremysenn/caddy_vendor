@@ -1,6 +1,6 @@
 class CustomersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_customer, only: [:show, :edit, :update, :destroy]
+  before_action :set_customer, only: [:show, :edit, :update, :destroy, :clear_account_balance]
   load_and_authorize_resource
 
   # GET /customers
@@ -93,6 +93,17 @@ class CustomersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to customers_url, notice: 'Member was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+  
+  # GET /customers/1/clear_account_balance
+  def clear_account_balance
+    respond_to do |format|
+      if @customer.clear_account_balance
+        format.html { redirect_to @customer, notice: "Member's account balance was successfully cleared." }
+      else
+        format.html { redirect_to @customer, alert: "There was a problem clearing this member's account balance." }
+      end
     end
   end
 
