@@ -8,12 +8,12 @@ class TransfersController < ApplicationController
   # GET /transfers
   # GET /transfers.json
   def index
-    unless params[:course_id].blank?
-      @course = Course.where(ClubCourseID: params[:course_id]).first
-      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
-    else
-      @course = current_course.blank? ? current_user.company.courses.first : current_course
-    end
+#    unless params[:course_id].blank?
+#      @course = Course.where(ClubCourseID: params[:course_id]).first
+#      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
+#    else
+#      @course = current_course.blank? ? current_user.company.courses.first : current_course
+#    end
     respond_to do |format|
       format.html {
         @transfers = current_user.company.transfers.order("#{transfers_sort_column} #{transfers_sort_direction}").page(params[:page]).per(20)

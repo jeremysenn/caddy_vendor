@@ -2,18 +2,19 @@
   %br
   %p.lead
     .pull-right
-      %a{href: transfers_path(format: "csv", course_id: @course.id), class: 'btn btn-primary'}
+      %a{href: transfers_path(format: "csv"), class: 'btn btn-primary'}
         %i.fa.fa-download
         Today's Report
-    - unless current_course.blank?
-      - if current_user.courses.count <= 1
-        - unless current_course.blank?
-          = current_course.name 
+    -#
+      - unless current_course.blank?
+        - if current_user.courses.count <= 1
+          - unless current_course.blank?
+            = current_course.name 
+          - else
+            = current_user.courses.first.name unless current_user.courses.blank?
         - else
-          = current_user.courses.first.name unless current_user.courses.blank?
-      - else
-        = form_tag transfers_path, id: 'courses_form', method: 'get', class: 'form-inline' do |f|
-          = select_tag :course_id, options_from_collection_for_select(current_user.courses, "id", "name", @course.id), onchange: "$(this).parent('form').submit();", class: "form-control"
+          = form_tag transfers_path, id: 'courses_form', method: 'get', class: 'form-inline' do |f|
+            = select_tag :course_id, options_from_collection_for_select(current_user.courses, "id", "name", @course.id), onchange: "$(this).parent('form').submit();", class: "form-control"
 
   .card.card-block
     %h4.card-title Transfers
