@@ -10,10 +10,18 @@
         %a.nav-link{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
           %i.fa.fa-calendar
           Calendar
-      %li.nav-item
-        %a.nav-link{:href => customers_path, :class => (params[:controller] == 'customers') ? "active" : ""} 
+      %li.nav-item.dropdown
+        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'customers') ? "active" : ""}
           %i.fa.fa-user-circle-o
           Members
+          %b.caret
+        %div.dropdown-menu
+          %a.dropdown-item{:href => customers_path, :class => (params[:controller] == 'customers' and not params[:balances] == 'true') ? "active" : ""} 
+            %i.fa.fa-users
+            All members
+          %a.dropdown-item{:href => customers_path(balances: true), :class => (params[:controller] == 'customers' and params[:balances] == 'true') ? "active" : ""} 
+            %i.fa.fa-dollar
+            Members with balance
       %li.nav-item
         %a.nav-link{:href => caddies_path, :class => (params[:controller] == 'caddies') ? "active" : ""} 
           %i.fa.fa-vcard-o
@@ -47,9 +55,10 @@
           %a.dropdown-item{:href => transactions_path(withdrawals: true), :class => (params[:controller] == 'transactions') ? "active" : ""} 
             %i.fa.fa-bolt
             EZCash Withdrawals
-          %a.dropdown-item{:href => customers_path(balances: true), :class => (params[:controller] == 'customers') ? "active" : ""} 
-            %i.fa.fa-user-circle-o
-            Members with Balance
+          -#
+            %a.dropdown-item{:href => customers_path(balances: true), :class => (params[:controller] == 'customers') ? "active" : ""} 
+              %i.fa.fa-user-circle-o
+              Members with Balance
       .float-xs-right
         %li.nav-item.dropdown
           %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
