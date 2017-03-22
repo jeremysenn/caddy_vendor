@@ -43,6 +43,10 @@ class Caddy < ApplicationRecord
     "#{first_name} #{last_name} (#{checkin_status})"
   end
   
+  def full_name_with_rank
+    "#{first_name} #{last_name} (#{acronym})"
+  end
+  
   def cell_phone_number
     customer.blank? ? '' : customer.PhoneMobile
   end

@@ -33,8 +33,15 @@ class Course < ApplicationRecord
   
   def grouped_caddies_for_select
     [
-      ['Checked In',  caddies.active.select{|caddy| caddy.checkin_today?}.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }],
-      ['Checked Out',  caddies.active.select{|caddy| not caddy.checkin_today?}.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }]
+      ['Checked In',  caddies.active.select{|caddy| caddy.checkin_today?}.sort_by {|c| c.caddy_rank_desc}.collect { |c| [ c.full_name, c.id ] }],
+      ['Checked Out',  caddies.active.select{|caddy| not caddy.checkin_today?}.sort_by {|c| c.caddy_rank_desc}.collect { |c| [ c.full_name, c.id ] }]
+    ]
+  end
+  
+  def grouped_caddies_by_status_for_select
+    [
+      ['Checked In',  caddies.active.select{|caddy| caddy.checkin_today?}.sort_by {|c| c.caddy_rank_desc}.collect { |c| [ c.full_name_with_rank, c.id ] }],
+      ['Checked Out',  caddies.active.select{|caddy| not caddy.checkin_today?}.sort_by {|c| c.caddy_rank_desc}.collect { |c| [ c.full_name_with_rank, c.id ] }]
     ]
   end
   
