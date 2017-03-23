@@ -17,12 +17,12 @@
               %th Amount
               %th
           %tbody
-            - @credit_transactions.reverse.each do |credit_transaction|
+            - @one_sided_credit_transactions.reverse.each do |transaction|
               %tr
-                %td= credit_transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
-                %td= number_to_currency(credit_transaction.amt_auth)
+                %td= transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
+                %td= number_to_currency(transaction.amt_auth)
                 %td
-                  = link_to "Show", credit_transaction, class: 'btn btn-secondary'
+                  = link_to "Show", transaction, class: 'btn btn-secondary'
     - else
       %p.lead None
 
