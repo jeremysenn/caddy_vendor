@@ -1,4 +1,4 @@
-.container
+.container-fluid
   %br
   %p.lead
     .pull-right
@@ -83,18 +83,34 @@
             %table.table.table-striped
               %thead
                 %tr
-                  %th Date
-                  %th Description
+                  %th Date of play
+                  %th Member number
+                  %th Amount billed
+                  %th Player name
+                  %th Member name
+                  %th Date caddy paid
+                  %th Amount paid to caddy
+                  %th Caddy name
+                  %th Reference number
+                  -# %th Description
                   %th Note
-                  %th Amount
+                  -# %th Amount
                   %th
               %tbody
                 - @transfers.each do |transfer|
                   %tr
+                    %td= "#{transfer.date_of_play.blank? ? 'N/A' : transfer.date_of_play.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y')}"
+                    %td= transfer.member_number
+                    %td= number_to_currency(transfer.amount_billed)
+                    %td= "#{transfer.player_name.blank? ? 'N/A' : transfer.player_name}"
+                    %th= transfer.member_name
                     %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y")
-                    %td= transfer.description
+                    %td= number_to_currency(transfer.amount_paid_to_caddy)
+                    %td= transfer.caddy_name
+                    %td= link_to transfer.reference_number, transaction_path(transfer.reference_number) unless transfer.reference_number.blank?
+                    -# %td= transfer.description
                     %td= transfer.note
-                    %td= number_to_currency(transfer.amount_paid_total)
+                    -# %td= number_to_currency(transfer.amount_paid_total)
                     %td= link_to "Show", transfer, class: 'btn btn-secondary'
         - else
           %p.lead None

@@ -219,7 +219,9 @@ class Transfer < ApplicationRecord
   
   ### Start methods for use with generating CSV file ###
   def date_of_play # Date of play
-    player.event.start.to_date unless player.blank? or player.event.blank?
+    unless player.blank? or player.event.blank?
+      player.event.start.to_date
+    end
   end
   
   def member_number # Member number
