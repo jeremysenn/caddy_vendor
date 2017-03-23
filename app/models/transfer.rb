@@ -223,17 +223,29 @@ class Transfer < ApplicationRecord
   end
   
   def member_number # Member number
-    player.member.member_number unless player.blank?
+    unless player.blank?
+      player.member.member_number 
+    else
+      customer.member_number unless customer.blank?
+    end
   end
   
   def member_name
-    player.member.primary_member.full_name unless player.blank? or player.member.blank?
+    unless player.blank? or player.member.blank?
+      player.member.primary_member.full_name 
+    else
+      customer.primary_member.full_name 
+    end
   end
   
   def amount_paid_to_caddy
-    fee = caddy_fee.blank? ? 0 : caddy_fee
-    tip = caddy_tip.blank? ? 0 : caddy_tip
-    return fee + tip
+    unless player.blank?
+      fee = caddy_fee.blank? ? 0 : caddy_fee
+      tip = caddy_tip.blank? ? 0 : caddy_tip
+      return fee + tip
+    else
+      amount_paid_total
+    end
   end
   
   def amount_paid_total # Amount paid total
@@ -256,7 +268,11 @@ class Transfer < ApplicationRecord
   end
   
   def caddy_name
-    player.caddy.full_name unless player.blank? or player.caddy.blank?
+    unless player.blank? or player.caddy.blank?
+      player.caddy.full_name
+    else
+      to_account_record.customer.full_name unless to_account_record.blank? or to_account_record.customer.blank?
+    end
   end
   
   def transaction_fee
@@ -272,10 +288,12 @@ class Transfer < ApplicationRecord
   end
   
   def player_name
-    unless member_guest.blank?
-      member_guest
-    else
-      member_name
+    unless player.blank?
+      unless member_guest.blank?
+        member_guest
+      else
+        member_name
+      end
     end
   end
   ### End methods for use with generating CSV file ###
