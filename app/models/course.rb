@@ -63,14 +63,6 @@ class Course < ApplicationRecord
     Account.where(CompanyNumber: company.id, CustomerID: nil).first
   end
   
-  def last_cut_transaction
-    account.cut_transactions.last unless account.blank?
-  end
-  
-  def date_of_last_cut_transaction
-    last_cut_transaction.date_time unless last_cut_transaction.blank?
-  end
-  
   def perform_one_sided_credit_transaction(amount)
     unless account.blank?
       transaction_id = account.ezcash_one_sided_credit_transaction_web_service_call(amount) 
