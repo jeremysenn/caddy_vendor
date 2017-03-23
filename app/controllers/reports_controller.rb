@@ -20,7 +20,7 @@ class ReportsController < ApplicationController
       format.html {
 #        @transfers = @course.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("#{reports_sort_column} #{reports_sort_direction}").page(params[:page]).per(20)
         @transfers = current_user.company.transfers.where(created_at: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
-        @members = @transfers.map{|t| t.member}.uniq
+#        @members = @transfers.map{|t| t.member}.uniq
 #        @members = current_user.members.joins(:account).where("accounts.Balance != ?", 0)
         @transfers_total = 0
         @transfers.each do |transfer|
@@ -32,13 +32,13 @@ class ReportsController < ApplicationController
 #          @transactions_total = @transactions_total + transaction.total unless transaction.total.blank?
 #        end
         
-        @members_balance_total = 0
-        @members.each do |member|
-          @members_balance_total = @members_balance_total + member.balance unless member.blank? #or not member.primary?
-        end
+#        @members_balance_total = 0
+#        @members.each do |member|
+#          @members_balance_total = @members_balance_total + member.balance unless member.blank? #or not member.primary?
+#        end
       }
       format.csv { 
-        @transfers = current_user.company.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, ''])
+        @transfers = current_user.company.transfers.where(created_at: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, ''])
         send_data @transfers.to_csv, filename: "transfers-#{Date.today}.csv" 
         }
     end
