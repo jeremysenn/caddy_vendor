@@ -10,13 +10,13 @@ class CustomersController < ApplicationController
       format.html {
         unless params[:q].blank?
           @query_string = "%#{params[:q]}%"
-          members = current_user.members.where("NameF like ? OR NameL like ?", @query_string, @query_string)
-          members = current_user.members.joins(:account).where("accounts.ActNbr like ?", @query_string) if members.blank?
+          members = current_user.company.members.where("NameF like ? OR NameL like ?", @query_string, @query_string)
+          members = current_user.company.members.joins(:account).where("accounts.ActNbr like ?", @query_string) if members.blank?
         else
           unless params[:balances].blank?
-            members = current_user.members.joins(:account).where("accounts.Balance != ?", 0).order(:NameL)
+            members = current_user.company.members_with_balance.order(:NameL)
           else
-            members = current_user.members.order(:NameL)
+            members = current_user.company.members.order(:NameL)
           end
             
         end
@@ -105,6 +105,24 @@ class CustomersController < ApplicationController
         format.html { redirect_back fallback_location: @customer, alert: "There was a problem clearing this member's account balance." }
       end
     end
+  end
+  
+  # GET /customers/clear_all_account_balances
+  def clear_all_account_balances
+    respond_to do |format|
+      format.html {
+        unless params[:balances].blank?
+          members = current_user.company.members_with_balance
+          members.each do |member|
+            member.clear_account_balance
+          end
+          redirect_back fallback_location: customers_path, notice: "Request to clear member account balances has been submitted."
+        else
+          redirect_back fallback_location: customers_path, alert: "No member account balances to clear."
+        end
+      }
+    end
+    
   end
 
   private
