@@ -15,10 +15,11 @@
           = button_tag(:type => 'submit', :class => "btn btn-danger #{(@transfers_total != @transactions_total or @transfers_total != @members_balance_total.abs) ? 'disabled' : ''} ", :data => { :confirm => 'Are you sure you want to clear these member balances? This action cannot be undone.' }) do
             %i.fa.fa-exclamation-triangle
             Clear Balances
-      - unless @members_balance_total.zero?
-        %a{href: reports_clear_member_balances_path, class: "btn btn-warning"}
-          %i.fa.fa-refresh
-          Clear Member Balances
+      -#
+        - unless @members_balance_total.zero?
+          %a{href: reports_clear_member_balances_path, class: "btn btn-warning"}
+            %i.fa.fa-refresh
+            Clear Member Balances
   %p
     = form_tag reports_path, :method => 'get', :class => "form-inline" do
       =# hidden_field_tag 'report[type]', @type
@@ -40,36 +41,37 @@
         %i.fa.fa-search
 
   .row
-    .col-sm-6
-      .card.card-block.card-outline-warning
-        %h4.card-title.text-warning
-          %i.fa.fa-user-circle-o
-          = "Members (#{@members.count})"
-          .pull-right
-            = number_to_currency(@members_balance_total)
-        - unless @members.blank?
-          .table-responsive
-            %table.table.table-striped
-              %thead
-                %tr
-                  %th Member
-                  %th Balance
-                  %th
-              %tbody
-                - @members.each do |member|
-                  - unless member.blank?
-                    %tr
-                      %td
-                        = member.full_name
-                        - unless member.parent_customer.blank?
-                          %br
-                          = link_to "(#{member.parent_customer.full_name})", member.parent_customer
-                      %td
-                        = number_to_currency(member.balance)
-                      %td= link_to "Show", member, class: 'btn btn-secondary'
-        - else
-          %p.lead None
-    .col-sm-6
+    -#
+      .col-sm-6
+        .card.card-block.card-outline-warning
+          %h4.card-title.text-warning
+            %i.fa.fa-user-circle-o
+            = "Members (#{@members.count})"
+            .pull-right
+              = number_to_currency(@members_balance_total)
+          - unless @members.blank?
+            .table-responsive
+              %table.table.table-striped
+                %thead
+                  %tr
+                    %th Member
+                    %th Balance
+                    %th
+                %tbody
+                  - @members.each do |member|
+                    - unless member.blank?
+                      %tr
+                        %td
+                          = member.full_name
+                          - unless member.parent_customer.blank?
+                            %br
+                            = link_to "(#{member.parent_customer.full_name})", member.parent_customer
+                        %td
+                          = number_to_currency(member.balance)
+                        %td= link_to "Show", member, class: 'btn btn-secondary'
+          - else
+            %p.lead None
+    .col-sm-12
       .card.card-block.card-outline-primary
         %h4.card-title.text-primary
           %i.fa.fa-dollar

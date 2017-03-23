@@ -339,6 +339,14 @@ class Customer < ActiveRecord::Base
     Customer.where(CustomerID: self.ParentCustID).first unless primary?
   end
   
+  def primary_member
+    unless primary?
+      parent_customer
+    else
+      self
+    end
+  end
+  
   def active?
     self.Active?
   end
