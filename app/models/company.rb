@@ -59,6 +59,10 @@ class Company < ActiveRecord::Base
     last_cut_transaction.date_time unless last_cut_transaction.blank?
   end
   
+  def members_with_balance
+    members.joins(:account).where("accounts.Balance != ?", 0)
+  end
+  
   #############################
   #     Class Methods      #
   #############################

@@ -13,6 +13,9 @@ Rails.application.routes.draw do
     member do
       get :clear_account_balance
     end
+    collection do
+      get :clear_all_account_balances
+    end
   end
   resources :transfers
   resources :companies
