@@ -91,7 +91,7 @@
               %tbody
                 - @transfers.each do |transfer|
                   %tr
-                    %td= transfer.created_at.strftime("%-m/%-d/%y")
+                    %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y")
                     %td= transfer.description
                     %td= transfer.note
                     %td= number_to_currency(transfer.amount_paid_total)
