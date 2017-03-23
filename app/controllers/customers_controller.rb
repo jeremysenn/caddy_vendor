@@ -100,9 +100,9 @@ class CustomersController < ApplicationController
   def clear_account_balance
     respond_to do |format|
       if @customer.clear_account_balance
-        format.html { redirect_to @customer, notice: "Member's account balance was successfully cleared." }
+        format.html { redirect_back fallback_location: @customer, notice: "Member's account balance was successfully cleared." }
       else
-        format.html { redirect_to @customer, alert: "There was a problem clearing this member's account balance." }
+        format.html { redirect_back fallback_location: @customer, alert: "There was a problem clearing this member's account balance." }
       end
     end
   end

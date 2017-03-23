@@ -36,7 +36,11 @@
                 %td= member.PhoneMobile
                 %td= "#{member.member_number.blank? ? 'None' : member.member_number}"
                 %td= "#{member.active? ? 'Yes' : 'No'}"
-                %td= "#{member.account.blank? ? 'N/A' : number_to_currency(member.account.balance)}"
+                %td 
+                  - if member.primary?
+                    = number_to_currency(member.account.balance)
+                  - else
+                    N/A
                 %td
                   %a{href: customer_path(member), class: 'btn btn-secondary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> More..." }}
                     %i.fa.fa-user-circle-o
@@ -44,6 +48,10 @@
                   %a{href: edit_customer_path(member), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
                     %i.fa.fa-edit
                     Edit
+                  - if member.primary? and member.balance < 0
+                    %a{href: clear_account_balance_customer_path(member), class: 'btn btn-danger', :data => { :confirm => "Are you sure you want to clear this member's balance? This action cannot be undone." }}
+                      %i.fa.fa-exclamation-triangle
+                      Clear Balance
     - else
       %p.lead No members found
 
