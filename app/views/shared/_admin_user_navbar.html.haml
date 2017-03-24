@@ -55,6 +55,9 @@
           %a.dropdown-item{:href => transactions_path(withdrawals: true), :class => (params[:controller] == 'transactions') ? "active" : ""} 
             %i.fa.fa-bolt
             EZCash Withdrawals
+          %a{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active dropdown-item" : "dropdown-item"} 
+            %i.fa.fa-dollar
+            All Transfers
           -#
             %a.dropdown-item{:href => customers_path(balances: true), :class => (params[:controller] == 'customers') ? "active" : ""} 
               %i.fa.fa-user-circle-o
@@ -75,9 +78,10 @@
             %a{:href => users_admin_index_path, :class => (params[:controller] == 'users') ? "active dropdown-item" : "dropdown-item"} 
               %i.fa.fa-users
               Users
-            %a{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active dropdown-item" : "dropdown-item"} 
-              %i.fa.fa-dollar
-              Transfers
+            -#
+              %a{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active dropdown-item" : "dropdown-item"} 
+                %i.fa.fa-dollar
+                Transfers
             %a{:href => transactions_path, :class => (params[:controller] == 'transactions') ? "active dropdown-item" : "dropdown-item"} 
               %i.fa.fa-bolt
               EZCash
