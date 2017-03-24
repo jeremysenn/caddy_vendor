@@ -16,7 +16,10 @@
       = @transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
     %p.lead
       From:
-      = @from.full_name unless @from.blank?
+      - unless @from.blank?
+        = @from.full_name 
+      - else
+        = current_user.company.CompanyName
     %p.lead
       To:
       = @to.full_name unless @to.blank?
