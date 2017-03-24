@@ -49,7 +49,11 @@
                   - else
                     None
                 %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
-                %td= transfer.customer.full_name unless transfer.customer.blank?
+                %td
+                  - unless transfer.customer.blank?
+                    = transfer.customer.full_name 
+                  - else
+                    = current_user.company.CompanyName
                 %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
                 %td= number_to_currency(transfer.caddy_fee)
                 %td= number_to_currency(transfer.caddy_tip)
