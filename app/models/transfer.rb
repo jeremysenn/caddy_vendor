@@ -236,7 +236,9 @@ class Transfer < ApplicationRecord
     unless player.blank? or player.member.blank?
       player.member.primary_member.full_name 
     else
-      customer.primary_member.full_name 
+      unless customer.blank?
+        customer.primary_member.full_name 
+      end
     end
   end
   
