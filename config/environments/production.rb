@@ -84,5 +84,13 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   
-  routes.default_url_options = {:host => 'http://app.caddyvend.com'} 
+  routes.default_url_options = {:host => 'http://app.caddyvend.com/'}
+  
+  Rails.application.config.middleware.use ExceptionNotification::Rack,
+  :email => {
+    :ignore_exceptions => ['ActionView::TemplateError'] + ExceptionNotifier.ignored_exceptions,
+    :sender_address => %{"CaddyVend Exception Notifier" <notifier@tranact.com>},
+    :exception_recipients => %w{jeremy@tranact.com shark@tranact.com}
+  }
+  
 end
