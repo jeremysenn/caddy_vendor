@@ -15,7 +15,7 @@
             .input-group
               %span.input-group-addon
                 %i.fa.fa-dollar
-              = text_field_tag :amount, nil, :placeholder => "Amount", class: "form-control input-lg", required: true
+              = number_field_tag :amount, nil, :placeholder => "Amount", class: "form-control input-lg", required: true, step: '1'
           %p= text_area_tag :note, nil, :placeholder => "Note", class: "form-control input-lg", style: "width: 100%;"
           .modal-footer
             %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel

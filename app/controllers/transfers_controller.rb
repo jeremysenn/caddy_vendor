@@ -23,12 +23,12 @@ class TransfersController < ApplicationController
     end
     respond_to do |format|
       format.html {
-        @transfers = transfers.page(params[:page]).per(20)
+        @transfers = transfers.order("created_at DESC").page(params[:page]).per(20)
       }
       format.csv { 
 #        @transfers = current_user.company.transfers.where(created_at: Date.today.in_time_zone(current_user.time_zone).beginning_of_day..Date.today.in_time_zone(current_user.time_zone).end_of_day, reversed: false)
         @transfers = transfers
-        send_data @transfers.to_csv, filename: "transfers-#{@start_date}-#{@end_date}.csv" 
+        send_data @transfers.order("created_at DESC").to_csv, filename: "transfers-#{@start_date}-#{@end_date}.csv" 
         }
     end
   end

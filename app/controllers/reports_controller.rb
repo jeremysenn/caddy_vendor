@@ -19,7 +19,7 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html {
 #        @transfers = @course.transfers.where(created_at: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day, reversed: false).where.not(ez_cash_tran_id: [nil, '']).order("#{reports_sort_column} #{reports_sort_direction}").page(params[:page]).per(20)
-        @transfers = current_user.company.transfers.where(created_at: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day, reversed: false, club_credit_transaction_id: nil).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
+        @transfers = current_user.company.transfers.where(created_at: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day, reversed: false, club_credit_transaction_id: nil, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
 #        @members = @transfers.map{|t| t.member}.uniq
 #        @members = current_user.members.joins(:account).where("accounts.Balance != ?", 0)
         @transfers_total = 0
@@ -38,7 +38,7 @@ class ReportsController < ApplicationController
 #        end
       }
       format.csv { 
-        @transfers = current_user.company.transfers.where(created_at: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day, reversed: false, club_credit_transaction_id: nil).where.not(ez_cash_tran_id: [nil, ''])
+        @transfers = current_user.company.transfers.where(created_at: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day, reversed: false, club_credit_transaction_id: nil, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, ''])
         send_data @transfers.to_csv, filename: "transfers-#{@start_date}-#{@end_date}.csv" 
         }
     end
@@ -53,12 +53,17 @@ class ReportsController < ApplicationController
 #      @course = current_course.blank? ? current_user.company.courses.first : current_course
 #    end
     
-    @start_date = current_user.company.date_of_last_cut_transaction.to_s
-    @start_date = Date.today.beginning_of_day.to_s if @start_date.blank?
-    @end_date = Date.today.end_of_day.to_s
+#    @start_date = current_user.company.date_of_last_cut_transaction.to_s
+#    @start_date = Date.today.beginning_of_day.to_s if @start_date.blank?
+#    @end_date = Date.today.end_of_day.to_s
+    
+    @start_date = report_params[:start_date] ||= Date.today.to_s
+    @end_date = report_params[:end_date] ||= Date.today.to_s
     
     # Need to add 5 hours to because the transaction's date_time in stored as Eastern time
-    @transfers = current_user.company.transfers.where(created_at: (@start_date.to_datetime + 5.hours)..@end_date.to_datetime, reversed: false, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
+#    @transfers = current_user.company.transfers.where(created_at: (@start_date.to_datetime + 5.hours)..@end_date.to_datetime, reversed: false, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
+   
+    @transfers = current_user.company.transfers.where(created_at: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day, reversed: false, club_credit_transaction_id: nil, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
     @members = @transfers.map{|t| t.member}.uniq
 #    @members = current_user.members.joins(:account).where("accounts.Balance != ?", 0)
     @transfers_total = 0
@@ -73,25 +78,24 @@ class ReportsController < ApplicationController
 #      @transactions_total = @transactions_total + transaction.total unless transaction.total.blank?
 #    end
     
-    @members_balance_total = 0
-    @members.each do |member|
-      @members_balance_total = @members_balance_total + member.balance unless member.blank? #or not member.primary?
-    end
+#    @members_balance_total = 0
+#    @members.each do |member|
+#      @members_balance_total = @members_balance_total + member.balance unless member.blank? #or not member.primary?
+#    end
 #    unless params[:clearing_member_balances].blank? or @transfers_total.zero?
     unless params[:clearing_member_balances].blank? or @transfers_total.zero?
-      current_user.company.perform_one_sided_credit_transaction(@transfers_total)
+#      current_user.company.perform_one_sided_credit_transaction(@transfers_total)
 #      @course.perform_one_sided_credit_transaction(@members_balance_total.abs)
       @transfers.each do |transfer|
         transfer.update_attribute(:member_balance_cleared, true)
+        transfer.member.credit_account(transfer.amount_paid_total)
       end
-      @members.each do |member|
-        ClearMemberBalanceWorker.perform_async(member.account_id, current_user.company.account.id, member.balance) unless member.blank? # Clear member's balance with sidekiq background process
-      end
-      
-      flash[:notice] = "Request to clear member balances submitted to EZcash."
-      redirect_to reports_path
+#      @members.each do |member|
+#        ClearMemberBalanceWorker.perform_async(member.account_id, current_user.company.account.id, member.balance) unless member.blank? # Clear member's balance with sidekiq background process
+#      end
     end
 #    redirect_back(fallback_location: root_path)
+    redirect_back fallback_location: root_path, notice: 'Transfers and corresponding member balances cleared.'
   end
 
   private
