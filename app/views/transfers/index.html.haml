@@ -1,4 +1,4 @@
-.container
+.container-fluid
   %br
   %p.lead
     .pull-right
@@ -15,6 +15,15 @@
         - else
           = form_tag transfers_path, id: 'courses_form', method: 'get', class: 'form-inline' do |f|
             = select_tag :course_id, options_from_collection_for_select(current_user.courses, "id", "name", @course.id), onchange: "$(this).parent('form').submit();", class: "form-control"
+  %p
+    = form_tag transfers_path, :method => 'get', :class => "form-inline" do
+      .form-group
+        = text_field_tag 'transfer[start_date]', nil, :placeholder => "Start Date", value: "#{@start_date.blank? ? Date.today : @start_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
+      To
+      .form-group
+        = text_field_tag 'transfer[end_date]', nil, :placeholder => "End Date", value: "#{@end_date.blank? ? Date.today : @end_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
+      = button_tag(:type => 'submit', :class => 'btn btn-primary', data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}) do
+        %i.fa.fa-search
 
   .card.card-block
     %h4.card-title Transfers

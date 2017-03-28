@@ -133,7 +133,7 @@ class Transfer < ApplicationRecord
           unless club_credit_transaction_id.blank?
             # Also need to reverse the original one-side course credit transaction if there was one with this transfer
 #            club_credit_transaction = Transaction.find(club_credit_transaction_id)
-            current_user.company.perform_one_sided_credit_transaction(-amount_paid_total) # Use negative of transfer's total amount paid
+            company.perform_one_sided_credit_transaction(-amount_paid_total) # Use negative of transfer's total amount paid
           end
           return true
         else
