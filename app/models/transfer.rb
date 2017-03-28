@@ -296,7 +296,7 @@ class Transfer < ApplicationRecord
       unless member_guest.blank?
         member_guest
       else
-        member_name
+        player.member.full_name unless player.member.blank?
       end
     end
   end
