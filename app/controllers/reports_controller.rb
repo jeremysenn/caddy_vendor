@@ -39,7 +39,7 @@ class ReportsController < ApplicationController
       }
       format.csv { 
         @transfers = current_user.company.transfers.where(created_at: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day, reversed: false, club_credit_transaction_id: nil).where.not(ez_cash_tran_id: [nil, ''])
-        send_data @transfers.to_csv, filename: "transfers-#{Date.today}.csv" 
+        send_data @transfers.to_csv, filename: "transfers-#{@start_date}-#{@end_date}.csv" 
         }
     end
     
