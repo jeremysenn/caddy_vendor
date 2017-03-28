@@ -51,7 +51,7 @@
               %th
           %tbody
             - @transfers.each do |transfer|
-              %tr
+              %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
                 %td= "#{transfer.date_of_play.blank? ? 'N/A' : transfer.date_of_play.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y')}"
                 %td= "#{transfer.member_number.blank? ? 'N/A' : transfer.member_number}"
                 %td= number_to_currency(transfer.amount_billed)
