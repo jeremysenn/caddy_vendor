@@ -2,9 +2,9 @@
   %br
   %p.lead
     .pull-right
-      %a{href: transfers_path(format: "csv"), class: 'btn btn-primary'}
+      %a{href: transfers_path(format: "csv", 'transfer[type]' => @type, 'transfer[start_date]' => @start_date, 'transfer[end_date]' => @end_date), class: 'btn btn-primary'}
         %i.fa.fa-download
-        Today's Report
+        CSV Report
     -#
       - unless current_course.blank?
         - if current_user.courses.count <= 1
@@ -17,6 +17,7 @@
             = select_tag :course_id, options_from_collection_for_select(current_user.courses, "id", "name", @course.id), onchange: "$(this).parent('form').submit();", class: "form-control"
   %p
     = form_tag transfers_path, :method => 'get', :class => "form-inline" do
+      = select_tag 'transfer[type]', options_for_select(["All", "Member to Caddy", "Club to Caddy"], @type), class: "form-control"
       .form-group
         = text_field_tag 'transfer[start_date]', nil, :placeholder => "Start Date", value: "#{@start_date.blank? ? Date.today : @start_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
       To
@@ -24,56 +25,99 @@
         = text_field_tag 'transfer[end_date]', nil, :placeholder => "End Date", value: "#{@end_date.blank? ? Date.today : @end_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
       = button_tag(:type => 'submit', :class => 'btn btn-primary', data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}) do
         %i.fa.fa-search
+  %p.lead.text-muted= "#{pluralize(@transfers.count, 'transfer')} found"
 
-  .card.card-block
-    %h4.card-title Transfers
+  .card.card-block.card-outline-primary
+    %h4.card-title.text-primary
+      %i.fa.fa-dollar
+      = "Transfers"
     - unless @transfers.blank?
       .table-responsive
         %table.table.table-striped
           %thead
             %tr
-              -# %th Tran ID
-              %th= transfers_sort_link 'ez_cash_tran_id', "Tran ID"
-              -# %th DateTime
-              %th= transfers_sort_link 'created_at', "Date/Time"
-              -# %th From
-              %th= transfers_sort_link 'from_account_id', "From"
-              -# %th To
-              %th= transfers_sort_link 'to_account_id', "To"
-              -# %th Fee
-              %th= transfers_sort_link 'caddy_fee_cents', "Caddy Fee"
-              -# %th Tip
-              %th= transfers_sort_link 'caddy_tip_cents', "Tip"
-              %th= transfers_sort_link 'fee_cents', "Transaction Fee"
+              %th Date of play
+              %th Member number
+              %th Amount billed
+              %th Player name
+              %th Member name
+              %th Date caddy paid
+              %th Amount paid to caddy
+              %th Caddy name
+              %th Reference number
+              -# %th Description
               %th Note
-              -# %th Total
-              %th= transfers_sort_link 'amount_cents', "Total"
+              -# %th Amount
               %th
           %tbody
             - @transfers.each do |transfer|
-              %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                %td
-                  - unless transfer.ez_cash_tran_id.blank?
-                    = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
-                  - else
-                    None
-                %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
-                %td
-                  - unless transfer.customer.blank?
-                    = transfer.customer.full_name 
-                  - else
-                    = current_user.company.CompanyName
-                %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
-                %td= number_to_currency(transfer.caddy_fee)
-                %td= number_to_currency(transfer.caddy_tip)
-                %td= number_to_currency(transfer.fee)
+              %tr
+                %td= "#{transfer.date_of_play.blank? ? 'N/A' : transfer.date_of_play.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y')}"
+                %td= transfer.member_number
+                %td= number_to_currency(transfer.amount_billed)
+                %td= "#{transfer.player_name.blank? ? 'N/A' : transfer.player_name}"
+                %th= transfer.member_name
+                %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y")
+                %td= number_to_currency(transfer.amount_paid_to_caddy)
+                %td= transfer.caddy_name
+                %td= link_to transfer.reference_number, transaction_path(transfer.reference_number) unless transfer.reference_number.blank?
+                -# %td= transfer.description
                 %td= transfer.note
-                %td= number_to_currency(transfer.amount_paid_total)
-                %td
-                  - if transfer.reversed?
-                    .text-danger Reversed
-                  = link_to "Show", transfer, class: 'btn btn-secondary'
+                -# %td= number_to_currency(transfer.amount_paid_total)
+                %td= link_to "Show", transfer, class: 'btn btn-secondary'
     - else
       %p.lead None
+
+  -#
+    .card.card-block
+      %h4.card-title Transfers
+      - unless @transfers.blank?
+        .table-responsive
+          %table.table.table-striped
+            %thead
+              %tr
+                -# %th Tran ID
+                %th= transfers_sort_link 'ez_cash_tran_id', "Tran ID"
+                -# %th DateTime
+                %th= transfers_sort_link 'created_at', "Date/Time"
+                -# %th From
+                %th= transfers_sort_link 'from_account_id', "From"
+                -# %th To
+                %th= transfers_sort_link 'to_account_id', "To"
+                -# %th Fee
+                %th= transfers_sort_link 'caddy_fee_cents', "Caddy Fee"
+                -# %th Tip
+                %th= transfers_sort_link 'caddy_tip_cents', "Tip"
+                %th= transfers_sort_link 'fee_cents', "Transaction Fee"
+                %th Note
+                -# %th Total
+                %th= transfers_sort_link 'amount_cents', "Total"
+                %th
+            %tbody
+              - @transfers.each do |transfer|
+                %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
+                  %td
+                    - unless transfer.ez_cash_tran_id.blank?
+                      = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
+                    - else
+                      None
+                  %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                  %td
+                    - unless transfer.customer.blank?
+                      = transfer.customer.full_name 
+                    - else
+                      = current_user.company.CompanyName
+                  %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
+                  %td= number_to_currency(transfer.caddy_fee)
+                  %td= number_to_currency(transfer.caddy_tip)
+                  %td= number_to_currency(transfer.fee)
+                  %td= transfer.note
+                  %td= number_to_currency(transfer.amount_paid_total)
+                  %td
+                    - if transfer.reversed?
+                      .text-danger Reversed
+                    = link_to "Show", transfer, class: 'btn btn-secondary'
+      - else
+        %p.lead None
 
   = paginate @transfers
