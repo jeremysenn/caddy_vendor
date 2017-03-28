@@ -32,18 +32,18 @@
                 $
                 - unless player.paid?
                   %a{href: nil, class: 'caddy_fee', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_caddy_fee", "data-value" => player.fee.blank? ? player.caddy_pay_rate : player.fee}
-                    = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 2)
+                    = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
                   =# "#{player.fee.blank? ? number_to_currency(player.caddy_pay_rate) : number_to_currency(player.fee)}"
                 - else
-                  = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 2)
+                  = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
               %td{class: "#{player.paid? ? '' : 'text-primary'}"}
                 =# number_to_currency("#{player.tip.blank? ? '0' : player.tip}")
                 $
                 - unless player.paid?
                   %a{href: nil, class: 'tip', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_tip", "data-value" => player.tip.blank? ? '0' : player.tip}
-                    = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 2)
+                    = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
                 - else
-                  = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 2)
+                  = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
               %td
                 = number_to_currency("#{player.transfer_transaction_fee.blank? ? current_course.transaction_fee : player.transfer_transaction_fee}")
               %td

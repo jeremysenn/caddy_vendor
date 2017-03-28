@@ -405,6 +405,30 @@ class Customer < ActiveRecord::Base
     end
   end
   
+  def credit_account(amount)
+    # Perform one-sided transaction for company account (credit the customer's balance as a positive
+    company.perform_one_sided_credit_transaction(amount)
+
+    # Credit customers account
+    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+    response = client.call(:ez_cash_txn, message: { FromActID: company.account.id, ToActID: account_id, Amount: amount})
+
+    Rails.logger.debug "Credit customer account response body: #{response.body}"
+    if response and response.success?
+      unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
+        return true
+      else
+        # Reverse the one-sided transaction from the company account if customer transaction doesn't go through.
+        company.perform_one_sided_credit_transaction(amount) # Credit the company account a negative value, effectively reversing it
+        return nil
+      end
+    else
+      # Reverse the one-sided transaction from the company account if customer transaction doesn't go through.
+      company.perform_one_sided_credit_transaction(amount) # Credit the company account a negative value, effectively reversing it
+      return nil
+    end
+  end
+  
   #############################
   #     Class Methods      #
   #############################
