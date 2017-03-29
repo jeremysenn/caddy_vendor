@@ -8,7 +8,7 @@ class ClearMemberBalanceWorker
 #    end
 #  end
 
-  def perform(member_account_id, club_account_id, balance)
+  def perform(member_account_id, company_account_id, balance)
     Member.ezcash_rebalance_transaction_web_service_call(member_account_id, company_account_id, balance)
   end
   
