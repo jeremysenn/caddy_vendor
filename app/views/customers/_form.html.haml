@@ -13,6 +13,8 @@
         = account_form.input :CompanyNumber, :as => :hidden, :input_html => { :value => current_user.company_id }
         = account_form.input :Balance, :as => :hidden, :input_html => { :value => 0 }
         = account_form.input :MinBalance, :as => :hidden, :input_html => { :value => -1000 }
+        = account_form.input :ActTypeID, :as => :hidden, :input_html => { :value => 1018 }
+        
       -#
         - unless current_user.not_admin? and not account_form.object.active?
           = account_form.input :Active, as: :boolean, inline_label: 'Account Active'
