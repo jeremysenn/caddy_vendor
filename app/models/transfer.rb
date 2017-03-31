@@ -70,11 +70,11 @@ class Transfer < ApplicationRecord
   ### End Virtual Attributes ###
   
   def from_account_record
-    Account.find(from_account_id)
+    Account.where(ActID: from_account_id).first
   end
   
   def to_account_record
-    Account.find(to_account_id)
+    Account.where(ActID: to_account_id).first
   end
   
   def amount_not_greater_than_available
