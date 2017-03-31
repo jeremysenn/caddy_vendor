@@ -18,12 +18,13 @@
       Members
       - unless params[:balances].blank?
         with a balance
-      - unless params[:balances].blank? or @members.blank?
-        .pull-right
-          %p
-            %a{href: clear_all_account_balances_customers_path(balances: true), class: 'btn btn-danger', :data => { :confirm => "Are you sure you want to clear all of these member's balances? This action cannot be undone." }}
-              %i.fa.fa-exclamation-triangle
-              Clear all balances
+      -#
+        - unless params[:balances].blank? or @members.blank?
+          .pull-right
+            %p
+              %a{href: clear_all_account_balances_customers_path(balances: true), class: 'btn btn-danger', :data => { :confirm => "Are you sure you want to clear all of these member's balances? This action cannot be undone." }}
+                %i.fa.fa-exclamation-triangle
+                Clear all balances
     - unless @members.blank?
       .table-responsive
         %table.table.table-striped
@@ -54,10 +55,11 @@
                   %a{href: edit_customer_path(member), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
                     %i.fa.fa-edit
                     Edit
-                  - if member.primary? and member.balance < 0
-                    %a{href: clear_account_balance_customer_path(member), class: 'btn btn-outline-danger', :data => { :confirm => "Are you sure you want to clear this member's balance? This action cannot be undone." }}
-                      %i.fa.fa-exclamation-triangle
-                      Clear Balance
+                  -#
+                    - if member.primary? and member.balance < 0
+                      %a{href: clear_account_balance_customer_path(member), class: 'btn btn-outline-danger', :data => { :confirm => "Are you sure you want to clear this member's balance? This action cannot be undone." }}
+                        %i.fa.fa-exclamation-triangle
+                        Clear Balance
     - else
       %p.lead No members found
 
