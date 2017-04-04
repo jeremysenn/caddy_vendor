@@ -165,6 +165,20 @@ class Ability
       end
       can :create, :events
       
+      # Players
+      ############
+      can :manage, Player do |player|
+        player.event.course.company == user.company
+      end
+      can :create, :players
+      
+      # Transfers
+      ############
+      can :manage, Transfer do |transfer|
+        transfer.company == user.company
+      end
+      can :create, :transfers
+      
       # Caddies
       ############
       can :manage, Caddy do |caddy|
@@ -173,14 +187,14 @@ class Ability
       
       # Customers
       ############
-      can :manage, Customer do |customer|
-        unless customer.company.blank? or customer.company.CompanyNumber == 0
-          customer.company == user.company
-        else
-          true
-        end
-      end
-      can :create, :customers
+#      can :manage, Customer do |customer|
+#        unless customer.company.blank? or customer.company.CompanyNumber == 0
+#          customer.company == user.company
+#        else
+#          true
+#        end
+#      end
+#      can :create, :customers
     
     end
     
