@@ -9,7 +9,7 @@ class Company < ActiveRecord::Base
   has_many :members, -> { members }, :foreign_key => "CompanyNumber", :class_name => 'Customer' # Use 'members' scope in Customer
   has_many :caddies, :through => :courses
   has_many :customers, :foreign_key => "CompanyNumber"
-  has_many :transactions, :through => :customers
+#  has_many :transactions, :through => :customers
   has_many :caddy_pay_rates, :through => :courses
   has_many :caddy_rank_descs, :through => :courses
   has_many :events, through: :courses
@@ -18,6 +18,7 @@ class Company < ActiveRecord::Base
   has_many :accounts
   has_many :caddy_ratings, through: :users
   has_many :transfers
+  has_many :transactions
   
   #############################
   #     Instance Methods      #
