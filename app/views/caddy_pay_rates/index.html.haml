@@ -36,4 +36,4 @@
                   = link_to 'Show', caddy_pay_rate, class: 'btn btn-secondary'
                   = link_to 'Edit', edit_caddy_pay_rate_path(caddy_pay_rate), class: 'btn btn-primary'
                   = link_to 'Delete', caddy_pay_rate, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }
-    %p= link_to "New #{course.name} caddy pay rate", new_caddy_pay_rate_path(course_id: course.id), class: 'btn btn-primary'
+  %p= link_to "New #{course.name} caddy pay rate", new_caddy_pay_rate_path(course_id: course.id), class: 'btn btn-primary'
