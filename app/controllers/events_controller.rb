@@ -10,7 +10,7 @@ class EventsController < ApplicationController
     unless current_course.blank?
       @events = current_course.events
     else
-      @events = Event.all
+#      @events = Event.all
 #      @checked_in_caddies = current_course.caddies.select{|caddy| caddy.checkin_today?}
 #      @checked_out_caddies = current_course.caddies.select{|caddy| not caddy.checkin_today?}
     end

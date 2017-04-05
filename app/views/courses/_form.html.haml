@@ -2,6 +2,7 @@
   = f.error_notification
 
   .form-inputs
+    = f.input :ClubCompanyNumber, :as => :hidden, :input_html => { :value => current_user.company_id}
     = f.input :CourseName, as: :string
     = f.input :transaction_fee
 

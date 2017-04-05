@@ -43,7 +43,7 @@ class Ability
       can :manage, Course do |course|
         course.company == user.company
       end
-      can :create, :courses
+      can :create, Course
       
       # Caddies
       ############
