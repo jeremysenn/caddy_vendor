@@ -64,6 +64,18 @@ class Company < ActiveRecord::Base
     members.joins(:account).where("accounts.Balance != ?", 0)
   end
   
+  def caddies_with_balance
+    caddies.joins(:customer => :account).where("accounts.Balance != ?", 0)
+  end
+  
+  def caddies_total_balance
+    total = 0
+    caddies_with_balance.each do |caddy|
+      total = total + caddy.balance
+    end
+    return total
+  end
+  
   #############################
   #     Class Methods      #
   #############################

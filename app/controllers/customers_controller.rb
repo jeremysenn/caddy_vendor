@@ -18,7 +18,6 @@ class CustomersController < ApplicationController
           else
             members = current_user.company.members.order(:NameL)
           end
-            
         end
         @members = members.page(params[:page]).per(50)
       }

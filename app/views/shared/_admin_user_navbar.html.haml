@@ -22,10 +22,18 @@
           %a.dropdown-item{:href => customers_path(balances: true), :class => (params[:controller] == 'customers' and params[:balances] == 'true') ? "active" : ""} 
             %i.fa.fa-dollar
             Members with balance
-      %li.nav-item
-        %a.nav-link{:href => caddies_path, :class => (params[:controller] == 'caddies') ? "active" : ""} 
+      %li.nav-item.dropdown
+        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'caddies') ? "active" : ""}
           %i.fa.fa-vcard-o
           Caddies
+          %b.caret
+        %div.dropdown-menu
+          %a.dropdown-item{:href => caddies_path, :class => (params[:controller] == 'caddies' and not params[:balances] == 'true') ? "active" : ""} 
+            %i.fa.fa-vcard-o
+            All caddies
+          %a.dropdown-item{:href => caddies_path(balances: true), :class => (params[:controller] == 'caddies' and params[:balances] == 'true') ? "active" : ""} 
+            %i.fa.fa-dollar
+            Caddies with balance
       %li.nav-item
         %a.nav-link{:href => courses_path, :class => (params[:controller] == 'courses') ? "active" : ""} 
           %i.fa.fa-tree
