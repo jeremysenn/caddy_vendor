@@ -59,6 +59,16 @@ class Caddy < ApplicationRecord
     customer.account unless customer.blank?
   end
   
+  def balance
+    unless account.blank?
+      account.Balance
+    end
+  end
+  
+  def holds_balance?
+    balance != 0
+  end
+  
   def acronym
     caddy_rank_desc.acronym unless caddy_rank_desc.blank?
   end

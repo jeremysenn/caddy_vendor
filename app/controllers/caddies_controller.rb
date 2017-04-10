@@ -20,7 +20,11 @@ class CaddiesController < ApplicationController
           @query_string = "%#{params[:q]}%"
           caddies = @course.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string).order("customer.NameL")
         else
-          caddies = @course.caddies.joins(:customer).order("customer.NameL")
+          unless params[:balances].blank?
+            caddies = current_user.company.caddies_with_balance
+          else
+            caddies = @course.caddies.joins(:customer).order("customer.NameL")
+          end
         end
         unless params[:caddy_rank_desc_id].blank?
           @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).page(params[:page]).per(50)
@@ -95,7 +99,11 @@ class CaddiesController < ApplicationController
           @query_string = "%#{params[:q]}%"
           caddies = current_user.caddies.active.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string).order("customer.NameL")
         else
-          caddies = current_user.caddies.active.joins(:customer).order("customer.NameL")
+          unless params[:balances].blank?
+            caddies = current_user.company.caddies_with_balance
+          else
+            caddies = current_user.caddies.active.joins(:customer).order("customer.NameL")
+          end
         end
         unless params[:caddy_rank_desc_id].blank?
           @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id])
