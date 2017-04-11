@@ -406,7 +406,7 @@ class Customer < ActiveRecord::Base
   end
   
   def credit_account(amount)
-    # Perform one-sided transaction for company account (credit the customer's balance as a positive
+    # Perform one-sided transaction for company account (credit the customer's balance as a positive)
     company.perform_one_sided_credit_transaction(amount)
 
     # Credit customers account
@@ -419,12 +419,12 @@ class Customer < ActiveRecord::Base
         return true
       else
         # Reverse the one-sided transaction from the company account if customer transaction doesn't go through.
-        company.perform_one_sided_credit_transaction(amount) # Credit the company account a negative value, effectively reversing it
+        company.perform_one_sided_credit_transaction(-amount) # Credit the company account a negative value, effectively reversing it
         return nil
       end
     else
       # Reverse the one-sided transaction from the company account if customer transaction doesn't go through.
-      company.perform_one_sided_credit_transaction(amount) # Credit the company account a negative value, effectively reversing it
+      company.perform_one_sided_credit_transaction(-amount) # Credit the company account a negative value, effectively reversing it
       return nil
     end
   end
