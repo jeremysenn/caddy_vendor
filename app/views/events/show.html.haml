@@ -44,8 +44,14 @@
                     = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
                 - else
                   = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
-              %td
-                = number_to_currency("#{player.transfer_transaction_fee.blank? ? current_course.transaction_fee : player.transfer_transaction_fee}")
+              %td{class: "#{player.paid? ? '' : 'text-primary'}"}
+                =# number_to_currency("#{player.transfer_transaction_fee.blank? ? current_course.transaction_fee : player.transfer_transaction_fee}")
+                $
+                - unless player.paid?
+                  %a{href: nil, class: 'transaction_fee', "data-value" => player.transfer_transaction_fee.blank? ? current_course.transaction_fee : player.transfer_transaction_fee}
+                    = number_with_precision("#{player.transfer_transaction_fee.blank? ? current_course.transaction_fee : player.transfer_transaction_fee}", precision: 2)
+                - else
+                  = number_with_precision("#{player.transfer_transaction_fee.blank? ? current_course.transaction_fee : player.transfer_transaction_fee}", precision: 2)
               %td
                 -# unless player.caddy.account.blank? or player.member.account.blank?
                 = form_for Transfer.new, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|

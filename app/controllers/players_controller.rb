@@ -80,7 +80,7 @@ class PlayersController < ApplicationController
       end
     end
   end
-
+  
   # DELETE /players/1
   # DELETE /players/1.json
   def destroy
