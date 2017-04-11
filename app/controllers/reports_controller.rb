@@ -71,18 +71,6 @@ class ReportsController < ApplicationController
       @transfers_total = @transfers_total + transfer.amount_paid_total unless transfer.amount_paid_total.blank?
     end
     
-    # Use current user's time zone since transactions are stored in east coast time
-#    @transactions = current_user.company.transactions.where(date_time: @start_date.to_datetime..@end_date.to_datetime, tran_code: 'CARD', sec_tran_code: ['TFR', 'TFR ']).where.not(tran_code: ['FEE', 'FEE '], amt_auth: [nil]).order("date_time DESC")
-#    @transactions_total = 0
-#    @transactions.each do |transaction|
-#      @transactions_total = @transactions_total + transaction.total unless transaction.total.blank?
-#    end
-    
-#    @members_balance_total = 0
-#    @members.each do |member|
-#      @members_balance_total = @members_balance_total + member.balance unless member.blank? #or not member.primary?
-#    end
-#    unless params[:clearing_member_balances].blank? or @transfers_total.zero?
     unless params[:clearing_member_balances].blank? or @transfers_total.zero?
 #      current_user.company.perform_one_sided_credit_transaction(@transfers_total)
 #      @course.perform_one_sided_credit_transaction(@members_balance_total.abs)

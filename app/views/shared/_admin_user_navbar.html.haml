@@ -57,7 +57,7 @@
           Reporting
           %b.caret
         %div.dropdown-menu
-          %a.dropdown-item{:href => transactions_path(withdrawals: true), :class => (params[:controller] == 'transactions') ? "active" : ""} 
+          %a.dropdown-item{:href => transactions_path(withdrawals: true), :class => (params[:controller] == 'transactions' and params[:withdrawals] == 'true') ? "active" : ""} 
             %i.fa.fa-bolt
             EZCash Withdrawals
           %a{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active dropdown-item" : "dropdown-item"} 

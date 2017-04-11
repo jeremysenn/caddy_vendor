@@ -2,32 +2,34 @@
   %br
   %h3
     = @company.CompanyName
-  %p.lead= "Balance: #{number_to_currency(@company.balance)}"
+  -#
+    %p.lead= "Balance: #{number_to_currency(@company.balance)}"
 
   %br
   
-  .card.card-block
-    %h4.card-title 
-      %a{"aria-controls" => "collapseExample", "aria-expanded" => "false", "data-toggle" => "collapse", :href => "#one_side_credit_transactions"}
-        One-sided Credit Transactions
-    #one_side_credit_transactions.collapse
-      - unless @one_sided_credit_transactions.blank?
-        .table-responsive
-          %table.table.table-striped
-            %thead
-              %tr
-                %th DateTime
-                %th Amount
-                %th
-            %tbody
-              - @one_sided_credit_transactions.reverse.each do |transaction|
+  -#
+    .card.card-block
+      %h4.card-title 
+        %a{"aria-controls" => "collapseExample", "aria-expanded" => "false", "data-toggle" => "collapse", :href => "#one_side_credit_transactions"}
+          One-sided Credit Transactions
+      #one_side_credit_transactions.collapse
+        - unless @one_sided_credit_transactions.blank?
+          .table-responsive
+            %table.table.table-striped
+              %thead
                 %tr
-                  %td= transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
-                  %td= number_to_currency(transaction.amt_auth)
-                  %td
-                    = link_to "Show", transaction, class: 'btn btn-secondary'
-      - else
-        %p.lead None
+                  %th DateTime
+                  %th Amount
+                  %th
+              %tbody
+                - @one_sided_credit_transactions.reverse.each do |transaction|
+                  %tr
+                    %td= transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
+                    %td= number_to_currency(transaction.amt_auth)
+                    %td
+                      = link_to "Show", transaction, class: 'btn btn-secondary'
+        - else
+          %p.lead None
 
   .card.card-block
     %h4.card-title Courses

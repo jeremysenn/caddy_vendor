@@ -117,9 +117,6 @@ class Player < ApplicationRecord
   def send_sms_notification_to_caddy
     unless caddy.blank? or caddy.cell_phone_number.blank?
       SendCaddyNewRoundNotificationSmsWorker.perform_async(id)
-#      client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
-#      response = client.call(:send_sms, message: { Phone: caddy.cell_phone_number, Msg: "Hey #{caddy.first_name}, you have a new round with #{member.full_name} at #{event.start.strftime('%I:%M%p')}!"})
-#      Rails.logger.debug "Response body: #{response.body}"
     end
   end
   
