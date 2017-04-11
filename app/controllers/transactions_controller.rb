@@ -13,19 +13,19 @@ class TransactionsController < ApplicationController
     @end_date = transaction_params[:end_date] ||= Date.today.to_s
     
     if @type == 'Withdrawal'
-      transactions = current_user.company.transactions.withdrawals
+      transactions = current_user.company.transactions.withdrawals.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day)
     elsif @type == 'Transfer'
-      transactions = current_user.company.transactions.transfers
+      transactions = current_user.company.transactions.transfers.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day)
     elsif @type == 'Balance'
-      transactions = current_user.company.transactions.one_sided_credits
+      transactions = current_user.company.transactions.one_sided_credits.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day)
     else
-      transactions = current_user.company.transactions
+      transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day)
     end
-    @transactions = transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
     @transactions_total = 0
-    @transactions.each do |transaction|
+    transactions.each do |transaction|
       @transactions_total = @transactions_total + transaction.amt_auth unless transaction.amt_auth.blank?
     end
+    @transactions = transactions.order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
   end
 
   # GET /transactions/1
