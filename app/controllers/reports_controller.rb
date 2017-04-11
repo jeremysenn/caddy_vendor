@@ -64,7 +64,7 @@ class ReportsController < ApplicationController
 #    @transfers = current_user.company.transfers.where(created_at: (@start_date.to_datetime + 5.hours)..@end_date.to_datetime, reversed: false, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
    
     @transfers = current_user.company.transfers.where(created_at: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day, reversed: false, club_credit_transaction_id: nil, member_balance_cleared: false).where.not(ez_cash_tran_id: [nil, '']).order("created_at DESC")
-    @members = @transfers.map{|t| t.member}.uniq
+#    @members = @transfers.map{|t| t.member}.uniq
 #    @members = current_user.members.joins(:account).where("accounts.Balance != ?", 0)
     @transfers_total = 0
     @transfers.each do |transfer|
