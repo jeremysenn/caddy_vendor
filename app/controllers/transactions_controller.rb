@@ -8,24 +8,24 @@ class TransactionsController < ApplicationController
   # GET /transactions
   # GET /transactions.json
   def index
-    unless params[:withdrawals].blank?
-      @transactions = current_user.company.transactions.withdrawals.order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
+    @type = params[:type]
+    @start_date = transaction_params[:start_date] ||= Date.today.to_s
+    @end_date = transaction_params[:end_date] ||= Date.today.to_s
+    
+    if @type == 'Withdrawal'
+      transactions = current_user.company.transactions.withdrawals
+    elsif @type == 'Transfer'
+      transactions = current_user.company.transactions.transfers
+    elsif @type == 'Balance'
+      transactions = current_user.company.transactions.one_sided_credits
     else
-      @start_date = transaction_params[:start_date] ||= Date.today.to_s
-      @end_date = transaction_params[:end_date] ||= Date.today.to_s
-      
-      @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
+      transactions = current_user.company.transactions
     end
-    
-#    @transactions = Transaction.withdrawals.order(date_time: :desc).page(params[:page]).per(20)
-#    @transactions = current_user.company.transactions.withdrawals.order(date_time: :desc).page(params[:page]).per(20)
-    
-#    @transactions = current_user.company.transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
-    
-#    @transactions_total = 0
-#    @transactions.each do |transaction|
-#      @transactions_total = @transactions_total + transaction.amt_auth unless transaction.amt_auth.blank?
-#    end
+    @transactions = transactions.where(date_time: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("#{transactions_sort_column} #{transactions_sort_direction}").page(params[:page]).per(20)
+    @transactions_total = 0
+    @transactions.each do |transaction|
+      @transactions_total = @transactions_total + transaction.amt_auth unless transaction.amt_auth.blank?
+    end
   end
 
   # GET /transactions/1
