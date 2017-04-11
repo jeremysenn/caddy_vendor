@@ -9,6 +9,8 @@ class Transaction < ActiveRecord::Base
   belongs_to :company, :foreign_key => "DevCompanyNbr"
   
   scope :withdrawals, -> { where(tran_code: ["WDL", "ALL"], sec_tran_code: ["TFR", ""]) }
+  scope :transfers, -> { where(tran_code: ["CARD"], sec_tran_code: ["TFR"]) }
+  scope :one_sided_credits, -> { where(tran_code: ["DEP"], sec_tran_code: ["REFD"]) }
   
   #############################
   #     Instance Methods      #

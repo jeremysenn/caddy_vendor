@@ -57,9 +57,10 @@
           Reporting
           %b.caret
         %div.dropdown-menu
-          %a.dropdown-item{:href => transactions_path(withdrawals: true), :class => (params[:controller] == 'transactions' and params[:withdrawals] == 'true') ? "active" : ""} 
-            %i.fa.fa-bolt
-            EZCash Withdrawals
+          -#
+            %a.dropdown-item{:href => transactions_path(withdrawals: true), :class => (params[:controller] == 'transactions' and params[:withdrawals] == 'true') ? "active" : ""} 
+              %i.fa.fa-bolt
+              EZCash Withdrawals
           %a{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active dropdown-item" : "dropdown-item"} 
             %i.fa.fa-dollar
             Transfers
@@ -70,30 +71,27 @@
             %a.dropdown-item{:href => customers_path(balances: true), :class => (params[:controller] == 'customers') ? "active" : ""} 
               %i.fa.fa-user-circle-o
               Members with Balance
+      %li.nav-item.dropdown
+        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+          %i.fa.fa-gear
+          More
+          %b.caret
+        %div.dropdown-menu
+          %a{:href => company_path(current_user.company.id), :class => (params[:controller] == 'companies') ? "active dropdown-item" : "dropdown-item"} 
+            %i.fa.fa-building
+            = current_user.company.CompanyName
+          %a{:href => edit_user_registration_path(current_user), :class => "dropdown-item"} 
+            %i.fa.fa-user
+            = current_user.email
+          %a{:href => users_admin_index_path, :class => (params[:controller] == 'users') ? "active dropdown-item" : "dropdown-item"} 
+            %i.fa.fa-users
+            Users
+          -#
+            %a{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active dropdown-item" : "dropdown-item"} 
+              %i.fa.fa-dollar
+              Transfers
+          %a{:href => transactions_path, :class => (params[:controller] == 'transactions') ? "active dropdown-item" : "dropdown-item"} 
+            %i.fa.fa-bolt
+            EZCash
       .float-xs-right
-        %li.nav-item.dropdown
-          %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
-            %i.fa.fa-gear
-            More
-            %b.caret
-          %div.dropdown-menu
-            %a{:href => company_path(current_user.company.id), :class => (params[:controller] == 'companies') ? "active dropdown-item" : "dropdown-item"} 
-              %i.fa.fa-building
-              = current_user.company.CompanyName
-            %a{:href => edit_user_registration_path(current_user), :class => "dropdown-item"} 
-              %i.fa.fa-user
-              = current_user.email
-            %a{:href => users_admin_index_path, :class => (params[:controller] == 'users') ? "active dropdown-item" : "dropdown-item"} 
-              %i.fa.fa-users
-              Users
-            -#
-              %a{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active dropdown-item" : "dropdown-item"} 
-                %i.fa.fa-dollar
-                Transfers
-            %a{:href => transactions_path, :class => (params[:controller] == 'transactions') ? "active dropdown-item" : "dropdown-item"} 
-              %i.fa.fa-bolt
-              EZCash
-        -#
-          %li.nav-item= link_to current_user.company.CompanyName, current_user.company, class: "nav-link #{params[:controller] == 'companies' ? 'active' : ''} "
-          %li.nav-item= link_to current_user.email, edit_user_registration_path(current_user), class: "nav-link #{current_page?(edit_user_registration_path(current_user)) ? 'active' : ''}"
         %li.nav-item= link_to 'Log out', destroy_user_session_path, method: :delete, data: { confirm: 'Are you sure you want to sign out?' }, class: 'btn btn-outline-danger nav-link'
