@@ -60,7 +60,7 @@
                   = f.hidden_field :company_id, value: current_user.company.id
                   = f.hidden_field :from_account, value: "#{player.member.primary? ? player.member.account.id : player.member.parent_customer.account.id}"
                   = f.hidden_field :to_account, value: player.caddy.account.id unless player.caddy.account.blank?
-                  = f.hidden_field :fee, value: current_course.transaction_fee, class: 'transaction_fee'
+                  = f.hidden_field :fee, value: player.transfer_transaction_fee.blank? ? current_course.transaction_fee : player.transfer_transaction_fee , class: 'transaction_fee'
                   = f.hidden_field :fee_to_account_id, value: current_user.company.account.id unless current_user.company.account.blank?
                   = f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
                   = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
