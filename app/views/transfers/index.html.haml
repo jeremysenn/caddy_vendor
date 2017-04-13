@@ -18,7 +18,7 @@
             = select_tag :course_id, options_from_collection_for_select(current_user.courses, "id", "name", @course.id), onchange: "$(this).parent('form').submit();", class: "form-control"
   %p
     = form_tag transfers_path, :method => 'get', :class => "form-inline" do
-      = select_tag 'transfer[type]', options_for_select(["All", "Member to Caddy", "Club to Caddy"], @type), class: "form-control"
+      =# select_tag 'transfer[type]', options_for_select(["All", "Member to Caddy", "Club to Caddy"], @type), class: "form-control"
       .form-group
         = text_field_tag 'transfer[start_date]', nil, :placeholder => "Start Date", value: "#{@start_date.blank? ? Date.today : @start_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
       To
