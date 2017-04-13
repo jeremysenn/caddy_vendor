@@ -44,9 +44,9 @@ jQuery ->
       success: (response, newValue) ->
         if response.status == 'error'
           return response.msg
-        caddy_fee = parseFloat($(this).closest('tr').find('#transfer_caddy_fee:first').val())
         caddy_tip = parseFloat(newValue)
-        transaction_fee = parseFloat($(this).closest('tr').find('#transfer_fee:first').val())
+        caddy_fee = parseFloat($(this).closest('tr').find('#transfer_caddy_fee:first').val())
+        #transaction_fee = parseFloat($(this).closest('tr').find('#transfer_fee:first').val())
         $(this).closest('tr').find('#transfer_caddy_tip:first').val caddy_tip
         $(this).closest('tr').find('#transfer_amount:first').val caddy_fee + caddy_tip
         sum = 0
@@ -88,8 +88,9 @@ jQuery ->
           return response.msg
         caddy_fee = parseFloat(newValue)
         caddy_tip = parseFloat($(this).closest('tr').find('#transfer_caddy_tip:first').val())
-        transaction_fee = parseFloat($(this).closest('tr').find('#transfer_fee:first').val())
-        $(this).closest('tr').find('#transfer_caddy_tip:first').val caddy_tip
+        #transaction_fee = parseFloat($(this).closest('tr').find('#transfer_fee:first').val())
+        $(this).closest('tr').find('#transfer_caddy_fee:first').val caddy_fee
+        #$(this).closest('tr').find('#transfer_caddy_tip:first').val caddy_tip
         $(this).closest('tr').find('#transfer_amount:first').val caddy_fee + caddy_tip
         sum = 0
         # Add up all the amounts
@@ -125,12 +126,11 @@ jQuery ->
         #if response.status == 'error'
         #  return response.msg
         transaction_fee = parseFloat(newValue)
-        caddy_fee = parseFloat($(this).closest('tr').find('#transfer_caddy_fee:first').val())
-        caddy_tip = parseFloat($(this).closest('tr').find('#transfer_caddy_tip:first').val())
-        transaction_fee = parseFloat(newValue)
+        #caddy_fee = parseFloat($(this).closest('tr').find('#transfer_caddy_fee:first').val())
+        #caddy_tip = parseFloat($(this).closest('tr').find('#transfer_caddy_tip:first').val())
         $(this).closest('tr').find('#transfer_fee:first').val transaction_fee
-        $(this).closest('tr').find('#transfer_caddy_tip:first').val caddy_tip
-        $(this).closest('tr').find('#transfer_amount:first').val caddy_fee + caddy_tip
+        #$(this).closest('tr').find('#transfer_caddy_tip:first').val caddy_tip
+        #$(this).closest('tr').find('#transfer_amount:first').val caddy_fee + caddy_tip
         sum = 0
         # Add up all the amounts
         $('.amount').each ->
