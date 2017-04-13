@@ -46,7 +46,6 @@ jQuery ->
           return response.msg
         caddy_tip = parseFloat(newValue)
         caddy_fee = parseFloat($(this).closest('tr').find('#transfer_caddy_fee:first').val())
-        #transaction_fee = parseFloat($(this).closest('tr').find('#transfer_fee:first').val())
         $(this).closest('tr').find('#transfer_caddy_tip:first').val caddy_tip
         $(this).closest('tr').find('#transfer_amount:first').val caddy_fee + caddy_tip
         sum = 0
@@ -88,9 +87,7 @@ jQuery ->
           return response.msg
         caddy_fee = parseFloat(newValue)
         caddy_tip = parseFloat($(this).closest('tr').find('#transfer_caddy_tip:first').val())
-        #transaction_fee = parseFloat($(this).closest('tr').find('#transfer_fee:first').val())
         $(this).closest('tr').find('#transfer_caddy_fee:first').val caddy_fee
-        #$(this).closest('tr').find('#transfer_caddy_tip:first').val caddy_tip
         $(this).closest('tr').find('#transfer_amount:first').val caddy_fee + caddy_tip
         sum = 0
         # Add up all the amounts
@@ -105,15 +102,12 @@ jQuery ->
         #msg will be shown in editable form
         return  
 
-    # Edit in place transfer fee
+    # Edit in place transfer fee # No ajax call here
     $('#players').editable
       selector: '.transaction_fee'
       tpl: "<input type='text' style='width: 75px'>"
       title: 'Transaction Fee'
       name: 'transaction fee'
-      #ajaxOptions: 
-      #  type: 'put'
-      #  dataType: 'json'
       validate: (value) ->
         if $.trim(value) == ''
           return 'This field is required'
@@ -126,11 +120,7 @@ jQuery ->
         #if response.status == 'error'
         #  return response.msg
         transaction_fee = parseFloat(newValue)
-        #caddy_fee = parseFloat($(this).closest('tr').find('#transfer_caddy_fee:first').val())
-        #caddy_tip = parseFloat($(this).closest('tr').find('#transfer_caddy_tip:first').val())
         $(this).closest('tr').find('#transfer_fee:first').val transaction_fee
-        #$(this).closest('tr').find('#transfer_caddy_tip:first').val caddy_tip
-        #$(this).closest('tr').find('#transfer_amount:first').val caddy_fee + caddy_tip
         sum = 0
         # Add up all the amounts
         $('.amount').each ->
