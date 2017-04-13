@@ -35,11 +35,12 @@
       %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
         %i.fa.fa-dollar
         Pay by member
-      %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_company"}
-        %i.fa.fa-dollar
-        Pay by company
+      -#
+        %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_company"}
+          %i.fa.fa-dollar
+          Pay by company
       = render 'pay_caddy_by_member'
-      = render 'pay_caddy_by_company'
+      =# render 'pay_caddy_by_company'
       -#
         - if @caddy.checkin_today? 
           = f.input_field :CheckedIn, as: :hidden, value: nil
