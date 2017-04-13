@@ -7,7 +7,7 @@ class Player < ApplicationRecord
   has_many :transfers
   has_one :caddy_rating
   
-  after_create :check_caddy_out, :clear_event_color, :send_sms_notification_to_caddy
+  after_create :check_caddy_out, :clear_event_color #, :send_sms_notification_to_caddy
 #  before_destroy :check_caddy_in
   
 #  validates :tip, numericality: { :greater_than_or_equal_to => 0 }

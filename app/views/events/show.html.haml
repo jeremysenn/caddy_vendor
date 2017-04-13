@@ -2,11 +2,13 @@
   %br
   .card.card-block
     .card-title
-      %h4= @event.course.name
-      %p.lead
-        = @event.start.strftime("%-m/%-d/%y %l:%M %p")
+      %h4
+        = @event.course.name
         #player_total.pull-right
           = number_to_currency(@event.players_total_with_fee)
+      %p.lead
+        = @event.start.strftime("%-m/%-d/%y %l:%M %p")
+        
     .table-responsive
       %table.table.table-striped#players
         %thead
