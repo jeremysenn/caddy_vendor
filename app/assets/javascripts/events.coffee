@@ -102,12 +102,15 @@ jQuery ->
         #msg will be shown in editable form
         return  
 
-    # Edit in place transfer fee # No ajax call here
+    # Edit in place transaction fee
     $('#players').editable
       selector: '.transaction_fee'
       tpl: "<input type='text' style='width: 75px'>"
       title: 'Transaction Fee'
       name: 'transaction fee'
+      ajaxOptions: 
+        type: 'put'
+        dataType: 'json'
       validate: (value) ->
         if $.trim(value) == ''
           return 'This field is required'

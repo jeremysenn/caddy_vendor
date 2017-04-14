@@ -81,6 +81,18 @@ class PlayersController < ApplicationController
     end
   end
   
+  def update_transaction_fee
+    respond_to do |format|
+      if @player.update_attribute(:transaction_fee, params[:value])
+        format.html { redirect_to @player, notice: 'Player was successfully updated.' }
+        format.json { render :show, status: :ok, location: @player }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @player.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
   # DELETE /players/1
   # DELETE /players/1.json
   def destroy
@@ -99,6 +111,6 @@ class PlayersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def player_params
-      params.require(:player).permit(:member_id, :caddy_id, :event_id, :caddy_type, :fee, :tip, :round, :status, :note)
+      params.require(:player).permit(:member_id, :caddy_id, :event_id, :caddy_type, :fee, :tip, :round, :status, :note, :transaction_fee)
     end
 end

@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     member do
       put 'update_tip'
       put 'update_caddy_fee'
+      put 'update_transaction_fee'
     end
   end
   resources :caddies do
