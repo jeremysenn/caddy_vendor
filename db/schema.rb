@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170322152652) do
+ActiveRecord::Schema.define(version: 20170414185505) do
 
   create_table "caddy_ratings", force: :cascade do |t|
     t.integer  "caddy_id"
@@ -48,11 +48,12 @@ ActiveRecord::Schema.define(version: 20170322152652) do
     t.string   "caddy_type"
     t.string   "status"
     t.integer  "round"
-    t.decimal  "fee",        precision: 7, scale: 2
-    t.decimal  "tip",        precision: 7, scale: 2
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.decimal  "fee",             precision: 7, scale: 2
+    t.decimal  "tip",             precision: 7, scale: 2
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.string   "note"
+    t.decimal  "transaction_fee", precision: 7, scale: 2
     t.index ["caddy_id"], name: "index_players_on_caddy_id"
     t.index ["event_id"], name: "index_players_on_event_id"
     t.index ["member_id"], name: "index_players_on_member_id"
