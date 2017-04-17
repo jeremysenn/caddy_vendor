@@ -6,6 +6,7 @@
     = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 14 : @customer.GroupID}" }
     = f.input :NameF, label: 'First Name'
     = f.input :NameL, label: 'Last Name'
+    = f.input :Email, label: 'Email'
     =# f.input :PhoneMobile, label: 'Phone' if current_user.admin?
     = f.simple_fields_for :account do |account_form|
       = account_form.input :ActNbr, label: 'Member Number'

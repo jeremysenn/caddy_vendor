@@ -10,8 +10,12 @@
           Edit
     .card-block
       %p.lead
-        Phone:
-        = @customer.PhoneMobile
+        Email:
+        = @customer.Email
+      -#
+        %p.lead
+          Phone:
+          = @customer.PhoneMobile
       %p.lead
         Member Number:
         = "#{@customer.member_number.blank? ? 'None' : @customer.member_number}"
