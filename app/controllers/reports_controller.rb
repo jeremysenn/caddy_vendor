@@ -76,7 +76,8 @@ class ReportsController < ApplicationController
 #      @course.perform_one_sided_credit_transaction(@members_balance_total.abs)
       @transfers.each do |transfer|
         transfer.update_attribute(:member_balance_cleared, true)
-        transfer.member.credit_account(transfer.amount_paid_total) unless transfer.member.blank?
+#        transfer.member.credit_account(transfer.amount_paid_total) unless transfer.member.blank?
+        ClearMemberBalanceWorker.perform_async(transfer.id) # Clear member's balance with sidekiq background process
       end
 #      @members.each do |member|
 #        ClearMemberBalanceWorker.perform_async(member.account_id, current_user.company.account.id, member.balance) unless member.blank? # Clear member's balance with sidekiq background process
