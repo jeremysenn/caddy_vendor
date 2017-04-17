@@ -8,8 +8,9 @@ class ClearMemberBalanceWorker
 #    end
 #  end
 
-  def perform(member_account_id, company_account_id, balance)
-    Member.ezcash_rebalance_transaction_web_service_call(member_account_id, company_account_id, balance)
+  def perform(transfer_id)
+    transfer = Transfer.where(id: transfer_id).first
+    transfer.member.credit_account(transfer.amount_paid_total)
   end
   
 end
