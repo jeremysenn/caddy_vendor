@@ -37,7 +37,11 @@ Rails.application.routes.draw do
   end
   resources :members
   resources :courses
-  resources :events
+  resources :events do 
+    collection do
+      get 'calendar'
+    end
+  end
   resources :caddy_pay_rates
   resources :caddy_rank_descs
   

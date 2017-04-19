@@ -6,14 +6,21 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    session[:course_id] = params[:course_id] unless params[:course_id].blank?
-    unless current_course.blank?
-      @events = current_course.events
+    @start_date = event_params[:start_date] ||= Date.today.to_s
+    @end_date = event_params[:end_date] ||= Date.today.to_s
+    unless event_params[:course_id].blank?
+      session[:course_id] = event_params[:course_id]
+      @course = Course.where(ClubCourseID: event_params[:course_id]).first
+      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
     else
-#      @events = Event.all
-#      @checked_in_caddies = current_course.caddies.select{|caddy| caddy.checkin_today?}
-#      @checked_out_caddies = current_course.caddies.select{|caddy| not caddy.checkin_today?}
+      @course = current_course.blank? ? current_user.company.courses.first : current_course
     end
+    @events = current_course.events.where(start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC")
+#    @events = current_course.events
+#    session[:course_id] = params[:course_id] unless params[:course_id].blank?
+#    unless current_course.blank?
+#      @events = current_course.events
+#    end
   end
 
   # GET /events/1
@@ -35,21 +42,26 @@ class EventsController < ApplicationController
   # POST /events.json
   def create
     @event = Event.new(event_params)
-    @event.save
-    if params[:pay]
-      #redirect_to @event, notice: 'Select Member and Caddy for Payment'
-      redirect_to @event
-    end
-
-#    respond_to do |format|
-#      if @event.save
-#        format.html { redirect_to @event, notice: 'Event was successfully created.' }
-#        format.json { render :show, status: :created, location: @event }
-#      else
-#        format.html { render :new }
-#        format.json { render json: @event.errors, status: :unprocessable_entity }
-#      end
+#    @event.save
+#    if params[:pay]
+#      redirect_to @event
 #    end
+
+    respond_to do |format|
+      if @event.save
+        format.html { redirect_to @event, notice: 'Event was successfully created.' }
+        format.json { render :show, status: :created, location: @event }
+        format.js {
+          if params[:pay]
+            redirect_to @event
+          end
+        }
+      else
+        format.html { render :new }
+        format.json { render json: @event.errors, status: :unprocessable_entity }
+        format.js
+      end
+    end
   end
 
   # PATCH/PUT /events/1
@@ -80,6 +92,13 @@ class EventsController < ApplicationController
 #      format.json { head :no_content }
 #    end
   end
+  
+  def calendar
+    session[:course_id] = params[:course_id] unless params[:course_id].blank?
+    unless current_course.blank?
+      @events = current_course.events
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -89,7 +108,7 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:title, :date_range, :start, :end, :color, :size, :round, :status, :notes, :course_id, 
+      params.fetch(:event, {}).permit(:title, :date_range, :start, :end, :color, :size, :round, :status, :notes, :course_id, :start_date, :end_date, :course_id,
         players_attributes:[:event_id, :member_id, :caddy_id, :caddy_type, :fee, :tip, :round, :status, :_destroy, :id, :note])
     end
 end
