@@ -53,47 +53,47 @@
         %div.col-xs-6.col-sm-4.col-md-3
           %p= link_to member.full_name, member
       = paginate @members
-
-  .card.card-block
-    %h4.card-title Caddies
-    .table-responsive
-      %table.table.table-striped
-        %thead
-          %tr
-            %th Name
-            %th Course
-            %th Ranking
-            %th Checked In
-            %th
-        %tbody
-          - @company.caddies.each do |caddy|
+  -#
+    .card.card-block
+      %h4.card-title Caddies
+      .table-responsive
+        %table.table.table-striped
+          %thead
             %tr
-              %td= caddy.full_name
-              %td= link_to caddy.course.name, caddy.course
-              %td= link_to caddy.rank_description, caddy.caddy_rank_desc
-              %td= caddy.CheckedIn.in_time_zone(current_user.time_zone).strftime("%l:%M %p") if caddy.checkin_today? 
-              %td
-                = link_to "Show", caddy, class: 'btn btn-secondary'
-                = link_to 'Edit', edit_caddy_path(caddy), class: 'btn btn-primary'
-
-  .card.card-block
-    %h4.card-title Users
-    .table-responsive
-      %table.table.table-striped
-        %thead
-          %tr
-            %th Email
-            %th Admin
-            %th Active
-            %th
-        %tbody
-          - @company.users.each do |user|
+              %th Name
+              %th Course
+              %th Ranking
+              %th Checked In
+              %th
+          %tbody
+            - @company.caddies.each do |caddy|
+              %tr
+                %td= caddy.full_name
+                %td= link_to caddy.course.name, caddy.course
+                %td= link_to caddy.rank_description, caddy.caddy_rank_desc
+                %td= caddy.CheckedIn.in_time_zone(current_user.time_zone).strftime("%l:%M %p") if caddy.checkin_today? 
+                %td
+                  = link_to "Show", caddy, class: 'btn btn-secondary'
+                  = link_to 'Edit', edit_caddy_path(caddy), class: 'btn btn-primary'
+  -#
+    .card.card-block
+      %h4.card-title Users
+      .table-responsive
+        %table.table.table-striped
+          %thead
             %tr
-              %td= user.email
-              %td= "#{user.admin? ? 'Yes' : 'No'}"
-              %td= "#{user.active? ? 'Yes' : 'No'}"
-              %td
-                = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary'
+              %th Email
+              %th Admin
+              %th Active
+              %th
+          %tbody
+            - @company.users.each do |user|
+              %tr
+                %td= user.email
+                %td= "#{user.admin? ? 'Yes' : 'No'}"
+                %td= "#{user.active? ? 'Yes' : 'No'}"
+                %td
+                  = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary'
   
   =# link_to 'Companies', companies_path, class: 'btn btn-secondary'
   %p= link_to 'Edit company', edit_company_path(@company), class: 'btn btn-primary'
