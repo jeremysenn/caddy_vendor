@@ -16,18 +16,21 @@
   .card.card-block
     %h4.card-title 
       Rounds
-    .table-responsive
-      %table.table.table-striped
-        %thead
-          %tr
-            %th Start
-            %th Players
-            %th Status
-            %th
-        %tbody
-          - @events.each do |event|
+    - unless @events.blank?
+      .table-responsive
+        %table.table.table-striped
+          %thead
             %tr
-              %td= event.start.strftime('%-m/%-d/%y %l:%M %p')
-              %td= event.player_names_with_caddy_names
-              %td= "#{event.not_paid? ? 'Open' : 'Paid'}"
-              %td= link_to "Show", event, class: 'btn btn-secondary'
+              %th Start
+              %th Players
+              %th Status
+              %th
+          %tbody
+            - @events.each do |event|
+              %tr
+                %td= event.start.strftime('%-m/%-d/%y %l:%M %p')
+                %td= event.player_names_with_caddy_names
+                %td= "#{event.not_paid? ? 'Open' : 'Paid'}"
+                %td= link_to "Show", event, class: 'btn btn-secondary'
+    - else
+      %p.lead None
