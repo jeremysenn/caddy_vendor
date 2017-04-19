@@ -1,17 +1,33 @@
-.container
+.container-fluid
   %br
-  - unless current_course.blank?
-    - if current_user.courses.count <= 1
-      %br
-      %p.lead
-        - unless current_course.blank?
-          = current_course.name 
-        - else
-          = current_user.courses.first.name unless current_user.courses.blank?
-    - else
-      %p
-        = form_tag events_path, id: 'courses_form', method: 'get', class: 'form-inline' do |f|
-          = select_tag :course_id, options_from_collection_for_select(current_user.courses, "id", "name", current_course.id), onchange: "$(this).parent('form').submit();", class: "form-control"
-  
-  .calendar
-  #remote_container
+  %p
+    = form_tag events_path, id: 'events_form', method: 'get', class: 'form-inline' do |f|
+      - unless current_user.courses.count <= 1
+        = select_tag 'event[course_id]', options_from_collection_for_select(current_user.courses, "id", "name", @course.id), class: "form-control"
+      .form-group
+        = text_field_tag 'event[start_date]', nil, :placeholder => "Start Date", value: "#{@start_date.blank? ? Date.today : @start_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
+      To
+      .form-group
+        = text_field_tag 'event[end_date]', nil, :placeholder => "End Date", value: "#{@end_date.blank? ? Date.today : @end_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
+      =# search_field_tag :q, params[:q], :placeholder => "Search caddies", class: "form-control input-lg", autofocus: true
+      %button.btn.btn-secondary{id: 'events_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
+        %i.fa.fa-search
+
+  .card.card-block
+    %h4.card-title 
+      Rounds
+    .table-responsive
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Start
+            %th Players
+            %th Status
+            %th
+        %tbody
+          - @events.each do |event|
+            %tr
+              %td= event.start.strftime('%-m/%-d/%y %l:%M %p')
+              %td= event.player_names_with_caddy_names
+              %td= "#{event.not_paid? ? 'Open' : 'Paid'}"
+              %td= link_to "Show", event, class: 'btn btn-secondary'

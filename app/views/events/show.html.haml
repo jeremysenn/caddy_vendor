@@ -89,4 +89,4 @@
                   .text-danger Reversed
                 =# "Paid" if player.paid?
                 =# link_to 'Rate', new_caddy_rating_path(player_id: player.id), class: 'btn btn-warning' unless player.caddy_rating.present?
-    .card-link= link_to "Done", events_path, class: 'btn btn-primary'
+    .card-link= link_to "Done", :back, class: 'btn btn-primary'

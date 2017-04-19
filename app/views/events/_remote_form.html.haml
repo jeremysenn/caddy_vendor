@@ -1,15 +1,9 @@
-= form_for @event, :html => {class: 'form-horizontal event_form', role: 'form'} do |f|
+= form_for @event, :html => {class: 'form-horizontal event_form', role: 'form'}, remote: true do |f|
   = f.hidden_field :course_id, value: current_course.id
   = f.hidden_field :date_range, class: "date-range-picker"
+  = f.hidden_field :start, value: Date.today, class: 'start_hidden'
+  = f.hidden_field :end, value: Date.today, class: 'end_hidden'
   = f.hidden_field :round, value: '18'
-  .row.form-group
-    %div{:class => "col-sm-12"}
-      %label.col-sm-2.control-label.lead{for: "event_start"}
-        Time
-      %div{:class => "col-sm-10"}
-        = f.time_select :start, value: Time.now.in_time_zone(current_user.time_zone), minute_step: 15, ampm: true
-        to
-        = f.time_select :end, value: Time.now.in_time_zone(current_user.time_zone), minute_step: 15, ampm: true, class: 'end_hidden'
   .row.form-group
     %div{:class => "col-sm-12"}
       %label.col-sm-2.control-label.lead{for: "event_players"} 
@@ -77,9 +71,9 @@
   
   .row.form-group
     %div{:class => "col-sm-12"}
-      = link_to 'Cancel', :back, class: 'btn btn-secondary'
-      %button.btn.btn-primary{:type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Save"}} 
-        Save
+      %button.btn.btn-secondary{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button", onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"} Cancel
+      = f.submit "Payment", :class => 'btn btn-success', name: 'pay', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();" #if current_user.admin?
+      = f.submit "Save", :class => 'btn btn-primary', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"
       - unless @event.contains_paid_players?
         = link_to 'Delete',                      |
               event,                                 |

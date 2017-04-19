@@ -6,10 +6,24 @@
       %i.fa.fa-flag
       CaddyVend
     %ul.nav.navbar-nav  
-      %li.nav-item
-        %a.nav-link{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
-          %i.fa.fa-calendar
-          Calendar
+      %li.nav-item.dropdown
+        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'events') ? "active" : ""}
+          Rounds
+          %b.caret
+        %div.dropdown-menu
+          %a.dropdown-item{:href => new_event_path, :class => (current_page? new_event_path) ? "active" : ""} 
+            %i.fa.fa-plus-circle
+            New Round
+          %a.dropdown-item{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
+            All Rounds
+          %a.dropdown-item{:href => calendar_events_path, :class => (current_page? calendar_events_path) ? "active" : ""} 
+            %i.fa.fa-calendar
+            Calendar
+      -#
+        %li.nav-item
+          %a.nav-link{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
+            %i.fa.fa-calendar
+            Calendar
       %li.nav-item.dropdown
         %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'customers') ? "active" : ""}
           %i.fa.fa-user-circle-o
