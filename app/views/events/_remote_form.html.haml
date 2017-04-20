@@ -89,6 +89,7 @@
 
   $('.event_form').on('click', '.add_nested_fields_link', function() {
     if ($('.event_form').find('.player_fields:visible').length === 4) {
+      // Don't allow for more than five players to be entered, so remove add button
       $(this).hide();
     }
     return true;
@@ -96,6 +97,7 @@
 
   $('.event_form').on('click', '.remove_nested_fields_link', function() {
     if ($('.event_form').find('.player_fields:visible').length === 5) {
+      // Put the add player button back if go under five players
       $('.event_form').find('.add_nested_fields_link').show();
     }
     return true;
@@ -106,23 +108,9 @@
     theme: 'bootstrap'
   });
 
-  // Apply select2 to dynamically added player caddy selects
-  $("body").on("click",".more_players_link", function(){
-    $('.caddy_select').select2({
-      theme: 'bootstrap',
-    });
-  });
-
   // Apply select2 to existing player member selects
   $('.member_select').select2({
     theme: 'bootstrap',
-  });
-
-  // Apply select2 to dynamically added player member selects
-  $("body").on("click",".more_players_link", function(){
-    $('.member_select').select2({
-      theme: 'bootstrap',
-    });
   });
 
   // Apply select2 to existing player guest selects
@@ -133,8 +121,14 @@
     multiple: false,
   });
 
-  // Apply select2 to dynamically added player guest selects
+  // Apply select2 to dynamically added player selects
   $("body").on("click",".more_players_link", function(){
+    $('.caddy_select').select2({
+      theme: 'bootstrap',
+    });
+    $('.member_select').select2({
+      theme: 'bootstrap',
+    });
     $('.note_select').select2({
       placeholder: 'Guest',
       theme: 'bootstrap',
