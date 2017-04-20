@@ -31,7 +31,7 @@
           %thead
             %tr
               %th Name
-              %th Phone
+              -# %th Phone
               %th Member #
               %th Active
               %th Balance
@@ -40,7 +40,7 @@
             - @members.each do |member|
               %tr{class: "#{(not member.primary?) ? 'table-active' : ''}"}
                 %td= member.full_name
-                %td= member.PhoneMobile
+                -# %td= member.PhoneMobile
                 %td= "#{member.member_number.blank? ? 'None' : member.member_number}"
                 %td= "#{member.active? ? 'Yes' : 'No'}"
                 %td 

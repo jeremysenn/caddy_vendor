@@ -2,10 +2,11 @@
   %br
   %h3
     = @course.name
-  %p
-    %a{href: events_path, class: 'btn btn-warning'}
-      %i.fa.fa-calendar
-      Calendar
+  -#
+    %p
+      %a{href: events_path, class: 'btn btn-warning'}
+        %i.fa.fa-calendar
+        Calendar
   .card.card-block    
     %p.lead= "Transaction Fee: #{number_to_currency(@course.transaction_fee)}"
   

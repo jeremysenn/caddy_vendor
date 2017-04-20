@@ -95,9 +95,14 @@ class EventsController < ApplicationController
   
   def calendar
     session[:course_id] = params[:course_id] unless params[:course_id].blank?
-    unless current_course.blank?
-      @events = current_course.events
+    unless event_params[:course_id].blank?
+      session[:course_id] = event_params[:course_id]
+      @course = Course.where(ClubCourseID: event_params[:course_id]).first
+      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
+    else
+      @course = current_course.blank? ? current_user.company.courses.first : current_course
     end
+    @events = @course.events
   end
 
   private
