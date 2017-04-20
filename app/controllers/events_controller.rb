@@ -94,6 +94,8 @@ class EventsController < ApplicationController
   end
   
   def calendar
+    @start = params[:start] ||= Date.today.to_s
+    @end = params[:end] ||= Date.today.to_s
     session[:course_id] = params[:course_id] unless params[:course_id].blank?
     unless event_params[:course_id].blank?
       session[:course_id] = event_params[:course_id]
@@ -102,7 +104,7 @@ class EventsController < ApplicationController
     else
       @course = current_course.blank? ? current_user.company.courses.first : current_course
     end
-    @events = @course.events
+    @events = @course.events.where(start: @start.to_date.beginning_of_day..@end.to_date.end_of_day)
   end
 
   private

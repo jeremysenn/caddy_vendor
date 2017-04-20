@@ -12,7 +12,7 @@ initialize_calendar = function() {
       selectHelper: true,
       editable: true,
       eventLimit: true,
-      events: '/events.json',
+      events: '/events/calendar.json',
       defaultView: 'agendaDay',
       minTime: "06:00:00",
       maxTime: "18:00:00",
