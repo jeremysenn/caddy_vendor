@@ -4,12 +4,17 @@
   = f.hidden_field :round, value: '18'
   .row.form-group
     %div{:class => "col-sm-12"}
+      %div{:class => "col-sm-3"}
+        %p.lead= current_course.name
+  .row.form-group
+    %div{:class => "col-sm-12"}
       %label.col-sm-2.control-label.lead{for: "event_start"}
-        Time
+        Start
       %div{:class => "col-sm-10"}
-        = f.time_select :start, value: Time.now.in_time_zone(current_user.time_zone), minute_step: 15, ampm: true
-        to
-        = f.time_select :end, value: Time.now.in_time_zone(current_user.time_zone), minute_step: 15, ampm: true, class: 'end_hidden'
+        = f.datetime_select :start, value: Time.now.in_time_zone(current_user.time_zone), minute_step: 15, ampm: true
+        -#
+          to
+          = f.datetime_select :end, value: Time.now.in_time_zone(current_user.time_zone), minute_step: 15, ampm: true
   .row.form-group
     %div{:class => "col-sm-12"}
       %label.col-sm-2.control-label.lead{for: "event_players"} 

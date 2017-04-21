@@ -32,6 +32,7 @@ class EventsController < ApplicationController
   def new
     @event = Event.new
     @event.players.build
+    session[:course_id] = params[:course_id] unless params[:course_id].blank?
   end
 
   # GET /events/1/edit
@@ -42,6 +43,7 @@ class EventsController < ApplicationController
   # POST /events.json
   def create
     @event = Event.new(event_params)
+    @event.end = @event.start + 15.minutes
 #    @event.save
 #    if params[:pay]
 #      redirect_to @event

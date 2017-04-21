@@ -11,9 +11,16 @@
           Rounds
           %b.caret
         %div.dropdown-menu
-          %a.dropdown-item{:href => new_event_path, :class => (current_page? new_event_path) ? "active" : ""} 
-            %i.fa.fa-plus-circle
-            New Round
+          - if current_user.courses.count <= 1
+            %a.dropdown-item{:href => new_event_path, :class => (current_page? new_event_path) ? "active" : ""} 
+              %i.fa.fa-plus-circle
+              New Round
+          - else
+            - current_user.courses.each do |course|
+              %a.dropdown-item{:href => new_event_path(course_id: course.id), :class => (current_page? new_event_path(course_id: course.id)) ? "active" : ""} 
+                %i.fa.fa-plus-circle
+                = "#{course.name} Round"
+            
           %a.dropdown-item{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
             All Rounds
           %a.dropdown-item{:href => calendar_events_path, :class => (current_page? calendar_events_path) ? "active" : ""} 
