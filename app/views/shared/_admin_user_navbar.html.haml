@@ -49,10 +49,10 @@
           Caddies
           %b.caret
         %div.dropdown-menu
-          %a.dropdown-item{:href => caddies_path, :class => (params[:controller] == 'caddies' and not params[:balances] == 'true') ? "active" : ""} 
+          %a.dropdown-item{:href => caddies_path, :class => (params[:controller] == 'caddies' and params[:action] == 'index' and not params[:balances] == 'true') ? "active" : ""} 
             %i.fa.fa-vcard-o
             All caddies
-          %a.dropdown-item{:href => caddies_path(balances: true), :class => (params[:controller] == 'caddies' and params[:balances] == 'true') ? "active" : ""} 
+          %a.dropdown-item{:href => caddies_path(balances: true), :class => (params[:controller] == 'caddies' and params[:action] == 'index' and params[:balances] == 'true') ? "active" : ""} 
             %i.fa.fa-dollar
             Caddies with balance
       %li.nav-item
