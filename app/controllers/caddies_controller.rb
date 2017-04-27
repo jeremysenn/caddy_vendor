@@ -4,6 +4,7 @@ class CaddiesController < ApplicationController
   load_and_authorize_resource
   around_action :set_time_zone, if: :current_user
 
+  helper_method :caddies_sort_column, :caddies_sort_direction
 
   # GET /caddies
   # GET /caddies.json
@@ -18,18 +19,18 @@ class CaddiesController < ApplicationController
       format.html {
         unless params[:q].blank?
           @query_string = "%#{params[:q]}%"
-          caddies = @course.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ? OR customer.PhoneMobile like ?", @query_string, @query_string, @query_string).order("customer.NameL")
+          caddies = @course.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ? OR customer.PhoneMobile like ?", @query_string, @query_string, @query_string) #.order("customer.NameL")
         else
           unless params[:balances].blank?
             caddies = current_user.company.caddies_with_balance
           else
-            caddies = @course.caddies.joins(:customer).order("customer.NameL")
+            caddies = @course.caddies.joins(:customer) #.order("customer.NameL")
           end
         end
         unless params[:caddy_rank_desc_id].blank?
-          @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).page(params[:page]).per(50)
+          @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).order("#{caddies_sort_column} #{caddies_sort_direction}").page(params[:page]).per(50)
         else
-          @caddies = caddies.page(params[:page]).per(50)
+          @caddies = caddies.order("#{caddies_sort_column} #{caddies_sort_direction}").page(params[:page]).per(50)
         end
       }
       format.json {
@@ -157,5 +158,15 @@ class CaddiesController < ApplicationController
     
     def set_time_zone(&block)
       Time.use_zone(current_user.time_zone, &block)
+    end
+    
+    ### Secure the caddies sort direction ###
+    def caddies_sort_direction
+      %w[asc desc].include?(params[:caddies_direction]) ?  params[:caddies_direction] : "asc"
+    end
+
+    ### Secure the caddies sort column name ###
+    def caddies_sort_column
+      ["customer.NameL", "customer.NameF"].include?(params[:caddies_column]) ? params[:caddies_column] : "customer.NameL"
     end
 end
