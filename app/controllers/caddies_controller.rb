@@ -18,7 +18,7 @@ class CaddiesController < ApplicationController
       format.html {
         unless params[:q].blank?
           @query_string = "%#{params[:q]}%"
-          caddies = @course.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string).order("customer.NameL")
+          caddies = @course.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ? OR customer.PhoneMobile like ?", @query_string, @query_string, @query_string).order("customer.NameL")
         else
           unless params[:balances].blank?
             caddies = current_user.company.caddies_with_balance

@@ -8,7 +8,7 @@
       = search_field_tag :q, params[:q], :placeholder => "Search caddies", class: "form-control input-lg", autofocus: true
       %button.btn.btn-secondary{id: 'caddy_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
         %i.fa.fa-search
-      %small.text-muted Search by first name or last name
+      %small.text-muted Search by first name, last name, or phone.
       .pull-right
         %a{href: '#', class: 'btn btn-secondary', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
           %i.fa.fa-commenting
