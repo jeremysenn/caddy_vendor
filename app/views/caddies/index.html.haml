@@ -8,7 +8,7 @@
       = search_field_tag :q, params[:q], :placeholder => "Search caddies", class: "form-control input-lg", autofocus: true
       %button.btn.btn-secondary{id: 'caddy_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
         %i.fa.fa-search
-      %small.text-muted Search by first name or last name
+      %small.text-muted Search by first name, last name, or phone.
       .pull-right
         %a{href: '#', class: 'btn btn-secondary', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
           %i.fa.fa-commenting
@@ -48,7 +48,10 @@
         %table.table.table-striped
           %thead
             %tr
-              %th Name
+              -# %th First Name
+              %th= caddies_sort_link 'customer.NameF', "First Name"
+              -# %th Last Name
+              %th= caddies_sort_link 'customer.NameL', "Last Name"
               %th Course
               %th Rating
               %th Ranking
@@ -60,7 +63,8 @@
           %tbody
             - @caddies.each do |caddy|
               %tr{class: "#{caddy.inactive? ? 'table-danger' : ''}"}
-                %td= caddy.full_name
+                %td= caddy.first_name
+                %td= caddy.last_name
                 %td= link_to truncate(caddy.course.name, length: 7), caddy.course
                 %td
                   %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => caddy.average_rating, "data-rateit-readonly" => "true" }

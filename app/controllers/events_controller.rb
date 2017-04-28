@@ -51,7 +51,14 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
-        format.html { redirect_to @event, notice: 'Event was successfully created.' }
+#        format.html { redirect_to @event, notice: 'Event was successfully created.' }
+        format.html { 
+          if params[:pay]
+            redirect_to @event, notice: 'Event was successfully created.'
+          else
+            redirect_to events_path, notice: 'Event was successfully created.' 
+          end
+          }
         format.json { render :show, status: :created, location: @event }
         format.js {
           if params[:pay]
@@ -69,20 +76,33 @@ class EventsController < ApplicationController
   # PATCH/PUT /events/1
   # PATCH/PUT /events/1.json
   def update
-    @event.update(event_params)
-    if params[:pay]
-#      redirect_to @event, notice: 'Select Member and Caddy for Payment'
-      redirect_to @event
-    end
-#    respond_to do |format|
-#      if @event.update(event_params)
-#        format.html { redirect_to @event, notice: 'Event was successfully updated.' }
-#        format.json { render :show, status: :ok, location: @event }
-#      else
-#        format.html { render :edit }
-#        format.json { render json: @event.errors, status: :unprocessable_entity }
-#      end
+#    @event.update(event_params)
+#    if params[:pay]
+#      redirect_to @event
 #    end
+    respond_to do |format|
+      if @event.update(event_params)
+        format.html { 
+          if params[:pay]
+            redirect_to @event, notice: 'Event was successfully updated.'
+          else
+            redirect_to events_path, notice: 'Event was successfully updated.' 
+          end
+          }
+        format.json { render :show, status: :ok, location: @event }
+        format.js {
+          if params[:pay]
+            redirect_to @event
+          else
+            redirect_to events_path, notice: 'Event was successfully updated.' 
+          end
+        }
+      else
+        format.html { render :edit }
+        format.json { render json: @event.errors, status: :unprocessable_entity }
+        format.js
+      end
+    end
   end
 
   # DELETE /events/1
