@@ -43,7 +43,10 @@
                   .col-sm-6
                     = ff.select :round, [["Eighteen holes", 18], ["Nine holes", 9]], {required: true, include_blank: false}, class: "form-control"
                   .col-sm-6
-                    = ff.select :caddy_type, ["Carry", "Chase"], {required: true, include_blank: false}, class: "form-control"
+                    - unless current_user.company.id == 4
+                      = ff.select :caddy_type, ["Carry", "Chase"], {required: true, include_blank: false}, class: "form-control"
+                    - else
+                      = ff.select :caddy_type, ["Carry", "Chase", "Car Wash", "Forecaddy", "Shadow"], {required: true, include_blank: false}, class: "form-control"
                 - else
                   .col-sm-6
                     %p.lead= ff.object.round_as_string
