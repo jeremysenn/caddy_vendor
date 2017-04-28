@@ -87,11 +87,12 @@
   .row.form-group
     %div{:class => "col-sm-12"}
       = link_to 'Cancel', :back, class: 'btn btn-secondary'
-      %button.btn.btn-primary{:type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Save"}} 
+      = f.submit "Payment", :class => 'btn btn-success', name: 'pay'
+      %button.btn.btn-primary{:type => "submit"} 
         Save
       - unless @event.contains_paid_players?
         = link_to 'Delete',                      |
-              event,                                 |
+              @event,                                 |
               method: :delete,                       |
               class: 'btn btn-danger',               |
               data: { confirm: 'Are you sure?' },    |

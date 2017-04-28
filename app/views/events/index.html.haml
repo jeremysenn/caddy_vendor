@@ -31,6 +31,8 @@
                 %td= event.start.strftime('%-m/%-d/%y %l:%M %p')
                 %td= event.player_names_with_caddy_names
                 %td= "#{event.not_paid? ? 'Open' : 'Paid'}"
-                %td= link_to "Show", event, class: 'btn btn-secondary'
+                %td
+                  = link_to "Edit", edit_event_path(event), class: 'btn btn-primary'
+                  = link_to "Payment", event, class: 'btn btn-success'
     - else
       %p.lead None
