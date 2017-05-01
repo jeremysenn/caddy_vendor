@@ -90,21 +90,21 @@
     $(this).find('[autofocus]').first().focus();
   });
 
-  $('.event_form').on('click', '.add_nested_fields_link', function() {
-    if ($('.event_form').find('.player_fields:visible').length === 4) {
-      // Don't allow for more than five players to be entered, so remove add button
-      $(this).hide();
-    }
-    return true;
-  });
+  //$('.event_form').on('click', '.add_nested_fields_link', function() {
+  //  if ($('.event_form').find('.player_fields:visible').length === 4) {
+  //    // Don't allow for more than five players to be entered, so remove add button
+  //    $(this).hide();
+  //  }
+  //  return true;
+  //});
 
-  $('.event_form').on('click', '.remove_nested_fields_link', function() {
-    if ($('.event_form').find('.player_fields:visible').length === 5) {
-      // Put the add player button back if go under five players
-      $('.event_form').find('.add_nested_fields_link').show();
-    }
-    return true;
-  });
+  //$('.event_form').on('click', '.remove_nested_fields_link', function() {
+  //  if ($('.event_form').find('.player_fields:visible').length === 5) {
+  //    // Put the add player button back if go under five players
+  //    $('.event_form').find('.add_nested_fields_link').show();
+  //  }
+  //  return true;
+  //});
 
   // Apply select2 to existing player caddy selects
   $('.caddy_select').select2({
