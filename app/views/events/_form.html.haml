@@ -35,7 +35,7 @@
                   .col-sm-6
                     =# ff.collection_select :member_id, current_user.members, :id, :full_name, class: 'input-lg form-control', required: true
                     =# ff.select :member_id, current_user.members.order(:NameL).collect { |m| [ m.full_name_by_last_name, m.id ] }, {required: true, include_blank: false}, class: "form-control"
-                    = ff.select :member_id, current_user.members.active.order(:NameL).collect { |m| [ m.full_name, m.id ] }, {prompt: '-- Select member --'}, required: true, class: "member_select form-control", style: "width: 100%;"
+                    = ff.select :member_id, current_user.members.active.order(:NameL).collect { |m| [ m.full_name_with_member_number, m.id ] }, {prompt: '-- Select member --'}, required: true, class: "member_select form-control", style: "width: 100%;"
                   .col-sm-6
                     =# ff.collection_select :caddy_id, current_course.caddies, :id, :full_name, class: 'input-lg form-control', required: true
                     =# ff.select :caddy_id, current_course.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "form-control"
@@ -99,21 +99,21 @@
               remote: true unless @event.new_record? |
 
 :javascript
-  $('.event_form').on('click', '.add_nested_fields_link', function() {
-    if ($('.event_form').find('.player_fields:visible').length === 4) {
-      // Don't allow for more than five players to be entered, so remove add button
-      $(this).hide();
-    }
-    return true;
-  });
+  //$('.event_form').on('click', '.add_nested_fields_link', function() {
+  //  if ($('.event_form').find('.player_fields:visible').length === 4) {
+  //    // Don't allow for more than five players to be entered, so remove add button
+  //    $(this).hide();
+  //  }
+  //  return true;
+  //});
 
-  $('.event_form').on('click', '.remove_nested_fields_link', function() {
-    if ($('.event_form').find('.player_fields:visible').length === 5) {
-      // Put the add player button back if go under five players
-      $('.event_form').find('.add_nested_fields_link').show();
-    }
-    return true;
-  });
+  //$('.event_form').on('click', '.remove_nested_fields_link', function() {
+  //  if ($('.event_form').find('.player_fields:visible').length === 5) {
+  //    // Put the add player button back if go under five players
+  //    $('.event_form').find('.add_nested_fields_link').show();
+  //  }
+  //  return true;
+  //});
 
   // Apply select2 to existing player caddy selects
   $('.caddy_select').select2({
