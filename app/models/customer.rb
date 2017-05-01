@@ -323,12 +323,21 @@ class Customer < ActiveRecord::Base
     "#{self.NameL}, #{self.NameF} "
   end
   
+  def full_name_with_member_number
+    "#{self.NameF} #{self.NameL} #{member_number}"
+  end
+  
   def member_number
-    if primary?
-      account.ActNbr unless account.blank?
-    else
-      parent_customer.member_number
-    end
+    self.Registration_Source
+#    unless self.Registration_Source.blank?
+#      self.Registration_Source
+#    else
+#      if primary?
+#        account.ActNbr unless account.blank?
+#      else
+#        parent_customer.member_number
+#      end
+#    end
   end
   
   def primary?
