@@ -93,6 +93,7 @@
                   %th Date caddy paid
                   %th Amount paid to caddy
                   %th Caddy name
+                  %th Caddy rank
                   %th Reference number
                   -# %th Description
                   %th Note
@@ -110,6 +111,7 @@
                     %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y")
                     %td= number_to_currency(transfer.amount_paid_to_caddy)
                     %td= transfer.caddy_name
+                    %td= "#{transfer.caddy_rank.blank? ? 'N/A' : transfer.caddy_rank}"
                     %td= link_to transfer.reference_number, transaction_path(transfer.reference_number) unless transfer.reference_number.blank?
                     -# %td= transfer.description
                     %td= transfer.note

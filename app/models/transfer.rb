@@ -334,13 +334,19 @@ class Transfer < ApplicationRecord
     end
   end
   
+  def caddy_rank
+    unless player.blank? or player.caddy.blank?
+      player.caddy.acronym
+    end
+  end
+  
   #############################
   #     Class Methods         #
   #############################
   
   def self.to_csv
     require 'csv'
-    attributes = %w{date_of_play holes member_number amount_billed player_name member_name date_caddy_paid amount_paid_to_caddy caddy_name reference_number note}
+    attributes = %w{date_of_play holes member_number amount_billed player_name member_name date_caddy_paid amount_paid_to_caddy caddy_name caddy_rank reference_number note}
     
     CSV.generate(headers: true) do |csv|
       csv << attributes
