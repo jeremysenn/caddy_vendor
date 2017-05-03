@@ -328,13 +328,19 @@ class Transfer < ApplicationRecord
     not customer_id.blank?
   end
   
+  def holes
+    unless player.blank?
+      player.round
+    end
+  end
+  
   #############################
   #     Class Methods         #
   #############################
   
   def self.to_csv
     require 'csv'
-    attributes = %w{date_of_play member_number amount_billed player_name member_name date_caddy_paid amount_paid_to_caddy caddy_name reference_number note}
+    attributes = %w{date_of_play holes member_number amount_billed player_name member_name date_caddy_paid amount_paid_to_caddy caddy_name reference_number note}
     
     CSV.generate(headers: true) do |csv|
       csv << attributes
