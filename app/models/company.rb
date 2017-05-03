@@ -76,6 +76,10 @@ class Company < ActiveRecord::Base
     return total
   end
   
+  def caddy_types
+    self.caddy_pay_rates.all.distinct('Type').pluck('Type')
+  end
+  
   #############################
   #     Class Methods      #
   #############################
