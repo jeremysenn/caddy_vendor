@@ -103,7 +103,6 @@
                 - @transfers.each do |transfer|
                   %tr
                     %td= "#{transfer.date_of_play.blank? ? 'N/A' : transfer.date_of_play.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y')}"
-                    %td= "#{transfer.holes.blank? ? 'N/A' : transfer.holes}"
                     %td= transfer.member_number
                     %td= number_to_currency(transfer.amount_billed)
                     %td= "#{transfer.player_name.blank? ? 'N/A' : transfer.player_name}"
@@ -112,6 +111,7 @@
                     %td= number_to_currency(transfer.amount_paid_to_caddy)
                     %td= transfer.caddy_name
                     %td= "#{transfer.caddy_rank.blank? ? 'N/A' : transfer.caddy_rank}"
+                    %td= "#{transfer.holes.blank? ? 'N/A' : transfer.holes}"
                     %td= link_to transfer.reference_number, transaction_path(transfer.reference_number) unless transfer.reference_number.blank?
                     -# %td= transfer.description
                     %td= transfer.note
