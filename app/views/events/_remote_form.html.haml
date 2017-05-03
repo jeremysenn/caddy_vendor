@@ -60,7 +60,7 @@
                     #note_field.collapse.show{class: "#{ff.object.note.blank? ? '' : 'in'}"}
                     =# ff.text_field :note, placeholder: 'Guest', class: 'input-lg form-control'
                   - unless ff.object.paid?
-                    = ff.select :note, current_course.player_notes, {prompt: 'Guest'},class: "note_select form-control", style: "width: 100%;"
+                    = ff.select :note, current_course.player_notes, {prompt: 'Guest'},class: "note_select form-control", style: "width: 100%;" #, required: true
                   - else
                     = ff.object.note
                 

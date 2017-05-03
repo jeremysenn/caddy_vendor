@@ -221,6 +221,9 @@ class Transfer < ApplicationRecord
   def date_of_play # Date of play
     unless player.blank? or player.event.blank?
       player.event.start.to_date
+    else
+      # Use transfer's created_at date if there is no player/round associated with transfer
+      created_at.to_date
     end
   end
   
