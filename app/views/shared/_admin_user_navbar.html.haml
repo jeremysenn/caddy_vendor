@@ -22,7 +22,8 @@
                 = "#{course.name} Round"
             
           %a.dropdown-item{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
-            All Rounds
+            %i.fa.fa-search
+            Rounds
           %a.dropdown-item{:href => calendar_events_path, :class => (current_page? calendar_events_path) ? "active" : ""} 
             %i.fa.fa-calendar
             Calendar
@@ -38,8 +39,8 @@
           %b.caret
         %div.dropdown-menu
           %a.dropdown-item{:href => customers_path, :class => (params[:controller] == 'customers' and not params[:balances] == 'true') ? "active" : ""} 
-            %i.fa.fa-users
-            All members
+            %i.fa.fa-search
+            Members
           %a.dropdown-item{:href => customers_path(balances: true), :class => (params[:controller] == 'customers' and params[:balances] == 'true') ? "active" : ""} 
             %i.fa.fa-dollar
             Members with balance
@@ -50,8 +51,8 @@
           %b.caret
         %div.dropdown-menu
           %a.dropdown-item{:href => caddies_path, :class => (params[:controller] == 'caddies' and params[:action] == 'index' and not params[:balances] == 'true') ? "active" : ""} 
-            %i.fa.fa-vcard-o
-            All caddies
+            %i.fa.fa-search
+            Caddies
           %a.dropdown-item{:href => caddies_path(balances: true), :class => (params[:controller] == 'caddies' and params[:action] == 'index' and params[:balances] == 'true') ? "active" : ""} 
             %i.fa.fa-dollar
             Caddies with balance
@@ -83,7 +84,7 @@
               %i.fa.fa-bolt
               EZCash Withdrawals
           %a{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active dropdown-item" : "dropdown-item"} 
-            %i.fa.fa-dollar
+            %i.fa.fa-search
             Transfers
           %a.dropdown-item{:href => reports_path, :class => (params[:controller] == 'reports' and params[:action] == 'index') ? "active" : ""} 
             %i.fa.fa-refresh

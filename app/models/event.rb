@@ -26,9 +26,9 @@ class Event < ApplicationRecord
     names = ''
     players.each do |player|
       unless player.member.blank? or player.caddy.blank?
-        if player.note.blank?
+        if player.note.blank? or player.note == 'None' # There's no guest
           names = names + ' ' + player.member.full_name + ' (' + player.caddy.full_name + ')'
-        else
+        else # There's a guest
           names = names + ' ' + player.note + ' (' + player.caddy.full_name + ')'
         end
       end
