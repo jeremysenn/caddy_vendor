@@ -76,7 +76,7 @@ class Course < ApplicationRecord
   end
   
   def player_notes
-    players.where.not(note: [nil, '']).collect { |p| [ p.note ] }.uniq
+    players.where.not(note: [nil, '']).collect { |p| [ p.note ] }.insert(0,['None']).uniq
   end
   
   #############################

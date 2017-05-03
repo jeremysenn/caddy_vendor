@@ -296,7 +296,7 @@ class Transfer < ApplicationRecord
   
   def player_name
     unless player.blank?
-      unless member_guest.blank?
+      unless member_guest.blank? or member_guest == 'None'
         member_guest
       else
         player.member.full_name unless player.member.blank?
