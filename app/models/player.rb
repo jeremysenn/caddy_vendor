@@ -11,6 +11,7 @@ class Player < ApplicationRecord
 #  before_destroy :check_caddy_in
   
 #  validates :tip, numericality: { :greater_than_or_equal_to => 0 }
+  validates :member_id, :caddy_id, presence: true
   
   #############################
   #     Instance Methods      #
