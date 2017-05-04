@@ -167,6 +167,6 @@ class CaddiesController < ApplicationController
 
     ### Secure the caddies sort column name ###
     def caddies_sort_column
-      ["customer.NameL", "customer.NameF"].include?(params[:caddies_column]) ? params[:caddies_column] : "customer.NameL"
+      ["customer.NameL", "customer.NameF"].include?(params[:caddies_column]) ? params[:caddies_column] : "customer.NameF"
     end
 end
