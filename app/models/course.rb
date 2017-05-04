@@ -79,6 +79,10 @@ class Course < ApplicationRecord
     players.where.not(note: [nil, '']).collect { |p| [ p.note ] }.insert(0,['None']).uniq
   end
   
+  def caddy_types
+    caddy_pay_rates.collect { |cpr| [ cpr.Type ] }.uniq
+  end
+  
   #############################
   #     Class Methods         #
   #############################
