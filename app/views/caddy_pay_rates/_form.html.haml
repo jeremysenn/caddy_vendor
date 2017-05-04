@@ -6,10 +6,10 @@
     = f.input :ClubCompanyID, :as => :hidden, :input_html => { :value => "#{@caddy_pay_rate.new_record? ? @course.id : @caddy_pay_rate.course.id}" }
     =# f.input :RankingAcronym, collection: @course.caddy_rankings_array.uniq, include_blank: false
     = f.association :caddy_rank_desc, collection: @course.caddy_rank_descs, label_method: :RankingAcronym, label: "Ranking", value_method: :id, include_blank: false
-    - unless current_user.company.id == 4
-      = f.input :Type, collection: ["Carry", "Chase"], include_blank: false
-    - else
-      = f.input :Type, collection: ["Carry", "Chase", "Forecaddy", "Shadow", "Car Wash"], include_blank: false
+    =# f.input :Type, collection: ["Carry", "Chase"], include_blank: false
+    .form-group
+      %label Type
+      = f.select :Type, current_course.caddy_types, {:include_blank => false, required: true}, class: "caddy_type_select form-control", style: "width: 100%;"
     = f.input :NbrHoles, collection: [9, 18], include_blank: false
     = f.input :Payrate, as: :string
 
