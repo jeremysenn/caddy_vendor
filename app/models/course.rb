@@ -80,7 +80,7 @@ class Course < ApplicationRecord
   end
   
   def caddy_types
-    caddy_pay_rates.collect { |cpr| [ cpr.Type ] }.uniq
+    caddy_pay_rates.collect { |cpr| [ cpr.Type ] }.uniq.sort
   end
   
   #############################
