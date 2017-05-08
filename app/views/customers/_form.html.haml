@@ -7,9 +7,10 @@
     = f.input :NameF, label: 'First Name'
     = f.input :NameL, label: 'Last Name'
     = f.input :Email, label: 'Email'
+    = f.input :Registration_Source, label: 'Member Number'
     =# f.input :PhoneMobile, label: 'Phone' if current_user.admin?
     = f.simple_fields_for :account do |account_form|
-      = account_form.input :ActNbr, label: 'Member Number'
+      =# account_form.input :ActNbr, label: 'Member Number'
       - if account_form.object.new_record?
         = account_form.input :CompanyNumber, :as => :hidden, :input_html => { :value => current_user.company_id }
         = account_form.input :Balance, :as => :hidden, :input_html => { :value => 0 }
