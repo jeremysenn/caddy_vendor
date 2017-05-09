@@ -30,7 +30,7 @@
             =# hidden_field_tag :q, params[:q]
             =# hidden_field_tag :balances, params[:balances]
             .row
-              .col-xs-12.col-sm-5{style: 'height: 220px; overflow-y: auto;'}
+              .col-xs-12.col-sm-5{style: 'height: 240px; overflow-y: scroll;'}
                 - @caddies.each do |caddy|
                   %p
                     = check_box_tag "caddy_ids[]", caddy.id, true, {id: "caddy_#{caddy.id}", class: "form_control"}
