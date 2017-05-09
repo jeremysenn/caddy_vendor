@@ -7,6 +7,17 @@ default: &default
   adapter: sqlite3
   pool: 41
   timeout: 15000
+  
+#development:
+#  adapter: mysql2
+#  encoding: utf8
+#  reconnect: false
+#  database: caddy_vendor
+#  pool: 5
+#  username: root
+#  password:
+#  socket: /tmp/mysql.sock
+##  socket: /var/lib/mysql/mysql.sock
 
 development:
   <<: *default

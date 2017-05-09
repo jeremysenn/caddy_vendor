@@ -13,7 +13,7 @@
         = link_to @transfer.club_credit_transaction_id, transaction_path(@transfer.club_credit_transaction_id)
     %p.lead
       DateTime of transfer:
-      = @transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+      = @transfer.created_at.in_time_zone(@transfer.course.time_zone).strftime("%-m/%-d/%y %l:%M %p")
     %p.lead
       From:
       - unless @from.blank?

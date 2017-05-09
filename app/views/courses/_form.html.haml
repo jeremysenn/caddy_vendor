@@ -5,6 +5,7 @@
     = f.input :ClubCompanyNumber, :as => :hidden, :input_html => { :value => current_user.company_id}
     = f.input :CourseName, as: :string
     = f.input :transaction_fee
+    = f.input :time_zone, priority: /US/, collection: ActiveSupport::TimeZone.us_zones, required: true, as: :time_zone
 
   .form-actions
     = f.button :submit, class: 'btn btn-primary'

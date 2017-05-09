@@ -102,12 +102,12 @@
               %tbody
                 - @transfers.each do |transfer|
                   %tr
-                    %td= "#{transfer.date_of_play.blank? ? 'N/A' : transfer.date_of_play.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y')}"
+                    %td= "#{transfer.date_of_play.blank? ? 'N/A' : transfer.date_of_play.strftime('%-m/%-d/%y')}"
                     %td= transfer.member_number
                     %td= number_to_currency(transfer.amount_billed)
                     %td= "#{transfer.player_name.blank? ? 'N/A' : transfer.player_name}"
                     %th= transfer.member_name
-                    %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y")
+                    %td= transfer.date_caddy_paid.strftime("%-m/%-d/%y")
                     %td= number_to_currency(transfer.amount_paid_to_caddy)
                     %td= transfer.caddy_name
                     %td= "#{transfer.caddy_rank.blank? ? 'N/A' : transfer.caddy_rank}"

@@ -2,7 +2,7 @@ class Event < ApplicationRecord
   belongs_to :course
   
   has_many :players, :dependent => :destroy
-  accepts_nested_attributes_for :players, allow_destroy: true, limit: 5
+  accepts_nested_attributes_for :players, allow_destroy: true #, limit: 5
   has_many :transfers, through: :players
   
 #  validates :title, presence: true
