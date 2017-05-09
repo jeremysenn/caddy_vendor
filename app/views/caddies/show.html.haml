@@ -114,6 +114,11 @@
     .tab-pane{:id => "messages"}
       %br
       #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
+        .pull-right
+          %p
+            %a{href: '#', class: 'btn btn-secondary', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
+              %i.fa.fa-commenting
+              Text Message
         - unless @text_messages.blank?
           .table-responsive
             %table.table.table-striped
@@ -130,3 +135,27 @@
                     %td= link_to "Show", text_message, class: 'btn btn-secondary'
         - else
           %p.lead None
+
+      #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+        .modal-dialog.modal-sm{:role => "document"}
+          .modal-content
+            .modal-header
+              %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+                %span{"aria-hidden" => "true"} ×
+              .modal-title
+                .lead 
+                  %i.fa.fa-commenting
+                  Text Message
+            .modal-body
+              = form_tag send_group_text_message_caddies_path, id: 'send_caddies_sms_form', method: 'get' do |f|
+                = hidden_field_tag "caddy_ids[]", [@caddy.id]
+                .row
+                  .col-xs-12
+                    = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 8, style: 'width:100%', autofocus: true
+                .row
+                  .col-xs-12
+                    .pull-right
+                      %br
+                      %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
+                      %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Send"}} 
+                        Send
