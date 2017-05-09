@@ -14,7 +14,7 @@
           %i.fa.fa-commenting
           Text Message
   #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
-    .modal-dialog.modal-sm{:role => "document"}
+    .modal-dialog{:role => "document"}
       .modal-content
         .modal-header
           %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
@@ -24,16 +24,27 @@
               %i.fa.fa-commenting
               Text Message
         .modal-body
-          = form_tag send_group_text_message_caddies_path, id: 'send_caddies_sms_form', method: 'get', class: 'form-inline' do |f|
-            = hidden_field_tag :course_id, params[:course_id]
-            = hidden_field_tag :caddy_rank_desc_id, params[:caddy_rank_desc_id]
-            = hidden_field_tag :q, params[:q]
-            = hidden_field_tag :balances, params[:balances]
-            = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 4, style: 'width:100%', autofocus: true
-            .modal-footer
-              %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
-              %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
-                Send
+          = form_tag send_group_text_message_caddies_path, id: 'send_caddies_sms_form', method: 'get' do |f|
+            =# hidden_field_tag :course_id, params[:course_id]
+            =# hidden_field_tag :caddy_rank_desc_id, params[:caddy_rank_desc_id]
+            =# hidden_field_tag :q, params[:q]
+            =# hidden_field_tag :balances, params[:balances]
+            .row
+              .col-xs-12.col-sm-6
+                - @caddies.each do |caddy|
+                  %p
+                    = check_box_tag "caddy_ids[]", caddy.id, true, {id: "caddy_#{caddy.id}", class: "form_control"}
+                    = caddy.full_name
+              .col-xs-12.col-sm-6
+                = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 8, style: 'width:100%', autofocus: true
+            .row
+              .col-xs-12.col-sm-6
+              .col-xs-12.col-sm-6
+                .pull-right
+                  %br
+                  %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
+                  %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Send"}} 
+                    Send
 
   .card.card-block
     %h4.card-title 
@@ -74,7 +85,7 @@
                   - else
                     None
                 %td= number_to_currency(caddy.balance)
-                %td= "#{caddy.checkin_today? ? caddy.CheckedIn.in_time_zone(current_user.time_zone).strftime('%l:%M %p') : 'Not today'}"
+                %td= "#{caddy.checkin_today? ? caddy.CheckedIn.in_time_zone(caddy.course.time_zone).strftime('%l:%M %p') : 'Not today'}"
                 %td= "#{caddy.active? ? 'Yes' : 'No'}"
                 %td
                   %a{href: caddy_path(caddy), class: 'btn btn-secondary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> More..." }}

@@ -218,16 +218,22 @@ class Transfer < ApplicationRecord
   def course
     unless player.blank?
       player.course
+    else
+      unless caddy.blank?
+        caddy.course
+      else
+        nil
+      end
     end
   end
   
   ### Start methods for use with generating CSV file ###
   def date_of_play # Date of play
     unless player.blank? or player.event.blank?
-      player.event.start.to_date
+      player.event.start.in_time_zone(course.time_zone).to_date
     else
       # Use transfer's created_at date if there is no player/round associated with transfer
-      created_at.to_date
+      created_at.in_time_zone(course.time_zone).to_date
     end
   end
   
@@ -275,7 +281,7 @@ class Transfer < ApplicationRecord
   end
   
   def date_caddy_paid
-    created_at.to_date
+    created_at.in_time_zone(course.time_zone).to_date
   end
   
   def caddy_name
