@@ -1,4 +1,4 @@
-.container
+.container-fluid
   %br
   %p
     = form_tag caddies_path, id: 'caddies_form', method: 'get', class: 'form-inline' do |f|
@@ -30,12 +30,12 @@
             =# hidden_field_tag :q, params[:q]
             =# hidden_field_tag :balances, params[:balances]
             .row
-              .col-xs-12.col-sm-6
+              .col-xs-12.col-sm-5{style: 'height: 220px; overflow-y: auto;'}
                 - @caddies.each do |caddy|
                   %p
                     = check_box_tag "caddy_ids[]", caddy.id, true, {id: "caddy_#{caddy.id}", class: "form_control"}
                     = caddy.full_name
-              .col-xs-12.col-sm-6
+              .col-xs-12.col-sm-7
                 = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 8, style: 'width:100%', autofocus: true
             .row
               .col-xs-12.col-sm-6
