@@ -42,11 +42,11 @@ production:
   password:
   socket: /var/lib/mysql/mysql.sock
 
-ez_cash:
-  adapter: sqlserver
-  host: <%= ENV['EZCASH_HOST'] %>
-  database: <%= ENV['EZCASH_DATABASE'] %>
-  username: <%= ENV['EZCASH_USERNAME'] %>
-  password: <%= ENV['EZCASH_PASSWORD'] %>
+#ez_cash:
+#  adapter: sqlserver
+#  host: <%= ENV['EZCASH_HOST'] %>
+#  database: <%= ENV['EZCASH_DATABASE'] %>
+#  username: <%= ENV['EZCASH_USERNAME'] %>
+#  password: <%= ENV['EZCASH_PASSWORD'] %>
   
 
