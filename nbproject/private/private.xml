@@ -3,11 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/controllers/reports_controller.rb</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/controllers/customers_controller.rb</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/workers/clear_member_balance_worker.rb</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/transfer.rb</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/customer.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddies/index.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddies/show.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/controllers/caddies_controller.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/transactions/index.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/customers/index.html.haml</file>
         </group>
     </open-files>
 </project-private>
