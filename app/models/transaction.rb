@@ -297,6 +297,18 @@ class Transaction < ActiveRecord::Base
     Account.where(ActID: from_acct_id).first
   end
   
+  def to_account_customer
+    unless to_account.blank?
+      to_account.customer
+    end
+  end
+  
+  def from_account_customer
+    unless from_account.blank?
+      from_account.customer
+    end
+  end
+  
   def reverse
     client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
     response = client.call(:ez_cash_txn, message: { TranID: tranID })
