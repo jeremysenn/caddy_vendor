@@ -307,6 +307,8 @@ class Transfer < ApplicationRecord
       else
         player.member.full_name unless player.member.blank?
       end
+    else
+      member_name
     end
   end
   ### End methods for use with generating CSV file ###
@@ -345,7 +347,7 @@ class Transfer < ApplicationRecord
   end
   
   def reference
-    "#{holes} #{caddy_rank} Caddie Cash Advance #{player_name}"
+    "#{holes} #{caddy_rank} Caddie Cash Advance #{note} #{player_name}"
   end
   
   #############################
