@@ -18,9 +18,11 @@
       = @transaction.dev_id
     %p.lead
       From Account:
+      = @transaction.from_account_customer.full_name unless @transaction.from_account_customer.blank?
       = @transaction.from_acct_id
     %p.lead
       To Account:
+      = @transaction.to_account_customer.full_name unless @transaction.to_account_customer.blank?
       = @transaction.to_acct_id
     %p.lead
       DateTime:
