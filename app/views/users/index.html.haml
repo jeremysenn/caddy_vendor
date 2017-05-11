@@ -1,5 +1,15 @@
 .container
   %br
+  %p
+    = form_tag users_admin_index_path, id: 'users_form', method: 'get', class: 'form-inline' do |f|
+      .input-group
+        = search_field_tag :q, params[:q], :placeholder => "Search users", class: "form-control input-lg", autofocus: true
+        %span.input-group-btn
+          %button.btn.btn-primary{id: 'user_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
+            %i.fa.fa-search
+      .pull-right
+        = link_to 'New user', new_users_admin_path, class: 'btn btn-warning'
+
   .card.card-block
     %h4.card-title Users
     .table-responsive
@@ -18,5 +28,3 @@
               %td= "#{user.active? ? 'Yes' : 'No'}"
               %td
                 = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary'
-
-  = link_to 'New user', new_users_admin_path, class: 'btn btn-primary'

@@ -10,8 +10,10 @@
       .form-group
         = text_field_tag 'event[end_date]', nil, :placeholder => "End Date", value: "#{@end_date.blank? ? Date.today : @end_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
       =# search_field_tag :q, params[:q], :placeholder => "Search caddies", class: "form-control input-lg", autofocus: true
-      %button.btn.btn-secondary{id: 'events_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
+      %button.btn.btn-primary{id: 'events_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
         %i.fa.fa-search
+      .pull-right
+        = link_to 'New round', new_event_path(course_id: current_course.id), class: 'btn btn-warning'
 
   .card.card-block
     %h4.card-title 
