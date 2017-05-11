@@ -9,8 +9,8 @@
             %button.btn.btn-primary{id: 'member_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
               %i.fa.fa-search
         %small.text-muted Search by first name, last name, or member number.
-
-    %p= link_to 'New member', new_customer_path, class: 'btn btn-primary'
+        .pull-right
+          = link_to 'New member', new_customer_path, class: 'btn btn-warning'
 
   .card.card-block
     %h4.card-title 
