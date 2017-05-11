@@ -345,7 +345,7 @@ class Transfer < ApplicationRecord
   end
   
   def reference
-    "#{holes} #{caddy_rank} Caddie Cash Advance #{player_name}"
+    "#{holes} #{caddy_rank} Caddie Cash Advance #{note} #{player_name}"
   end
   
   #############################

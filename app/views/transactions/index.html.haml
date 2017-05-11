@@ -25,7 +25,8 @@
           %thead
             %tr
               -# %th Tran ID
-              %th= transaction_sort_link 'tranID', "Tran ID"
+              %th= transaction_sort_link 'tranID', "ID"
+              %th= transaction_sort_link 'Description', "Description"
               -#
                 -# %th Device ID
                 %th= transaction_sort_link 'dev_id', "Device"
@@ -48,6 +49,7 @@
             - @transactions.each do |transaction|
               %tr{class: "#{transaction.error? ? 'table-danger' : '' }"}
                 %td= transaction.id
+                %td= transaction.Description
                 -#
                   %td= transaction.dev_id
                 %td= transaction.from_acct_id
