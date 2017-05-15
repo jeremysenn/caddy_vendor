@@ -10,6 +10,7 @@ class Customer < ActiveRecord::Base
   has_many :transfers
   has_one :account, :foreign_key => "CustomerID"
   has_many :transactions, :through => :account
+  has_one :vendor_payable, :foreign_key => "CustID"
   
   scope :members, -> { where(GroupID: 14) }
   scope :active, -> { where(Active: true) }
@@ -174,12 +175,33 @@ class Customer < ActiveRecord::Base
   end
   
   def balance
+    unless vendor_payable.blank?
+      # Get customer's vendor payable balance
+      vendor_payable_balance = vendor_payable.balance
+    else
+      vendor_payable_balance = 0
+    end
     unless account.blank?
-      account.Balance 
+      # Get customer's account balance
+      account_balance = account.Balance 
     else
       if not primary?
-        parent_customer.account.Balance unless parent_customer.account.blank?
+        unless parent_customer.account.blank?
+          # Get parent customer's account balance
+          account_balance = parent_customer.account.Balance 
+        else
+          account_balance = 0
+        end
+      else
+        account_balance = 0
       end
+    end
+    
+    # Compare the two balances, and return the lesser of the two
+    if vendor_payable_balance < account_balance
+      return vendor_payable_balance
+    else
+      return account_balance
     end
   end
   
