@@ -19,6 +19,7 @@ class Company < ActiveRecord::Base
   has_many :caddy_ratings, through: :users
   has_many :transfers
   has_many :transactions, :foreign_key => "DevCompanyNbr"
+  has_many :vendor_payables, :foreign_key => "CompanyNbr"
   
   #############################
   #     Instance Methods      #
