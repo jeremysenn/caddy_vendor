@@ -42,6 +42,9 @@
           %p.lead
             Active:
             = "#{@caddy.active? ? 'Yes' : 'No'}"
+          %p.lead
+            Balance:
+            = number_to_currency(@caddy.balance)
           -#
             %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
               %i.fa.fa-dollar

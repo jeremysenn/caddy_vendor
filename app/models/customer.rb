@@ -11,6 +11,7 @@ class Customer < ActiveRecord::Base
   has_one :account, :foreign_key => "CustomerID"
   has_many :transactions, :through => :account
 #  has_one :vendor_payable, :foreign_key => "CustID"
+  has_many :vendor_payables, :foreign_key => "CustID"
   
   scope :members, -> { where(GroupID: 14) }
   scope :active, -> { where(Active: true) }
@@ -175,34 +176,36 @@ class Customer < ActiveRecord::Base
   end
   
   def balance
-    unless vendor_payable.blank?
-      # Get customer's vendor payable balance
-      vendor_payable_balance = vendor_payable.balance
-    else
-      vendor_payable_balance = 0
-    end
-    unless account.blank?
-      # Get customer's account balance
-      account_balance = account.Balance 
-    else
-      if not primary?
-        unless parent_customer.account.blank?
-          # Get parent customer's account balance
-          account_balance = parent_customer.account.Balance 
-        else
-          account_balance = 0
-        end
-      else
-        account_balance = 0
-      end
-    end
+    account.Balance
     
-    # Compare the two balances, and return the lesser of the two
-    if vendor_payable_balance < account_balance
-      return vendor_payable_balance
-    else
-      return account_balance
-    end
+#    unless vendor_payable.blank?
+#      # Get customer's vendor payable balance
+#      vendor_payable_balance = vendor_payable.balance
+#    else
+#      vendor_payable_balance = 0
+#    end
+#    unless account.blank?
+#      # Get customer's account balance
+#      account_balance = account.Balance 
+#    else
+#      if not primary?
+#        unless parent_customer.account.blank?
+#          # Get parent customer's account balance
+#          account_balance = parent_customer.account.Balance 
+#        else
+#          account_balance = 0
+#        end
+#      else
+#        account_balance = 0
+#      end
+#    end
+#    
+#    # Compare the two balances, and return the lesser of the two
+#    if vendor_payable_balance < account_balance
+#      return vendor_payable_balance
+#    else
+#      return account_balance
+#    end
   end
   
   def lang_obj_text_1
@@ -464,13 +467,13 @@ class Customer < ActiveRecord::Base
     Caddy.where(CustomerID: self.CustomerID).first
   end
   
-  def vendor_payable
-    unless caddy.blank?
-      VendorPayable.where(CustID: self.CustomerID, CompanyNbr: caddy.course.ClubCompanyNumber).first
-    else
-      VendorPayable.where(CustID: self.CustomerID, CompanyNbr: self.CompanyNumber).first
-    end
-  end
+#  def vendor_payable
+#    unless caddy.blank?
+#      VendorPayable.where(CustID: self.CustomerID, CompanyNbr: caddy.course.ClubCompanyNumber).first
+#    else
+#      VendorPayable.where(CustID: self.CustomerID, CompanyNbr: self.CompanyNumber).first
+#    end
+#  end
   
   #############################
   #     Class Methods      #
