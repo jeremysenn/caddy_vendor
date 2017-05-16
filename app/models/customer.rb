@@ -10,7 +10,7 @@ class Customer < ActiveRecord::Base
   has_many :transfers
   has_one :account, :foreign_key => "CustomerID"
   has_many :transactions, :through => :account
-  has_one :vendor_payable, :foreign_key => "CustID"
+#  has_one :vendor_payable, :foreign_key => "CustID"
   
   scope :members, -> { where(GroupID: 14) }
   scope :active, -> { where(Active: true) }
@@ -457,6 +457,18 @@ class Customer < ActiveRecord::Base
       # Reverse the one-sided transaction from the company account if customer transaction doesn't go through.
       company.perform_one_sided_credit_transaction(-amount) # Credit the company account a negative value, effectively reversing it
       return nil
+    end
+  end
+  
+  def caddy
+    Caddy.where(CustomerID: self.CustomerID).first
+  end
+  
+  def vendor_payable
+    unless caddy.blank?
+      VendorPayable.where(CustID: self.CustomerID, CompanyNbr: caddy.course.ClubCompanyNumber).first
+    else
+      VendorPayable.where(CustID: self.CustomerID, CompanyNbr: self.CompanyNumber).first
     end
   end
   
