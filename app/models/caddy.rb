@@ -137,6 +137,10 @@ class Caddy < ApplicationRecord
     Transfer.where(to_account_id: account.id).or(Transfer.where(from_account_id: account.id)) unless account.blank?
   end
   
+  def company
+    course.company unless course.blank?
+  end
+  
   #############################
   #     Class Methods         #
   #############################
