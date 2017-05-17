@@ -33,7 +33,7 @@
               .col-xs-12.col-sm-5{style: 'height: 240px; overflow-y: scroll;'}
                 - @caddies.each do |caddy|
                   %p
-                    = check_box_tag "caddy_ids[]", caddy.id, true, {id: "caddy_#{caddy.id}", class: "form_control"}
+                    = check_box_tag "caddy_ids[]", caddy.id, false, {id: "caddy_#{caddy.id}", class: "form_control"}
                     = caddy.full_name
               .col-xs-12.col-sm-7
                 = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 8, style: 'width:100%', autofocus: true
