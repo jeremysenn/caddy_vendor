@@ -66,7 +66,8 @@ class Company < ActiveRecord::Base
   end
   
   def caddies_with_balance
-    caddies.joins(:customer => :account).where("accounts.Balance != ?", 0)
+#    caddies.joins(:customer => :account).where("accounts.Balance != ?", 0)
+    caddies.select { |c| (c.holds_balance?) }
   end
   
   def caddies_total_balance
