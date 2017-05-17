@@ -22,15 +22,23 @@ class CaddiesController < ApplicationController
           caddies = @course.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ? OR customer.PhoneMobile like ?", @query_string, @query_string, @query_string) #.order("customer.NameL")
         else
           unless params[:balances].blank?
-            caddies = current_user.company.caddies_with_balance
+            caddies = Kaminari.paginate_array(current_user.company.caddies_with_balance)
           else
             caddies = @course.caddies.joins(:customer) #.order("customer.NameL")
           end
         end
         unless params[:caddy_rank_desc_id].blank?
-          @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).order("#{caddies_sort_column} #{caddies_sort_direction}").page(params[:page]).per(50)
+          if params[:balances].blank?
+            @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).order("#{caddies_sort_column} #{caddies_sort_direction}").page(params[:page]).per(50)
+          else
+            @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).page(params[:page]).per(50)
+          end
         else
-          @caddies = caddies.order("#{caddies_sort_column} #{caddies_sort_direction}").page(params[:page]).per(50)
+          if params[:balances].blank?
+            @caddies = caddies.order("#{caddies_sort_column} #{caddies_sort_direction}").page(params[:page]).per(50)
+          else
+            @caddies = caddies.page(params[:page]).per(50)
+          end
         end
       }
       format.json {
