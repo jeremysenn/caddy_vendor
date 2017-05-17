@@ -19,7 +19,7 @@ class CustomersController < ApplicationController
             members = current_user.company.members
           end
         end
-        @members = members(:NameL).page(params[:page]).per(50)
+        @members = members.order(:NameL).page(params[:page]).per(50)
       }
       format.json {
         @query_string = "%#{params[:q]}%"
