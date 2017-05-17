@@ -12,6 +12,10 @@
         %i.fa.fa-dollar
         Transfers
     %li.nav-item
+      %a.nav-link{:href => "#withdrawals", :data => {:toggle => "tab"}} 
+        %i.fa.fa-bolt
+        Withdrawals
+    %li.nav-item
       %a.nav-link{:href => "#messages", :data => {:toggle => "tab"}} 
         %i.fa.fa-commenting
         Messages
@@ -111,6 +115,37 @@
                       - if transfer.reversed?
                         .text-danger Reversed
                       = link_to "Show", transfer, class: 'btn btn-secondary'
+        - else
+          %p.lead None
+
+    .tab-pane{:id => "withdrawals"}
+      %br
+      #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
+        .pull-right
+        - unless @withdrawal_transactions.blank?
+          .table-responsive
+            %table.table.table-striped
+              %thead
+                %tr
+                  %th ID
+                  %th Date/Time
+                  %th Code
+                  %th Status
+                  %th Requested
+                  %th Authorized
+                  %th Description
+                  %th
+              %tbody
+                - @withdrawal_transactions.each do |withdrawal_transaction|
+                  %tr
+                    %td= withdrawal_transaction.id
+                    %td= withdrawal_transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
+                    %td= withdrawal_transaction.error_code_description
+                    %td= withdrawal_transaction.status_description
+                    %td= number_to_currency(withdrawal_transaction.amt_req)
+                    %td= number_to_currency(withdrawal_transaction.amt_auth)
+                    %td= withdrawal_transaction.Description
+                    %td= link_to "Show", withdrawal_transaction, class: 'btn btn-secondary'
         - else
           %p.lead None
 
