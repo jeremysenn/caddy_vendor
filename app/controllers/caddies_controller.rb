@@ -59,6 +59,7 @@ class CaddiesController < ApplicationController
 #    @transfers = @caddy.transfers
     @transfers = @caddy.account_transfers.order('created_at DESC') unless @caddy.account_transfers.blank?
     @text_messages = @caddy.sms_messages.reverse
+    @withdrawal_transactions = @caddy.customer.transactions.withdrawals
   end
 
   # GET /caddies/new
