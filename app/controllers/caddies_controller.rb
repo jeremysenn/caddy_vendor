@@ -29,15 +29,15 @@ class CaddiesController < ApplicationController
         end
         unless params[:caddy_rank_desc_id].blank?
           if params[:balances].blank?
-            @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).order("#{caddies_sort_column} #{caddies_sort_direction}").page(params[:page]).per(50)
+            @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).order("#{caddies_sort_column} #{caddies_sort_direction}").page(params[:page]).per(200)
           else
-            @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).page(params[:page]).per(50)
+            @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).page(params[:page]).per(200)
           end
         else
           if params[:balances].blank?
-            @caddies = caddies.order("#{caddies_sort_column} #{caddies_sort_direction}").page(params[:page]).per(50)
+            @caddies = caddies.order("#{caddies_sort_column} #{caddies_sort_direction}").page(params[:page]).per(200)
           else
-            @caddies = caddies.page(params[:page]).per(50)
+            @caddies = caddies.page(params[:page]).per(200)
           end
         end
       }
