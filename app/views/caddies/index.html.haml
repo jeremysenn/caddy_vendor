@@ -30,7 +30,7 @@
             =# hidden_field_tag :q, params[:q]
             =# hidden_field_tag :balances, params[:balances]
             .row
-              .col-xs-12.col-sm-7{style: 'height: 240px; overflow-y: scroll;'}
+              .col-xs-12.col-sm-7{style: 'height: 340px; overflow-y: scroll;'}
                 - @caddies.each_slice(2) do |caddies|
                   .row
                     - caddies.each do |caddy|
