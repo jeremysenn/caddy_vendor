@@ -14,7 +14,7 @@
           %i.fa.fa-commenting
           Text Message
   #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
-    .modal-dialog{:role => "document"}
+    .modal-dialog.modal-lg{:role => "document"}
       .modal-content
         .modal-header
           %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
@@ -30,12 +30,14 @@
             =# hidden_field_tag :q, params[:q]
             =# hidden_field_tag :balances, params[:balances]
             .row
-              .col-xs-12.col-sm-5{style: 'height: 240px; overflow-y: scroll;'}
-                - @caddies.each do |caddy|
-                  %p
-                    = check_box_tag "caddy_ids[]", caddy.id, false, {id: "caddy_#{caddy.id}", class: "form_control"}
-                    = caddy.full_name
-              .col-xs-12.col-sm-7
+              .col-xs-12.col-sm-7{style: 'height: 240px; overflow-y: scroll;'}
+                - @caddies.each_slice(2) do |caddies|
+                  .row
+                    - caddies.each do |caddy|
+                      .col-xs-6
+                        = check_box_tag "caddy_ids[]", caddy.id, false, {id: "caddy_#{caddy.id}", class: "form_control"}
+                        = caddy.full_name_with_rank
+              .col-xs-12.col-sm-5
                 = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 8, style: 'width:100%', autofocus: true
             .row
               .col-xs-12.col-sm-6
