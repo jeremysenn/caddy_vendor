@@ -54,9 +54,8 @@
       Caddies
       - unless params[:balances].blank?
         with a balance
-        -#
-          .pull-right
-            = number_to_currency(current_user.company.caddies_total_balance)
+        .pull-right
+          = number_to_currency(current_user.company.caddies_total_balance)
     - unless @caddies.blank?
       .table-responsive
         %table.table.table-striped
