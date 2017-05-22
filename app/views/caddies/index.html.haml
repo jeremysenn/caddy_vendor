@@ -61,16 +61,14 @@
         %table.table.table-striped
           %thead
             %tr
-              -# %th First Name
               %th= caddies_sort_link 'customer.NameF', "First Name"
-              -# %th Last Name
               %th= caddies_sort_link 'customer.NameL', "Last Name"
-              %th Course
-              %th Rating
+              -# %th Course
+              -# %th Rating
               %th Ranking
               %th Balance
-              %th Checked In
-              %th Active
+              -# %th Checked In
+              -# %th Active
               %th
               %th
           %tbody
@@ -78,17 +76,21 @@
               %tr{class: "#{caddy.inactive? ? 'table-danger' : ''}"}
                 %td= caddy.first_name
                 %td= caddy.last_name
-                %td= link_to truncate(caddy.course.name, length: 7), caddy.course
-                %td
-                  %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => caddy.average_rating, "data-rateit-readonly" => "true" }
+                -#
+                  %td= link_to truncate(caddy.course.name, length: 15), caddy.course
+                -#
+                  %td
+                    %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => caddy.average_rating, "data-rateit-readonly" => "true" }
                 %td
                   - unless caddy.acronym.blank?
                     = link_to caddy.acronym, caddy.caddy_rank_desc
                   - else
                     None
                 %td= number_to_currency(caddy.balance)
-                %td= "#{caddy.checkin_today? ? caddy.CheckedIn.in_time_zone(caddy.course.time_zone).strftime('%l:%M %p') : 'Not today'}"
-                %td= "#{caddy.active? ? 'Yes' : 'No'}"
+                -#
+                  %td= "#{caddy.checkin_today? ? caddy.CheckedIn.in_time_zone(caddy.course.time_zone).strftime('%l:%M %p') : 'Not today'}"
+                -#
+                  %td= "#{caddy.active? ? 'Yes' : 'No'}"
                 %td
                   %a{href: caddy_path(caddy), class: 'btn btn-secondary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> More..." }}
                     %i.fa.fa-vcard-o
@@ -97,19 +99,20 @@
                     %a{href: edit_caddy_path(caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
                       %i.fa.fa-edit
                       Edit
-                %td
-                  - unless caddy.inactive?
-                    = simple_form_for(caddy) do |f|
-                      - if caddy.checkin_today? 
-                        = f.input_field :CheckedIn, as: :hidden, value: nil
-                        = button_tag(type: 'submit', class: "btn btn-warning", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check Out" }) do
-                          Check Out
-                          %i.fa.fa-sign-out
-                      - else
-                        = f.input_field :CheckedIn, as: :hidden, value: DateTime.now
-                        = button_tag(type: 'submit', class: "btn btn-secondary", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check In" }) do
-                          %i.fa.fa-sign-in
-                          Check In
+                -#
+                  %td
+                    - unless caddy.inactive?
+                      = simple_form_for(caddy) do |f|
+                        - if caddy.checkin_today? 
+                          = f.input_field :CheckedIn, as: :hidden, value: nil
+                          = button_tag(type: 'submit', class: "btn btn-warning", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check Out" }) do
+                            Check Out
+                            %i.fa.fa-sign-out
+                        - else
+                          = f.input_field :CheckedIn, as: :hidden, value: DateTime.now
+                          = button_tag(type: 'submit', class: "btn btn-secondary", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check In" }) do
+                            %i.fa.fa-sign-in
+                            Check In
     - else
       %p.lead No caddies found
 
