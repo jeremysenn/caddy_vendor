@@ -68,14 +68,22 @@ class Caddy < ApplicationRecord
     unless vendor_payable.blank?
       # Get vendor payable balance
       vendor_payable_balance = vendor_payable.Balance
+      if vendor_payable_balance == 0
+        return vendor_payable_balance
+      end
     else
-      vendor_payable_balance = 0
+      return 0
+#      vendor_payable_balance = 0
     end
     unless account.blank?
       # Get account balance
       account_balance = account.Balance 
+      if account_balance == 0
+        return account_balance
+      end
     else
-      account_balance = 0
+#      account_balance = 0
+      return 0
     end
       
     # Compare the two balances, and return the lesser of the two
@@ -87,7 +95,7 @@ class Caddy < ApplicationRecord
   end
   
   def vendor_payable
-    customer.vendor_payables.where(CompanyNbr: course.ClubCompanyNumber).first
+    VendorPayable.where(CustID: self.CustomerID, CompanyNbr: self.ClubCompanyNbr).first
   end
   
   def holds_balance?
