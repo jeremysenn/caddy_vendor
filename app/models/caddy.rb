@@ -73,25 +73,25 @@ class Caddy < ApplicationRecord
       end
     else
       return 0
-#      vendor_payable_balance = 0
     end
-    unless account.blank?
-      # Get account balance
-      account_balance = account.Balance 
-      if account_balance == 0
-        return account_balance
-      end
-    else
-#      account_balance = 0
-      return 0
-    end
+    
+#    unless account.blank?
+#      # Get account balance
+#      account_balance = account.Balance 
+#      if account_balance == 0
+#        return account_balance
+#      end
+#    else
+##      account_balance = 0
+#      return 0
+#    end
       
     # Compare the two balances, and return the lesser of the two
-    if vendor_payable_balance < account_balance
-      return vendor_payable_balance
-    else
-      return account_balance
-    end
+#    if vendor_payable_balance < account_balance
+#      return vendor_payable_balance
+#    else
+#      return account_balance
+#    end
   end
   
   def vendor_payable
