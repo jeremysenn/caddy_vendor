@@ -95,7 +95,8 @@ class Caddy < ApplicationRecord
   end
   
   def vendor_payable
-    VendorPayable.where(CustID: self.CustomerID, CompanyNbr: self.ClubCompanyNbr).first
+#    VendorPayable.where(CustID: self.CustomerID, CompanyNbr: self.ClubCompanyNbr).first
+    customer.vendor_payables.where(CompanyNbr: self.ClubCompanyNbr).first
   end
   
   def holds_balance?
