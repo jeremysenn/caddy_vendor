@@ -67,10 +67,11 @@ class Caddy < ApplicationRecord
     
     unless vendor_payable.blank?
       # Get vendor payable balance
-      vendor_payable_balance = vendor_payable.Balance
-      if vendor_payable_balance == 0
-        return vendor_payable_balance
-      end
+#      vendor_payable_balance = vendor_payable.Balance
+#      if vendor_payable_balance == 0
+#        return vendor_payable_balance
+#      end
+      return vendor_payable.Balance
     else
       return 0
     end
