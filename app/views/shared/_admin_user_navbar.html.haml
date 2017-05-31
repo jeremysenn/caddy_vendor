@@ -53,9 +53,10 @@
           %a.dropdown-item{:href => caddies_path, :class => (params[:controller] == 'caddies' and params[:action] == 'index' and not params[:balances] == 'true') ? "active" : ""} 
             %i.fa.fa-search
             Caddies
-          %a.dropdown-item{:href => caddies_path(balances: true), :class => (params[:controller] == 'caddies' and params[:action] == 'index' and params[:balances] == 'true') ? "active" : ""} 
-            %i.fa.fa-dollar
-            Caddies with balance
+          -#
+            %a.dropdown-item{:href => caddies_path(balances: true), :class => (params[:controller] == 'caddies' and params[:action] == 'index' and params[:balances] == 'true') ? "active" : ""} 
+              %i.fa.fa-dollar
+              Caddies with balance
       %li.nav-item
         %a.nav-link{:href => courses_path, :class => (params[:controller] == 'courses') ? "active" : ""} 
           %i.fa.fa-tree
