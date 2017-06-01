@@ -14,6 +14,7 @@ class Customer < ActiveRecord::Base
   has_many :vendor_payables, :foreign_key => "CustID"
   
   scope :members, -> { where(GroupID: 14) }
+  scope :caddies, -> { where(GroupID: 13) }
   scope :active, -> { where(Active: true) }
   
   attr_accessor :password
@@ -467,13 +468,9 @@ class Customer < ActiveRecord::Base
     Caddy.where(CustomerID: self.CustomerID).first
   end
   
-#  def vendor_payable
-#    unless caddy.blank?
-#      VendorPayable.where(CustID: self.CustomerID, CompanyNbr: caddy.course.ClubCompanyNumber).first
-#    else
-#      VendorPayable.where(CustID: self.CustomerID, CompanyNbr: self.CompanyNumber).first
-#    end
-#  end
+  def vendor_payables_with_balance
+    vendor_payables.where("Balance > ?", 0)
+  end
   
   #############################
   #     Class Methods      #
