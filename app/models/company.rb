@@ -7,7 +7,8 @@ class Company < ActiveRecord::Base
   has_many :users
   has_many :courses, :foreign_key => "ClubCompanyNumber"
   has_many :members, -> { members }, :foreign_key => "CompanyNumber", :class_name => 'Customer' # Use 'members' scope in Customer
-  has_many :caddies, :through => :courses
+#  has_many :caddies, :through => :courses
+  has_many :caddies, :foreign_key => "ClubCompanyNbr"
   has_many :customers, :foreign_key => "CompanyNumber"
 #  has_many :transactions, :through => :customers
   has_many :caddy_pay_rates, :through => :courses
@@ -80,6 +81,14 @@ class Company < ActiveRecord::Base
   
   def caddy_types
     self.caddy_pay_rates.all.distinct('Type').pluck('Type')
+  end
+  
+  def caddy_customers
+    Customer.where(CompanyNumber: self.CompanyNumber, GroupID: 13)
+  end
+  
+  def vendor_payables_with_balance
+    vendor_payables.where("Balance > ?", 0)
   end
   
   #############################
