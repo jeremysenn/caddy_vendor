@@ -32,7 +32,9 @@
             .row
               .col-xs-12.col-sm-7{style: 'height: 340px; overflow-y: scroll;'}
                 -# %p= link_to 'Select all', nil, id: 'select_all', remote: true, rel: "caddies_select_group"
-                %i.fa.fa-square-o.fa-lg{id: 'select_all', rel: "caddies_select_group"}
+                %p.lead
+                  %i.fa.fa-square-o.fa-lg{id: 'select_all', rel: "caddies_select_group"}
+                  Caddies
                 %fieldset#caddies_select_group
                   - @all_caddies.each_slice(2) do |caddies|
                     .row
