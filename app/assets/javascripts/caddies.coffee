@@ -11,4 +11,27 @@ jQuery ->
     $.rails.enableElement $('.caddy_spinner_button')
     return
 
+  $(document).on "turbolinks:load", ->
+    $('#select_all').click ->
+      s = $(this)
+
+      #if s.text() == 'Select all'
+      if s.hasClass 'fa-square-o'
+        #s.html 'Select none'
+        s.toggleClass('fa-square-o fa-check-square-o')
+        $('#' + $(this).attr('rel') + ' INPUT[type=\'checkbox\']').prop 'checked', true
+        false
+      else
+        #s.html 'Select all'
+        s.toggleClass('fa-square-o fa-check-square-o')
+        $('#' + $(this).attr('rel') + ' INPUT[type=\'checkbox\']').prop 'checked', false
+        false
+
+      #s.html if s.text() == 'Select all' then 'Select none' else 'Select all'
+      #$('#' + $(this).attr('rel') + ' INPUT[type=\'checkbox\']').attr 'checked', true
+
+      return
+
   $('.member_select').select2 theme: 'bootstrap'
+
+    
