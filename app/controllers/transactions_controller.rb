@@ -8,7 +8,7 @@ class TransactionsController < ApplicationController
   # GET /transactions
   # GET /transactions.json
   def index
-    @type = params[:type]
+    @type = params[:type] ||= 'Withdrawal'
     @start_date = transaction_params[:start_date] ||= Date.today.to_s
     @end_date = transaction_params[:end_date] ||= Date.today.to_s
     

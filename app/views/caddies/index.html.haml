@@ -31,12 +31,15 @@
             =# hidden_field_tag :balances, params[:balances]
             .row
               .col-xs-12.col-sm-7{style: 'height: 340px; overflow-y: scroll;'}
-                - @all_caddies.each_slice(2) do |caddies|
-                  .row
-                    - caddies.each do |caddy|
-                      .col-xs-6
-                        = check_box_tag "caddy_ids[]", caddy.id, false, {id: "caddy_#{caddy.id}", class: "form_control"}
-                        = caddy.full_name_with_rank
+                -# %p= link_to 'Select all', nil, id: 'select_all', remote: true, rel: "caddies_select_group"
+                %i.fa.fa-square-o.fa-lg{id: 'select_all', rel: "caddies_select_group"}
+                %fieldset#caddies_select_group
+                  - @all_caddies.each_slice(2) do |caddies|
+                    .row
+                      - caddies.each do |caddy|
+                        .col-xs-6
+                          = check_box_tag "caddy_ids[]", caddy.id, false, {id: "caddy_#{caddy.id}", class: "form_control"}
+                          = caddy.full_name_with_rank
               .col-xs-12.col-sm-5
                 = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 8, style: 'width:100%', autofocus: true
             .row
