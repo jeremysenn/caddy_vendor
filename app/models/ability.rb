@@ -151,6 +151,14 @@ class Ability
       ############
       can :index, :reports
       
+      # SmsMessages
+      ############
+      can :manage, SmsMessage do |sms_message|
+        sms_message.customer.company == user.company
+      end
+      can :create, :sms_messages
+      can :index, :sms_messages
+      
     elsif not user.admin? and user.active?
       # Non-admin, active user
       # 

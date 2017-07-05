@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170414185505) do
+ActiveRecord::Schema.define(version: 20170705164115) do
 
-  create_table "caddy_ratings", force: :cascade do |t|
+  create_table "caddy_ratings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "caddy_id"
     t.integer  "user_id"
     t.string   "comment"
@@ -22,26 +22,26 @@ ActiveRecord::Schema.define(version: 20170414185505) do
     t.integer  "player_id"
     t.integer  "appearance_score", default: 0
     t.integer  "enthusiasm_score", default: 0
-    t.index ["caddy_id"], name: "index_caddy_ratings_on_caddy_id"
-    t.index ["user_id"], name: "index_caddy_ratings_on_user_id"
+    t.index ["caddy_id"], name: "index_caddy_ratings_on_caddy_id", using: :btree
+    t.index ["user_id"], name: "index_caddy_ratings_on_user_id", using: :btree
   end
 
-  create_table "events", force: :cascade do |t|
+  create_table "events", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "title"
     t.datetime "start"
     t.datetime "end"
     t.string   "color"
     t.string   "size"
     t.string   "round"
-    t.string   "status",     default: "open"
-    t.text     "notes"
+    t.string   "status",                   default: "open"
+    t.text     "notes",      limit: 65535
     t.integer  "course_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.index ["course_id"], name: "index_events_on_course_id"
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.index ["course_id"], name: "index_events_on_course_id", using: :btree
   end
 
-  create_table "players", force: :cascade do |t|
+  create_table "players", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "member_id"
     t.integer  "caddy_id"
     t.integer  "event_id"
@@ -54,21 +54,22 @@ ActiveRecord::Schema.define(version: 20170414185505) do
     t.datetime "updated_at",                              null: false
     t.string   "note"
     t.decimal  "transaction_fee", precision: 7, scale: 2
-    t.index ["caddy_id"], name: "index_players_on_caddy_id"
-    t.index ["event_id"], name: "index_players_on_event_id"
-    t.index ["member_id"], name: "index_players_on_member_id"
+    t.index ["caddy_id"], name: "index_players_on_caddy_id", using: :btree
+    t.index ["event_id"], name: "index_players_on_event_id", using: :btree
+    t.index ["member_id"], name: "index_players_on_member_id", using: :btree
   end
 
-  create_table "sms_messages", force: :cascade do |t|
+  create_table "sms_messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "to"
-    t.text     "body"
+    t.text     "body",        limit: 65535
     t.integer  "customer_id"
     t.integer  "caddy_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "company_id"
   end
 
-  create_table "transfers", force: :cascade do |t|
+  create_table "transfers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "from_account_id"
     t.integer  "to_account_id"
     t.integer  "customer_id"
@@ -88,7 +89,7 @@ ActiveRecord::Schema.define(version: 20170414185505) do
     t.integer  "club_credit_transaction_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "email",                  default: "",                           null: false
     t.string   "encrypted_password",     default: "",                           null: false
     t.string   "reset_password_token"
@@ -105,8 +106,8 @@ ActiveRecord::Schema.define(version: 20170414185505) do
     t.boolean  "admin",                  default: false
     t.string   "time_zone",              default: "Eastern Time (US & Canada)"
     t.boolean  "active",                 default: false
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
 end

@@ -12,6 +12,7 @@ class Customer < ActiveRecord::Base
   has_many :transactions, :through => :account
 #  has_one :vendor_payable, :foreign_key => "CustID"
   has_many :vendor_payables, :foreign_key => "CustID"
+  has_many :sms_messages
   
   scope :members, -> { where(GroupID: 14) }
   scope :caddies, -> { where(GroupID: 13) }

@@ -4,6 +4,7 @@ class Caddy < ApplicationRecord
   
   establish_connection :ez_cash
   
+  belongs_to :company, :foreign_key => "ClubCompanyNbr"
   belongs_to :course, :foreign_key => "ClubCompanyNbr"
   belongs_to :customer, :foreign_key => "CustomerID"
   belongs_to :caddy_rank_desc, :foreign_key => "RankingID"
@@ -141,7 +142,7 @@ class Caddy < ApplicationRecord
   
   def send_sms_notification(message_body)
     unless cell_phone_number.blank?
-      SendCaddySmsWorker.perform_async(cell_phone_number, id, self.CustomerID, message_body)
+      SendCaddySmsWorker.perform_async(cell_phone_number, id, self.CustomerID, self.ClubCompanyNbr, message_body)
     end
   end
   
