@@ -9,10 +9,11 @@
       %button.btn.btn-primary{id: 'caddy_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
         %i.fa.fa-search
       %small.text-muted Search by first name, last name, or phone.
-      .pull-right
-        %a{href: '#', class: 'btn btn-warning', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
-          %i.fa.fa-commenting
-          Text Message
+      - unless @all_caddies.blank?
+        .pull-right
+          %a{href: '#', class: 'btn btn-warning', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
+            %i.fa.fa-commenting
+            Text Message
   #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
     .modal-dialog.modal-lg{:role => "document"}
       .modal-content
