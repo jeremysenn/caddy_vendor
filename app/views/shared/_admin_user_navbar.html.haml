@@ -90,6 +90,9 @@
           %a.dropdown-item{:href => reports_path, :class => (params[:controller] == 'reports' and params[:action] == 'index') ? "active" : ""} 
             %i.fa.fa-refresh
             Clear Transfers
+          %a{:href => sms_messages_path, :class => (params[:controller] == 'sms_messages') ? "active dropdown-item" : "dropdown-item"} 
+            %i.fa.fa-commenting
+            Text Messages
           -#
             %a.dropdown-item{:href => customers_path(balances: true), :class => (params[:controller] == 'customers') ? "active" : ""} 
               %i.fa.fa-user-circle-o

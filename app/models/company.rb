@@ -21,6 +21,7 @@ class Company < ActiveRecord::Base
   has_many :transfers
   has_many :transactions, :foreign_key => "DevCompanyNbr"
   has_many :vendor_payables, :foreign_key => "CompanyNbr"
+  has_many :sms_messages
   
   #############################
   #     Instance Methods      #

@@ -11,6 +11,7 @@ class Transaction < ActiveRecord::Base
   scope :withdrawals, -> { where(tran_code: ["WDL", "ALL"], sec_tran_code: ["TFR", ""]) }
   scope :transfers, -> { where(tran_code: ["CARD"], sec_tran_code: ["TFR"]) }
   scope :one_sided_credits, -> { where(tran_code: ["DEP"], sec_tran_code: ["REFD"]) }
+  scope :fees, -> { where(tran_code: ["FEE"], sec_tran_code: ["TFR"]) }
   
   #############################
   #     Instance Methods      #
@@ -80,6 +81,8 @@ class Transaction < ActiveRecord::Base
         return "Fund Transfer"
       elsif (tran_code.strip == "CRED" and sec_tran_code.strip == "TFR")
         return "Account Credit"
+      elsif (tran_code.strip == "FEE" and sec_tran_code.strip == "TFR")
+        return "Fee"
       else
         return "Unknown"
       end
@@ -152,6 +155,10 @@ class Transaction < ActiveRecord::Base
   
   def fund_transfer?
     type == "Fund Transfer"
+  end
+  
+  def fee_transfer?
+    type == "Fee"
   end
   
 #  def transfer_in?(account_number)
