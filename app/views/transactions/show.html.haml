@@ -2,6 +2,9 @@
   %br
   .card.card-block
     %p.lead
+      Company:
+      = @transaction.company.CompanyName unless @transaction.company.blank?
+    %p.lead
       Tran ID:
       = @transaction.id
     %p.lead
