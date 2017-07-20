@@ -137,11 +137,15 @@ class CaddiesController < ApplicationController
     respond_to do |format|
       format.html {
         @message_body = params[:message_body]
-        params[:caddy_ids].each do |caddy_id|
-          caddy = Caddy.where(id: caddy_id).first
-          caddy.send_sms_notification(@message_body) unless caddy.blank?
+        unless params[:caddy_ids].blank?
+          params[:caddy_ids].each do |caddy_id|
+            caddy = Caddy.where(id: caddy_id).first
+            caddy.send_sms_notification(@message_body) unless caddy.blank?
+          end
+          redirect_back fallback_location: customers_path, notice: 'Text message sent to caddies.'
+        else
+          redirect_back fallback_location: customers_path, alert: 'You must select at least one caddy to text message.'
         end
-        redirect_back fallback_location: customers_path, notice: 'Text message sent to caddies.'
       }
     end
   end
