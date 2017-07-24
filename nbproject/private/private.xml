@@ -2,12 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/company.rb</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/transactions/index.html.haml</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/config/database.yml</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/transaction.rb</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/controllers/transactions_controller.rb</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
