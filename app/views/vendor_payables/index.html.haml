@@ -1,8 +1,16 @@
 .container-fluid
   %br
+  - unless @vendor_payables.blank?
+    %p.lead
+      .pull-right
+        %a{href: vendor_payables_path(format: "csv"), class: 'btn btn-primary'}
+          %i.fa.fa-download
+          CSV Report
+
+  %p.lead.text-muted= "#{pluralize(@vendor_payables.count, 'balances')} found"
   .card.card-block
     %h4.card-title 
-      Vendor Payables
+      Caddy Balances
       .pull-right
         = number_to_currency(@balances_total)
     - unless @vendor_payables.blank?
