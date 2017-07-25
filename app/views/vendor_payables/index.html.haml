@@ -10,6 +10,7 @@
   %p.lead.text-muted= "#{pluralize(@vendor_payables.count, 'balances')} found"
   .card.card-block
     %h4.card-title 
+      %i.fa.fa-dollar
       Caddy Balances
       .pull-right
         = number_to_currency(@balances_total)
