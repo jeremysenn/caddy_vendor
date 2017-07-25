@@ -364,4 +364,5 @@ class Transfer < ApplicationRecord
       end
     end
   end
+  
 end
