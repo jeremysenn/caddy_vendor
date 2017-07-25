@@ -97,7 +97,8 @@ class Company < ActiveRecord::Base
   end
   
   def caddy_vendor_payables_with_balance
-    vendor_payables_with_balance.select { |vp| (vp.caddy?) }
+#    vendor_payables_with_balance.select { |vp| (vp.caddy?) }
+    vendor_payables_with_balance.joins(:customer).where("customer.GroupID = ?", 13)
   end
   
   def caddy_vendor_payables_balance_total
