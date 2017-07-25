@@ -8,13 +8,13 @@ class VendorPayablesController < ApplicationController
   def index
     respond_to do |format|
       format.html {
-        @vendor_payables = current_user.company.caddy_vendor_payables_with_balance
+        @vendor_payables = current_user.company.vendor_payables_with_balance
     #    @vendor_payables = current_user.company.vendor_payables
         @balances_total = current_user.company.caddy_vendor_payables_balance_total
     #    @balances_total = current_user.company.vendor_payables_balance_total
       }
       format.csv { 
-        vendor_payables = current_user.company.caddy_vendor_payables_with_balance
+        vendor_payables = current_user.company.vendor_payables_with_balance
         send_data vendor_payables.to_csv, filename: "vendor-payables-#{Time.now}.csv" 
       }
     end
