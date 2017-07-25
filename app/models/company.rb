@@ -92,6 +92,10 @@ class Company < ActiveRecord::Base
     vendor_payables.where("Balance > ?", 0)
   end
   
+  def vendor_payables_balance_total
+    vendor_payables.sum(:Balance)
+  end
+  
   #############################
   #     Class Methods      #
   #############################

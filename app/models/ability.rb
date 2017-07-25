@@ -158,6 +158,12 @@ class Ability
       can :create, :sms_messages
       can :index, :sms_messages
       
+      # VendorPayables
+      ############
+      can :manage, VendorPayable do |vendor_payable|
+        vendor_payable.company == user.company
+      end
+      
     elsif not user.admin? and user.active?
       # Non-admin, active user
       # 
