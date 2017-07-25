@@ -469,6 +469,10 @@ class Customer < ActiveRecord::Base
     Caddy.where(CustomerID: self.CustomerID).first
   end
   
+  def caddy?
+    self.GroupID == 13
+  end
+  
   def vendor_payables_with_balance
     vendor_payables.where("Balance > ?", 0)
   end

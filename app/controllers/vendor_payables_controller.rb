@@ -6,8 +6,11 @@ class VendorPayablesController < ApplicationController
   # GET /vendor_payables
   # GET /vendor_payables.json
   def index
-    @vendor_payables = current_user.company.vendor_payables
-    @balances_total = current_user.company.vendor_payables_balance_total
+    @vendor_payables = current_user.company.caddy_vendor_payables_with_balance
+#    @vendor_payables = current_user.company.vendor_payables
+    @balances_total = current_user.company.caddy_vendor_payables_balance_total
+#    @balances_total = current_user.company.vendor_payables_balance_total
+    
   end
 
   # GET /vendor_payables/1
