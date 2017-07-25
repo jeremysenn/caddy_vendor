@@ -20,6 +20,7 @@ class CustomersController < ApplicationController
           end
         end
         @members = members.order(:NameL).page(params[:page]).per(50)
+        @all_members = members
       }
       format.json {
         @query_string = "%#{params[:q]}%"
