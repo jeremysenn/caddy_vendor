@@ -1,0 +1,23 @@
+.container-fluid
+  %br
+  .card.card-block
+    %h4.card-title 
+      Vendor Payables
+      .pull-right
+        = number_to_currency(@balances_total)
+    - unless @vendor_payables.blank?
+      .table-responsive
+        %table.table.table-striped
+          %thead
+            %tr
+              %th First Name
+              %th Last Name
+              %th Balance
+          %tbody
+            - @vendor_payables.each do |vendor_payable|
+              %tr
+                %td= vendor_payable.customer.NameF unless vendor_payable.customer.blank?
+                %td= vendor_payable.customer.NameL unless vendor_payable.customer.blank?
+                %td= number_to_currency(vendor_payable.Balance)
+    - else
+      %p.lead None

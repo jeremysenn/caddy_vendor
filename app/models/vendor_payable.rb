@@ -6,5 +6,4 @@ class VendorPayable < ApplicationRecord
   belongs_to :customer, :foreign_key => "CustID"
   belongs_to :company, :foreign_key => "CompanyNbr"
   
-  
 end
