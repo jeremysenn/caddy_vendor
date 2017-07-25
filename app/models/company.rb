@@ -96,6 +96,18 @@ class Company < ActiveRecord::Base
     vendor_payables.sum(:Balance)
   end
   
+  def caddy_vendor_payables_with_balance
+    vendor_payables_with_balance.select { |vp| (vp.caddy?) }
+  end
+  
+  def caddy_vendor_payables_balance_total
+    total = 0
+    caddy_vendor_payables_with_balance.each do |vp|
+      total = total + vp.Balance
+    end
+    return total
+  end
+  
   #############################
   #     Class Methods      #
   #############################
