@@ -23,6 +23,7 @@ class TransfersController < ApplicationController
     end
     respond_to do |format|
       format.html {
+        @all_transfers = transfers
         @transfers = transfers.order("created_at DESC").page(params[:page]).per(20)
       }
       format.csv { 
