@@ -79,8 +79,8 @@ jQuery ->
           return 'This field is required'
         if ! $.isNumeric(value) or value <= 0
           return 'Must be greater than zero.'
-        if value > 199
-          return 'Must be less than $200.'
+        if value > 999
+          return 'Must be less than $1000.'
         return
       success: (response, newValue) ->
         if response.status == 'error'
