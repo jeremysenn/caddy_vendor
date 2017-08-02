@@ -90,9 +90,10 @@
           %a{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active dropdown-item" : "dropdown-item"} 
             %i.fa.fa-search
             Transfers
-          %a.dropdown-item{:href => reports_path, :class => (params[:controller] == 'reports' and params[:action] == 'index') ? "active" : ""} 
-            %i.fa.fa-refresh
-            Clear Transfers
+          -#
+            %a.dropdown-item{:href => reports_path, :class => (params[:controller] == 'reports' and params[:action] == 'index') ? "active" : ""} 
+              %i.fa.fa-refresh
+              Clear Transfers
           %a{:href => sms_messages_path, :class => (params[:controller] == 'sms_messages') ? "active dropdown-item" : "dropdown-item"} 
             %i.fa.fa-commenting
             Text Messages
