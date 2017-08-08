@@ -39,6 +39,7 @@
             %tr
               %th Date of play
               %th Member number
+              %th Member extension
               %th Amount billed
               %th Player name
               %th Member name
@@ -55,6 +56,7 @@
               %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
                 %td= "#{transfer.date_of_play.blank? ? 'N/A' : transfer.date_of_play.in_time_zone(transfer.course.time_zone).strftime('%-m/%-d/%y')}"
                 %td= "#{transfer.member_number.blank? ? 'N/A' : transfer.member_number}"
+                %td= "#{transfer.member_extension.blank? ? 'N/A' : transfer.member_extension}"
                 %td= number_to_currency(transfer.amount_billed)
                 %td= "#{transfer.player_name.blank? ? 'N/A' : transfer.player_name}"
                 %th= "#{transfer.member_name.blank? ? 'N/A' : transfer.member_name}"

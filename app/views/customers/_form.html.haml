@@ -8,6 +8,7 @@
     = f.input :NameL, label: 'Last Name'
     = f.input :Email, label: 'Email'
     = f.input :Registration_Source, label: 'Member Number'
+    = f.input :Registration_Source_ext, as: :string, label: 'Member Extension'
     =# f.input :PhoneMobile, label: 'Phone' if current_user.admin?
     = f.simple_fields_for :account do |account_form|
       =# account_form.input :ActNbr, label: 'Member Number'
