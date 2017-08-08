@@ -19,6 +19,9 @@
       %p.lead
         Member Number:
         = "#{@customer.member_number.blank? ? 'None' : @customer.member_number}"
+      %p.lead
+        Member Extension:
+        = "#{@customer.member_extension.blank? ? 'None' : @customer.member_extension}"
       - if @customer.primary?
         %p.lead
           Add-ons:

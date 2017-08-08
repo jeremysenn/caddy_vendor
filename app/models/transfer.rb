@@ -245,6 +245,14 @@ class Transfer < ApplicationRecord
     end
   end
   
+  def member_extension # Member extension
+    unless player.blank?
+      player.member.member_extension
+    else
+      customer.member_extension unless customer.blank?
+    end
+  end
+  
   def member_name
     unless player.blank? or player.member.blank?
       player.member.primary_member.full_name 
@@ -360,7 +368,7 @@ class Transfer < ApplicationRecord
   
   def self.to_csv
     require 'csv'
-    attributes = %w{date_of_play member_number amount_billed player_name member_name date_caddy_paid amount_paid_to_caddy caddy_name caddy_rank caddy_type holes reference_number note reference}
+    attributes = %w{date_of_play member_number member_extension amount_billed player_name member_name date_caddy_paid amount_paid_to_caddy caddy_name caddy_rank caddy_type holes reference_number note reference}
     
     CSV.generate(headers: true) do |csv|
       csv << attributes

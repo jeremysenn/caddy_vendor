@@ -367,6 +367,10 @@ class Customer < ActiveRecord::Base
 #    end
   end
   
+  def member_extension
+    self.Registration_Source_ext
+  end
+  
   def primary?
     self.ParentCustID.blank?
   end
