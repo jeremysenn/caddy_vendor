@@ -6,6 +6,8 @@ class CaddyPayRate < ApplicationRecord
   
   belongs_to :course, :foreign_key => "ClubCompanyID"
   belongs_to :caddy_rank_desc, :foreign_key => "RankingID"
+  
+  validates_numericality_of :Payrate, :greater_than => 0
     
   #############################
   #     Instance Methods      #

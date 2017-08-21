@@ -14,6 +14,8 @@ class Transfer < ApplicationRecord
 #  validates :from_account, :to_account, :amount, :fee, presence: true
 #  validate :amount_not_greater_than_available
 
+  validates_numericality_of :caddy_fee_cents, :greater_than => 0
+
   #############################
   #     Instance Methods      #
   ############################

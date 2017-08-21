@@ -50,6 +50,7 @@ class CaddyPayRatesController < ApplicationController
   # PATCH/PUT /caddy_pay_rates/1
   # PATCH/PUT /caddy_pay_rates/1.json
   def update
+    @course = @caddy_pay_rate.course
     respond_to do |format|
       if @caddy_pay_rate.update(caddy_pay_rate_params)
         format.html { redirect_to @caddy_pay_rate, notice: 'CaddyPayRate was successfully updated.' }
