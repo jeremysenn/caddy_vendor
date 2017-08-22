@@ -14,7 +14,7 @@ class Transfer < ApplicationRecord
 #  validates :from_account, :to_account, :amount, :fee, presence: true
 #  validate :amount_not_greater_than_available
 
-  validates_numericality_of :caddy_fee_cents, :greater_than => 0
+#  validates_numericality_of :caddy_fee_cents, :greater_than => 0
 
   #############################
   #     Instance Methods      #
@@ -86,7 +86,7 @@ class Transfer < ApplicationRecord
   def ezcash_payment_transaction_web_service_call
     client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
     response = client.call(:ez_cash_txn, message: { FromActID: from_account_id, ToActID: to_account_id, Amount: amount, Fee: fee, FeeActId: fee_to_account_id})
-    Rails.logger.debug "Response body: #{response.body}"
+    Rails.logger.debug "**************Response body: #{response.body}"
     if response.success?
       unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
         self.update_attribute(:ez_cash_tran_id, response.body[:ez_cash_txn_response][:tran_id])
