@@ -1,5 +1,9 @@
 .container-fluid
   %br
+  .alert.alert-danger{:role => "alert"}
+    %i.fa.fa-warning
+    Texting is currently unavailable
+
   %p
     = form_tag caddies_path, id: 'caddies_form', method: 'get', class: 'form-inline' do |f|
       - unless current_user.courses.count <= 1
