@@ -37,7 +37,7 @@ production:
   encoding: utf8
   reconnect: false
   database: caddy_vendor
-  pool: 25
+  pool: 5
   username: root
   password:
   socket: /var/lib/mysql/mysql.sock
