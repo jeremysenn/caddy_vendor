@@ -224,7 +224,7 @@ class Transfer < ApplicationRecord
       unless caddy.blank?
         caddy.course
       else
-        nil
+        company.courses.first
       end
     end
   end

@@ -14,6 +14,7 @@
         %i.fa.fa-search
       .pull-right
         = link_to 'New round', new_event_path(course_id: current_course.id), class: 'btn btn-warning'
+  %p.lead.text-muted= "#{pluralize(number_with_delimiter(@all_events.count), 'round')} found"
 
   .card.card-block
     %h4.card-title 
@@ -38,3 +39,5 @@
                   = link_to "Payment", event, class: 'btn btn-success'
     - else
       %p.lead None
+
+  = paginate @events

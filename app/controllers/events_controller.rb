@@ -15,12 +15,24 @@ class EventsController < ApplicationController
     else
       @course = current_course.blank? ? current_user.company.courses.first : current_course
     end
-    @events = current_course.events.where(start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC")
+    events = current_course.events.where(start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC")
 #    @events = current_course.events
 #    session[:course_id] = params[:course_id] unless params[:course_id].blank?
 #    unless current_course.blank?
 #      @events = current_course.events
 #    end
+
+    respond_to do |format|
+      format.html {
+        @all_events = events
+        @events = events.page(params[:page]).per(20)
+      }
+      format.csv { 
+        @events = events
+        send_data @events.to_csv, filename: "rounds-#{@start_date}-#{@end_date}.csv" 
+        }
+    end
+    
   end
 
   # GET /events/1

@@ -9,7 +9,7 @@
       = text_field_tag 'transaction[end_date]', nil, :placeholder => "End Date", value: "#{@end_date.blank? ? Date.today : @end_date}", class: "form-control input-lg", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
       = button_tag(:type => 'submit', :class => 'btn btn-primary', data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}) do
         %i.fa.fa-search
-  %p.lead.text-muted= "#{pluralize(@transactions_count, 'transaction')} found"
+  %p.lead.text-muted= "#{pluralize(number_with_delimiter(@transactions_count), 'transaction')} found"
 
   .card.card-block
     %h4.card-title 
