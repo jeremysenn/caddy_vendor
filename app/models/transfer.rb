@@ -23,7 +23,12 @@ class Transfer < ApplicationRecord
   
   ### Start Virtual Attributes ###
   def amount # Getter
-    amount_cents.to_d / 100 if amount_cents
+    unless reversed
+      amount_cents.to_d / 100 if amount_cents
+    else
+      # Return negative value if transfer has been reversed
+      -(amount_cents.to_d / 100) if amount_cents
+    end
   end
   
   def amount=(dollars) # Setter
@@ -31,7 +36,12 @@ class Transfer < ApplicationRecord
   end
   
   def caddy_fee # Getter
-    caddy_fee_cents.to_d / 100 if caddy_fee_cents
+    unless reversed
+      caddy_fee_cents.to_d / 100 if caddy_fee_cents
+    else
+      # Return negative value if transfer has been reversed
+      -(caddy_fee_cents.to_d / 100) if caddy_fee_cents
+    end
   end
   
   def caddy_fee=(dollars) # Setter
@@ -161,17 +171,32 @@ class Transfer < ApplicationRecord
   end
   
   def amount_in_dollars
-    amount_cents / 100.0
+    unless reversed
+      amount_cents / 100.0
+    else
+      # Return negative value if transfer has been reversed
+      -(amount_cents / 100.0)
+    end
   end
   
   def fee_in_dollars
-    fee_cents / 100.0 unless fee_cents.blank?
+    unless reversed
+      fee_cents / 100.0 unless fee_cents.blank?
+    else
+      # Return negative value if transfer has been reversed
+      -(fee_cents / 100.0) unless fee_cents.blank?
+    end
   end
   
   def total
 #    (amount_cents - fee_cents) / 100
 #    (amount_cents + fee_cents) / 100.0 unless amount_cents.blank? or fee_cents.blank?
-    (amount_cents) / 100.0 unless amount_cents.blank?
+    unless reversed
+      (amount_cents) / 100.0 unless amount_cents.blank?
+    else
+      # Return negative value if transfer has been reversed
+      -((amount_cents) / 100.0) unless amount_cents.blank?
+    end
   end
   
   def update_player
