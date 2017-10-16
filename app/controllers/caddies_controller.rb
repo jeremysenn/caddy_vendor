@@ -61,9 +61,11 @@ class CaddiesController < ApplicationController
   def show
     @course = @caddy.course
 #    @transfers = @caddy.transfers
-    @transfers = @caddy.account_transfers.order('created_at DESC') unless @caddy.account_transfers.blank?
+    # Get caddy account transfers, filtered by company_id
+    @transfers = @caddy.account_transfers.where(company_id: current_user.company_id).order('created_at DESC') unless @caddy.account_transfers.blank?
     @text_messages = @caddy.sms_messages.reverse
-    @withdrawal_transactions = @caddy.customer.transactions.withdrawals
+    # Get caddy account withdrawal transactions, filtered by company_id
+    @withdrawal_transactions = @caddy.customer.transactions.where(DevCompanyNbr: current_user.company_id).withdrawals
   end
 
   # GET /caddies/new
