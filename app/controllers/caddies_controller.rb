@@ -65,7 +65,7 @@ class CaddiesController < ApplicationController
     @transfers = @caddy.account_transfers.where(company_id: current_user.company_id).order('created_at DESC') unless @caddy.account_transfers.blank?
     @text_messages = @caddy.sms_messages.reverse
     # Get caddy account withdrawal transactions, filtered by company_id
-    @withdrawal_transactions = @caddy.customer.transactions.where(DevCompanyNbr: current_user.company_id).withdrawals
+    @withdrawal_transactions = @caddy.customer.transactions.where(DevCompanyNbr: current_user.company_id).withdrawals.last(20).reverse
   end
 
   # GET /caddies/new
