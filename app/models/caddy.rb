@@ -66,8 +66,14 @@ class Caddy < ApplicationRecord
 #    end
     vp = vendor_payable
     unless vp.blank?
-      # Get vendor payable balance
-      return vp.Balance
+      vendor_payable_balance = vp.Balance
+      account_balance = account.Balance
+      # Get the lesser of the two balances
+      if vendor_payable_balance <= account_balance
+        return vendor_payable_balance
+      else
+        return account_balance
+      end
     else
       return 0
     end

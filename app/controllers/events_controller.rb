@@ -25,7 +25,7 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.html {
         @all_events = events
-        @events = events.page(params[:page]).per(20)
+        @events = events.page(params[:page]).per(50)
       }
       format.csv { 
         @events = events
