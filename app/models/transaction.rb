@@ -340,4 +340,17 @@ class Transaction < ActiveRecord::Base
     Rails.logger.debug "Response body: #{response.body}"
   end
   
+  def self.ezcash_get_barcode_png_web_service_call(customer_id, company_number, scale)
+    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+    response = client.call(:get_customer_barcode_png, message: { CustomerID: customer_id, CompanyNumber: company_number, Scale: scale})
+    
+    Rails.logger.debug "Response body: #{response.body}"
+    
+    unless response.body[:get_customer_barcode_png_response].blank? or response.body[:get_customer_barcode_png_response][:return].blank?
+      return response.body[:get_customer_barcode_png_response][:return]
+    else
+      return ""
+    end
+  end
+  
 end

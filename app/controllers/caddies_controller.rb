@@ -1,6 +1,6 @@
 class CaddiesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_caddy, only: [:show, :edit, :update, :pay, :destroy]
+  before_action :set_caddy, only: [:show, :edit, :update, :pay, :barcode, :destroy]
   load_and_authorize_resource
   around_action :set_time_zone, if: :current_user
 
@@ -165,6 +165,12 @@ class CaddiesController < ApplicationController
       Transfer.create(company_id: current_user.company.id, from_account_id: current_user.company.account.id, to_account_id: @caddy.account.id, amount: amount, note: note, club_credit_transaction_id: transaction_id)
     end
     redirect_back fallback_location: @caddy, notice: 'Caddy payment submitted.'
+  end
+  
+  # GET /caddies/1/barcode
+  # GET /caddies/1/barcode.json
+  def barcode
+    @base64_barcode_string = Transaction.ezcash_get_barcode_png_web_service_call(@caddy.CustomerID, current_user.company_id, 5)
   end
 
   # DELETE /caddies/1

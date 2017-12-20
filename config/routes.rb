@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   resources :caddies do
     member do
       get 'pay'
+      get 'barcode'
     end
     collection do
       get 'send_group_text_message'
