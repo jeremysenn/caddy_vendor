@@ -57,7 +57,7 @@
             %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_company"}
               %i.fa.fa-dollar
               Pay by company
-          %a{href: barcode_caddy_path(@caddy), class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_barcode", target: '_blank'}
+          %a{href: barcode_caddy_path(@caddy), class: 'btn btn-success', target: '_blank'}
             %i.fa.fa-barcode
             Pay by barcode
           %a{href: edit_caddy_path(@caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
