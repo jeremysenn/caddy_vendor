@@ -209,6 +209,9 @@ class Ability
 #        end
 #      end
 #      can :create, :customers
+
+    elsif not user.is_caddy? and user.active?
+      # Active caddy user
     
     end
     
