@@ -5,20 +5,20 @@
   %ul.nav.nav-tabs
     %li.nav-item
       %a.nav-link.active{:href => "#info", :data => {:toggle => "tab"}} 
-        %i.fa.fa-vcard-o
-        Info
+        %i.fa.fa-vcard-o.fa-lg
+        = "Info" unless browser.device.mobile?
     %li.nav-item
       %a.nav-link{:href => "#transfers", :data => {:toggle => "tab"}} 
-        %i.fa.fa-dollar
-        Transfers
+        %i.fa.fa-dollar.fa-lg
+        = "Transfers" unless browser.device.mobile?
     %li.nav-item
       %a.nav-link{:href => "#withdrawals", :data => {:toggle => "tab"}} 
-        %i.fa.fa-bolt
-        Withdrawals
+        %i.fa.fa-bolt.fa-lg
+        = "Withdrawals" unless browser.device.mobile?
     %li.nav-item
       %a.nav-link{:href => "#messages", :data => {:toggle => "tab"}} 
-        %i.fa.fa-commenting
-        Messages
+        %i.fa.fa-commenting.fa-lg
+        = "Messages" unless browser.device.mobile?
   .tab-content
     .tab-pane.active{:id => "info"}
       %br
@@ -57,9 +57,6 @@
             %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_company"}
               %i.fa.fa-dollar
               Pay by company
-          %a{href: barcode_caddy_path(@caddy), class: 'btn btn-success', target: '_blank'}
-            %i.fa.fa-barcode
-            Pay by barcode
           %a{href: edit_caddy_path(@caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
             %i.fa.fa-edit
             Edit
@@ -83,9 +80,13 @@
       #caddy_transfers.collapse.show.in{"aria-expanded" => "true"}
         .pull-right
           %p
-            %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
-              %i.fa.fa-dollar
-              Pay by member
+            - if current_caddy.blank? and current_user.admin?
+              %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
+                %i.fa.fa-dollar
+                Pay by member
+            %a{href: barcode_caddy_path(@caddy), class: 'btn btn-success', target: '_blank'}
+              %i.fa.fa-barcode
+              Barcode Payment
         = render 'pay_caddy_by_member'
         - unless @transfers.blank?
           .table-responsive
@@ -155,11 +156,12 @@
     .tab-pane{:id => "messages"}
       %br
       #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
-        .pull-right
-          %p
-            %a{href: '#', class: 'btn btn-primary', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
-              %i.fa.fa-commenting
-              Text Message
+        - if current_caddy.blank? and current_user.admin?
+          .pull-right
+            %p
+              %a{href: '#', class: 'btn btn-primary', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
+                %i.fa.fa-commenting
+                Text Message
         - unless @text_messages.blank?
           .table-responsive
             %table.table.table-striped
@@ -176,27 +178,27 @@
                     %td= link_to "Show", text_message, class: 'btn btn-secondary'
         - else
           %p.lead None
-
-      #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
-        .modal-dialog.modal-sm{:role => "document"}
-          .modal-content
-            .modal-header
-              %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
-                %span{"aria-hidden" => "true"} ×
-              .modal-title
-                .lead 
-                  %i.fa.fa-commenting
-                  Text Message
-            .modal-body
-              = form_tag send_group_text_message_caddies_path, id: 'send_caddies_sms_form', method: 'get' do |f|
-                = hidden_field_tag "caddy_ids[]", [@caddy.id]
-                .row
-                  .col-xs-12
-                    = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 8, style: 'width:100%', autofocus: true
-                .row
-                  .col-xs-12
-                    .pull-right
-                      %br
-                      %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
-                      %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Send"}} 
-                        Send
+      - if current_caddy.blank? and current_user.admin?
+        #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+          .modal-dialog.modal-sm{:role => "document"}
+            .modal-content
+              .modal-header
+                %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+                  %span{"aria-hidden" => "true"} ×
+                .modal-title
+                  .lead 
+                    %i.fa.fa-commenting
+                    Text Message
+              .modal-body
+                = form_tag send_group_text_message_caddies_path, id: 'send_caddies_sms_form', method: 'get' do |f|
+                  = hidden_field_tag "caddy_ids[]", [@caddy.id]
+                  .row
+                    .col-xs-12
+                      = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 8, style: 'width:100%', autofocus: true
+                  .row
+                    .col-xs-12
+                      .pull-right
+                        %br
+                        %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
+                        %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Send"}} 
+                          Send

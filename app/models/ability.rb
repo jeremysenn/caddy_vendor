@@ -164,6 +164,15 @@ class Ability
         vendor_payable.company == user.company
       end
       
+    elsif user.is_caddy? and user.active?
+      # Active caddy user
+    
+      # Caddies
+      ############
+      can :manage, Caddy do |caddy|
+        caddy == user.caddy
+      end  
+      
     elsif not user.admin? and user.active?
       # Non-admin, active user
       # 
@@ -209,10 +218,7 @@ class Ability
 #        end
 #      end
 #      can :create, :customers
-
-    elsif not user.is_caddy? and user.active?
-      # Active caddy user
-    
+      
     end
     
   end

@@ -35,6 +35,10 @@ class User < ApplicationRecord
     not admin?
   end
   
+  def caddy
+    Caddy.all.joins(:customer).where("customer.Email = ?", email).first
+  end
+  
   #############################
   #     Class Methods         #
   #############################

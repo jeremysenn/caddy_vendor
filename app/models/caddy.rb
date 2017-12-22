@@ -12,6 +12,7 @@ class Caddy < ApplicationRecord
   has_many :transfers, through: :players
   has_many :caddy_ratings
   has_many :sms_messages
+  has_many :events, through: :players
   
 #  has_and_belongs_to_many :courses
 

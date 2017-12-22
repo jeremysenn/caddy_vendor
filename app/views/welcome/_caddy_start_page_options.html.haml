@@ -1,0 +1,9 @@
+.row.form-group
+  .col-xs-6
+    .pull-right
+      %a.btn.btn-primary.btn-lg{:href => events_path, :role => "button"}
+        Rounds
+  .col-xs-6
+    .pull-left
+      %a.btn.btn-secondary.btn-lg{:href => caddy_path(current_caddy), :role => "button"}
+        = current_caddy.first_name

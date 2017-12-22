@@ -1,0 +1,31 @@
+%nav.navbar.navbar-fixed-top.navbar-dark.bg-inverse
+  %button.navbar-toggler.hidden-sm-up{"data-target" => "#exCollapsingNavbar2", "data-toggle" => "collapse", :type => "button"}
+    \☰
+  #exCollapsingNavbar2.collapse.navbar-toggleable-xs
+    %a.navbar-brand{:href => root_path} 
+      %i.fa.fa-flag
+      CaddyVend
+    %ul.nav.navbar-nav  
+      %li.nav-item.dropdown
+        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'events') ? "active" : ""}
+          Rounds
+          %b.caret
+        %div.dropdown-menu
+          - if current_user.courses.count <= 1
+            %a.dropdown-item{:href => new_event_path, :class => (current_page? new_event_path) ? "active" : ""} 
+              %i.fa.fa-plus-circle
+              New Round
+          - else
+            - current_user.courses.each do |course|
+              %a.dropdown-item{:href => new_event_path(course_id: course.id), :class => (current_page? new_event_path(course_id: course.id)) ? "active" : ""} 
+                %i.fa.fa-plus-circle
+                = "#{course.name} Round"
+            
+          %a.dropdown-item{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
+            %i.fa.fa-search
+            Rounds
+      %li.nav-item
+        %a.nav-link{:href => caddy_path(current_caddy), :class => (params[:controller] == 'caddies') ? "active" : ""} 
+          Info
+      .float-xs-right
+        %li.nav-item= link_to 'Log out', destroy_user_session_path, method: :delete, data: { confirm: 'Are you sure you want to sign out?' }, class: 'btn btn-outline-danger nav-link'

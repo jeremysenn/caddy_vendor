@@ -44,7 +44,7 @@ gem 'haml'
 gem 'haml-rails'
 
 # Bootstrap 4 Ruby Gem for Rails / Sprockets and Compass. https://rubygems.org/gems/bootstrap
-gem 'bootstrap'
+gem 'bootstrap', '4.0.0.alpha5'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'
@@ -95,6 +95,9 @@ gem 'exception_notification'
 
 # For converting SQLite to MySQL database
 gem 'yaml_db'
+
+# Do some browser detection with Ruby. Includes ActionController integration.
+gem 'browser'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

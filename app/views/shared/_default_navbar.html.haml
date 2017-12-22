@@ -1,6 +1,8 @@
 - unless current_user.blank?
   - if current_user.admin?
     = render 'shared/admin_user_navbar' 
+  - elsif current_user.is_caddy?
+    = render 'shared/caddy_user_navbar' 
   - else
     = render 'shared/non_admin_user_navbar' 
 - else
