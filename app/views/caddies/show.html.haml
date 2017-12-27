@@ -57,9 +57,10 @@
             %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_company"}
               %i.fa.fa-dollar
               Pay by company
-          %a{href: edit_caddy_path(@caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
-            %i.fa.fa-edit
-            Edit
+          - if current_caddy.blank? and current_user.admin? 
+            %a{href: edit_caddy_path(@caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
+              %i.fa.fa-edit
+              Edit
           =# render 'pay_caddy_by_member'
           =# render 'pay_caddy_by_company'
           -#

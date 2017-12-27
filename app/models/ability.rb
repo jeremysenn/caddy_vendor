@@ -166,12 +166,37 @@ class Ability
       
     elsif user.is_caddy? and user.active?
       # Active caddy user
+      
+      # Events
+      ############
+      can :manage, Event do |event|
+        unless event.course.blank?
+          event.course.company == user.company
+        else
+          true
+        end
+      end
+      can :create, :events
     
       # Caddies
       ############
       can :manage, Caddy do |caddy|
         caddy == user.caddy
       end  
+      
+      # Players
+      ############
+      can :manage, Player do |player|
+        # Companies must match, and player caddy must match the currently logged in caddy
+        player.event.course.company == user.company && player.caddy_id == user.caddy.id
+      end
+      
+      # Transfers
+      ############
+      can :manage, Transfer do |transfer|
+        # Companies must match, and transfer's player caddy must match the currently logged in caddy
+        transfer.company == user.company && transfer.player.caddy_id == user.caddy.id
+      end
       
     elsif not user.admin? and user.active?
       # Non-admin, active user
