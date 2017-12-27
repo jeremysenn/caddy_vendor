@@ -8,17 +8,20 @@
         = render 'welcome/admin_start_page_options'
       - elsif current_user.is_caddy?
         = render 'welcome/caddy_start_page_options'
+      - elsif current_user.is_member?
+        = render 'welcome/member_start_page_options'
       - else
         = render 'welcome/non_admin_start_page_options'
     - else
-      %h1 
+      %h1.text-xs-center
         %i.fa.fa-flag
         CaddyVend
-      %br
-      %h3 
-        Easy payment processing of members and caddies.
+      -#
         %br
-        No more cash • Fully automated
+        %h3 
+          Easy payment processing of members and caddies.
+          %br
+          No more cash • Fully automated
       %ul.list-inline.text-xs-center
         %li.list-inline-item
           .col-xs-12

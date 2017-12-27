@@ -198,6 +198,9 @@ class Ability
         transfer.company == user.company && transfer.player.caddy_id == user.caddy.id
       end
       
+    elsif user.is_member? and user.active?
+      # Active member user  
+      
     elsif not user.admin? and user.active?
       # Non-admin, active user
       # 

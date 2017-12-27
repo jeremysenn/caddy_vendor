@@ -7,6 +7,9 @@ class User < ApplicationRecord
   belongs_to :company
   has_many :caddy_ratings
   
+  ROLES = %w[admin member caddy].freeze
+#  validates_presence_of :role, :message => 'Please select type of user.'
+  
   #############################
   #     Instance Methods      #
   #############################
@@ -37,6 +40,18 @@ class User < ApplicationRecord
   
   def caddy
     Caddy.all.joins(:customer).where("customer.Email = ?", email).first
+  end
+  
+  def member
+    Customer.members.where(Email: email).first
+  end
+  
+  def is_member?
+    role == 'member'
+  end
+  
+  def is_caddy?
+    role == 'caddy'
   end
   
   #############################

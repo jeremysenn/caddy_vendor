@@ -12,6 +12,15 @@
           = f.input :email, disabled: true
           = f.input :admin, inline_label: 'Admin'
           = f.input :active, inline_label: 'Active'
+          .row.form-group
+            %div{:class => "col-sm-12"}
+              .btn-group-horizontal{"data-toggle" => "buttons"}
+                %label.btn.btn-secondary{class: "#{@user.is_caddy? ? 'active' : ''}"}
+                  = f.radio_button :role, "caddy"
+                  Caddy
+                %label.btn.btn-secondary{class: "#{@user.is_member? ? 'active' : ''}"}
+                  = f.radio_button :role, "member"
+                  Member
 
         .form-actions
           = link_to 'Cancel', :back, class: 'btn btn-secondary'
