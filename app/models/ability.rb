@@ -201,6 +201,12 @@ class Ability
     elsif user.is_member? and user.active?
       # Active member user  
       
+      # Customers
+      ############
+      can :manage, Customer do |customer|
+        customer.company == user.company && customer == user.member
+      end
+      
     elsif not user.admin? and user.active?
       # Non-admin, active user
       # 
