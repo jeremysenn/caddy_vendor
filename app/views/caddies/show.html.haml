@@ -57,7 +57,7 @@
             %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_company"}
               %i.fa.fa-dollar
               Pay by company
-          - if current_caddy.blank? and current_user.admin? 
+          - if current_caddy.blank? and current_user.is_admin?
             %a{href: edit_caddy_path(@caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
               %i.fa.fa-edit
               Edit
@@ -81,7 +81,7 @@
       #caddy_transfers.collapse.show.in{"aria-expanded" => "true"}
         .pull-right
           %p
-            - if current_caddy.blank? and current_user.admin?
+            - if current_caddy.blank? and current_user.is_admin?
               %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
                 %i.fa.fa-dollar
                 Pay by member
@@ -157,7 +157,7 @@
     .tab-pane{:id => "messages"}
       %br
       #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
-        - if current_caddy.blank? and current_user.admin?
+        - if current_caddy.blank? and current_user.is_admin?
           .pull-right
             %p
               %a{href: '#', class: 'btn btn-primary', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
@@ -179,7 +179,7 @@
                     %td= link_to "Show", text_message, class: 'btn btn-secondary'
         - else
           %p.lead None
-      - if current_caddy.blank? and current_user.admin?
+      - if current_caddy.blank? and current_user.is_admin?
         #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
           .modal-dialog.modal-sm{:role => "document"}
             .modal-content

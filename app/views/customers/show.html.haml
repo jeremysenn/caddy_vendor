@@ -115,7 +115,7 @@
             = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 14 : @customer.GroupID}" }
             = f.input :NameF, label: 'First Name'
             = f.input :NameL, label: 'Last Name'
-            = f.input :PhoneMobile, label: 'Phone' if current_user.admin?
+            = f.input :PhoneMobile, label: 'Phone' if current_user.is_admin?
             - unless current_user.not_admin? and not @customer.active?
               = f.input :Active, as: :boolean, inline_label: 'Active'
           .modal-footer
@@ -139,7 +139,7 @@
             = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 14 : @customer.GroupID}" }
             = f.input :NameF, label: 'First Name'
             = f.input :NameL, label: 'Last Name'
-            = f.input :PhoneMobile, label: 'Phone' if current_user.admin?
+            = f.input :PhoneMobile, label: 'Phone' if current_user.is_admin?
             = f.input :NameS, as: :hidden, :input_html => { :value => @customer.member_number }
             - unless current_user.not_admin? and not @customer.active?
               = f.input :Active, as: :boolean, inline_label: 'Active'

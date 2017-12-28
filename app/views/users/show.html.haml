@@ -5,8 +5,8 @@
       Email:
       = @user.email
     %p.lead
-      Admin:
-      = "#{@user.admin? ? 'Yes' : 'No'}"
+      Role:
+      = user.role
     %p.lead
       Active:
       = "#{@user.active? ? 'Yes' : 'No'}"

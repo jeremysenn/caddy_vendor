@@ -69,7 +69,7 @@
   .row.form-group
     %div{:class => "col-sm-12"}
       %button.btn.btn-secondary{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button", onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"} Cancel
-      = f.submit "Payment", :class => 'btn btn-success', name: 'pay', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();" #if current_user.admin?
+      = f.submit "Payment", :class => 'btn btn-success', name: 'pay', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();" #if current_user.is_admin?
       = f.submit "Save", :class => 'btn btn-primary', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"
       - unless @event.contains_paid_players?
         = link_to 'Delete',                      |

@@ -17,14 +17,14 @@
         %thead
           %tr
             %th Email
-            %th Admin
+            %th Role
             %th Active
             %th
         %tbody
           - @users.each do |user|
             %tr
               %td= user.email
-              %td= "#{user.admin? ? 'Yes' : 'No'}"
+              %td= user.role
               %td= "#{user.active? ? 'Yes' : 'No'}"
               %td
                 = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary'

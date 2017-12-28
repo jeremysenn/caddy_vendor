@@ -35,7 +35,7 @@ class User < ApplicationRecord
   end
   
   def not_admin?
-    not admin?
+    not is_admin?
   end
   
   def caddy
@@ -52,6 +52,10 @@ class User < ApplicationRecord
   
   def is_caddy?
     role == 'caddy'
+  end
+  
+  def is_admin?
+    role == 'admin'
   end
   
   #############################

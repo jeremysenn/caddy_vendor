@@ -29,7 +29,7 @@ class Ability
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
     
-    if user.admin? and user.active?
+    if user.is_admin? and user.active?
       
       # Companies
       ############
@@ -207,7 +207,7 @@ class Ability
         customer.company == user.company && customer == user.member
       end
       
-    elsif not user.admin? and user.active?
+    elsif not user.is_admin? and user.active?
       # Non-admin, active user
       # 
       # Events
