@@ -19,10 +19,11 @@
             %th Email
             %th Role
             %th Active
+            %th Confirmed
             %th
         %tbody
           - @users.each do |user|
-            %tr{class: "#{user.active? ? '' : 'table-danger'}"}
+            %tr{class: "#{!user.confirmed? ? 'table-danger' : !user.active? ? 'table-warning' : ''}"}
               %td= user.email
               %td
                 - if user.is_member? and not user.member.blank?
@@ -32,5 +33,6 @@
                 - else
                   = user.role
               %td= "#{user.active? ? 'Yes' : 'No'}"
+              %td= "#{user.confirmed? ? 'Yes' : 'No'}"
               %td
                 = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary'
