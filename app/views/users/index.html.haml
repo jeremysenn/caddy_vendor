@@ -22,9 +22,15 @@
             %th
         %tbody
           - @users.each do |user|
-            %tr
+            %tr{class: "#{user.active? ? '' : 'table-danger'}"}
               %td= user.email
-              %td= user.role
+              %td
+                - if user.is_member? and not user.member.blank?
+                  = link_to user.role, user.member
+                - elsif user.is_caddy? and not user.caddy.blank?
+                  = link_to user.role, user.caddy
+                - else
+                  = user.role
               %td= "#{user.active? ? 'Yes' : 'No'}"
               %td
                 = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary'

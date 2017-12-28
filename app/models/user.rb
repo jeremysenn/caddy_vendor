@@ -10,6 +10,8 @@ class User < ApplicationRecord
   ROLES = %w[admin member caddy].freeze
   validates_presence_of :role, :message => 'Please select type of user.'
   
+  after_save :set_company_id, :unless => :company_id
+  
   #############################
   #     Instance Methods      #
   #############################
@@ -56,6 +58,14 @@ class User < ApplicationRecord
   
   def is_admin?
     role == 'admin'
+  end
+  
+  def set_company_id
+    if is_caddy? and not caddy.blank?
+      self.update_attribute(:company_id, caddy.ClubCompanyNbr)
+    elsif is_member? and not member.blank?
+      self.update_attribute(:company_id, member.CompanyNumber)
+    end
   end
   
   #############################

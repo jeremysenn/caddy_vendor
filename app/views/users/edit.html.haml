@@ -9,7 +9,7 @@
 
         .form-inputs
           = f.input :company_id, as: :hidden, :input_html => {:value => current_user.company.id}
-          = f.input :email, disabled: true
+          = f.input :email#, disabled: true
           = f.input :active, inline_label: 'Active'
           .row.form-group
             %div{:class => "col-sm-12"}
