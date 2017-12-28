@@ -198,6 +198,12 @@ class Ability
         transfer.company == user.company && transfer.player.caddy_id == user.caddy.id
       end
       
+      # Transactions
+      ############
+      can :manage, Transaction do |transaction|
+        transaction.company == user.company 
+      end
+      
     elsif user.is_member? and user.active?
       # Active member user  
       
@@ -205,6 +211,19 @@ class Ability
       ############
       can :manage, Customer do |customer|
         customer.company == user.company && customer == user.member
+      end
+      
+      # Transfers
+      ############
+      can :manage, Transfer do |transfer|
+        # Companies must match, and transfer's player caddy must match the currently logged in caddy
+        transfer.company == user.company && transfer.player.member_id == user.member.id
+      end
+      
+      # Transactions
+      ############
+      can :manage, Transaction do |transaction|
+        transaction.company == user.company 
       end
       
     elsif not user.is_admin? and user.active?

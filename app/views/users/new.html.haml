@@ -10,9 +10,20 @@
         .form-inputs
           = f.input :company_id, as: :hidden, :input_html => {:value => current_user.company.id}
           = f.input :email, required: true
-          = f.input :admin, inline_label: 'Admin'
           = f.input :active, inline_label: 'Active'
           = f.input :password, autocomplete: "off", required: true
+          .row.form-group
+            %div{:class => "col-sm-12"}
+              .btn-group-horizontal{"data-toggle" => "buttons"}
+                %label.btn.btn-secondary
+                  = f.radio_button :role, "caddy", required: true
+                  Caddy
+                %label.btn.btn-secondary
+                  = f.radio_button :role, "member", required: true
+                  Member
+                %label.btn.btn-secondary
+                  = f.radio_button :role, "admin", required: true
+                  Admin
 
         .form-actions
           = link_to 'Cancel', :back, class: 'btn btn-secondary'

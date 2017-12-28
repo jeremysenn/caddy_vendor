@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_many :caddy_ratings
   
   ROLES = %w[admin member caddy].freeze
-#  validates_presence_of :role, :message => 'Please select type of user.'
+  validates_presence_of :role, :message => 'Please select type of user.'
   
   #############################
   #     Instance Methods      #

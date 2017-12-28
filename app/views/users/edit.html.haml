@@ -10,7 +10,6 @@
         .form-inputs
           = f.input :company_id, as: :hidden, :input_html => {:value => current_user.company.id}
           = f.input :email, disabled: true
-          = f.input :admin, inline_label: 'Admin'
           = f.input :active, inline_label: 'Active'
           .row.form-group
             %div{:class => "col-sm-12"}
@@ -21,6 +20,9 @@
                 %label.btn.btn-secondary{class: "#{@user.is_member? ? 'active' : ''}"}
                   = f.radio_button :role, "member"
                   Member
+                %label.btn.btn-secondary{class: "#{@user.is_admin? ? 'active' : ''}"}
+                  = f.radio_button :role, "admin"
+                  Admin
 
         .form-actions
           = link_to 'Cancel', :back, class: 'btn btn-secondary'

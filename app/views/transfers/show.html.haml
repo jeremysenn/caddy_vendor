@@ -44,5 +44,5 @@
   = form_for @transfer, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
     = f.hidden_field :reversed, value: true
     = link_to 'Back', :back, class: 'btn btn-secondary'
-    - if @transfer.reversable?
+    - if @transfer.reversable? and (current_user.is_admin? or current_user.is_caddy?)
       = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }

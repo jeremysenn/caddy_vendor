@@ -4,10 +4,11 @@
     %h3.card-header
       %i.fa.fa-user-circle-o
       = @customer.full_name
-      .pull-right
-        %a{href: edit_customer_path(@customer), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
-          %i.fa.fa-edit
-          Edit
+      - if current_user.is_admin?
+        .pull-right
+          %a{href: edit_customer_path(@customer), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
+            %i.fa.fa-edit
+            Edit
     .card-block
       %p.lead
         Email:
@@ -30,10 +31,11 @@
               = link_to add_on_member.full_name, add_on_member
           - else
             None
-          %br
-          %a{class: 'btn btn-secondary btn-sm', "data-toggle" => "modal", "data-target" => "#add_family_member"}
-            %i.fa.fa-plus
-            Add family
+          - if current_user.is_admin?
+            %br
+            %a{class: 'btn btn-secondary btn-sm', "data-toggle" => "modal", "data-target" => "#add_family_member"}
+              %i.fa.fa-plus
+              Add family
           -#
             %a{class: 'btn btn-secondary btn-sm', "data-toggle" => "modal", "data-target" => "#add_guest_member"}
               %i.fa.fa-plus
