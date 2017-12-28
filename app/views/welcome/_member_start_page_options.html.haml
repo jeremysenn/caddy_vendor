@@ -1,5 +1,8 @@
 .row.form-group
   .text-xs-center
     %p.lead Member User
-    %a.btn.btn-secondary.btn-lg{:href => customer_path(current_member), :role => "button"}
-      = current_member.NameF
+    - unless current_member.blank?
+      %a.btn.btn-secondary.btn-lg{:href => customer_path(current_member), :role => "button"}
+        = current_member.NameF
+    - else
+      Your account needs to be verified.
