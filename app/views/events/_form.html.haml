@@ -5,10 +5,10 @@
   .row.form-group
     %div{:class => "col-sm-12"}
       %div{:class => "col-sm-3"}
-        %p.lead= current_course.name
+        %p= current_course.name
   .row.form-group
     %div{:class => "col-sm-12"}
-      %label.col-sm-2.control-label.lead{for: "event_start"}
+      %label.col-sm-2.control-label{for: "event_start"}
         Start
       %div{:class => "col-sm-10"}
         = f.datetime_select :start, default: Time.now.in_time_zone(current_course.time_zone), minute_step: 15, ampm: true
@@ -17,15 +17,15 @@
           = f.datetime_select :end, value: Time.now.in_time_zone(current_user.time_zone), minute_step: 15, ampm: true
   .row.form-group
     %div{:class => "col-sm-12"}
-      %label.col-sm-2.control-label.lead{for: "event_players"} 
+      %label.col-sm-2.control-label{for: "event_players"} 
         Players
       %div{:class => "col-sm-10"}
         = f.nested_fields_for :players do |ff|
           .card.player_fields{class: "#{ff.object.payment_reversed? ? 'card-outline-danger' : ''}" }
             - if ff.object.paid?
-              %p.card-header.lead.text-success Paid
+              %p.card-header.text-success Paid
             - elsif ff.object.payment_reversed?
-              %p.card-header.lead.text-danger Payment Reversed
+              %p.card-header.text-danger Payment Reversed
             - else
               %p.card-header
                 = ff.remove_nested_fields_link "<i class='fa fa-trash-o'></i>".html_safe, class: 'btn btn-sm btn-danger', role: 'button', data: { confirm: 'Are you sure you want to delete?' }
@@ -39,13 +39,14 @@
                       = ff.select :caddy_id, grouped_options_for_select(current_course.grouped_caddies_by_rank_for_select, ff.object.caddy_id), {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
                     - else
                       = ff.hidden_field :caddy_id, value: current_caddy.id
+                      = current_caddy.full_name
 
               - else
                 .row.form-group
                   .col-sm-6
-                    %p.lead= ff.object.member.full_name
+                    %p= ff.object.member.full_name
                   .col-sm-6
-                    %p.lead= ff.object.caddy.full_name
+                    %p= ff.object.caddy.full_name
               .row.form-group
                 - unless ff.object.paid?
                   .col-sm-6
@@ -60,13 +61,13 @@
                     
                 - else
                   .col-sm-6
-                    %p.lead= ff.object.round_as_string
+                    %p= ff.object.round_as_string
                   .col-sm-6
-                    %p.lead= ff.object.caddy_type
+                    %p= ff.object.caddy_type
               .row.form-group
                 .col-sm-4
                   - unless ff.object.note.blank?
-                    %p.lead Guest
+                    %p Guest
                   -#
                     #note_field.collapse.show{class: "#{ff.object.note.blank? ? '' : 'in'}"}
                     =# ff.text_field :note, placeholder: 'Guest', class: 'input-lg form-control'
@@ -78,7 +79,7 @@
         = f.add_nested_fields_link :players, "<i class='fa fa-plus'></i> Add Player".html_safe, class: 'more_players_link btn btn-warning'
   .row.form-group
     %div{:class => "col-sm-12"}
-      %label.col-sm-2.control-label.lead{for: "event_notes"} 
+      %label.col-sm-2.control-label{for: "event_notes"} 
         Notes
       .col-sm-10
         = f.text_area :notes, placeholder:'Notes', class: 'input-lg form-control'

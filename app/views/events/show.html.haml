@@ -4,8 +4,9 @@
     .card-title
       %h4
         = @event.course.name
-        #player_total.pull-right
-          = number_to_currency(@event.players_total_with_fee)
+        - if current_user.is_admin?
+          #player_total.pull-right
+            = number_to_currency(@event.players_total_with_fee)
       %p.lead
         = @event.start.strftime("%-m/%-d/%y %l:%M %p")
         
@@ -23,7 +24,7 @@
             %th Fee
             %th
         %tbody
-          - @event.players.each do |player|
+          - @players.each do |player|
             %tr{class: "#{(player.transfer and player.transfer.reversed?) ? 'table-danger' : '' }"}
               %td= player.member.full_name
               %td= player.caddy.full_name

@@ -60,4 +60,14 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :role])
   end
   
+  # when a user logs in
+  def after_sign_in_path_for(resource_or_scope)
+    if current_user.is_member? 
+      session[:member_id] = current_user.member.id
+    elsif current_user.is_caddy?
+      session[:caddy_id] = current_user.caddy.id
+    end
+    root_path
+  end
+  
 end

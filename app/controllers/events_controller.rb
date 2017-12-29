@@ -18,7 +18,7 @@ class EventsController < ApplicationController
     if current_caddy.blank?
       events = current_course.events.where(start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC")
     else
-      events = current_caddy.events(course_id: @course.id, start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC")
+      events = current_caddy.events.where(course_id: @course.id, start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC")
     end
 #    @events = current_course.events
 #    session[:course_id] = params[:course_id] unless params[:course_id].blank?
@@ -42,6 +42,11 @@ class EventsController < ApplicationController
   # GET /events/1
   # GET /events/1.json
   def show
+    if current_caddy.blank?
+      @players = @event.players
+    else
+      @players = @event.players.where(caddy_id: current_caddy_id)
+    end
   end
 
   # GET /events/new
