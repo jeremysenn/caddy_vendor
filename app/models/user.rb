@@ -24,8 +24,14 @@ class User < ApplicationRecord
     company.members
   end
   
+#  def caddies
+#    company.caddies
+#  end
+
   def caddies
-    company.caddies
+    unless caddy_customer.blank?
+      caddy_customer.caddies
+    end
   end
   
   def caddy_pay_rates
@@ -42,6 +48,10 @@ class User < ApplicationRecord
   
   def caddy
     Caddy.all.joins(:customer).where("customer.Email = ?", email).first
+  end
+  
+  def caddy_customer
+    Customer.caddies.where(Email: email).first
   end
   
   def member

@@ -26,3 +26,19 @@
         %p
           Unhappy? #{link_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete}
         = link_to "Back", :back
+  - if current_user.is_caddy?
+    %div{:class => "col-sm-6"}
+      %br
+      .card.card-block
+        %h2 Caddy Details
+        %p 
+          Role:
+          = current_user.role
+        %p
+          Clubs:
+          - current_user.caddies.each do |caddy|
+            = caddy.company.CompanyName
+        %p
+          Customer ID:
+          = current_user.caddy_customer.CustomerID
+        

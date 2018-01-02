@@ -2,7 +2,7 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :ClubCompanyNbr, as: :hidden, :input_html => {:value => @course.id}
+    = f.input :ClubCompanyNbr, as: :hidden, :input_html => {:value => current_user.company_id}
     = f.simple_fields_for :customer do |customer_form|
       = customer_form.input :NameF, label: 'First name', required: true
       = customer_form.input :NameL, label: 'Last name', required: true

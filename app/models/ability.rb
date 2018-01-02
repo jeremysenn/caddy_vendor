@@ -50,6 +50,7 @@ class Ability
       can :manage, Caddy do |caddy|
         caddy.course.company == user.company
       end
+      can :create, Caddy
       
       # Customers
       ############
