@@ -29,9 +29,14 @@ class User < ApplicationRecord
 #  end
 
   def caddies
-    unless caddy_customer.blank?
-      caddy_customer.caddies
+#    unless caddy_customer.blank?
+#      caddy_customer.caddies
+#    end
+    user_caddies = []
+    caddy_customers.each do |customer|
+      user_caddies = user_caddies << customer.caddy unless customer.caddy.blank?
     end
+    return user_caddies
   end
   
   def caddy_pay_rates
@@ -50,8 +55,12 @@ class User < ApplicationRecord
     Caddy.all.joins(:customer).where("customer.Email = ?", email).first
   end
   
-  def caddy_customer
-    Customer.caddies.where(Email: email).first
+  def caddy_customer(company_id)
+    Customer.caddies.where(Email: email, CompanyNumber: company_id).first
+  end
+  
+  def caddy_customers
+    Customer.caddies.where(Email: email)
   end
   
   def member

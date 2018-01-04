@@ -11,8 +11,8 @@ class Company < ActiveRecord::Base
   has_many :caddies, :foreign_key => "ClubCompanyNbr"
   has_many :customers, :foreign_key => "CompanyNumber"
 #  has_many :transactions, :through => :customers
-  has_many :caddy_pay_rates, :through => :courses
-  has_many :caddy_rank_descs, :through => :courses
+  has_many :caddy_pay_rates, :foreign_key => "ClubCompanyID"#, :through => :courses
+  has_many :caddy_rank_descs, :foreign_key => "ClubCompanyID"#, :through => :courses
   has_many :events, through: :courses
 #  has_many :accounts, through: :customers
 #  has_many :accounts, through: :courses
@@ -22,6 +22,7 @@ class Company < ActiveRecord::Base
   has_many :transactions, :foreign_key => "DevCompanyNbr"
   has_many :vendor_payables, :foreign_key => "CompanyNbr"
   has_many :sms_messages
+  has_one :company_act_default_min_balance
   
   #############################
   #     Instance Methods      #

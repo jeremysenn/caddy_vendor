@@ -4,8 +4,8 @@ class Caddy < ApplicationRecord
   
   establish_connection :ez_cash
   
-#  belongs_to :company, :foreign_key => "ClubCompanyNbr"
-  belongs_to :course, :foreign_key => "ClubCompanyNbr"
+  belongs_to :company, :foreign_key => "ClubCompanyNbr"
+#  belongs_to :course, :foreign_key => "ClubCompanyNbr"
   belongs_to :customer, :foreign_key => "CustomerID"
   belongs_to :caddy_rank_desc, :foreign_key => "RankingID"
   has_many :players
@@ -53,6 +53,10 @@ class Caddy < ApplicationRecord
     customer.blank? ? '' : customer.PhoneMobile
   end
   
+  def email
+    customer.blank? ? '' : customer.Email
+  end
+  
 #  def customer
 #    Customer.where(CustomerID: self.CustomerID).first
 #  end
@@ -62,25 +66,28 @@ class Caddy < ApplicationRecord
   end
   
   def balance
-#    unless account.blank?
-#      account.Balance
-#    end
-    vp = vendor_payable
     # If the account minimum balance is nil, set to zero
     account_minimum_balance = account.MinBalance || 0
-    unless vp.blank?
-      vendor_payable_balance = vp.Balance
-      # The account available balance is the balance minus the minimum balance
-      account_balance = account.Balance - account_minimum_balance
-      # Get the lesser of the two balances
-      if vendor_payable_balance <= account_balance
-        return vendor_payable_balance
-      else
-        return account_balance
-      end
-    else
-      return 0
-    end
+    # The account available balance is the balance minus the minimum balance
+    account_balance = account.Balance - account_minimum_balance
+    return account_balance
+    
+#    # Get the lesser of vendor payable and account balance
+#    vp = vendor_payable
+#    unless vp.blank?
+#      vendor_payable_balance = vp.Balance
+#      # The account available balance is the balance minus the minimum balance
+#      account_balance = account.Balance - account_minimum_balance
+#      # Get the lesser of the two balances
+#      if vendor_payable_balance <= account_balance
+#        return vendor_payable_balance
+#      else
+#        return account_balance
+#      end
+#    else
+#      return 0
+#    end
+
   end
   
   def vendor_payable
@@ -160,9 +167,9 @@ class Caddy < ApplicationRecord
     Transfer.where(to_account_id: account.id).or(Transfer.where(from_account_id: account.id)) unless account.blank?
   end
   
-  def company
-    course.company unless course.blank?
-  end
+#  def company
+#    course.company unless course.blank?
+#  end
   
   #############################
   #     Class Methods         #

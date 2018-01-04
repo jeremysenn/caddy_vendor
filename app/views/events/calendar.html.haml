@@ -1,17 +1,17 @@
 .container
   %br
   - unless current_course.blank?
-    - if current_user.courses.count <= 1
+    - if current_company.courses.count <= 1
       %br
       %p.lead
         - unless current_course.blank?
           = current_course.name 
         - else
-          = current_user.courses.first.name unless current_user.courses.blank?
+          = current_company.courses.first.name unless current_company.courses.blank?
     - else
       %p
         = form_tag calendar_events_path, id: 'courses_form', method: 'get', class: 'form-inline' do |f|
-          = select_tag :course_id, options_from_collection_for_select(current_user.courses, "id", "name", current_course.id), onchange: "$(this).parent('form').submit();", class: "form-control"
+          = select_tag :course_id, options_from_collection_for_select(current_company.courses, "id", "name", current_course.id), onchange: "$(this).parent('form').submit();", class: "form-control"
   
   .calendar
   #remote_container

@@ -32,14 +32,21 @@
               .text-muted= "#{number_with_precision(@caddy.average_rating, precision: 1)} out of 5 stars"
 
           %p.lead
-            Course:
-            = link_to @caddy.course.name, @caddy.course
+            Club:
+            =# link_to @caddy.company.CompanyName, @caddy.course
+            = @caddy.company.CompanyName
           %p.lead
             Cell phone:
             = @caddy.cell_phone_number
           %p.lead
+            Email:
+            = @caddy.email
+          %p.lead
             Ranking:
-            = link_to @caddy.rank_description, @caddy.caddy_rank_desc
+            - unless @caddy_rank_desc.blank?
+              = link_to @caddy_rank_desc.description, @caddy_rank_desc
+            - else
+              None
           %p.lead
             Checked In:
             = "#{@caddy.checkin_today? ? @caddy.CheckedIn.in_time_zone(@caddy.course.time_zone).strftime('%l:%M %p') : 'No'}" 
@@ -85,9 +92,6 @@
               %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
                 %i.fa.fa-dollar
                 Pay by member
-            %a{href: barcode_caddy_path(@caddy), class: 'btn btn-success', target: '_blank'}
-              %i.fa.fa-barcode
-              Barcode Payment
         = render 'pay_caddy_by_member'
         - unless @transfers.blank?
           .table-responsive
@@ -126,7 +130,12 @@
     .tab-pane{:id => "withdrawals"}
       %br
       #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
-        .pull-right
+        - if @balance > 0
+          .pull-right
+            %p
+              %a{href: barcode_caddy_path(@caddy), class: 'btn btn-success', target: '_blank'}
+                %i.fa.fa-qrcode
+                ATM Payment
         - unless @withdrawal_transactions.blank?
           .table-responsive
             %table.table.table-striped

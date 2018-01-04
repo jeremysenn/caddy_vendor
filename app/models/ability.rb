@@ -30,6 +30,7 @@ class Ability
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
     
     if user.is_admin? and user.active?
+      ### Active Admin User ###
       
       # Companies
       ############
@@ -48,7 +49,7 @@ class Ability
       # Caddies
       ############
       can :manage, Caddy do |caddy|
-        caddy.course.company == user.company
+        caddy.company == user.company
       end
       can :create, Caddy
       
@@ -166,7 +167,7 @@ class Ability
       end
       
     elsif user.is_caddy? and user.active?
-      # Active caddy user
+      ### Active Caddy User ###
       
       # Events
       ############
@@ -182,8 +183,10 @@ class Ability
       # Caddies
       ############
       can :manage, Caddy do |caddy|
-        caddy == user.caddy
+        caddy == user.caddy or user.caddies.include?(caddy)
       end  
+      can :create, Caddy
+      cannot :index, Caddy
       
       # Players
       ############
@@ -205,8 +208,13 @@ class Ability
         transaction.company == user.company 
       end
       
+      # Customers
+      ############
+      can :create, Customer
+      cannot :index, Customer
+      
     elsif user.is_member? and user.active?
-      # Active member user  
+      ###  Active Member User ###  
       
       # Customers
       ############
@@ -228,7 +236,7 @@ class Ability
       end
       
     elsif not user.is_admin? and user.active?
-      # Non-admin, active user
+      ###  Non-admin, active user ### 
       # 
       # Events
       ############

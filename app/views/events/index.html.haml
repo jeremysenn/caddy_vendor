@@ -2,18 +2,27 @@
   %br
   %p
     = form_tag events_path, id: 'events_form', method: 'get', class: 'form-inline' do |f|
-      - unless current_user.courses.count <= 1
-        = select_tag 'event[course_id]', options_from_collection_for_select(current_user.courses, "id", "name", @course.id), class: "form-control"
+      .form-group
+        - unless current_user.courses.count <= 1
+          =# select_tag 'event[course_id]', options_from_collection_for_select(current_user.courses, "id", "name", @course.id), class: "form-control"
+          = select_tag 'event[course_id]', options_from_collection_for_select(current_company.courses, "id", "name", @course.id), class: "form-control"
       .form-group
         = text_field_tag 'event[start_date]', nil, :placeholder => "Start Date", value: "#{@start_date.blank? ? Date.today : @start_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
-      To
+      .form-group
+        To
       .form-group
         = text_field_tag 'event[end_date]', nil, :placeholder => "End Date", value: "#{@end_date.blank? ? Date.today : @end_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
       =# search_field_tag :q, params[:q], :placeholder => "Search caddies", class: "form-control input-lg", autofocus: true
       %button.btn.btn-primary{id: 'events_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
         %i.fa.fa-search
       .pull-right
-        = link_to 'New round', new_event_path(course_id: current_course.id), class: 'btn btn-warning'
+        =# link_to 'New round', new_event_path(course_id: current_course.id), class: 'btn btn-warning'
+        %a{href: calendar_events_path, class: 'btn btn-secondary'}
+          %i.fa.fa-calendar
+          Calendar
+        %a{href: new_event_path(course_id: current_course.id), class: 'btn btn-warning'}
+          %i.fa.fa-plus-circle
+          Round
   %p.lead.text-muted= "#{pluralize(number_with_delimiter(@all_events.count), 'round')} found"
 
   .card.card-block

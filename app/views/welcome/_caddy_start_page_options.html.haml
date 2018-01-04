@@ -2,18 +2,14 @@
   .text-xs-center
     -#
       %p.lead Caddy User
-  .col-xs-6
-    .pull-right
-      %a.btn.btn-primary.btn-lg{:href => events_path, :role => "button"}
-        Rounds
-  .col-xs-6
-    .pull-left
-      -#
+  - unless current_user.active?
+    %p= content_tag(:div, "Your administrator must activate your account.", class: "alert alert-danger")
+  - else
+    .col-xs-6
+      .pull-right
+        %a.btn.btn-primary.btn-lg{:href => events_path, :role => "button"}
+          Rounds
+    .col-xs-6
+      .pull-left
         %a.btn.btn-secondary.btn-lg{:href => caddy_path(current_caddy), :role => "button"}
-          = current_caddy.first_name
-      .dropdown
-        %button#dropdownMenuButton.btn.btn-secondary.btn-lg.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :type => "button"}
-          = current_user.caddy_customer.NameF
-        .dropdown-menu{"aria-labelledby" => "dropdownMenuButton"}
-          - current_user.caddies.each do |caddy|
-            %a.dropdown-item{:href => caddy_path(caddy)}= caddy.company.CompanyName
+          Caddy Details

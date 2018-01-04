@@ -44,6 +44,7 @@ class CustomersController < ApplicationController
   def new
     @customer = Customer.new
     @customer.build_account
+    @type = params[:type]
   end
 
   # GET /customers/1/edit
@@ -61,7 +62,18 @@ class CustomersController < ApplicationController
           unless customer_params[:ParentCustID].blank?
             redirect_back fallback_location: @customer, notice: 'Family member was successfully created.'
           else
-            redirect_to @customer, notice: 'Member was successfully created.' 
+            unless current_user.is_caddy?
+              if @customer.member?
+                redirect_to @customer, notice: 'Member was successfully created.' 
+              elsif @customer.caddy?
+                redirect_to @customer.caddy, notice: 'Caddy was successfully created.'
+              else
+                redirect_to root_path, notice: 'Customer was successfully created.'
+              end
+            else
+              flash[:notice] = 'Club successfully added.' 
+              redirect_to root_path
+            end
           end
           }
         format.json { render :show, status: :created, location: @customer }
@@ -133,7 +145,8 @@ class CustomersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def customer_params
-      params.require(:customer).permit(:ParentCustID, :CompanyNumber, :Active, :GroupID, :NameF, :NameL, :NameS, :PhoneMobile, :Email, :Registration_Source, :Registration_Source_ext,
+      params.require(:customer).permit(:ParentCustID, :CompanyNumber, :Active, :GroupID, :NameF, :NameL, :NameS, :PhoneMobile, :Email, 
+        :LangID, :Registration_Source, :Registration_Source_ext,
         account_attributes:[:CompanyNumber, :Balance, :MinBalance, :Active, :CustomerID, :ActNbr, :ActTypeID, :_destroy,:id])
     end
 end

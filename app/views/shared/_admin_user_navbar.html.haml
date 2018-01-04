@@ -11,15 +11,16 @@
           Rounds
           %b.caret
         %div.dropdown-menu
-          - if current_user.courses.count <= 1
-            %a.dropdown-item{:href => new_event_path, :class => (current_page? new_event_path) ? "active" : ""} 
-              %i.fa.fa-plus-circle
-              New Round
-          - else
-            - current_user.courses.each do |course|
-              %a.dropdown-item{:href => new_event_path(course_id: course.id), :class => (current_page? new_event_path(course_id: course.id)) ? "active" : ""} 
+          -#
+            - if current_user.courses.count <= 1
+              %a.dropdown-item{:href => new_event_path, :class => (current_page? new_event_path) ? "active" : ""} 
                 %i.fa.fa-plus-circle
-                = "#{course.name} Round"
+                New Round
+            - else
+              - current_user.courses.each do |course|
+                %a.dropdown-item{:href => new_event_path(course_id: course.id), :class => (current_page? new_event_path(course_id: course.id)) ? "active" : ""} 
+                  %i.fa.fa-plus-circle
+                  = "#{course.name} Round"
             
           %a.dropdown-item{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
             %i.fa.fa-search
@@ -33,7 +34,7 @@
             %i.fa.fa-calendar
             Calendar
       %li.nav-item.dropdown
-        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'customers') ? "active" : ""}
+        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'customers' and params[:action] == 'index') ? "active" : ""}
           %i.fa.fa-user-circle-o
           Members
           %b.caret

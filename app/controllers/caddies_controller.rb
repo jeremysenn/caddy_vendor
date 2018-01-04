@@ -59,18 +59,21 @@ class CaddiesController < ApplicationController
   # GET /caddies/1
   # GET /caddies/1.json
   def show
-    @course = @caddy.course
+#    @course = @caddy.course
 #    @transfers = @caddy.transfers
     # Get caddy account transfers, filtered by company_id
-    @transfers = @caddy.account_transfers.where(company_id: current_user.company_id).order('created_at DESC') unless @caddy.account_transfers.blank?
+    @transfers = @caddy.account_transfers.where(company_id: current_company.id).order('created_at DESC') unless @caddy.account_transfers.blank?
     @text_messages = @caddy.sms_messages.reverse
     # Get caddy account withdrawal transactions, filtered by company_id
-    @withdrawal_transactions = @caddy.customer.transactions.where(DevCompanyNbr: current_user.company_id).withdrawals.last(20).reverse
+    @withdrawal_transactions = @caddy.customer.transactions.where(DevCompanyNbr: current_company.id).withdrawals.last(20).reverse
+    @caddy_rank_desc = @caddy.caddy_rank_desc
+    @balance = @caddy.balance
   end
 
   # GET /caddies/new
   def new
     @caddy = Caddy.new
+    @caddy.build_customer
   end
 
   # GET /caddies/1/edit
@@ -191,7 +194,8 @@ class CaddiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def caddy_params
-      params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym, :RankingID, :CheckedIn, :ClubCompanyNbr, :active, customer_attributes:[:PhoneMobile, :NameF, :NameL, :_destroy,:id])
+      params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym, :RankingID, :CheckedIn, :ClubCompanyNbr, :active, :CustomerID,
+        customer_attributes:[:PhoneMobile, :NameF, :NameL, :Email, :_destroy, :id])
     end
     
     def set_time_zone(&block)

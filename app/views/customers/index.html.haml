@@ -10,7 +10,7 @@
               %i.fa.fa-search
         %small.text-muted Search by first name, last name, or member number.
         .pull-right
-          = link_to 'New member', new_customer_path, class: 'btn btn-warning'
+          = link_to 'New member', new_customer_path(type: 'member'), class: 'btn btn-warning'
   %p.lead.text-muted= "#{pluralize(@all_members.count, 'member')} found"
   .card.card-block
     %h4.card-title 

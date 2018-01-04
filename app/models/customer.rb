@@ -24,6 +24,7 @@ class Customer < ActiveRecord::Base
   
 #  before_save :encrypt_all_security_question_answers, :prepare_password
   after_save :match_account_active_status
+  after_commit :update_caddy_details, if: :caddy?, on: :create
   
   accepts_nested_attributes_for :account
   
@@ -480,6 +481,22 @@ class Customer < ActiveRecord::Base
   
   def vendor_payables_with_balance
     vendor_payables.where("Balance > ?", 0)
+  end
+  
+  def update_caddy_details
+    # Get default minimum balance for this company's caddy accounts
+    default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: self.CompanyNumber, AccountTypeID: 6).first
+    unless default_minimum_balance_row.blank?
+      minimum_balance = default_minimum_balance_row.DefaultMinBal
+    else
+      minimum_balance = 0
+    end
+    
+    # Update customer account
+    account.update_attributes(CompanyNumber: self.CompanyNumber, MinBalance: minimum_balance)
+    
+    # Create new caddy record
+    Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber, RankingID: company.caddy_rank_descs.first.id)
   end
   
   #############################

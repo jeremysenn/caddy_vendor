@@ -34,11 +34,14 @@
         %p 
           Role:
           = current_user.role
+        %p 
+          Active:
+          = "#{current_user.active? ? 'Yes' : 'No'}"
         %p
           Clubs:
           - current_user.caddies.each do |caddy|
             = caddy.company.CompanyName
         %p
           Customer ID:
-          = current_user.caddy_customer.CustomerID
+          = current_user.caddy_customer(current_company.id).CustomerID
         

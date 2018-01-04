@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
   
-  helper_method :current_course, :current_caddy, :current_member
+  helper_method :current_course, :current_caddy, :current_member, :current_company
   
   rescue_from CanCan::AccessDenied do |exception|
     flash[:danger] = exception.message
@@ -33,15 +33,20 @@ class ApplicationController < ActionController::Base
     session[:member_id]
   end
   
+  def current_company=(company)
+    session[:company_id] = company.id
+  end
+  
   # If don't find a course from session, return the current_user company's first course.
   def current_course
-    Course.find_by(ClubCourseID: session[:course_id]) || current_user.company.courses.first
+    Course.find_by(ClubCourseID: session[:course_id]) || current_company.courses.first
   end
   
   # If current_user is_caddy and don't find a caddy ID from session, return the current_user caddy ID.
   def current_caddy
     if current_user.is_caddy?
-      Caddy.find_by(id: session[:caddy_id]) || current_user.caddy
+#      Caddy.find_by(id: session[:caddy_id]) || current_user.caddy
+      Caddy.all.joins(:customer).where("customer.Email = ?", current_user.email).where(ClubCompanyNbr: current_company.id).first || current_user.caddy
     end
   end
   
@@ -50,6 +55,11 @@ class ApplicationController < ActionController::Base
     if current_user.is_member?
       Customer.find_by(CustomerID: session[:member_id]) || current_user.member
     end
+  end
+  
+  # If don't find a company from session, return the current_user's company ID.
+  def current_company
+    Company.find_by(CompanyNumber: session[:company_id]) || current_user.company
   end
   
   protected
@@ -64,8 +74,9 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource_or_scope)
     if current_user.is_member? 
       session[:member_id] = current_user.member.id
-    elsif current_user.is_caddy?
+    elsif current_user.is_caddy? # Set the caddy's caddy ID and company/club ID
       session[:caddy_id] = current_user.caddy.id
+      session[:company_id] = current_user.company_id
     end
     root_path
   end
