@@ -65,7 +65,8 @@ class CaddiesController < ApplicationController
     @transfers = @caddy.account_transfers.where(company_id: current_company.id).order('created_at DESC') unless @caddy.account_transfers.blank?
     @text_messages = @caddy.sms_messages.reverse
     # Get caddy account withdrawal transactions, filtered by company_id
-    @withdrawal_transactions = @caddy.customer.transactions.where(DevCompanyNbr: current_company.id).withdrawals.last(20).reverse
+#    @withdrawal_transactions = @caddy.customer.transactions.where(DevCompanyNbr: current_company.id).withdrawals.last(20).reverse
+    @withdrawal_transactions = @caddy.withdrawals.last(20).reverse
     @caddy_rank_desc = @caddy.caddy_rank_desc
     @balance = @caddy.balance
   end
@@ -194,7 +195,7 @@ class CaddiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def caddy_params
-      params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym, :RankingID, :CheckedIn, :ClubCompanyNbr, :active, :CustomerID,
+      params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym, :RankingID, :CheckedIn, :ClubCompanyNbr, :active, :CustomerID, :course_id,
         customer_attributes:[:PhoneMobile, :NameF, :NameL, :Email, :_destroy, :id])
     end
     

@@ -43,8 +43,10 @@ class CustomersController < ApplicationController
   # GET /customers/new
   def new
     @customer = Customer.new
-    @customer.build_account
-    @type = params[:type]
+#    @customer.accounts.build
+#    @type = params[:type]
+    @customer.type = params[:type]
+    @customer.course_id = params[:course_id]
   end
 
   # GET /customers/1/edit
@@ -54,7 +56,13 @@ class CustomersController < ApplicationController
   # POST /customers
   # POST /customers.json
   def create
-    @customer = Customer.new(customer_params)
+    # Check to see if customer already exists
+    @customer = Customer.where(Email: customer_params[:Email]).first
+    
+    # If customer does not yet exist, create a new one
+    if @customer.blank?
+      @customer = Customer.new(customer_params)
+    end
     
     respond_to do |format|
       if @customer.save
@@ -146,7 +154,7 @@ class CustomersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def customer_params
       params.require(:customer).permit(:ParentCustID, :CompanyNumber, :Active, :GroupID, :NameF, :NameL, :NameS, :PhoneMobile, :Email, 
-        :LangID, :Registration_Source, :Registration_Source_ext,
-        account_attributes:[:CompanyNumber, :Balance, :MinBalance, :Active, :CustomerID, :ActNbr, :ActTypeID, :_destroy,:id])
+        :LangID, :Registration_Source, :Registration_Source_ext, :course_id, :type,
+        accounts_attributes:[:CompanyNumber, :Balance, :MinBalance, :Active, :CustomerID, :ActNbr, :ActTypeID, :_destroy,:id])
     end
 end

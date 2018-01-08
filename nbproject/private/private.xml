@@ -2,6 +2,35 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddy_rank_descs/edit.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/controllers/caddies_controller.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/events/_remote_form.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/customer.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/controllers/events_controller.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddies/index.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/course.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/shared/_caddy_user_navbar.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddy_pay_rates/new.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/events/index.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddy_pay_rates/index.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/config/database.yml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/caddy_pay_rate.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/account.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddies/show.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/caddy.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/customers/index.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/customers/_form.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddy_rank_descs/_form.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/controllers/caddy_pay_rates_controller.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddy_rank_descs/index.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/ability.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/controllers/customers_controller.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddy_pay_rates/_form.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/events/show.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/events/_form.html.haml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/user.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/caddy_rank_desc.rb</file>
+        </group>
     </open-files>
 </project-private>

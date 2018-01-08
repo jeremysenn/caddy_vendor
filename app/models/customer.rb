@@ -8,7 +8,8 @@ class Customer < ActiveRecord::Base
   
   has_many :bill_payments
   has_many :transfers
-  has_one :account, :foreign_key => "CustomerID"
+#  has_one :account, :foreign_key => "CustomerID"
+  has_many :accounts, :foreign_key => "CustomerID"
   has_many :transactions, :through => :account
 #  has_one :vendor_payable, :foreign_key => "CustID"
   has_many :vendor_payables, :foreign_key => "CustID"
@@ -21,15 +22,21 @@ class Customer < ActiveRecord::Base
   
   attr_accessor :password
   attr_accessor :guest
+  attr_accessor :course_id
+  attr_accessor :type
   
 #  before_save :encrypt_all_security_question_answers, :prepare_password
-  after_save :match_account_active_status
-  after_commit :update_caddy_details, if: :caddy?, on: :create
-  
-  accepts_nested_attributes_for :account
+  after_save :match_account_active_status, if: :member?
+  after_commit :update_caddy_details, if: :caddy?, on: [:create, :update]
+  after_commit :create_account, if: :member?, on: [:create]
+      
+  accepts_nested_attributes_for :accounts
   
 #  validates :NameF, :NameL, :user_name, :PhoneMobile, :Answer1, :Answer2, :Answer3, presence: true
   validates :NameF, :NameL, presence: true
+  validates :Email, :PhoneMobile, presence: true
+#  validates_uniqueness_of :Email
+#  validates_uniqueness_of :PhoneMobile
   
 #  validates_uniqueness_of :user_name
   
@@ -398,13 +405,20 @@ class Customer < ActiveRecord::Base
   end
   
   def match_account_active_status
-    unless account.blank?
+    accounts.each do |account|
       if self.Active == account.Active
         nil
       else
         account.update_attribute(:Active, self.Active)
       end
     end
+#    unless account.blank?
+#      if self.Active == account.Active
+#        nil
+#      else
+#        account.update_attribute(:Active, self.Active)
+#      end
+#    end
   end
   
   def phone
@@ -489,6 +503,9 @@ class Customer < ActiveRecord::Base
   
   def update_caddy_details
     # Get default minimum balance for this company's caddy accounts
+    course = Course.where(ClubCourseID: self.course_id).first
+    Rails.logger.debug "************course ID: #{course.id}"
+    
     default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: self.CompanyNumber, AccountTypeID: 6).first
     unless default_minimum_balance_row.blank?
       minimum_balance = default_minimum_balance_row.DefaultMinBal
@@ -496,11 +513,20 @@ class Customer < ActiveRecord::Base
       minimum_balance = 0
     end
     
-    # Update customer account
-    account.update_attributes(CompanyNumber: self.CompanyNumber, MinBalance: minimum_balance)
+    # Look for existing account with this customer's ID and company number
+    caddy_account = Account.where(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber).first
     
-    # Create new caddy record
-    Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber, RankingID: company.caddy_rank_descs.first.id)
+    # Create account if there isn't already one for this customer within this company
+    if caddy_account.blank?
+#      account.update_attributes(CompanyNumber: self.CompanyNumber, MinBalance: minimum_balance, ActTypeID: 6)
+      Account.create(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber, MinBalance: minimum_balance, ActTypeID: 6)
+      # Create new corresponding caddy
+      Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id)
+    end
+  end
+  
+  def create_account
+    Account.create(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber, Balance: 0, MinBalance: -1000000, ActTypeID: 1018)
   end
   
   #############################

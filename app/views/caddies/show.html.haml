@@ -32,9 +32,9 @@
               .text-muted= "#{number_with_precision(@caddy.average_rating, precision: 1)} out of 5 stars"
 
           %p.lead
-            Club:
-            =# link_to @caddy.company.CompanyName, @caddy.course
-            = @caddy.company.CompanyName
+            Course:
+            = link_to @caddy.course.CourseName, @caddy.course
+            =# @caddy.company.CompanyName
           %p.lead
             Cell phone:
             = @caddy.cell_phone_number

@@ -88,6 +88,15 @@ class Event < ApplicationRecord
     status == 'paid'
   end
   
+  def include_caddy?(caddy)
+    found_players = players.where(caddy_id: caddy.id)
+    if found_players.blank?
+      return false
+    else
+      return true
+    end
+  end
+  
   #############################
   #     Class Methods         #
   #############################

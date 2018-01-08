@@ -172,11 +172,16 @@ class Ability
       # Events
       ############
       can :manage, Event do |event|
-        unless event.course.blank?
-          event.course.company == user.company
-        else
-          true
+        user.caddies.each do |caddy|
+          if event.include_caddy?(caddy)
+            true
+          end
         end
+#        unless event.course.blank?
+#          event.course.company == user.company
+#        else
+#          true
+#        end
       end
       can :create, :events
     
@@ -192,15 +197,17 @@ class Ability
       ############
       can :manage, Player do |player|
         # Companies must match, and player caddy must match the currently logged in caddy
-        player.event.course.company == user.company && player.caddy_id == user.caddy.id
+#        player.event.course.company == user.company && player.caddy_id == user.caddy.id
+        user.caddies.include?(player.caddy)
       end
       
       # Transfers
       ############
       can :manage, Transfer do |transfer|
         # Companies must match, and transfer's player caddy must match the currently logged in caddy
-        transfer.company == user.company && transfer.player.caddy_id == user.caddy.id
+        user.caddies.include?(transfer.caddy)
       end
+      can :create, Transfer
       
       # Transactions
       ############

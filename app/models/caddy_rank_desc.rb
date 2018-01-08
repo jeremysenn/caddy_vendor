@@ -4,7 +4,7 @@ class CaddyRankDesc < ApplicationRecord
   
   establish_connection :ez_cash
   
-#  belongs_to :course, :foreign_key => "ClubCompanyID"
+  belongs_to :course
   belongs_to :company, :foreign_key => "ClubCompanyID"
   has_many :caddies, :foreign_key => "RankingID"
   has_many :caddy_pay_rates, :foreign_key => "RankingID"

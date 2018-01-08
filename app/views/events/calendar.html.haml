@@ -9,9 +9,13 @@
         - else
           = current_company.courses.first.name unless current_company.courses.blank?
     - else
-      %p
-        = form_tag calendar_events_path, id: 'courses_form', method: 'get', class: 'form-inline' do |f|
-          = select_tag :course_id, options_from_collection_for_select(current_company.courses, "id", "name", current_course.id), onchange: "$(this).parent('form').submit();", class: "form-control"
+      - unless current_user.is_caddy?
+        %p
+          = form_tag calendar_events_path, id: 'courses_form', method: 'get', class: 'form-inline' do |f|
+            = select_tag :course_id, options_from_collection_for_select(current_company.courses, "id", "name", current_course.id), onchange: "$(this).parent('form').submit();", class: "form-control"
+      - else
+        %p= @course.name
+        = hidden_field_tag 'event[course_id]', @course.id
   
   .calendar
   #remote_container

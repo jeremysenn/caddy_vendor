@@ -22,10 +22,11 @@
             - current_user.caddies.each do |caddy|
               %a.dropdown-item{:href => root_path(company_id: caddy.company.CompanyNumber), :class => current_company == caddy.company ? "active" : ""} 
                 = caddy.company.CompanyName
-            - if current_user.active?
-              %a.dropdown-item{:href => new_customer_path(type: 'club')} 
-                %i.fa.fa-plus-circle
-                Add Club
+            -#
+              - if current_user.active?
+                %a.dropdown-item{:href => new_customer_path(type: 'club')} 
+                  %i.fa.fa-plus-circle
+                  Add Club
         %li.nav-item
           %a.nav-link{:href => edit_user_registration_path(current_user)} 
             %i.fa.fa-gear

@@ -15,11 +15,14 @@
         %i.fa.fa-search
       %small.text-muted Search by first name, last name, or phone.
       .pull-right
-        = link_to 'New caddy', new_customer_path(type: 'caddy'), class: 'btn btn-warning'
         - unless @all_caddies.blank?
           %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
             %i.fa.fa-commenting
-            Text Message
+            Message
+        %a{href: new_customer_path(type: 'caddy', course_id: @course.id), class: 'btn btn-warning'}
+          %i.fa.fa-plus-circle
+          Caddy
+        
   #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
     .modal-dialog.modal-lg{:role => "document"}
       .modal-content

@@ -65,6 +65,10 @@ class Account < ActiveRecord::Base
     return transactions
   end
   
+  def withdrawals
+    withdrawal_transactions + withdrawal_all_transactions
+  end
+  
   def credit_transactions
 #    transactions = Transaction.where(from_acct_id: decrypted_account_number, tran_code: 'CRED') + Transaction.where(to_acct_id: decrypted_account_number, tran_code: 'CRED')
     transactions = Transaction.where(from_acct_id: id, tran_code: 'CRED') + Transaction.where(to_acct_id: id, tran_code: 'CRED')

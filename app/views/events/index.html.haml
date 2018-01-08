@@ -3,9 +3,14 @@
   %p
     = form_tag events_path, id: 'events_form', method: 'get', class: 'form-inline' do |f|
       .form-group
-        - unless current_user.courses.count <= 1
+        - unless current_user.company.courses.count <= 1
           =# select_tag 'event[course_id]', options_from_collection_for_select(current_user.courses, "id", "name", @course.id), class: "form-control"
-          = select_tag 'event[course_id]', options_from_collection_for_select(current_company.courses, "id", "name", @course.id), class: "form-control"
+          - unless current_user.is_caddy?
+            = select_tag 'event[course_id]', options_from_collection_for_select(current_company.courses, "id", "name", @course.id), class: "form-control"
+          - else
+            = @course.name
+            = hidden_field_tag 'event[course_id]', @course.id
+            =# select_tag 'event[course_id]', options_from_collection_for_select(current_user.courses, "id", "name", @course.id), class: "form-control"
       .form-group
         = text_field_tag 'event[start_date]', nil, :placeholder => "Start Date", value: "#{@start_date.blank? ? Date.today : @start_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
       .form-group

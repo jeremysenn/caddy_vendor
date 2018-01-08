@@ -5,7 +5,7 @@ class Caddy < ApplicationRecord
   establish_connection :ez_cash
   
   belongs_to :company, :foreign_key => "ClubCompanyNbr"
-#  belongs_to :course, :foreign_key => "ClubCompanyNbr"
+  belongs_to :course
   belongs_to :customer, :foreign_key => "CustomerID"
   belongs_to :caddy_rank_desc, :foreign_key => "RankingID"
   has_many :players
@@ -62,7 +62,16 @@ class Caddy < ApplicationRecord
 #  end
   
   def account
-    customer.account unless customer.blank?
+#    customer.account unless customer.blank?
+    Account.where(CustomerID: self.CustomerID, CompanyNumber: self.ClubCompanyNbr).first
+  end
+  
+  def transactions
+    account.transactions
+  end
+  
+  def withdrawals
+    account.withdrawals
   end
   
   def balance

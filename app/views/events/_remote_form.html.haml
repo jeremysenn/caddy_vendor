@@ -22,12 +22,13 @@
               - unless ff.object.paid?
                 .row.form-group
                   .col-sm-6
-                    = ff.select :member_id, current_user.members.active.order(:NameL).collect { |m| [ m.full_name_with_member_number, m.id ] }, {prompt: '-- Select member --'}, required: true, class: "member_select form-control", style: "width: 100%;"
+                    = ff.select :member_id, current_company.members.active.order(:NameL).collect { |m| [ m.full_name_with_member_number, m.id ] }, {prompt: '-- Select member --'}, required: true, class: "member_select form-control", style: "width: 100%;"
                   .col-sm-6
                     - if current_caddy.blank?
                       = ff.select :caddy_id, grouped_options_for_select(current_course.grouped_caddies_by_rank_for_select, ff.object.caddy_id), {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
                     - else
                       = ff.hidden_field :caddy_id, value: current_caddy.id
+                      = current_caddy.full_name
 
               - else
                 .row.form-group

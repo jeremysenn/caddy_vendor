@@ -14,8 +14,7 @@
               %td= course.name
               %td
                 %a{href: events_path(course_id: course.id), class: 'btn btn-warning'}
-                  %i.fa.fa-calendar
-                  Calendar
+                  Rounds
                 = link_to "Show", course, class: 'btn btn-secondary'
                 = link_to 'Edit', edit_course_path(course), class: 'btn btn-primary'
     .card-link= link_to "New course", new_course_path, class: 'btn btn-primary'

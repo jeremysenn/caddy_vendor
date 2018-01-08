@@ -8,7 +8,7 @@
           = current_course.name 
         - else
           = current_user.courses.first.name unless current_user.courses.blank?
-        = link_to "New caddy rank", new_caddy_rank_desc_path(course_id: @course.id), class: 'btn btn-warning' unless @course.blank?
+    .pull-right= link_to "New caddy rank", new_caddy_rank_desc_path(course_id: @course.id), class: 'btn btn-warning' unless @course.blank?
     - else
       %p
         = form_tag caddy_rank_descs_path, id: 'courses_form', method: 'get', class: 'form-inline' do |f|
@@ -39,6 +39,3 @@
                     = link_to 'Delete', caddy_rank_desc, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }
                   - else
                     %button.btn.btn-danger{"data-content" => "You must first remove this Caddy Rank from all Caddies and Caddy Pay Rates.", "data-toggle" => "popover", :title => "Delete Caddy Rank", "data-placement" => "top", :type => "button"} Delete
-
-  - if @caddy_rank_descs.blank?
-    %p= link_to "New #{current_course.name} caddy rank desc", new_caddy_rank_desc_path(course_id: current_course.id), class: 'btn btn-primary' unless current_course.blank?

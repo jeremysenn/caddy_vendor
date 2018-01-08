@@ -82,6 +82,10 @@
    color: red;  
 }
 
+.help-block {
+   color: firebrick;  
+}
+
 /* ---- For specific types ---- */
 
 .editableform .editable-date {

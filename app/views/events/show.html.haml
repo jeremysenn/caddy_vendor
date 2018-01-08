@@ -66,8 +66,8 @@
                 = form_for Transfer.new, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
                   = f.hidden_field :customer_id, value: player.member_id
                   = f.hidden_field :player_id, value: player.id
-                  = f.hidden_field :company_id, value: current_user.company.id
-                  = f.hidden_field :from_account, value: "#{player.member.primary? ? player.member.account.id : player.member.parent_customer.account.id}"
+                  = f.hidden_field :company_id, value: current_course.company.id
+                  = f.hidden_field :from_account, value: "#{player.member.primary? ? player.member.accounts.first.id : player.member.parent_customer.accounts.first.id}"
                   = f.hidden_field :to_account, value: player.caddy.account.id unless player.caddy.account.blank?
                   = f.hidden_field :fee, value: player.transaction_fee.blank? ? current_course.transaction_fee : player.transaction_fee , class: 'transaction_fee'
                   = f.hidden_field :fee_to_account_id, value: current_user.company.account.id unless current_user.company.account.blank?

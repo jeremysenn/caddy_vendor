@@ -81,6 +81,6 @@ class CaddyRankDescsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def caddy_rank_desc_params
-      params.require(:caddy_rank_desc).permit(:ClubCompanyID, :RankingAcronym, :RankingDescription)
+      params.require(:caddy_rank_desc).permit(:ClubCompanyID, :RankingAcronym, :RankingDescription, :course_id)
     end
 end

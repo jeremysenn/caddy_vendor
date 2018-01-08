@@ -16,8 +16,16 @@ class User < ApplicationRecord
   #     Instance Methods      #
   #############################
   
+#  def courses
+#    company.courses
+#  end
+  
   def courses
-    company.courses
+    user_courses = []
+    caddies.each do |caddy|
+      user_courses = user_courses << caddy.course unless caddy.course.blank?
+    end
+    return user_courses
   end
   
   def members

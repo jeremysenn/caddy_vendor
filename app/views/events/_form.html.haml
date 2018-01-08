@@ -53,7 +53,7 @@
                   .col-sm-6
                     = ff.select :round, [["Eighteen holes", 18], ["Nine holes", 9]], {required: true, include_blank: false}, class: "form-control"
                   .col-sm-6
-                    = ff.select :caddy_type, current_company.caddy_types, {required: true, include_blank: false}, class: "form-control"
+                    = ff.select :caddy_type, current_course.caddy_types, {required: true, include_blank: false}, class: "form-control"
                     -#
                       - unless current_user.company.id == 4
                         = ff.select :caddy_type, ["Carry", "Chase"], {required: true, include_blank: false}, class: "form-control"

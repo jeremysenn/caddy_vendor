@@ -13,7 +13,11 @@ class EventsController < ApplicationController
       @course = Course.where(ClubCourseID: event_params[:course_id]).first
       @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
     else
-      @course = current_course.blank? ? current_user.company.courses.first : current_course
+      unless current_user.is_caddy?
+        @course = current_course.blank? ? current_user.company.courses.first : current_course
+      else
+        @course = current_course.blank? ? current_caddy.course.first : current_course
+      end
     end
     if current_caddy.blank?
       events = current_course.events.where(start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC")
@@ -45,7 +49,7 @@ class EventsController < ApplicationController
     if current_caddy.blank?
       @players = @event.players
     else
-      @players = @event.players.where(caddy_id: current_caddy_id)
+      @players = @event.players.where(caddy_id: current_caddy.id)
     end
   end
 
@@ -145,7 +149,11 @@ class EventsController < ApplicationController
       @course = Course.where(ClubCourseID: event_params[:course_id]).first
       @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
     else
-      @course = current_course.blank? ? current_user.company.courses.first : current_course
+      unless current_user.is_caddy?
+        @course = current_course.blank? ? current_user.company.courses.first : current_course
+      else
+        @course = current_course.blank? ? current_caddy.course : current_course
+      end
     end
     @events = @course.events.where(start: @start.to_date.beginning_of_day..@end.to_date.end_of_day)
   end
