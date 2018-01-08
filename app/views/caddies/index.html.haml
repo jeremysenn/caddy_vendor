@@ -7,8 +7,8 @@
 
   %p
     = form_tag caddies_path, id: 'caddies_form', method: 'get', class: 'form-inline' do |f|
-      - unless current_user.courses.count <= 1
-        = select_tag :course_id, options_from_collection_for_select(current_user.courses, "id", "name", @course.id), class: "form-control"
+      - unless current_company.courses.count <= 1
+        = select_tag :course_id, options_from_collection_for_select(current_company.courses, "id", "name", @course.id), class: "form-control"
       = select_tag :caddy_rank_desc_id, options_from_collection_for_select(@course.caddy_rank_descs, "ID", "RankingAcronym", params[:caddy_rank_desc_id]), prompt: "Choose Rank", class: "form-control"
       = search_field_tag :q, params[:q], :placeholder => "Search caddies", class: "form-control input-lg", autofocus: true
       %button.btn.btn-primary{id: 'caddy_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
