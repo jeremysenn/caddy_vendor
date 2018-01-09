@@ -11,7 +11,7 @@ class CustomersController < ApplicationController
         unless params[:q].blank?
           @query_string = "%#{params[:q]}%"
           members = current_user.company.members.where("NameF like ? OR NameL like ?", @query_string, @query_string)
-          members = current_user.company.members.joins(:account).where("accounts.ActNbr like ?", @query_string) if members.blank?
+          members = current_user.company.members.joins(:accounts).where("accounts.ActNbr like ?", @query_string) if members.blank?
         else
           unless params[:balances].blank?
             members = current_user.company.members_with_balance
@@ -25,7 +25,7 @@ class CustomersController < ApplicationController
       format.json {
         @query_string = "%#{params[:q]}%"
         members = current_user.members.where("NameF like ? OR NameL like ?", @query_string, @query_string)
-        members = current_user.members.joins(:account).where("accounts.ActNbr like ?", @query_string) if members.blank?
+        members = current_user.members.joins(:accounts).where("accounts.ActNbr like ?", @query_string) if members.blank?
         @members = members.order(:NameL).collect{ |member| {id: member.id, text: "#{member.full_name}"} }
         render json: {results: @members}
       }

@@ -6,22 +6,23 @@
       Texting is currently unavailable
 
   %p
-    = form_tag caddies_path, id: 'caddies_form', method: 'get', class: 'form-inline' do |f|
-      - unless current_company.courses.count <= 1
-        = select_tag :course_id, options_from_collection_for_select(current_company.courses, "id", "name", @course.id), class: "form-control"
-      = select_tag :caddy_rank_desc_id, options_from_collection_for_select(@course.caddy_rank_descs, "ID", "RankingAcronym", params[:caddy_rank_desc_id]), prompt: "Choose Rank", class: "form-control"
-      = search_field_tag :q, params[:q], :placeholder => "Search caddies", class: "form-control input-lg", autofocus: true
-      %button.btn.btn-primary{id: 'caddy_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
-        %i.fa.fa-search
-      %small.text-muted Search by first name, last name, or phone.
-      .pull-right
-        - unless @all_caddies.blank?
-          %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
-            %i.fa.fa-commenting
-            Message
-        %a{href: new_customer_path(type: 'caddy', course_id: @course.id), class: 'btn btn-warning'}
-          %i.fa.fa-plus-circle
-          Caddy
+    - if params[:balances].blank?
+      = form_tag caddies_path, id: 'caddies_form', method: 'get', class: 'form-inline' do |f|
+        - unless current_company.courses.count <= 1
+          = select_tag :course_id, options_from_collection_for_select(current_company.courses, "id", "name", @course.id), class: "form-control"
+        = select_tag :caddy_rank_desc_id, options_from_collection_for_select(@course.caddy_rank_descs, "ID", "RankingAcronym", params[:caddy_rank_desc_id]), prompt: "Choose Rank", class: "form-control"
+        = search_field_tag :q, params[:q], :placeholder => "Search caddies", class: "form-control input-lg", autofocus: true
+        %button.btn.btn-primary{id: 'caddy_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
+          %i.fa.fa-search
+        %small.text-muted Search by first name, last name, or phone.
+    .pull-right
+      - unless @all_caddies.blank?
+        %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
+          %i.fa.fa-commenting
+          Message
+      %a{href: new_customer_path(type: 'caddy', course_id: @course.id), class: 'btn btn-warning'}
+        %i.fa.fa-plus-circle
+        Caddy
         
   #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
     .modal-dialog.modal-lg{:role => "document"}
@@ -67,6 +68,8 @@
     %h4.card-title 
       %i.fa.fa-vcard-o
       Caddies
+      - unless params[:balances].blank?
+        with a balance
       -#
         - unless params[:balances].blank?
           with a balance
@@ -82,7 +85,7 @@
               -# %th Course
               -# %th Rating
               %th Ranking
-              -# %th Balance
+              %th Balance
               -# %th Checked In
               -# %th Active
               %th
@@ -101,8 +104,7 @@
                     = link_to caddy.acronym, caddy.caddy_rank_desc
                   - else
                     None
-                -#
-                  %td= number_to_currency(caddy.balance)
+                %td= number_to_currency(caddy.balance)
                 -#
                   %td= "#{caddy.checkin_today? ? caddy.CheckedIn.in_time_zone(caddy.course.time_zone).strftime('%l:%M %p') : 'Not today'}"
                 -#

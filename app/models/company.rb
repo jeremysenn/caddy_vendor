@@ -65,7 +65,7 @@ class Company < ActiveRecord::Base
   end
   
   def members_with_balance
-    members.joins(:account).where("accounts.Balance != ?", 0)
+    members.joins(:accounts).where("accounts.Balance != ?", 0)
   end
   
   def caddies_with_balance

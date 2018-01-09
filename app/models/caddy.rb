@@ -105,7 +105,7 @@ class Caddy < ApplicationRecord
   end
   
   def holds_balance?
-    balance != 0
+    balance > 0
   end
   
   def acronym
