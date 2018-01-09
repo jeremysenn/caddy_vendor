@@ -14,6 +14,7 @@ class Account < ActiveRecord::Base
   
   validates :ActNbr, confirmation: true
 #  validates :ActNbr_confirmation, presence: true
+  validates :MinBalance, numericality: { :less_than_or_equal_to => 0 }
   
   #############################
   #     Instance Methods      #
