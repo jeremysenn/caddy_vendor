@@ -76,9 +76,14 @@ class Caddy < ApplicationRecord
   
   def balance
     # If the account minimum balance is nil, set to zero
-    account_minimum_balance = account.MinBalance || 0
+    unless account.blank? or account.MinBalance.blank?
+      account_minimum_balance = account.MinBalance
+      account_balance = account.Balance - account_minimum_balance
+    else
+      account_balance = 0
+    end
     # The account available balance is the balance minus the minimum balance
-    account_balance = account.Balance - account_minimum_balance
+    
     return account_balance
     
 #    # Get the lesser of vendor payable and account balance
