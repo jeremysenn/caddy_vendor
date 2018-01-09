@@ -521,8 +521,8 @@ class Customer < ActiveRecord::Base
 #      account.update_attributes(CompanyNumber: self.CompanyNumber, MinBalance: minimum_balance, ActTypeID: 6)
       Account.create(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber, MinBalance: minimum_balance, ActTypeID: 6)
       # Create new corresponding caddy
-      Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id)
     end
+    Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id)
   end
   
   def create_account

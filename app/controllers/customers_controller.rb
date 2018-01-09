@@ -59,9 +59,12 @@ class CustomersController < ApplicationController
     # Check to see if customer already exists
     @customer = Customer.where(Email: customer_params[:Email]).first
     
-    # If customer does not yet exist, create a new one
     if @customer.blank?
+      # If customer does not yet exist, create a new one
       @customer = Customer.new(customer_params)
+    else
+      # If customer does does already exist, pass the course_id virtual attribute for creating the corresponding caddy row
+      @customer.course_id = customer_params[:course_id]
     end
     
     respond_to do |format|
@@ -74,7 +77,7 @@ class CustomersController < ApplicationController
               if @customer.member?
                 redirect_to @customer, notice: 'Member was successfully created.' 
               elsif @customer.caddy?
-                redirect_to @customer.caddy, notice: 'Caddy was successfully created.'
+                redirect_to @customer.caddies.last, notice: 'Caddy was successfully created.'
               else
                 redirect_to root_path, notice: 'Customer was successfully created.'
               end
