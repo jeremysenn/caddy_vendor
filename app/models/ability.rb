@@ -166,6 +166,12 @@ class Ability
         vendor_payable.company == user.company
       end
       
+      # Accounts
+      ############
+      can :manage, Account do |account|
+        account.company == user.company 
+      end
+      
     elsif user.is_caddy? and user.active?
       ### Active Caddy User ###
       

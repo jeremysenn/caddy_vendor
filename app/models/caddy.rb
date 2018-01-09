@@ -104,6 +104,14 @@ class Caddy < ApplicationRecord
 
   end
   
+  def minimum_balance
+    unless account.blank? or account.MinBalance.blank?
+      return account.MinBalance
+    else
+      0
+    end
+  end
+  
   def vendor_payable
 #    customer.vendor_payables.where(CompanyNbr: self.ClubCompanyNbr).first
     VendorPayable.where(CompanyNbr: self.ClubCompanyNbr, CustID: self.CustomerID).first

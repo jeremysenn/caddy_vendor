@@ -69,6 +69,7 @@ class CaddiesController < ApplicationController
     @withdrawal_transactions = @caddy.withdrawals.last(20).reverse
     @caddy_rank_desc = @caddy.caddy_rank_desc
     @balance = @caddy.balance
+    @account = @caddy.account
   end
 
   # GET /caddies/new

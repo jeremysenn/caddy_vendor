@@ -235,6 +235,10 @@ class Account < ActiveRecord::Base
     self.Balance
   end
   
+  def caddy
+    Caddy.where(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber).first
+  end
+  
   #############################
   #     Class Methods         #
   #############################

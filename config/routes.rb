@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   
+  resources :accounts
   resources :sms_messages
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'

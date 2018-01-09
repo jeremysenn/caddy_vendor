@@ -56,6 +56,10 @@
           %p.lead
             Balance:
             = number_to_currency(@caddy.balance)
+          %p.lead
+            Minimum Balance:
+            = number_to_currency(@caddy.minimum_balance)
+            = link_to 'Change', edit_account_path(@account), class: 'btn btn-sm btn-secondary' if current_user.is_admin?
           -#
             %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
               %i.fa.fa-dollar

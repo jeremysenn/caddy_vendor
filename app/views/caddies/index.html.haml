@@ -113,7 +113,7 @@
                   %a{href: caddy_path(caddy), class: 'btn btn-secondary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> More..." }}
                     %i.fa.fa-vcard-o
                     More...
-                  -#
+                  - if current_user.is_admin?
                     %a{href: edit_caddy_path(caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
                       %i.fa.fa-edit
                       Edit
