@@ -21,7 +21,8 @@
             %th Guest
             %th Charge
             %th Tip
-            %th Fee
+            - unless current_user.is_caddy?
+              %th Fee
             %th
         %tbody
           - @players.each do |player|
@@ -31,43 +32,34 @@
               %td= player.caddy_type
               %td= player.round
               %td= player.note
-              %td{class: "#{player.paid? ? '' : 'text-primary'}"}
+              %td{class: "#{(player.paid? or current_user.is_caddy?) ? '' : 'text-primary'}"}
                 $
-                - unless player.paid?
+                - unless player.paid? or current_user.is_caddy?
                   %a{href: nil, class: 'caddy_fee', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_caddy_fee", "data-value" => player.fee.blank? ? player.caddy_pay_rate : player.fee}
                     = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
-                  =# "#{player.fee.blank? ? number_to_currency(player.caddy_pay_rate) : number_to_currency(player.fee)}"
                 - else
                   = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
               %td{class: "#{player.paid? ? '' : 'text-primary'}"}
-                =# number_to_currency("#{player.tip.blank? ? '0' : player.tip}")
                 $
                 - unless player.paid?
                   %a{href: nil, class: 'tip', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_tip", "data-value" => player.tip.blank? ? '0' : player.tip}
                     = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
                 - else
                   = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
-              %td{class: "#{player.paid? ? '' : 'text-primary'}"}
-                =# number_to_currency("#{player.transfer_transaction_fee.blank? ? current_course.transaction_fee : player.transfer_transaction_fee}")
-                $
-                - unless player.paid?
-                  %a{href: nil, class: 'transaction_fee', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_transaction_fee", "data-value" => player.transaction_fee.blank? ? current_course.transaction_fee : player.transaction_fee}
-                    = number_with_precision("#{player.transaction_fee.blank? ? current_course.transaction_fee : player.transaction_fee}", precision: 2)
-                - else
-                  = number_with_precision("#{player.transaction_fee.blank? ? current_course.transaction_fee : player.transaction_fee}", precision: 2)
-                -#
+              - unless current_user.is_caddy?
+                %td{class: "#{player.paid? ? '' : 'text-primary'}"}
+                  $
                   - unless player.paid?
-                    %a{href: nil, class: 'transaction_fee', "data-value" => player.transfer_transaction_fee.blank? ? current_course.transaction_fee : player.transfer_transaction_fee}
-                      = number_with_precision("#{player.transfer_transaction_fee.blank? ? current_course.transaction_fee : player.transfer_transaction_fee}", precision: 2)
+                    %a{href: nil, class: 'transaction_fee', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_transaction_fee", "data-value" => player.transaction_fee.blank? ? current_course.transaction_fee : player.transaction_fee}
+                      = number_with_precision("#{player.transaction_fee.blank? ? current_course.transaction_fee : player.transaction_fee}", precision: 2)
                   - else
-                    = number_with_precision("#{player.transfer_transaction_fee.blank? ? current_course.transaction_fee : player.transfer_transaction_fee}", precision: 2)
+                    = number_with_precision("#{player.transaction_fee.blank? ? current_course.transaction_fee : player.transaction_fee}", precision: 2)
               %td
-                -# unless player.caddy.account.blank? or player.member.account.blank?
                 = form_for Transfer.new, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
                   = f.hidden_field :customer_id, value: player.member_id
                   = f.hidden_field :player_id, value: player.id
                   = f.hidden_field :company_id, value: current_course.company.id
-                  = f.hidden_field :from_account, value: "#{player.member.primary? ? player.member.accounts.first.id : player.member.parent_customer.accounts.first.id}"
+                  = f.hidden_field :from_account, value: "#{player.member.primary? ? player.member.club_account(current_company.id).id : player.member.parent_customer.club_account(current_company.id).id}"
                   = f.hidden_field :to_account, value: player.caddy.account.id unless player.caddy.account.blank?
                   = f.hidden_field :fee, value: player.transaction_fee.blank? ? current_course.transaction_fee : player.transaction_fee , class: 'transaction_fee'
                   = f.hidden_field :fee_to_account_id, value: current_user.company.account.id unless current_user.company.account.blank?
