@@ -16,7 +16,7 @@
       .float-xs-right
         %li.nav-item.dropdown
           %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
-            Club
+            = current_company.CompanyName
             %b.caret
           %div.dropdown-menu
             - current_user.caddies.each do |caddy|
