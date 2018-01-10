@@ -8,12 +8,16 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    unless params[:q].blank?
-      @query_string = "%#{params[:q]}%"
-      @users = current_user.company.users.where("email like ?", @query_string)
-    else
-      @users = current_user.company.users
-    end
+#    unless params[:q].blank?
+#      @query_string = "%#{params[:q]}%"
+#      @users = current_user.company.users.where("email like ?", @query_string)
+#    else
+#      @users = current_user.company.users
+#    end
+    @users = current_user.company.users
+    @admin_users = @users.where(role: 'admin')
+    @member_users = @users.where(role: 'member')
+    @caddy_users = @users.where(role: 'caddy')
   end
 
   # GET /users/1
