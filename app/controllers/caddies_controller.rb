@@ -162,12 +162,12 @@ class CaddiesController < ApplicationController
     amount = params[:amount].to_f.abs unless params[:amount].blank?
     note = params[:note]
     unless member.blank?
-      Transfer.create(company_id: current_user.company.id, from_account_id: member.account_id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount, note: note)
+      Transfer.create(company_id: current_company.id, from_account_id: member.club_account(current_company.id).id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount, note: note)
     else
       course = @caddy.course
       transaction_id = course.perform_one_sided_credit_transaction(amount)
       Rails.logger.debug "*********************************Club transaction ID: #{transaction_id}"
-      Transfer.create(company_id: current_user.company.id, from_account_id: current_user.company.account.id, to_account_id: @caddy.account.id, amount: amount, note: note, club_credit_transaction_id: transaction_id)
+      Transfer.create(company_id: current_company.id, from_account_id: current_company.account.id, to_account_id: @caddy.account.id, amount: amount, note: note, club_credit_transaction_id: transaction_id)
     end
     redirect_back fallback_location: @caddy, notice: 'Caddy payment submitted.'
   end

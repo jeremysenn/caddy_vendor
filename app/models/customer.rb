@@ -60,6 +60,15 @@ class Customer < ActiveRecord::Base
     Account.where(CustomerID: id)
   end
   
+  def club_account(company_id)
+    account = accounts.find_by(CompanyNumber: company_id)
+    unless account.blank?
+      return account
+    else
+      return accounts.first
+    end
+  end
+  
   def active_accounts
     Account.where(CustomerID: id, active: true)
   end
