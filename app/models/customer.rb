@@ -27,7 +27,7 @@ class Customer < ActiveRecord::Base
   
 #  before_save :encrypt_all_security_question_answers, :prepare_password
   after_save :match_account_active_status, if: :member?
-  after_commit :update_caddy_details, if: :caddy?, on: [:create, :update]
+  after_commit :update_caddy_details, if: :new_caddy_being_added?, on: [:create, :update]
   after_commit :create_account, if: :member?, on: [:create]
       
   accepts_nested_attributes_for :accounts
@@ -35,8 +35,8 @@ class Customer < ActiveRecord::Base
 #  validates :NameF, :NameL, :user_name, :PhoneMobile, :Answer1, :Answer2, :Answer3, presence: true
   validates :NameF, :NameL, presence: true
   validates :Email, :PhoneMobile, presence: true
-#  validates_uniqueness_of :Email
-#  validates_uniqueness_of :PhoneMobile
+  validates_uniqueness_of :Email
+  validates_uniqueness_of :PhoneMobile
   
 #  validates_uniqueness_of :user_name
   
@@ -513,7 +513,7 @@ class Customer < ActiveRecord::Base
   def update_caddy_details
     # Get default minimum balance for this company's caddy accounts
     course = Course.where(ClubCourseID: self.course_id).first
-    Rails.logger.debug "************course ID: #{course.id}"
+#    Rails.logger.debug "************course ID: #{course.id}"
     
     default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: self.CompanyNumber, AccountTypeID: 6).first
     unless default_minimum_balance_row.blank?
@@ -531,6 +531,8 @@ class Customer < ActiveRecord::Base
       Account.create(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber, MinBalance: minimum_balance, ActTypeID: 6)
       # Create new corresponding caddy
     end
+    
+    # Create a new caddy for course if a course_id is also being passed
     Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id)
   end
   
@@ -569,6 +571,10 @@ class Customer < ActiveRecord::Base
 #      self.pwd_hash = Digest::SHA1.hexdigest(password + user_salt).upcase
       self.pwd_hash = Digest::SHA1.hexdigest(user_salt + password).upcase
     end
+  end
+  
+  def new_caddy_being_added?
+    self.caddy? and not self.course_id.blank?
   end
 
 end

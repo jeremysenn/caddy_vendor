@@ -5,4 +5,5 @@
     = f.input :CompanyName
 
   .form-actions
-    = f.button :submit
+    = link_to 'Cancel', :back, class: 'btn btn-secondary'
+    = f.button :submit, class: 'btn btn-primary'
