@@ -3,6 +3,8 @@
 
   .form-inputs
     = f.input :CompanyName
+    = f.simple_fields_for :company_act_default_min_bal do |account_minimum_balance_form|
+      = account_minimum_balance_form.input :DefaultMinBal, as: :string, :input_html => { :value => @company.company_act_default_min_bal.DefaultMinBal }, label: "Account minimum balance"
 
   .form-actions
     = link_to 'Cancel', :back, class: 'btn btn-secondary'

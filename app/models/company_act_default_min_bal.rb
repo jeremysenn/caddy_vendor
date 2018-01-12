@@ -1,5 +1,5 @@
 class CompanyActDefaultMinBal < ActiveRecord::Base
-#  self.primary_key = 'AccountTypeID'
+  self.primary_key = 'CompanyNumber'
   self.table_name= 'CompanyActDefaultMinBal'
   
   establish_connection :ez_cash

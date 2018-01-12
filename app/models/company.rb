@@ -22,7 +22,9 @@ class Company < ActiveRecord::Base
   has_many :transactions, :foreign_key => "DevCompanyNbr"
   has_many :vendor_payables, :foreign_key => "CompanyNbr"
   has_many :sms_messages
-  has_one :company_act_default_min_balance
+  has_one :company_act_default_min_bal, :foreign_key => "CompanyNumber"
+  
+  accepts_nested_attributes_for :company_act_default_min_bal
   
   #############################
   #     Instance Methods      #
@@ -112,6 +114,10 @@ class Company < ActiveRecord::Base
       total = total + vp.Balance
     end
     return total
+  end
+  
+  def account_minimum_balance
+    company_act_default_min_bal.DefaultMinBal
   end
   
   #############################
