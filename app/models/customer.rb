@@ -525,15 +525,16 @@ class Customer < ActiveRecord::Base
     # Look for existing account with this customer's ID and company number
     caddy_account = Account.where(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber).first
     
-    # Create account if there isn't already one for this customer within this company
+    # Create a new account if there isn't already one for this customer within this company
     if caddy_account.blank?
-#      account.update_attributes(CompanyNumber: self.CompanyNumber, MinBalance: minimum_balance, ActTypeID: 6)
       Account.create(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber, MinBalance: minimum_balance, ActTypeID: 6)
-      # Create new corresponding caddy
     end
     
-    # Create a new caddy for course if a course_id is also being passed
-    Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id)
+    # Create a new caddy for course if a course_id is also being passed and there isn't alread a caddy with these attributes
+    caddy = Caddy.where(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id).first
+    if caddy.blank?
+      Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id)
+    end
   end
   
   def create_account
