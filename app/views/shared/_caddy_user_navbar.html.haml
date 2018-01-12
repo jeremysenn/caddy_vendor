@@ -10,13 +10,9 @@
         %li.nav-item
           %a.nav-link{:href => events_path, :class => (params[:controller] == 'events') ? "active" : ""} 
             Rounds
-        -#
-          %li.nav-item
-            %a.nav-link{:href => caddy_path(current_caddy), :class => (params[:controller] == 'caddies' and params[:action] == 'show') ? "active" : ""} 
-              Caddy Details
         %li.nav-item.dropdown
           %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
-            Caddy Details
+            Details
             %b.caret
           %div.dropdown-menu
             - current_user.caddies_by_club(current_company.id).each do |caddy|
