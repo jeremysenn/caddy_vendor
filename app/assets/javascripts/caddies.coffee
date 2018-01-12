@@ -34,4 +34,20 @@ jQuery ->
 
   $('.member_select').select2 theme: 'bootstrap'
 
+  
+  ### Send caddy verification code ###
+  $(document).on "turbolinks:load", ->
+    $('#send_caddy_verification_code').on 'click', ->
+      caddy_id = $(this).data( "caddy-id" )
+      #alert caddy_id
+      $.ajax
+        url: "/caddies/" + caddy_id + "/send_verification_code"
+        dataType: 'json'
+        success: (data) ->
+          return
+        error: ->
+          $('#sms_payment_verification').modal('toggle')
+          alert 'There was a problem sending the verification code'
+          return
+
     

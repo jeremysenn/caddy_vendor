@@ -28,6 +28,14 @@ class User < ApplicationRecord
     return user_courses
   end
   
+  def courses_by_club(company_id)
+    user_courses = []
+    caddies_by_club(company_id).each do |caddy|
+      user_courses = user_courses << caddy.course unless caddy.course.blank?
+    end
+    return user_courses
+  end
+  
   def members
     company.members
   end
@@ -42,7 +50,19 @@ class User < ApplicationRecord
 #    end
     user_caddies = []
     caddy_customers.each do |customer|
-      user_caddies = user_caddies << customer.caddy unless customer.caddy.blank?
+      customer.caddies.each do |caddy|
+        user_caddies = user_caddies << caddy
+      end
+    end
+    return user_caddies
+  end
+  
+  def caddies_by_club(company_id)
+    user_caddies = []
+    caddy_customers.where(CompanyNumber: company_id).each do |customer|
+      customer.caddies.each do |caddy|
+        user_caddies = user_caddies << caddy
+      end
     end
     return user_caddies
   end

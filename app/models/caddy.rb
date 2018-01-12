@@ -185,6 +185,13 @@ class Caddy < ApplicationRecord
     end
   end
   
+  def send_verification_code
+    unless cell_phone_number.blank?
+      client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+      client.call(:send_sms, message: { Phone: cell_phone_number, Msg: "Your verification code is: 1234"})
+    end
+  end
+  
   def account_transfers
     Transfer.where(to_account_id: account.id).or(Transfer.where(from_account_id: account.id)) unless account.blank?
   end

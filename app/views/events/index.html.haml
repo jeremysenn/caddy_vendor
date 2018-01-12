@@ -4,13 +4,10 @@
     = form_tag events_path, id: 'events_form', method: 'get', class: 'form-inline' do |f|
       .form-group
         - unless current_user.company.courses.count <= 1
-          =# select_tag 'event[course_id]', options_from_collection_for_select(current_user.courses, "id", "name", @course.id), class: "form-control"
           - unless current_user.is_caddy?
             = select_tag 'event[course_id]', options_from_collection_for_select(current_company.courses, "id", "name", @course.id), class: "form-control"
           - else
-            = @course.name
-            = hidden_field_tag 'event[course_id]', @course.id
-            =# select_tag 'event[course_id]', options_from_collection_for_select(current_user.courses, "id", "name", @course.id), class: "form-control"
+            = select_tag 'event[course_id]', options_from_collection_for_select(current_user.courses_by_club(current_company.id), "id", "name", @course.id), class: "form-control"
       .form-group
         = text_field_tag 'event[start_date]', nil, :placeholder => "Start Date", value: "#{@start_date.blank? ? Date.today : @start_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
       .form-group
@@ -22,12 +19,27 @@
         %i.fa.fa-search
       .pull-right
         =# link_to 'New round', new_event_path(course_id: current_course.id), class: 'btn btn-warning'
+        
+        -#
+          %a{href: new_event_path(course_id: current_course.id), class: 'btn btn-warning'}
+            %i.fa.fa-plus-circle
+            Round
+        .btn-group
+          %button#dropdownMenuButton.btn.btn-warning.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :type => "button"}
+            %i.fa.fa-plus-circle
+            Round
+          .dropdown-menu{"aria-labelledby" => "dropdownMenuButton"}
+            - unless current_user.is_caddy?
+              - current_company.courses.each do |course|
+                %a.dropdown-item{:href => new_event_path(course_id: course.id)}= course.name
+            - else
+              - current_user.courses_by_club(current_company.id).each do |course|
+                %a.dropdown-item{:href => new_event_path(course_id: course.id)}= course.name
         %a{href: calendar_events_path, class: 'btn btn-secondary'}
           %i.fa.fa-calendar
           Calendar
-        %a{href: new_event_path(course_id: current_course.id), class: 'btn btn-warning'}
-          %i.fa.fa-plus-circle
-          Round
+              
+
   %p.lead.text-muted= "#{pluralize(number_with_delimiter(@all_events.count), 'round')} found"
 
   .card.card-block

@@ -1,6 +1,6 @@
 class CaddiesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_caddy, only: [:show, :edit, :update, :pay, :barcode, :destroy]
+  before_action :set_caddy, only: [:show, :edit, :update, :pay, :barcode, :send_verification_code, :verify_phone,:destroy]
   load_and_authorize_resource
   around_action :set_time_zone, if: :current_user
 
@@ -157,6 +157,15 @@ class CaddiesController < ApplicationController
     end
   end
   
+  def send_verification_code
+    respond_to do |format|
+#      format.html {}
+      format.json { 
+        @caddy.send_verification_code
+      }
+    end
+  end
+  
   def pay
     member = Customer.where(CustomerID: params[:member_id]).first
     amount = params[:amount].to_f.abs unless params[:amount].blank?
@@ -176,6 +185,16 @@ class CaddiesController < ApplicationController
   # GET /caddies/1/barcode.json
   def barcode
     @base64_barcode_string = Transaction.ezcash_get_barcode_png_web_service_call(@caddy.CustomerID, current_user.company_id, 5)
+  end
+  
+  # GET /caddies/1/verify_phone
+  def verify_phone
+    respond_to do |format|
+      format.html { 
+        code = params[:verification_code]
+        redirect_to barcode_caddy_path(@caddy), notice: 'Caddy phone verified.' 
+        }
+    end
   end
 
   # DELETE /caddies/1

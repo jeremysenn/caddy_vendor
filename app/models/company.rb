@@ -16,7 +16,7 @@ class Company < ActiveRecord::Base
   has_many :events, through: :courses
 #  has_many :accounts, through: :customers
 #  has_many :accounts, through: :courses
-  has_many :accounts
+  has_many :accounts # This is all accounts that have this company ID
   has_many :caddy_ratings, through: :users
   has_many :transfers
   has_many :transactions, :foreign_key => "DevCompanyNbr"
@@ -30,6 +30,10 @@ class Company < ActiveRecord::Base
   
   def account
     Account.where(CompanyNumber: self.CompanyNumber, CustomerID: nil).last
+  end
+  
+  def club_accounts
+    Account.where(CompanyNumber: self.CompanyNumber, CustomerID: nil)
   end
   
   def caddy_rankings_array

@@ -32,6 +32,8 @@ Rails.application.routes.draw do
     member do
       get 'pay'
       get 'barcode'
+      get 'send_verification_code'
+      get 'verify_phone'
     end
     collection do
       get 'send_group_text_message'
