@@ -10,18 +10,26 @@
         %li.nav-item
           %a.nav-link{:href => events_path, :class => (params[:controller] == 'events') ? "active" : ""} 
             Rounds
-        %li.nav-item
-          %a.nav-link{:href => caddy_path(current_caddy), :class => (params[:controller] == 'caddies' and params[:action] == 'show') ? "active" : ""} 
+        -#
+          %li.nav-item
+            %a.nav-link{:href => caddy_path(current_caddy), :class => (params[:controller] == 'caddies' and params[:action] == 'show') ? "active" : ""} 
+              Caddy Details
+        %li.nav-item.dropdown
+          %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
             Caddy Details
+            %b.caret
+          %div.dropdown-menu
+            - current_user.caddies_by_club(current_company.id).each do |caddy|
+              %a.dropdown-item{:href => caddy_path(caddy), :class => current_course == caddy.course ? "active" : ""}= caddy.course.name
       .float-xs-right
         %li.nav-item.dropdown
           %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
             = current_company.CompanyName
             %b.caret
           %div.dropdown-menu
-            - current_user.caddies.each do |caddy|
-              %a.dropdown-item{:href => root_path(company_id: caddy.company.CompanyNumber), :class => current_company == caddy.company ? "active" : ""} 
-                = caddy.company.CompanyName
+            - current_user.caddy_customers.each do |customer|
+              %a.dropdown-item{:href => root_path(company_id: customer.CompanyNumber), :class => current_company == customer.company ? "active" : ""} 
+                = customer.company.CompanyName
             -#
               - if current_user.active?
                 %a.dropdown-item{:href => new_customer_path(type: 'club')} 

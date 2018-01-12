@@ -18,12 +18,6 @@
       %button.btn.btn-primary{id: 'events_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
         %i.fa.fa-search
       .pull-right
-        =# link_to 'New round', new_event_path(course_id: current_course.id), class: 'btn btn-warning'
-        
-        -#
-          %a{href: new_event_path(course_id: current_course.id), class: 'btn btn-warning'}
-            %i.fa.fa-plus-circle
-            Round
         .btn-group
           %button#dropdownMenuButton.btn.btn-warning.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :type => "button"}
             %i.fa.fa-plus-circle

@@ -11,5 +11,12 @@
           Rounds
     .col-xs-6
       .pull-left
-        %a.btn.btn-secondary.btn-lg{:href => caddy_path(current_caddy), :role => "button"}
-          Caddy Details
+        -#
+          %a.btn.btn-secondary.btn-lg{:href => caddy_path(current_caddy), :role => "button"}
+            Caddy Details
+        .btn-group
+          %button#dropdownMenuButton.btn.btn-secondary.btn-lg.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :type => "button"}
+            Caddy Details
+          .dropdown-menu{"aria-labelledby" => "dropdownMenuButton"}
+            - current_user.caddies_by_club(current_company.id).each do |caddy|
+              %a.dropdown-item{:href => caddy_path(caddy)}= caddy.course.name

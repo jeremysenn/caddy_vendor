@@ -70,6 +70,7 @@ class CaddiesController < ApplicationController
     @caddy_rank_desc = @caddy.caddy_rank_desc
     @balance = @caddy.balance
     @account = @caddy.account
+    session[:course_id] = @caddy.course.id
   end
 
   # GET /caddies/new
