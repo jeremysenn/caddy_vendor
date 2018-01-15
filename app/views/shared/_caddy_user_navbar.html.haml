@@ -23,9 +23,9 @@
             = current_company.CompanyName
             %b.caret
           %div.dropdown-menu
-            - current_user.caddy_customers.each do |customer|
-              %a.dropdown-item{:href => root_path(company_id: customer.CompanyNumber), :class => current_company == customer.company ? "active" : ""} 
-                = customer.company.CompanyName
+            - current_user.unique_caddy_clubs.each do |club|
+              %a.dropdown-item{:href => root_path(company_id: club.id), :class => current_company == club ? "active" : ""} 
+                = club.CompanyName
             -#
               - if current_user.active?
                 %a.dropdown-item{:href => new_customer_path(type: 'club')} 

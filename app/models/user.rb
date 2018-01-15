@@ -44,25 +44,23 @@ class User < ApplicationRecord
 #    company.caddies
 #  end
 
-  def caddies
-#    unless caddy_customer.blank?
-#      caddy_customer.caddies
+#  def caddies
+##    unless caddy_customer.blank?
+##      caddy_customer.caddies
+##    end
+#    user_caddies = []
+#    caddy_customers.each do |customer|
+#      customer.caddies.each do |caddy|
+#        user_caddies = user_caddies << caddy
+#      end
 #    end
-    user_caddies = []
-    caddy_customers.each do |customer|
-      customer.caddies.each do |caddy|
-        user_caddies = user_caddies << caddy
-      end
-    end
-    return user_caddies
-  end
+#    return user_caddies
+#  end
   
   def caddies_by_club(company_id)
     user_caddies = []
-    caddy_customers.where(CompanyNumber: company_id).each do |customer|
-      customer.caddies.each do |caddy|
-        user_caddies = user_caddies << caddy
-      end
+    caddies.where(ClubCompanyNbr: company_id).each do |caddy|
+      user_caddies << caddy
     end
     return user_caddies
   end
@@ -81,6 +79,20 @@ class User < ApplicationRecord
   
   def caddy
     Caddy.all.joins(:customer).where("customer.Email = ?", email).first
+  end
+  
+  def caddies
+    Caddy.all.joins(:customer).where("customer.Email = ?", email)
+  end
+  
+  def unique_caddy_clubs
+    clubs = []
+    caddies.each do |caddy|
+      unless clubs.include?(caddy.company)
+        clubs << caddy.company
+      end
+    end
+    return clubs
   end
   
   def caddy_customer(company_id)
