@@ -8,9 +8,10 @@
         = f.error_notification
         .form-inputs
           = f.input :email, required: true, autofocus: true
-          - if current_user.is_admin?
-            = f.input :admin
-            = f.input :active
+          -#
+            - if current_user.is_admin?
+              = f.input :admin
+              = f.input :active
           = f.input :time_zone, priority: /US/, collection: ActiveSupport::TimeZone.us_zones, required: true, as: :time_zone
           - if devise_mapping.confirmable? && resource.pending_reconfirmation?
             %p
