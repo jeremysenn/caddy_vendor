@@ -158,6 +158,6 @@ class CustomersController < ApplicationController
     def customer_params
       params.require(:customer).permit(:ParentCustID, :CompanyNumber, :Active, :GroupID, :NameF, :NameL, :NameS, :PhoneMobile, :Email, 
         :LangID, :Registration_Source, :Registration_Source_ext, :course_id, :type,
-        accounts_attributes:[:CompanyNumber, :Balance, :MinBalance, :Active, :CustomerID, :ActNbr, :ActTypeID, :_destroy,:id])
+        accounts_attributes:[:CompanyNumber, :Balance, :MinBalance, :Active, :CustomerID, :ActNbr, :ActTypeID, :BankActNbr, :RoutingNbr, :_destroy,:id])
     end
 end

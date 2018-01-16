@@ -99,12 +99,16 @@ class User < ApplicationRecord
     Customer.caddies.where(Email: email, CompanyNumber: company_id).first
   end
   
+  def caddy_customer
+    Customer.caddies.find_by(Email: email)
+  end
+  
   def caddy_customers
     Customer.caddies.where(Email: email)
   end
   
   def member
-    Customer.members.where(Email: email).first
+    Customer.members.find_by(Email: email)
   end
   
   def is_member?

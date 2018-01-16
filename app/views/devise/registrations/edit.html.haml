@@ -40,9 +40,11 @@
           = "#{current_user.active? ? 'Yes' : 'No'}"
         %p
           Clubs:
-          - current_user.caddies.each do |caddy|
-            = caddy.company.CompanyName
+          %br
+          - current_user.unique_caddy_clubs.each do |club|
+            = club.CompanyName
+            %br
         %p
           Customer ID:
-          = current_user.caddy_customer(current_company.id).CustomerID
+          = current_user.caddy_customer.CustomerID
         

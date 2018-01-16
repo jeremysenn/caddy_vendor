@@ -13,6 +13,9 @@
         = f.input :Registration_Source, label: 'Member Number'
         = f.input :Registration_Source_ext, as: :string, label: 'Member Extension'
         = f.input :PhoneMobile, label: 'Phone'
+        = f.simple_fields_for :accounts do |account_form|
+          = account_form.input :BankActNbr, label: 'Account Number', as: :string
+          = account_form.input :RoutingNbr, label: 'Routing Number', as: :string
         -#
           = f.simple_fields_for :accounts do |account_form|
             - if account_form.object.new_record?
@@ -37,10 +40,10 @@
     - else
       = f.input :CompanyNumber, label: "Club Number"
       = f.input :GroupID, :as => :hidden, :input_html => { :value => 13 }
-      = f.input :NameF, :as => :hidden, :input_html => { :value => current_user.caddy_customer(current_company.id).NameF }
-      = f.input :NameL, :as => :hidden, :input_html => { :value => current_user.caddy_customer(current_company.id).NameL }
-      = f.input :Email, :as => :hidden, :input_html => { :value => current_user.caddy_customer(current_company.id).Email }
-      = f.input :PhoneMobile, :as => :hidden, :input_html => { :value => current_user.caddy_customer(current_company.id).PhoneMobile }
+      = f.input :NameF, :as => :hidden, :input_html => { :value => current_user.caddy_customer.NameF }
+      = f.input :NameL, :as => :hidden, :input_html => { :value => current_user.caddy_customer.NameL }
+      = f.input :Email, :as => :hidden, :input_html => { :value => current_user.caddy_customer.Email }
+      = f.input :PhoneMobile, :as => :hidden, :input_html => { :value => current_user.caddy_customer.PhoneMobile }
       = f.input :Active, :as => :hidden, :input_html => { :value => 1 }
       = f.input :LangID, :as => :hidden, :input_html => { :value => 1 }
       -#
