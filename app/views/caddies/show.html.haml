@@ -159,10 +159,11 @@
                           We sent a verification code to 
                           = "#{@caddy.cell_phone_number}."
                           %br
-                          Please enter the 4-digit code below:
+                          Please enter the code below:
                         = form_tag verify_phone_caddy_path, id: 'send_caddy_sms_payment_verification_form', method: 'get' do |f|
                           = hidden_field_tag :caddy_id, @caddy.id
-                          = text_field_tag :verification_code, nil, placeholder: "4-digit code", class: "form-control input-lg", autofocus: true
+                          .col-xs-9
+                            = text_field_tag :verification_code, nil, placeholder: "4-digit code", class: "form-control input-lg", autofocus: true
                           .row
                             .col-xs-12
                               .pull-right

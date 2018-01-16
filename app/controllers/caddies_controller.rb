@@ -162,6 +162,7 @@ class CaddiesController < ApplicationController
     respond_to do |format|
 #      format.html {}
       format.json { 
+        @caddy.generate_pin
         @caddy.send_verification_code
       }
     end
@@ -185,7 +186,17 @@ class CaddiesController < ApplicationController
   # GET /caddies/1/barcode
   # GET /caddies/1/barcode.json
   def barcode
-    @base64_barcode_string = Transaction.ezcash_get_barcode_png_web_service_call(@caddy.CustomerID, current_user.company_id, 5)
+    if current_user.is_caddy?
+      if params[:code] == @caddy.pin
+        # Make sure that code matches up with Caddy's saved pin
+        @base64_barcode_string = Transaction.ezcash_get_barcode_png_web_service_call(@caddy.CustomerID, current_user.company_id, 5)
+      else
+        redirect_to @caddy, alert: 'Verification code is incorrect.' 
+      end
+    elsif current_user.is_admin
+      # Admin can view barcode
+      @base64_barcode_string = Transaction.ezcash_get_barcode_png_web_service_call(@caddy.CustomerID, current_user.company_id, 5)
+    end
   end
   
   # GET /caddies/1/verify_phone
@@ -193,7 +204,12 @@ class CaddiesController < ApplicationController
     respond_to do |format|
       format.html { 
         code = params[:verification_code]
-        redirect_to barcode_caddy_path(@caddy), notice: 'Caddy phone verified.' 
+        if code == @caddy.pin
+          # Make sure that code matches up with Caddy's saved pin
+          redirect_to barcode_caddy_path(@caddy, code: @caddy.pin) 
+        else
+          redirect_to @caddy, alert: 'Verification code is incorrect.' 
+        end
         }
     end
   end

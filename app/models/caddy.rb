@@ -188,7 +188,7 @@ class Caddy < ApplicationRecord
   def send_verification_code
     unless cell_phone_number.blank?
       client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
-      client.call(:send_sms, message: { Phone: cell_phone_number, Msg: "Your verification code is: 1234"})
+      client.call(:send_sms, message: { Phone: cell_phone_number, Msg: "Your verification code is: #{pin}"})
     end
   end
   
@@ -199,6 +199,11 @@ class Caddy < ApplicationRecord
 #  def company
 #    course.company unless course.blank?
 #  end
+
+  def generate_pin
+    self.pin = rand(0000..9999).to_s.rjust(4, "0")
+    save
+  end
   
   #############################
   #     Class Methods         #
