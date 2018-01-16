@@ -31,6 +31,7 @@
                 %th Tran ID
                 -#
                   %th Date/Time
+                %th Course
                 %th From
                 %th To
                 %th Fee
@@ -48,6 +49,7 @@
                       None
                   -#
                     %td= transfer.created_at.in_time_zone(transfer.course.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                  %td= transfer.course.CourseName unless transfer.course.blank?
                   %td= transfer.customer.full_name unless transfer.customer.blank?
                   %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
                   %td= number_to_currency(transfer.caddy_fee)
