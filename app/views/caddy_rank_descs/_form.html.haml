@@ -2,7 +2,7 @@
   = f.error_notification
 
   .form-inputs
-    = f.collection_select :course_id, current_company.courses.order(:CourseName), :ClubCourseID, :CourseName, {selected: current_course.id}, class: "form-control"
+    = f.collection_select :course_id, current_company.courses.order(:CourseName), :ClubCourseID, :CourseName, {selected: params[:course_id]}, class: "form-control"
     = f.input :ClubCompanyID, :as => :hidden, :input_html => { :value => current_company.id }
     = f.input :RankingAcronym, as: :string
     = f.input :RankingDescription, as: :text
