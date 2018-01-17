@@ -87,8 +87,12 @@ class TransfersController < ApplicationController
     respond_to do |format|
       if @transfer.update(transfer_params)
         format.html { 
-#          redirect_to @transfer, notice: 'Transfer was successfully updated.' 
-          redirect_back fallback_location: @transfer, notice: 'Transfer was successfully updated.' 
+#          redirect_to @transfer, notice: 'Transfer was successfully updated.'
+          unless transfer_params[:generate_reversal] == "true"
+            redirect_back fallback_location: @transfer, notice: 'Transfer was successfully updated.' 
+          else
+            redirect_back fallback_location: @transfer, notice: 'Transfer was reversed.'
+          end
           }
         format.json { render :show, status: :ok, location: @transfer }
       else
@@ -120,7 +124,7 @@ class TransfersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def transfer_params
       params.fetch(:transfer, {}).permit(:amount, :caddy_fee, :caddy_tip, :to_account, :from_account, :fee, :customer_id, :company_id, 
-        :player_id, :reversed, :fee_to_account_id, :note, :start_date, :end_date, :type)
+        :player_id, :reversed, :fee_to_account_id, :note, :start_date, :end_date, :type, :generate_reversal)
     end
     
     ### Secure the transfers sort direction ###

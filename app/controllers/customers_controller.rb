@@ -57,7 +57,7 @@ class CustomersController < ApplicationController
   # POST /customers.json
   def create
     # Check to see if customer already exists
-    @customer = Customer.where(Email: customer_params[:Email]).first
+    @customer = Customer.find_by(Email: customer_params[:Email])
     
     if @customer.blank?
       # If customer does not yet exist, create a new one

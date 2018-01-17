@@ -20,6 +20,8 @@ class Customer < ActiveRecord::Base
   scope :caddies, -> { where(GroupID: 13) }
   scope :active, -> { where(Active: true) }
   
+  
+  # Virtual Attributes
   attr_accessor :password
   attr_accessor :guest
   attr_accessor :course_id
@@ -515,22 +517,21 @@ class Customer < ActiveRecord::Base
     course = Course.where(ClubCourseID: self.course_id).first
 #    Rails.logger.debug "************course ID: #{course.id}"
     
-    default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: course.ClubCompanyNumber, AccountTypeID: 6).first
-    unless default_minimum_balance_row.blank?
-      minimum_balance = default_minimum_balance_row.DefaultMinBal
-    else
-      minimum_balance = 0
-    end
-    
     # Look for existing account with this customer's ID and company number
     caddy_account = Account.where(CustomerID: self.CustomerID, CompanyNumber: course.ClubCompanyNumber).first
     
     # Create a new account if there isn't already one for this customer within this company
     if caddy_account.blank?
+      default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: course.ClubCompanyNumber, AccountTypeID: 6).first
+      unless default_minimum_balance_row.blank?
+        minimum_balance = default_minimum_balance_row.DefaultMinBal
+      else
+        minimum_balance = 0
+      end
       Account.create(CustomerID: self.CustomerID, CompanyNumber: course.ClubCompanyNumber, MinBalance: minimum_balance, ActTypeID: 6)
     end
     
-    # Create a new caddy for course if a course_id is also being passed and there isn't alread a caddy with these attributes
+    # Create a new caddy for course if a course_id is also being passed and there isn't already a caddy with these attributes
     caddy = Caddy.where(CustomerID: self.CustomerID, ClubCompanyNbr: course.ClubCompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id).first
     if caddy.blank?
       Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: course.ClubCompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id)

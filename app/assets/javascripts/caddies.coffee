@@ -33,6 +33,9 @@ jQuery ->
       return
 
   $('.member_select').select2 theme: 'bootstrap'
+  $('.caddy_customers_select').select2
+    theme: 'bootstrap'
+    minimumInputLength: 3
 
   
   ### Send caddy verification code ###

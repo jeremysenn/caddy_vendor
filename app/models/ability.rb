@@ -172,6 +172,13 @@ class Ability
         account.company == user.company 
       end
       
+      # BalanceLogs
+      ############
+      can :manage, BalanceLog do |balance_log|
+        balance_log.company == user.company
+      end
+      can :create, :balance_logs
+      
     elsif user.is_caddy? and user.active?
       ### Active Caddy User ###
       

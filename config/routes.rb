@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   
+  resources :balance_logs
   resources :accounts
   resources :sms_messages
   require 'sidekiq/web'

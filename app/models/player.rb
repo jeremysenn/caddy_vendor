@@ -100,7 +100,12 @@ class Player < ApplicationRecord
 #  end
   
   def transfer
-    transfers.last unless transfers.blank?
+    reversed_transfer = transfers.find_by(reversed: true)
+    if reversed_transfer.blank? # No reversed transfer
+      transfers.last unless transfers.blank?
+    else
+      reversed_transfer
+    end
   end
   
   def check_caddy_out

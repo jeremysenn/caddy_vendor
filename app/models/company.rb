@@ -23,6 +23,7 @@ class Company < ActiveRecord::Base
   has_many :vendor_payables, :foreign_key => "CompanyNbr"
   has_many :sms_messages
   has_one :company_act_default_min_bal, :foreign_key => "CompanyNumber"
+  has_many :balance_logs, :foreign_key => "CompanyNumber"
   
   accepts_nested_attributes_for :company_act_default_min_bal
   
