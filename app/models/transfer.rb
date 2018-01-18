@@ -7,7 +7,7 @@ class Transfer < ApplicationRecord
 #  after_create :transfer_web_service_call
   after_save :update_player, if: :contains_player?
   
-  after_create :ezcash_payment_transaction_web_service_call
+  after_create :ezcash_payment_transaction_web_service_call, unless: :reversed?
   after_create :ezcash_send_sms_web_service_call, if: :contains_player?
   after_update :ezcash_reverse_transaction_web_service_call
   
@@ -150,11 +150,10 @@ class Transfer < ApplicationRecord
       Rails.logger.debug "****************Response body for reversing transfer: #{response.body}"
       if response.success?
         unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
-          unless club_credit_transaction_id.blank?
-            # Also need to reverse the original one-side course credit transaction if there was one with this transfer
-  #            club_credit_transaction = Transaction.find(club_credit_transaction_id)
-            company.perform_one_sided_credit_transaction(-amount_paid_total) # Use negative of transfer's total amount paid
-          end
+#          unless club_credit_transaction_id.blank?
+#            # Also need to reverse the original one-side course credit transaction if there was one with this transfer
+#            company.perform_one_sided_credit_transaction(-amount_paid_total) # Use negative of transfer's total amount paid
+#          end
 
           # Create a new transfer to represent the reversal
           Transfer.create(from_account_id: from_account_id, to_account_id: to_account_id, customer_id: customer_id, player_id: player_id, 

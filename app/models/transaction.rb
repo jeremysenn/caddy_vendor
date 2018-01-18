@@ -242,19 +242,20 @@ class Transaction < ActiveRecord::Base
     account.customer unless account.blank?
   end
   
-  def company
-    unless customer.blank?
-      customer.company
-    else
-      unless from_account.blank?  
-        from_account.company 
-      else
-        unless to_account.blank?
-          to_account.company 
-        end
-      end
-    end
-  end
+#  def company
+#    
+#    unless customer.blank?
+#      customer.company
+#    else
+#      unless from_account.blank?  
+#        from_account.company 
+#      else
+#        unless to_account.blank?
+#          to_account.company 
+#        end
+#      end
+#    end
+#  end
   
   def amount_with_fee
     unless self.ChpFee.blank? or self.ChpFee.zero?
