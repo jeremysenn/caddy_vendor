@@ -113,6 +113,6 @@ class BalanceLogsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def balance_log_params
-      params.fetch(:balance_log, {}).permit(:EventID, :EventDateTime, :StartDateTime, :EndDateTime, :StartTranID, :EndTranID, :TotalAmount, :CompanyNumber)
+      params.fetch(:balance_log, {}).permit(:start_date, :end_date, :EventID, :EventDateTime, :StartDateTime, :EndDateTime, :StartTranID, :EndTranID, :TotalAmount, :CompanyNumber)
     end
 end
