@@ -9,6 +9,31 @@
         = text_field_tag 'balance_log[end_date]', nil, :placeholder => "End Date", value: "#{@end_date.blank? ? Date.today : @end_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
       = button_tag(:type => 'submit', :class => 'btn btn-primary', data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}) do
         %i.fa.fa-search
+      .pull-right
+        %a{href: '#', class: 'btn btn-warning', "data-toggle" => "modal", "data-target" => "#new_balance_log"}
+          %i.fa.fa-plus-circle
+          Balance Log
+    #new_balance_log.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog"}
+      .modal-dialog.modal-sm{:role => "document"}
+        .modal-content
+          .modal-header
+            %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+              %span{"aria-hidden" => "true"} ×
+            .modal-title
+              .lead 
+                %i.fa.fa-plus-circle
+                Balance Log
+          .modal-body
+            = form_tag new_balance_log_path, id: 'new_balance_log_form', method: 'get' do |f|
+              .row
+                .col-xs-12
+                  .form-group
+                    = text_field_tag :end_date, nil, :placeholder => "Date", value: Date.today, class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
+              .modal-footer
+                %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
+                %button.btn.btn-success{id: 'new_balance_log_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> "}} 
+                  Go
+
   %p.lead.text-muted= "#{pluralize(number_with_delimiter(@balance_logs.count), 'balance log')} found"
       
 
@@ -23,6 +48,7 @@
               %th Description 
               %th Start
               %th End
+              %th Processed
               %th Amount
               %th
           %tbody
@@ -32,6 +58,7 @@
                 %td= balance_log.description
                 %td= balance_log.StartDateTime.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y %l:%M %p')
                 %td= balance_log.EndDateTime.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y %l:%M %p')
+                %td= balance_log.Processed? ? 'Yes' : 'No'
                 %td= number_to_currency(balance_log.TotalAmount)
                 %td
                   = link_to 'Show', balance_log, class: 'btn btn-secondary'

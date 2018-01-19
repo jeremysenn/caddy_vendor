@@ -13,47 +13,67 @@
         End:
         = @balance_log.EndDateTime.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y %l:%M %p')
       %p.lead
+        Processed:
+        = @balance_log.Processed? ? 'Yes' : 'No'
+      %p.lead 
+        Start Tran ID
+        = link_to @balance_log.StartTranID, transaction_path(@balance_log.StartTranID)
+      %p.lead 
+        End Tran ID
+        = link_to @balance_log.EndTranID, transaction_path(@balance_log.EndTranID)
+      
+      %p.lead
         Amount:
         = number_to_currency(@balance_log.TotalAmount)
 
-  %br
-
-  .card.card-block
-    %h4.card-title 
-      %a{"aria-controls" => "collapseExample", "data-toggle" => "collapse", :href => "#log_balance_transfers"}
-        %i.fa.fa-dollar
+  %ul.nav.nav-tabs
+    %li.nav-item
+      %a.nav-link.active{:href => "#transfers", :data => {:toggle => "tab"}} 
+        %i.fa.fa-dollar.fa-lg
         Transfers
-    #log_balance_transfers.collapse.show.in{"aria-expanded" => "true"}
-      - unless @transfers.blank?
-        .table-responsive
-          %table.table.table-striped
-            %thead
-              %tr
-                %th Tran ID
-                %td DateTime
-                %th To
-                %th Fee
-                %th Tip
-                %th Transaction Fee
-                %th Total
-                %th
-            %tbody
-              - @transfers.each do |transfer| 
-                %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                  %td
-                    - unless transfer.ez_cash_tran_id.blank?
-                      = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
-                    - else
-                      None
-                  %td= transfer.created_at.in_time_zone(transfer.course.time_zone).strftime("%-m/%-d/%y %l:%M %p")
-                  %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
-                  %td= number_to_currency(transfer.caddy_fee)
-                  %td= number_to_currency(transfer.caddy_tip)
-                  %td= number_to_currency(transfer.fee)
-                  %td= number_to_currency(transfer.amount_paid_total)
-                  %td
-                    - if transfer.reversed?
-                      .text-danger Reversed
-                    = link_to "Show", transfer, class: 'btn btn-secondary'
-      - else
-        %p.lead None
+    %li.nav-item
+      %a.nav-link{:href => "#csv", :data => {:toggle => "tab"}} 
+        CSV Report
+
+  .tab-content
+    .tab-pane.active{:id => "transfers"}
+      %br
+      .card.card-block
+        - unless @transfers.blank?
+          .table-responsive
+            %table.table.table-striped
+              %thead
+                %tr
+                  %th Tran ID
+                  %td DateTime
+                  %th To
+                  %th Fee
+                  %th Tip
+                  %th Transaction Fee
+                  %th Total
+                  %th
+              %tbody
+                - @transfers.each do |transfer| 
+                  %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
+                    %td
+                      - unless transfer.ez_cash_tran_id.blank?
+                        = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
+                      - else
+                        None
+                    %td= transfer.created_at.in_time_zone(transfer.course.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                    %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
+                    %td= number_to_currency(transfer.caddy_fee)
+                    %td= number_to_currency(transfer.caddy_tip)
+                    %td= number_to_currency(transfer.fee)
+                    %td= number_to_currency(transfer.amount_paid_total)
+                    %td
+                      - if transfer.reversed?
+                        .text-danger Reversed
+                      = link_to "Show", transfer, class: 'btn btn-secondary'
+        - else
+          %p.lead None
+
+    .tab-pane{:id => "csv"}
+      %br
+      .card.card-block
+        = @balance_log.CSVReport

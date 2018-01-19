@@ -8,7 +8,7 @@ class BalanceLogsController < ApplicationController
   def index
     @start_date = balance_log_params[:start_date] ||= Date.today.to_s
     @end_date = balance_log_params[:end_date] ||= Date.today.to_s
-    @balance_logs = current_company.balance_logs.where(EventDateTime: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day)
+    @balance_logs = current_company.balance_logs.reverse.where(EventDateTime: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day)
   end
 
   # GET /balance_logs/1
@@ -34,6 +34,31 @@ class BalanceLogsController < ApplicationController
   # GET /balance_logs/new
   def new
     @balance_log = BalanceLog.new
+    @end_date = params[:end_date] ||= Date.today.to_s
+    @last_balance_log = current_company.balance_logs.last
+    unless @last_balance_log.blank?
+      @start_date = @last_balance_log.EventDateTime
+    else
+      @start_date = Date.today.to_s
+    end
+    
+    transfers = current_user.company.transfers.where(created_at: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day).where.not(ez_cash_tran_id: [nil, ''])
+    @transfers_total_amount = 0
+    transfers.each do |transfer|
+      @transfers_total_amount = @transfers_total_amount + transfer.amount_billed
+    end
+    
+    respond_to do |format|
+      format.html {
+        @all_transfers = transfers
+        @transfers = transfers.order("created_at DESC").page(params[:page]).per(20)
+      }
+      format.csv { 
+        @transfers = transfers
+        send_data @transfers.order("created_at DESC").to_csv, filename: "transfers-#{@start_date}-#{@end_date}.csv" 
+        }
+    end
+    
   end
 
   # GET /balance_logs/1/edit
@@ -88,6 +113,6 @@ class BalanceLogsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def balance_log_params
-      params.fetch(:balance_log, {}).permit(:start_date, :end_date)
+      params.fetch(:balance_log, {}).permit(:EventID, :EventDateTime, :StartDateTime, :EndDateTime, :StartTranID, :EndTranID, :TotalAmount, :CompanyNumber)
     end
 end

@@ -16,8 +16,14 @@ class BalanceLog < ActiveRecord::Base
   end
   
   #############################
-  #     Class Methods      #
+  #     Class Methods         #
   #############################
+  
+  def self.build_ach_report_web_service_call(balance_log_id)
+    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+    response = client.call(:build_ach_report, message: { RowID: balance_log_id})
+    Rails.logger.debug "Response body: #{response.body}"
+  end
   
   
 end
