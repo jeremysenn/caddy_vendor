@@ -39,7 +39,8 @@
     .tab-pane.active{:id => "transfers"}
       %br
       .card.card-block
-        .pull-right= number_to_currency(@transfers_total_amount)
+        %h4.card-title.text-primary
+          .pull-right= number_to_currency(@transfers_total_amount)
         - unless @transfers.blank?
           .table-responsive
             %table.table.table-striped
