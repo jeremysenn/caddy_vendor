@@ -7,7 +7,7 @@ class BalanceLog < ActiveRecord::Base
   belongs_to :company, :foreign_key => "CompanyNumber"
   belongs_to :balance_log_event_desc, :foreign_key => "EventID"
   
-  after_save :build_ach_report_web_service_call
+  after_commit :build_ach_report_web_service_call, on: [:create]
   
   scope :processed, -> { where(Processed: 1) }
   
