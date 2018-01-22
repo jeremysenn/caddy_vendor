@@ -14,7 +14,7 @@ class BalanceLogsController < ApplicationController
   # GET /balance_logs/1
   # GET /balance_logs/1.json
   def show
-    transfers = current_user.company.transfers.where(created_at: @balance_log.StartDateTime.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@balance_log.StartDateTime.to_date.in_time_zone(current_user.time_zone).end_of_day).where.not(ez_cash_tran_id: [nil, ''])
+    transfers = current_user.company.transfers.where(created_at: @balance_log.StartDateTime.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@balance_log.EndDateTime.to_date.in_time_zone(current_user.time_zone).end_of_day).where.not(ez_cash_tran_id: [nil, ''])
     @transfers_total_amount = 0
     transfers.each do |transfer|
       @transfers_total_amount = @transfers_total_amount + transfer.amount
