@@ -7,6 +7,10 @@ class BalanceLog < ActiveRecord::Base
   belongs_to :company, :foreign_key => "CompanyNumber"
   belongs_to :balance_log_event_desc, :foreign_key => "EventID"
   
+  after_save :build_ach_report_web_service_call
+  
+  scope :processed, -> { where(Processed: 1) }
+  
   #############################
   #     Instance Methods      #
   #############################
@@ -15,15 +19,26 @@ class BalanceLog < ActiveRecord::Base
     balance_log_event_desc.EventDescription unless balance_log_event_desc.blank?
   end
   
+  def build_ach_report_web_service_call
+    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+    response = client.call(:build_ach_report, message: { RowID: self.RowID})
+    Rails.logger.debug "build_ach_report_web_service_call response body: #{response.body}"
+    if response.success?
+      unless response.body[:build_ach_report_response].blank? or response.body[:build_ach_report_response][:return].to_i > 0
+        return
+      else
+#        raise ActiveRecord::Rollback
+        return nil
+      end
+    else
+#      raise ActiveRecord::Rollback
+      return nil
+    end
+  end
+  
   #############################
   #     Class Methods         #
   #############################
-  
-  def self.build_ach_report_web_service_call(balance_log_id)
-    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
-    response = client.call(:build_ach_report, message: { RowID: balance_log_id})
-    Rails.logger.debug "Response body: #{response.body}"
-  end
   
   
 end

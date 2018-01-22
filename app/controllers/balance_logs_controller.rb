@@ -8,13 +8,14 @@ class BalanceLogsController < ApplicationController
   def index
     @start_date = balance_log_params[:start_date] ||= Date.today.to_s
     @end_date = balance_log_params[:end_date] ||= Date.today.to_s
-    @balance_logs = current_company.balance_logs.order("EventDateTime DESC").where(EventDateTime: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day)
+    @balance_logs = current_company.balance_logs.processed.order("EventDateTime DESC").where(EventDateTime: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day)
   end
 
   # GET /balance_logs/1
   # GET /balance_logs/1.json
   def show
-    transfers = current_user.company.transfers.where(created_at: @balance_log.StartDateTime.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@balance_log.EndDateTime.to_date.in_time_zone(current_user.time_zone).end_of_day).where.not(ez_cash_tran_id: [nil, ''])
+#    transfers = current_user.company.transfers.where(created_at: @balance_log.StartDateTime.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@balance_log.EndDateTime.to_date.in_time_zone(current_user.time_zone).end_of_day).where.not(ez_cash_tran_id: [nil, ''])
+    transfers = current_user.company.transfers.where.not(ez_cash_tran_id: [nil, '']).where(ez_cash_tran_id: @balance_log.StartTranID..@balance_log.EndTranID)
     @transfers_total_amount = 0
     transfers.each do |transfer|
       @transfers_total_amount = @transfers_total_amount + transfer.amount_billed
@@ -35,14 +36,14 @@ class BalanceLogsController < ApplicationController
   def new
     @balance_log = BalanceLog.new
     @end_date = params[:end_date] ||= Date.today.to_s
-    @last_balance_log = current_company.balance_logs.last
+    @last_balance_log = current_company.balance_logs.processed.last
     unless @last_balance_log.blank?
       @start_date = @last_balance_log.EventDateTime
     else
       @start_date = Date.today.to_s
     end
     
-    transfers = current_user.company.transfers.where(created_at: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day).where.not(ez_cash_tran_id: [nil, ''])
+    transfers = current_user.company.transfers.where.not(ez_cash_tran_id: [nil, '']).where("ez_cash_tran_id > #{@last_balance_log.EndTranID}").where(created_at: @start_date.to_date.in_time_zone(current_user.time_zone).beginning_of_day..@end_date.to_date.in_time_zone(current_user.time_zone).end_of_day)
     @transfers_total_amount = 0
     transfers.each do |transfer|
       @transfers_total_amount = @transfers_total_amount + transfer.amount_billed
@@ -52,6 +53,13 @@ class BalanceLogsController < ApplicationController
       format.html {
         @all_transfers = transfers
         @transfers = transfers.order("created_at DESC").page(params[:page]).per(20)
+#        unless @end_date < @start_date
+#          @all_transfers = transfers
+#          @transfers = transfers.order("created_at DESC").page(params[:page]).per(20)
+#        else
+#          flash[:error] = "Date is too early."
+#          redirect_back(fallback_location: root_path) 
+#        end
       }
       format.csv { 
         @transfers = transfers
@@ -75,7 +83,11 @@ class BalanceLogsController < ApplicationController
         format.html { redirect_to @balance_log, notice: 'BalanceLog was successfully created.' }
         format.json { render :show, status: :created, location: @balance_log }
       else
-        format.html { render :new }
+        format.html { 
+#          render :new 
+          flash[:error] = "There was a problem generating Balance Log."
+          redirect_back(fallback_location: root_path)
+          }
         format.json { render json: @balance_log.errors, status: :unprocessable_entity }
       end
     end
