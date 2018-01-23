@@ -193,7 +193,7 @@ class CaddiesController < ApplicationController
       else
         redirect_to @caddy, alert: 'Verification code is incorrect.' 
       end
-    elsif current_user.is_admin
+    elsif current_user.is_admin?
       # Admin can view barcode
       @base64_barcode_string = Transaction.ezcash_get_barcode_png_web_service_call(@caddy.CustomerID, current_user.company_id, 5)
     end
