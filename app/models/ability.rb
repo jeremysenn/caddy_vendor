@@ -233,6 +233,12 @@ class Ability
       can :create, Customer
       cannot :index, Customer
       
+      # Users
+      ############
+      can :manage, User do |user_record|
+        user_record == user 
+      end
+      
     elsif user.is_member? and user.active?
       ###  Active Member User ###  
       

@@ -115,7 +115,7 @@
             %tr
               %th= caddies_sort_link 'customer.NameF', "First Name"
               %th= caddies_sort_link 'customer.NameL', "Last Name"
-              -# %th Course
+              %th Course
               -# %th Rating
               %th Ranking
               %th Balance
@@ -127,8 +127,7 @@
               %tr{class: "#{caddy.inactive? ? 'table-danger' : ''}"}
                 %td= caddy.first_name
                 %td= caddy.last_name
-                -#
-                  %td= link_to truncate(caddy.course.name, length: 15), caddy.course
+                %td= caddy.course.name
                 -#z
                   %td
                     %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => caddy.average_rating, "data-rateit-readonly" => "true" }

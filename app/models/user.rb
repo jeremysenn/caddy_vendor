@@ -111,6 +111,14 @@ class User < ApplicationRecord
     Customer.members.find_by(Email: email)
   end
   
+  def customer
+    if is_member?
+      member
+    elsif is_caddy?
+      caddy_customer
+    end
+  end
+  
   def is_member?
     role == 'member'
   end
@@ -128,6 +136,26 @@ class User < ApplicationRecord
       self.update_attribute(:company_id, caddy.ClubCompanyNbr)
     elsif is_member? and not member.blank?
       self.update_attribute(:company_id, member.CompanyNumber)
+    end
+  end
+  
+  def ezcash_send_mms_cust_barcode_web_service_call
+    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+    customer_record = customer
+    unless customer_record.blank?
+      response = client.call(:send_mms_cust_barcode, message: { CustomerID: customer_record.id, CompanyNumber: company_id})
+      Rails.logger.debug "Response body: #{response.body}"
+      if response.success?
+        unless response.body[:send_mms_cust_barcode_response].blank? or response.body[:send_mms_cust_barcode_response][:return].blank?
+          return response.body[:send_mms_cust_barcode_response][:return]
+        else
+          return nil
+        end
+      else
+        return nil
+      end
+    else
+      return nil
     end
   end
   

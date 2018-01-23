@@ -142,10 +142,10 @@
                   %i.fa.fa-qrcode
                   ATM Payment
               - elsif current_user.is_caddy? and not @caddy.cell_phone_number.blank?
-                %a{href: '#', id: 'send_caddy_verification_code', "data-caddy-id" => @caddy.id, class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#sms_payment_verification"}
+                %a{href: '#', id: 'send_caddy_qr_code', "data-caddy-id" => @caddy.id, class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#sms_payment_qr_code"}
                   %i.fa.fa-qrcode
                   ATM Payment
-                #sms_payment_verification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+                #sms_payment_qr_code.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
                   .modal-dialog.modal-sm{:role => "document"}
                     .modal-content
                       .modal-header
@@ -156,21 +156,18 @@
                             ATM Payment
                       .modal-body
                         %p.lead
-                          We sent a verification code to 
-                          = "#{@caddy.cell_phone_number}."
-                          %br
-                          Please enter the code below:
-                        = form_tag verify_phone_caddy_path, id: 'send_caddy_sms_payment_verification_form', method: 'get' do |f|
-                          = hidden_field_tag :caddy_id, @caddy.id
+                          Please enter your PIN:
+                        = form_tag pin_verification_users_admin_path(current_user.id), id: 'send_caddy_sms_payment_verification_form', method: 'post' do |f|
+                          =# hidden_field_tag :caddy_id, @caddy.id
                           .col-xs-9
-                            = text_field_tag :verification_code, nil, placeholder: "4-digit code", class: "form-control input-lg", autofocus: true
+                            = text_field_tag :pin, nil, placeholder: "Your PIN", class: "form-control input-lg", autofocus: true, required: true
                           .row
                             .col-xs-12
                               .pull-right
                                 %br
                                 %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
-                                %button.btn.btn-primary{id: 'send_sms_payment_verification_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Verify"}} 
-                                  Verify
+                                %button.btn.btn-primary{id: 'send_sms_payment_qr_code_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Submit"}} 
+                                  Submit
         - unless @withdrawal_transactions.blank?
           .table-responsive
             %table.table.table-striped

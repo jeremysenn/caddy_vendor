@@ -47,12 +47,13 @@
       %p.lead
         Active:
         = "#{@customer.active? ? 'Yes' : 'No'}"
-      %p.lead
-        Bank Account Number:
-        = @customer.club_account(current_company.id).BankActNbr
-      %p.lead
-        Bank Routing Number:
-        = @customer.club_account(current_company.id).RoutingNbr
+      - if @customer.primary?
+        %p.lead
+          Bank Account Number:
+          = @customer.club_account(current_company.id).BankActNbr
+        %p.lead
+          Bank Routing Number:
+          = @customer.club_account(current_company.id).RoutingNbr
       - if @customer.primary?
         %p.lead
           Balance:

@@ -51,8 +51,13 @@ Rails.application.routes.draw do
   resources :caddy_rank_descs
   
   resources :caddy_ratings
+  
 #  resources :users
-  resources :users_admin, :controller => 'users'
+  resources :users_admin, :controller => 'users' do
+    member do
+      post 'pin_verification'
+    end
+  end
   
   resources :vendor_payables
   
