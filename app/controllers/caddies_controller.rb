@@ -113,34 +113,17 @@ class CaddiesController < ApplicationController
       end
     end
   end
-  
-#  def send_group_text_message
-#    respond_to do |format|
-#      format.html {
-#        unless params[:q].blank?
-#          @query_string = "%#{params[:q]}%"
-#          caddies = current_user.caddies.active.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string).order("customer.NameL")
-#        else
-#          unless params[:balances].blank?
-#            caddies = current_user.company.caddies_with_balance
-#          else
-#            caddies = current_user.caddies.active.joins(:customer).order("customer.NameL")
-#          end
-#        end
-#        unless params[:caddy_rank_desc_id].blank?
-#          @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id])
-#        else
-#          @caddies = caddies
-#        end
-#        @message_body = params[:message_body]
-#        @caddies.each do |caddy|
-#          caddy.send_sms_notification(@message_body)
-#        end
-#        redirect_back fallback_location: customers_path, notice: 'Text message sent to caddies.'
-#      }
-#    end
-#  end
 
+  # DELETE /caddies/1
+  # DELETE /caddies/1.json
+  def destroy
+    @caddy.destroy
+    respond_to do |format|
+      format.html { redirect_to caddies_url, notice: 'Caddy was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+  
   def send_group_text_message
     respond_to do |format|
       format.html {
@@ -213,15 +196,9 @@ class CaddiesController < ApplicationController
         }
     end
   end
-
-  # DELETE /caddies/1
-  # DELETE /caddies/1.json
-  def destroy
-    @caddy.destroy
-    respond_to do |format|
-      format.html { redirect_to caddies_url, notice: 'Caddy was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+  
+  def caddies_with_balance
+    @caddy_customers = current_company.customers.caddies.joins(:accounts).where("accounts.Balance != ?", 0).page(params[:page]).per(20)
   end
 
   private

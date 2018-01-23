@@ -54,7 +54,7 @@
           %a.dropdown-item{:href => caddies_path, :class => (params[:controller] == 'caddies' and params[:action] == 'index' and not params[:balances] == 'true') ? "active" : ""} 
             %i.fa.fa-search
             Caddies
-          %a{:href => caddies_path(balances: true), :class => (params[:controller] == 'caddies' and params[:action] == 'index' and params[:balances] == 'true') ? "active dropdown-item" : "dropdown-item"} 
+          %a{:href => caddies_with_balance_caddies_path, :class => (params[:controller] == 'caddies' and params[:action] == 'caddies_with_balance') ? "active dropdown-item" : "dropdown-item"} 
             %i.fa.fa-dollar
             Caddy with balance
           -#

@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     end
     collection do
       get 'send_group_text_message'
+      get 'caddies_with_balance'
     end
   end
   resources :members

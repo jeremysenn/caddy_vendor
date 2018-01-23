@@ -1,0 +1,31 @@
+.container-fluid
+  %br
+   
+  %p.lead.text-muted= "#{pluralize(@caddy_customers.count, 'caddy')} found"
+  .card.card-block
+    %h4.card-title 
+      %i.fa.fa-vcard-o
+      Caddies with a balance
+    - unless @caddy_customers.blank?
+      .table-responsive
+        %table.table.table-striped
+          %thead
+            %tr
+              %th= caddies_sort_link 'caddy_customer.NameF', "First Name"
+              %th= caddies_sort_link 'caddy_customer.NameL', "Last Name"
+              %th Balance
+              %th
+          %tbody
+            - @caddy_customers.each do |caddy_customer|
+              %tr
+                %td= caddy_customer.NameF
+                %td= caddy_customer.NameL
+                %td= number_to_currency(caddy_customer.club_account(current_company.id).Balance)
+                
+    - else
+      %p.lead No caddies found
+
+    = paginate @caddy_customers
+      
+
+
