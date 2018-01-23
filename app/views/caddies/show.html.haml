@@ -134,7 +134,7 @@
     .tab-pane{:id => "withdrawals"}
       %br
       #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
-        - if @balance > 0
+        - if @balance > 1
           .pull-right
             %p
               - if current_user.is_admin?
