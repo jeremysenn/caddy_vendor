@@ -150,13 +150,14 @@ class CustomersController < ApplicationController
   
   # GET /customers/1/show_caddy
   def show_caddy
+    @club_account = @customer.club_account(current_company.id)
     # Get caddy account transfers, filtered by company_id
-#    @transfers = @caddy.account_transfers.where(company_id: current_company.id).order('created_at DESC') unless @caddy.account_transfers.blank?
+    @transfers = Transfer.where(to_account_id: @club_account.id).or(Transfer.where(from_account_id: @club_account.id)).where(company_id: current_company.id).order('created_at DESC')
 #    @text_messages = @caddy.sms_messages.reverse
     # Get caddy account withdrawal transactions, filtered by company_id
-#    @withdrawal_transactions = @caddy.withdrawals.last(20).reverse
-    @balance = @customer.club_account(current_company.id).Balance
-    @minimum_balance = @customer.club_account(current_company.id).MinBalance
+    @withdrawal_transactions = @club_account.withdrawals.last(20).reverse
+    @balance = @club_account.Balance
+    @minimum_balance = @club_account.MinBalance
   end
 
   private
