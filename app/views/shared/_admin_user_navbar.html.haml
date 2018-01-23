@@ -34,7 +34,7 @@
             %i.fa.fa-calendar
             Calendar
       %li.nav-item.dropdown
-        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'customers' and params[:action] == 'index') ? "active" : ""}
+        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'customers' and (params[:action] == 'index' or params[:action] == 'show' or params[:action] == 'edit')) ? "active" : ""}
           %i.fa.fa-user-circle-o
           Members
           %b.caret
