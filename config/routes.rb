@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :customers do
     member do
       get :clear_account_balance
+      get :show_caddy
     end
     collection do
       get :clear_all_account_balances

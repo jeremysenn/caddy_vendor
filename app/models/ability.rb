@@ -231,6 +231,9 @@ class Ability
       # Customers
       ############
       can :create, Customer
+      can :manage, Customer do |customer|
+        user.caddy_customers.include?(customer)
+      end
       cannot :index, Customer
       
       # Users

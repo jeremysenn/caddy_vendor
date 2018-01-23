@@ -1,6 +1,6 @@
 class CustomersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_customer, only: [:show, :edit, :update, :destroy, :clear_account_balance]
+  before_action :set_customer, only: [:show, :edit, :update, :destroy, :clear_account_balance, :show_caddy]
   load_and_authorize_resource
 
   # GET /customers
@@ -146,6 +146,17 @@ class CustomersController < ApplicationController
       }
     end
     
+  end
+  
+  # GET /customers/1/show_caddy
+  def show_caddy
+    # Get caddy account transfers, filtered by company_id
+#    @transfers = @caddy.account_transfers.where(company_id: current_company.id).order('created_at DESC') unless @caddy.account_transfers.blank?
+#    @text_messages = @caddy.sms_messages.reverse
+    # Get caddy account withdrawal transactions, filtered by company_id
+#    @withdrawal_transactions = @caddy.withdrawals.last(20).reverse
+    @balance = @customer.club_account(current_company.id).Balance
+    @minimum_balance = @customer.club_account(current_company.id).MinBalance
   end
 
   private

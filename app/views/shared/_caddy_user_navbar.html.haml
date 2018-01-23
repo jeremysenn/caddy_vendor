@@ -10,13 +10,17 @@
         %li.nav-item
           %a.nav-link{:href => events_path, :class => (params[:controller] == 'events') ? "active" : ""} 
             Rounds
-        %li.nav-item.dropdown
-          %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+        %li.nav-item
+          %a.nav-link{:href => show_caddy_customer_path(current_user.caddy_customer), :class => (params[:controller] == 'customers' and params[:action] == 'show_caddy') ? "active" : ""} 
             Details
-            %b.caret
-          %div.dropdown-menu
-            - current_user.caddies_by_club(current_company.id).each do |caddy|
-              %a.dropdown-item{:href => caddy_path(caddy), :class => current_course == caddy.course ? "active" : ""}= caddy.course.name
+        -#
+          %li.nav-item.dropdown
+            %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+              Details
+              %b.caret
+            %div.dropdown-menu
+              - current_user.caddies_by_club(current_company.id).each do |caddy|
+                %a.dropdown-item{:href => caddy_path(caddy), :class => current_course == caddy.course ? "active" : ""}= caddy.course.name
       .float-xs-right
         %li.nav-item.dropdown
           %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
