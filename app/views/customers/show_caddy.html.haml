@@ -104,25 +104,24 @@
 
     .tab-pane{:id => "withdrawals"}
       %br
-      #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
-        - if browser.device.mobile?
-          %h4 Withdrawals
-        - unless @withdrawal_transactions.blank?
-          .table-responsive
-            %table.table.table-sm
-              %thead
+      - if browser.device.mobile?
+        %h4 Withdrawals
+      - unless @withdrawal_transactions.blank?
+        .table-responsive
+          %table.table.table-striped.table-sm
+            %thead
+              %tr
+                %th Time
+                %th Amount
+                %th
+            %tbody
+              - @withdrawal_transactions.each do |withdrawal_transaction|
                 %tr
-                  %th Time
-                  %th Amount
-                  %th
-              %tbody
-                - @withdrawal_transactions.each do |withdrawal_transaction|
-                  %tr
-                    %td= withdrawal_transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
-                    %td= number_to_currency(withdrawal_transaction.amt_auth)
-                    %td= link_to "Show", withdrawal_transaction, class: 'btn btn-secondary'
-        - else
-          %p.lead None
+                  %td= withdrawal_transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
+                  %td= number_to_currency(withdrawal_transaction.amt_auth)
+                  %td= link_to "Show", withdrawal_transaction, class: 'btn btn-secondary'
+      - else
+        %p.lead None
 
     .tab-pane{:id => "messages"}
       %br
@@ -131,11 +130,11 @@
           %h4 Messages
         - unless @text_messages.blank?
           .table-responsive
-            %table.table.table-striped
+            %table.table.table-striped.table-sm
               %thead
                 %tr
                   %th Sent
-                  %th Message Body
+                  %th Message
                   %th
               %tbody
                 - @text_messages.sort_by{|text_message| text_message.created_at}.each do |text_message|
