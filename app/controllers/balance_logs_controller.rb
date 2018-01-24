@@ -27,7 +27,7 @@ class BalanceLogsController < ApplicationController
       }
       format.csv { 
         @transfers = transfers
-        send_data @transfers.order("created_at DESC").to_csv, filename: "transfers-#{@start_date}-#{@end_date}.csv" 
+        send_data @transfers.order("created_at DESC").to_csv, filename: "transfers-#{@balance_log.StartTranID}-#{@balance_log.EndTranID}.csv" 
         }
     end
   end

@@ -38,6 +38,11 @@
   .tab-content
     .tab-pane.active{:id => "transfers"}
       %br
+      - unless @transfers.blank?
+        .pull-right
+          %a{href: balance_log_path(format: "csv"), class: 'btn btn-primary'}
+            %i.fa.fa-download
+            Download
       .card.card-block
         %h4.card-title.text-primary
           .pull-right= number_to_currency(@transfers_total_amount)
