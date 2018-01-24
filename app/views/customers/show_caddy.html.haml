@@ -15,87 +15,85 @@
       %a.nav-link{:href => "#withdrawals", :data => {:toggle => "tab"}} 
         %i.fa.fa-bolt.fa-lg
         = "Withdrawals" unless browser.device.mobile?
+    %li.nav-item
+      %a.nav-link{:href => "#messages", :data => {:toggle => "tab"}} 
+        %i.fa.fa-commenting.fa-lg
+        = "Messages" unless browser.device.mobile?
+
   .tab-content
     .tab-pane.active{:id => "info"}
       %br
-      .card
-        .card-block
-          %p.lead
-            Cell phone:
-            = @customer.PhoneMobile
-          %p.lead
-            Email:
-            = @customer.Email
-          %p.lead
-            Courses:
-            %br
-            - @customer.caddies.where(ClubCompanyNbr: current_company.id).each do |caddy|
-              = link_to caddy.course.name, caddy
-              %br
-          %p.lead
-            Available Balance:
-            = number_to_currency(@balance)
-          %p.lead
-            Minimum Balance:
-            = number_to_currency(@minimum_balance)
-          - if @balance > 1
-            %p
-              %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#sms_payment_qr_code"}
-                %i.fa.fa-qrcode
-                ATM Payment
-              #sms_payment_qr_code.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
-                .modal-dialog.modal-sm{:role => "document"}
-                  .modal-content
-                    .modal-header
-                      %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
-                        %span{"aria-hidden" => "true"} ×
-                      .modal-title
-                        .lead 
-                          ATM Payment
-                    .modal-body
-                      %p.lead
-                        Please enter your PIN:
-                      = form_tag pin_verification_users_admin_path(current_user.id), id: 'send_caddy_sms_payment_verification_form', method: 'post' do |f|
-                        =# hidden_field_tag :caddy_id, @caddy.id
-                        .col-xs-9
-                          = text_field_tag :pin, nil, placeholder: "Your PIN", class: "form-control input-lg", autofocus: true, required: true
-                        .row
-                          .col-xs-12
-                            .pull-right
-                              %br
-                              %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
-                              %button.btn.btn-primary{id: 'send_sms_payment_qr_code_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Submit"}} 
-                                Submit
+      - if browser.device.mobile?
+        %h4 Info
+      %p.lead
+        Cell phone:
+        = @customer.PhoneMobile
+      %p.lead
+        Email:
+        = @customer.Email
+      %p.lead
+        Courses:
+        %br
+        - @customer.caddies.where(ClubCompanyNbr: current_company.id).each do |caddy|
+          = caddy.course.name
+          %br
+      %p.lead
+        Balance:
+        = number_to_currency(@balance)
+      %p.lead
+        Minimum Balance:
+        = number_to_currency(@minimum_balance)
+      %p.lead
+        Available Balance:
+        = number_to_currency(@available_balance)
+      - if @available_balance > 1
+        %p
+          %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#sms_payment_qr_code"}
+            %i.fa.fa-qrcode
+            ATM Payment
+          #sms_payment_qr_code.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+            .modal-dialog.modal-sm{:role => "document"}
+              .modal-content
+                .modal-header
+                  %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+                    %span{"aria-hidden" => "true"} ×
+                  .modal-title
+                    .lead 
+                      ATM Payment
+                .modal-body
+                  %p.lead
+                    Please enter your PIN:
+                  = form_tag pin_verification_users_admin_path(current_user.id), id: 'send_caddy_sms_payment_verification_form', method: 'post' do |f|
+                    =# hidden_field_tag :caddy_id, @caddy.id
+                    .col-xs-9
+                      = text_field_tag :pin, nil, placeholder: "Your PIN", class: "form-control input-lg", autofocus: true, required: true
+                    .row
+                      .col-xs-12
+                        .pull-right
+                          %br
+                          %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
+                          %button.btn.btn-primary{id: 'send_sms_payment_qr_code_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Submit"}} 
+                            Submit
 
     .tab-pane{:id => "transfers"}
       %br
       #caddy_transfers.collapse.show.in{"aria-expanded" => "true"}
+        - if browser.device.mobile?
+          %h4 Transfers
         - unless @transfers.blank?
           .table-responsive
-            %table.table.table-striped
+            %table.table.table-striped.table-sm
               %thead
                 %tr
-                  %th Tran ID
-                  %th Date/Time
+                  %th Time
                   %th From
-                  %th Fee
-                  %th Tip
-                  %th Note
                   %th Total
                   %th
               %tbody
                 - @transfers.each do |transfer|
                   %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                    %td
-                      - unless transfer.ez_cash_tran_id.blank?
-                        = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
-                      - else
-                        None
                     %td= transfer.created_at.in_time_zone(transfer.course.time_zone).strftime("%-m/%-d/%y %l:%M %p")
                     %td= transfer.customer.full_name unless transfer.customer.blank?
-                    %td= number_to_currency(transfer.caddy_fee)
-                    %td= number_to_currency(transfer.caddy_tip)
-                    %td= transfer.note
                     %td= number_to_currency(transfer.amount)
                     %td
                       - if transfer.reversed?
@@ -107,29 +105,45 @@
     .tab-pane{:id => "withdrawals"}
       %br
       #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
+        - if browser.device.mobile?
+          %h4 Withdrawals
         - unless @withdrawal_transactions.blank?
           .table-responsive
-            %table.table.table-striped
+            %table.table.table-sm
               %thead
                 %tr
-                  %th ID
-                  %th Date/Time
-                  %th Code
-                  %th Status
-                  %th Requested
-                  %th Authorized
-                  %th Description
+                  %th Time
+                  %th Amount
                   %th
               %tbody
                 - @withdrawal_transactions.each do |withdrawal_transaction|
                   %tr
-                    %td= withdrawal_transaction.id
                     %td= withdrawal_transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
-                    %td= withdrawal_transaction.error_code_description
-                    %td= withdrawal_transaction.status_description
-                    %td= number_to_currency(withdrawal_transaction.amt_req)
                     %td= number_to_currency(withdrawal_transaction.amt_auth)
-                    %td= withdrawal_transaction.Description
                     %td= link_to "Show", withdrawal_transaction, class: 'btn btn-secondary'
         - else
           %p.lead None
+
+    .tab-pane{:id => "messages"}
+      %br
+      #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
+        - if browser.device.mobile?
+          %h4 Messages
+        - unless @text_messages.blank?
+          .table-responsive
+            %table.table.table-striped
+              %thead
+                %tr
+                  %th Sent
+                  %th Message Body
+                  %th
+              %tbody
+                - @text_messages.sort_by{|text_message| text_message.created_at}.each do |text_message|
+                  %tr
+                    %td= text_message.created_at.strftime("%-m/%-d/%y %l:%M %p")
+                    %td= text_message.body
+                    %td= link_to "Show", text_message, class: 'btn btn-secondary'
+        - else
+          %p.lead None
+
+  = link_to "Back", :back, class: 'btn btn-secondary'

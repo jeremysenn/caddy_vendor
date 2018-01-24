@@ -7,8 +7,9 @@
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
         = f.error_notification
         .form-inputs
-          = f.input :email, required: true, autofocus: true, input_html: {readonly: "#{current_user.is_admin? ? 'false' : 'true'}"}
-          = f.input :pin, required: true
+          = f.input :email, required: true, autofocus: true
+          - if current_user.is_caddy?
+            = f.input :pin, required: true
           -#
             - if current_user.is_admin?
               = f.input :admin
