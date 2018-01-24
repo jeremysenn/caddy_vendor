@@ -133,7 +133,7 @@ class CaddiesController < ApplicationController
             caddy = Caddy.where(id: caddy_id).first
             caddy.send_sms_notification(@message_body) unless caddy.blank?
           end
-          redirect_back fallback_location: customers_path, notice: 'Text message sent to caddies.'
+          redirect_back fallback_location: customers_path, notice: 'Text message sent.'
         else
           redirect_back fallback_location: customers_path, alert: 'You must select at least one caddy to text message.'
         end

@@ -137,10 +137,10 @@
                   %th Message
                   %th
               %tbody
-                - @text_messages.sort_by{|text_message| text_message.created_at}.each do |text_message|
+                - @text_messages.sort_by{|text_message| text_message.created_at}.reverse.each do |text_message|
                   %tr
                     %td= text_message.created_at.strftime("%-m/%-d/%y %l:%M %p")
-                    %td= text_message.body
+                    %td= truncate(text_message.body, limit: 15)
                     %td= link_to "Show", text_message, class: 'btn btn-secondary'
         - else
           %p.lead None
