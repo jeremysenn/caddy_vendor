@@ -38,47 +38,49 @@
   .tab-content
     .tab-pane.active{:id => "transfers"}
       %br
-      - unless @transfers.blank?
+      -# unless @transfers.blank?
+      %p
         .pull-right
-          %a{href: balance_log_path(format: "csv"), class: 'btn btn-primary'}
+          %a{href: transfers_balance_log_path(format: "csv"), class: 'btn btn-primary'}
             %i.fa.fa-download
             Download
-      .card.card-block
-        %h4.card-title.text-primary
-          .pull-right= number_to_currency(@transfers_total_amount)
-        - unless @transfers.blank?
-          .table-responsive
-            %table.table.table-striped
-              %thead
-                %tr
-                  %th Tran ID
-                  %td DateTime
-                  %th To
-                  %th Fee
-                  %th Tip
-                  %th Transaction Fee
-                  %th Total
-                  %th
-              %tbody
-                - @transfers.each do |transfer| 
-                  %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                    %td
-                      - unless transfer.ez_cash_tran_id.blank?
-                        = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
-                      - else
-                        None
-                    %td= transfer.created_at.in_time_zone(transfer.course.time_zone).strftime("%-m/%-d/%y %l:%M %p")
-                    %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
-                    %td= number_to_currency(transfer.caddy_fee)
-                    %td= number_to_currency(transfer.caddy_tip)
-                    %td= number_to_currency(transfer.fee)
-                    %td= number_to_currency(transfer.amount_paid_total)
-                    %td
-                      - if transfer.reversed?
-                        .text-danger Reversed
-                      = link_to "Show", transfer, class: 'btn btn-secondary'
-        - else
-          %p.lead None
+        %br
+        %br
+      %h4.text-primary
+        .pull-right= number_to_currency(@transfers_total_amount)
+      - unless @transfers.blank?
+        .table-responsive
+          %table.table.table-striped
+            %thead
+              %tr
+                %th Tran ID
+                %td DateTime
+                %th To
+                %th Fee
+                %th Tip
+                %th Transaction Fee
+                %th Total
+                %th
+            %tbody
+              - @transfers.each do |transfer| 
+                %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
+                  %td
+                    - unless transfer.ez_cash_tran_id.blank?
+                      = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
+                    - else
+                      None
+                  %td= transfer.created_at.in_time_zone(transfer.course.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                  %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
+                  %td= number_to_currency(transfer.caddy_fee)
+                  %td= number_to_currency(transfer.caddy_tip)
+                  %td= number_to_currency(transfer.fee)
+                  %td= number_to_currency(transfer.amount_paid_total)
+                  %td
+                    - if transfer.reversed?
+                      .text-danger Reversed
+                    = link_to "Show", transfer, class: 'btn btn-secondary'
+      - else
+        %p.lead None
 
     .tab-pane{:id => "csv"}
       %br

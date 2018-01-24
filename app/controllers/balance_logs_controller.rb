@@ -1,6 +1,6 @@
 class BalanceLogsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_balance_log, only: [:show, :edit, :update, :destroy]
+  before_action :set_balance_log, only: [:show, :edit, :update, :destroy, :transfers]
   load_and_authorize_resource
 
   # GET /balance_logs
@@ -53,18 +53,7 @@ class BalanceLogsController < ApplicationController
       format.html {
         @all_transfers = transfers
         @transfers = transfers.order("created_at DESC").page(params[:page]).per(20)
-#        unless @end_date < @start_date
-#          @all_transfers = transfers
-#          @transfers = transfers.order("created_at DESC").page(params[:page]).per(20)
-#        else
-#          flash[:error] = "Date is too early."
-#          redirect_back(fallback_location: root_path) 
-#        end
       }
-      format.csv { 
-        @transfers = transfers
-        send_data @transfers.order("created_at DESC").to_csv, filename: "transfers-#{@start_date}-#{@end_date}.csv" 
-        }
     end
     
   end
@@ -114,6 +103,18 @@ class BalanceLogsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to balance_logs_url, notice: 'BalanceLog was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+  
+  # GET /balance_logs/1/transfers
+  # GET /balance_logs/1/transfers.csv
+  def transfers
+    @transfers = current_user.company.transfers.where.not(ez_cash_tran_id: [nil, '']).where(ez_cash_tran_id: @balance_log.StartTranID..@balance_log.EndTranID)
+    respond_to do |format|
+      format.html {}
+      format.csv { 
+        send_data @transfers.order("created_at DESC").to_csv, filename: "transfers-#{@balance_log.StartTranID}-#{@balance_log.EndTranID}.csv" 
+        }
     end
   end
 

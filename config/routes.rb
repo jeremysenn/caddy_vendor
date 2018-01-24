@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   
-  resources :balance_logs
+  resources :balance_logs do
+    member do
+      get :transfers
+      get :ach_report
+    end
+  end
   resources :accounts
   resources :sms_messages
   require 'sidekiq/web'
