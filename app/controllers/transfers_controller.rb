@@ -23,7 +23,7 @@ class TransfersController < ApplicationController
     end
     @transfers_total_amount = 0
     transfers.each do |transfer|
-      @transfers_total_amount = @transfers_total_amount + transfer.amount
+      @transfers_total_amount = @transfers_total_amount + transfer.amount_billed
     end
     respond_to do |format|
       format.html {
