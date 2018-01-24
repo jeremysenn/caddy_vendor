@@ -84,5 +84,9 @@
 
     .tab-pane{:id => "csv"}
       %br
-      .card.card-block
-        = @balance_log.CSVReport
+              
+      %table.table.table-striped
+        - CSV.parse(@balance_log.CSVReport).each do |row|
+          %tr
+            - row.each do |element|
+              %td= element
