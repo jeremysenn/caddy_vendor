@@ -38,17 +38,12 @@
   .tab-content
     .tab-pane.active{:id => "transfers"}
       %br
-      -# unless @transfers.blank?
-      %p
-        .pull-right
-          %a{href: transfers_balance_log_path(format: "csv"), class: 'btn btn-primary'}
-            %i.fa.fa-download
-            Download
-        %br
-        %br
-      %h4.text-primary
-        .pull-right= number_to_currency(@transfers_total_amount)
       - unless @transfers.blank?
+        %a{href: transfers_balance_log_path(format: "csv"), class: 'btn btn-primary'}
+          %i.fa.fa-download
+          Download
+        %h4.text-primary
+          .pull-right= number_to_currency(@transfers_total_amount)
         .table-responsive
           %table.table.table-striped
             %thead
@@ -84,9 +79,14 @@
 
     .tab-pane{:id => "csv"}
       %br
-              
-      %table.table.table-striped
-        - CSV.parse(@balance_log.CSVReport).each do |row|
-          %tr
-            - row.each do |element|
-              %td= element
+      - unless @balance_log.CSVReport.blank?
+        %p
+          %a{href: ach_report_balance_log_path(format: "csv"), class: 'btn btn-primary'}
+            %i.fa.fa-download
+            Download  
+      .table-responsive
+        %table.table.table-striped
+          - CSV.parse(@balance_log.CSVReport).each do |row|
+            %tr
+              - row.each do |element|
+                %td= element

@@ -1,6 +1,6 @@
 class BalanceLogsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_balance_log, only: [:show, :edit, :update, :destroy, :transfers]
+  before_action :set_balance_log, only: [:show, :edit, :update, :destroy, :transfers, :ach_report]
   load_and_authorize_resource
 
   # GET /balance_logs
@@ -116,6 +116,17 @@ class BalanceLogsController < ApplicationController
       format.html {}
       format.csv { 
         send_data @transfers.order("created_at DESC").to_csv, filename: "transfers-#{@balance_log.StartTranID}-#{@balance_log.EndTranID}.csv" 
+        }
+    end
+  end
+  
+  # GET /balance_logs/1/ach_report
+  # GET /balance_logs/1/ach_report.csv
+  def ach_report
+    respond_to do |format|
+      format.html {}
+      format.csv { 
+        send_data @balance_log.CSVReport, filename: "ACHReport-#{@balance_log.StartTranID}-#{@balance_log.EndTranID}.csv" 
         }
     end
   end
