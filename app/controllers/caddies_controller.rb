@@ -69,6 +69,8 @@ class CaddiesController < ApplicationController
     @withdrawal_transactions = @caddy.withdrawals.last(20).reverse
     @caddy_rank_desc = @caddy.caddy_rank_desc
     @balance = @caddy.balance
+    @minimum_balance = @caddy.minimum_balance
+    @available_balance = @caddy.available_balance
     @account = @caddy.account
     session[:course_id] = @caddy.course.id
   end

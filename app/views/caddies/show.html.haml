@@ -54,12 +54,15 @@
             Active:
             = "#{@caddy.active? ? 'Yes' : 'No'}"
           %p.lead
-            Available Balance:
-            = number_to_currency(@caddy.balance)
+            Balance:
+            = number_to_currency(@balance)
           %p.lead
             Minimum Balance:
-            = number_to_currency(@caddy.minimum_balance)
+            = number_to_currency(@minimum_balance)
             = link_to 'Change', edit_account_path(@account), class: 'btn btn-sm btn-secondary' if current_user.is_admin?
+          %p.lead
+            Available Balance:
+            = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(available_balance)}"
           -#
             %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
               %i.fa.fa-dollar
