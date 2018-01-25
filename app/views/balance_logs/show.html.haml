@@ -31,9 +31,14 @@
       %a.nav-link.active{:href => "#transfers", :data => {:toggle => "tab"}} 
         %i.fa.fa-dollar.fa-lg
         Transfers
-    %li.nav-item
-      %a.nav-link{:href => "#csv", :data => {:toggle => "tab"}} 
-        ACH Report
+    - unless @balance_log.CSVReport.blank?
+      %li.nav-item
+        %a.nav-link{:href => "#csv", :data => {:toggle => "tab"}} 
+          ACH Report
+    - unless @balance_log.CSVCreditReport.blank?
+      %li.nav-item
+        %a.nav-link{:href => "#credit_csv", :data => {:toggle => "tab"}} 
+          ACH Credit Report
 
   .tab-content
     .tab-pane.active{:id => "transfers"}
@@ -77,16 +82,30 @@
       - else
         %p.lead None
 
-    .tab-pane{:id => "csv"}
-      %br
-      - unless @balance_log.CSVReport.blank?
+    - unless @balance_log.CSVReport.blank?
+      .tab-pane{:id => "csv"}
+        %br
         %p
           %a{href: ach_report_balance_log_path(format: "csv"), class: 'btn btn-primary'}
             %i.fa.fa-download
             Download  
-      .table-responsive
-        %table.table.table-striped
-          - CSV.parse(@balance_log.CSVReport).each do |row|
-            %tr
-              - row.each do |element|
-                %td= element
+        .table-responsive
+          %table.table.table-striped
+            - CSV.parse(@balance_log.CSVReport).each do |row|
+              %tr
+                - row.each do |element|
+                  %td= element
+
+    - unless @balance_log.CSVCreditReport.blank?
+      .tab-pane{:id => "credit_csv"}
+        %br
+        %p
+          %a{href: ach_credit_report_balance_log_path(format: "csv"), class: 'btn btn-primary'}
+            %i.fa.fa-download
+            Download  
+        .table-responsive
+          %table.table.table-striped
+            - CSV.parse(@balance_log.CSVCreditReport).each do |row|
+              %tr
+                - row.each do |element|
+                  %td= element

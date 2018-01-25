@@ -21,7 +21,8 @@ class BalanceLogsController < ApplicationController
     transfers.each do |transfer|
       @transfers_total_amount = @transfers_total_amount + transfer.amount_billed
     end
-    @ach_report = CSV.parse(@balance_log.CSVReport)
+    @ach_report = CSV.parse(@balance_log.CSVReport) unless @balance_log.CSVReport.blank?
+    @ach_credit_report = CSV.parse(@balance_log.CSVCreditReport) unless @balance_log.CSVCreditReport.blank?
     respond_to do |format|
       format.html {
         @all_transfers = transfers
@@ -127,6 +128,17 @@ class BalanceLogsController < ApplicationController
       format.html {}
       format.csv { 
         send_data @balance_log.CSVReport, filename: "ACHReport-#{@balance_log.StartTranID}-#{@balance_log.EndTranID}.csv" 
+        }
+    end
+  end
+  
+  # GET /balance_logs/1/ach_credit_report
+  # GET /balance_logs/1/ach_credit_report.csv
+  def ach_credit_report
+    respond_to do |format|
+      format.html {}
+      format.csv { 
+        send_data @balance_log.CSVCreditReport, filename: "ACHCreditReport-#{@balance_log.StartTranID}-#{@balance_log.EndTranID}.csv" 
         }
     end
   end

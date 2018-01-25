@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     member do
       get :transfers
       get :ach_report
+      get :ach_credit_report
     end
   end
   resources :accounts
