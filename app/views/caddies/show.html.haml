@@ -62,7 +62,7 @@
             = link_to 'Change', edit_account_path(@account), class: 'btn btn-sm btn-secondary' if current_user.is_admin?
           %p.lead
             Available Balance:
-            = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(available_balance)}"
+            = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
           -#
             %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
               %i.fa.fa-dollar
