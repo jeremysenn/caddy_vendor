@@ -80,7 +80,10 @@
                   %td= transfer.caddy_name
                   %td= link_to transfer.reference_number, transaction_path(transfer.reference_number) unless transfer.reference_number.blank?
                   %td= transfer.note
-                  %td= link_to "Show", transfer, class: 'btn btn-secondary'
+                  %td
+                    - if transfer.reversed?
+                      .text-danger Reversed
+                    = link_to "Show", transfer, class: 'btn btn-secondary'
         -#
           .table-responsive
             %table.table.table-striped
