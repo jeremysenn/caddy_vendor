@@ -17,10 +17,9 @@
           = f.simple_fields_for :accounts do |account_form|
             = account_form.input :BankActNbr, label: 'Account Number', as: :string
             = account_form.input :RoutingNbr, label: 'Routing Number', as: :string
-        -#
         = f.simple_fields_for :accounts do |account_form|
-          = account_form.input :BankActNbr, label: 'Account Number', as: :string
-          = account_form.input :RoutingNbr, label: 'Routing Number', as: :string
+          = account_form.input :BankActNbr, label: 'Account Number', as: :string, :input_html => { :value => "#{account_form.object.BankActNbr.blank? ? '' : account_form.object.decrypted_bank_account_number}" }
+          = account_form.input :RoutingNbr, label: 'Routing Number', as: :string, :input_html => { :value => "#{account_form.object.RoutingNbr.blank? ? '' : account_form.object.decrypted_bank_routing_number}" }
           - if account_form.object.new_record?
             = account_form.input :CompanyNumber, :as => :hidden, :input_html => { :value => current_user.company_id }
             = account_form.input :Balance, :as => :hidden, :input_html => { :value => 0 }
@@ -30,11 +29,12 @@
         = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 13 : @customer.GroupID}" }
         = f.input :course_id, :as => :hidden, :input_html => { :value => @customer.course_id}
         = f.input :PhoneMobile, label: 'Phone'
-        -#
-          = f.simple_fields_for :accounts do |account_form|
-            - if account_form.object.new_record?
-              = account_form.input :Balance, :as => :integer, :input_html => { :value => 0 }
-              = account_form.input :ActTypeID, :as => :hidden, :input_html => { :value => 6 }
+        = f.simple_fields_for :accounts do |account_form|
+          - if account_form.object.new_record?
+            = account_form.input :CompanyNumber, :as => :hidden, :input_html => { :value => current_company.id }
+            = account_form.input :Balance, :as => :hidden, :input_html => { :value => 0 }
+            = account_form.input :MinBalance, :as => :hidden, :input_html => { :value => @default_minimum_balance_row.blank? ? 0 : @default_minimum_balance_row.DefaultMinBal }
+            = account_form.input :ActTypeID, :as => :hidden, :input_html => { :value => 6 }
         -#
           - unless current_user.not_admin? and not account_form.object.active?
             = account_form.input :Active, as: :boolean, inline_label: 'Account Active'

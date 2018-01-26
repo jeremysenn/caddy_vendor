@@ -16,6 +16,9 @@ class Account < ActiveRecord::Base
 #  validates :ActNbr_confirmation, presence: true
 #  validates :MinBalance, numericality: { :greater_than_or_equal_to => 0 }
 #  validates :MinBalance, numericality: true
+
+  before_save :encrypt_bank_account_number
+  before_save :encrypt_bank_routing_number
   
   #############################
   #     Instance Methods      #
@@ -127,6 +130,16 @@ class Account < ActiveRecord::Base
     Decrypt.decryption(decoded_acctnbr)
   end
   
+  def decrypted_bank_account_number
+    decoded_acctnbr = Base64.decode64(self.BankActNbr).unpack("H*").first
+    Decrypt.decryption(decoded_acctnbr)
+  end
+  
+  def decrypted_bank_routing_number
+    decoded_acctnbr = Base64.decode64(self.RoutingNbr).unpack("H*").first
+    Decrypt.decryption(decoded_acctnbr)
+  end
+  
   def standby_auth
     StandbyAuth.find_by_account_nbr(account_number_with_leading_zeros)
   end
@@ -207,6 +220,24 @@ class Account < ActiveRecord::Base
       encrypted_and_encoded = Base64.strict_encode64(encrypted) # Base 64 encode it; strict_encode64 doesn't add the \n character on the end
       self.ActNbr = encrypted_and_encoded
       self.save
+    end
+  end
+  
+  def encrypt_bank_account_number
+    unless self.BankActNbr.blank?
+      encrypted = Decrypt.encryption(self.BankActNbr) # Encrypt the bank account number
+      encrypted_and_encoded = Base64.strict_encode64(encrypted) # Base 64 encode it; strict_encode64 doesn't add the \n character on the end
+      self.BankActNbr = encrypted_and_encoded
+#      self.update_attribute(:BankActNbr, encrypted_and_encoded)
+    end
+  end
+  
+  def encrypt_bank_routing_number
+    unless self.RoutingNbr.blank?
+      encrypted = Decrypt.encryption(self.RoutingNbr) # Encrypt the bank routing number
+      encrypted_and_encoded = Base64.strict_encode64(encrypted) # Base 64 encode it; strict_encode64 doesn't add the \n character on the end
+      self.RoutingNbr = encrypted_and_encoded
+#      self.update_attribute(:RoutingNbr, encrypted_and_encoded)
     end
   end
   

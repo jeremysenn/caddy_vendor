@@ -50,10 +50,10 @@
       - if @customer.primary?
         %p.lead
           Bank Account Number:
-          = @customer.club_account(current_company.id).BankActNbr
+          = @customer.club_account(current_company.id).decrypted_bank_account_number
         %p.lead
           Bank Routing Number:
-          = @customer.club_account(current_company.id).RoutingNbr
+          = @customer.club_account(current_company.id).decrypted_bank_routing_number
       - if @customer.primary?
         %p.lead
           Balance:

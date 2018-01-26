@@ -538,9 +538,9 @@ class Customer < ActiveRecord::Base
     end
   end
   
-  def create_account
-    Account.create(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber, Balance: 0, MinBalance: -1000000, ActTypeID: 1018)
-  end
+#  def create_account
+#    Account.create(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber, Balance: 0, MinBalance: -1000000, ActTypeID: 1018)
+#  end
   
   #############################
   #     Class Methods      #

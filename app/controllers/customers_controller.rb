@@ -47,6 +47,10 @@ class CustomersController < ApplicationController
 #    @type = params[:type]
     @customer.type = params[:type]
     @customer.course_id = params[:course_id]
+    if @customer.type == "caddy"
+      # Get the default minimum balance for this company's caddies
+      @default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: current_company.id, AccountTypeID: 6).first
+    end
   end
 
   # GET /customers/1/edit
