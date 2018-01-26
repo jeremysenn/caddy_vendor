@@ -12,10 +12,10 @@ class Account < ActiveRecord::Base
   
   attr_accessor :last_4_of_pan
   
-  validates :ActNbr, confirmation: true
+#  validates :ActNbr, confirmation: true
 #  validates :ActNbr_confirmation, presence: true
 #  validates :MinBalance, numericality: { :greater_than_or_equal_to => 0 }
-  validates :MinBalance, numericality: true
+#  validates :MinBalance, numericality: true
   
   #############################
   #     Instance Methods      #

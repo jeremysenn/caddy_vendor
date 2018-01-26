@@ -30,7 +30,7 @@ class Customer < ActiveRecord::Base
 #  before_save :encrypt_all_security_question_answers, :prepare_password
   after_save :match_account_active_status, if: :member?
   after_commit :update_caddy_details, if: :new_caddy_being_added?, on: [:create, :update]
-  after_commit :create_account, if: :member?, on: [:create]
+#  after_commit :create_account, if: :member?, on: [:create]
       
   accepts_nested_attributes_for :accounts
   
@@ -58,9 +58,9 @@ class Customer < ActiveRecord::Base
   #     Instance Methods      #
   #############################
   
-  def accounts
-    Account.where(CustomerID: id)
-  end
+#  def accounts
+#    Account.where(CustomerID: id)
+#  end
   
   def club_account(company_id)
     account = accounts.find_by(CompanyNumber: company_id)

@@ -43,7 +43,7 @@ class CustomersController < ApplicationController
   # GET /customers/new
   def new
     @customer = Customer.new
-#    @customer.accounts.build
+    @customer.accounts.build
 #    @type = params[:type]
     @customer.type = params[:type]
     @customer.course_id = params[:course_id]
