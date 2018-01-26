@@ -15,7 +15,6 @@
               %label.btn.btn-secondary
                 = f.radio_button :role, "member", required: true
                 Member
-        = f.input :pin, label: "ATM Payment PIN", required: true
         = f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length)
         = f.input :password_confirmation, required: true
       .form-actions
