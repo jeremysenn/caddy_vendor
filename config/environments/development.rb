@@ -71,4 +71,11 @@ Rails.application.configure do
   
   routes.default_url_options = {:host => 'http://71.41.52.58:3000'}
   
+  Rails.application.config.middleware.use ExceptionNotification::Rack,
+  :email => {
+    :ignore_exceptions => ['ActionView::TemplateError'] + ExceptionNotifier.ignored_exceptions,
+    :sender_address => %{"CaddyVend Exception Notifier" <notifier@tranact.com>},
+    :exception_recipients => %w{jeremy@tranact.com shark@tranact.com}
+  }
+  
 end
