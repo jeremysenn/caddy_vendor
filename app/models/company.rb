@@ -16,7 +16,7 @@ class Company < ActiveRecord::Base
   has_many :events, through: :courses
 #  has_many :accounts, through: :customers
 #  has_many :accounts, through: :courses
-  has_many :accounts # This is all accounts that have this company ID
+  has_many :accounts, :foreign_key => "CompanyNumber" # This is all accounts that have this company ID
   has_many :caddy_ratings, through: :users
   has_many :transfers
   has_many :transactions, :foreign_key => "DevCompanyNbr"

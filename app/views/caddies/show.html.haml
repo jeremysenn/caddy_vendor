@@ -24,13 +24,23 @@
       %br
       .card
         .card-block
+          %p.lead
+            Available Balance:
+            = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
+          %p.lead
+            Balance:
+            = number_to_currency(@balance)
+          %p.lead
+            Minimum Balance:
+            = number_to_currency(@minimum_balance)
+            = link_to 'Change', edit_account_path(@account), class: 'btn btn-sm btn-secondary' if current_user.is_admin?
+          
           %p.lead 
             %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => @caddy.average_rating, "data-rateit-readonly" => "true" }
             %small
               = link_to "#{@caddy.caddy_ratings.size} ratings", caddy_ratings_path(caddy_id: @caddy.id)
               %br
               .text-muted= "#{number_with_precision(@caddy.average_rating, precision: 1)} out of 5 stars"
-
           %p.lead
             Course:
             = link_to @caddy.course.CourseName, @caddy.course
@@ -53,16 +63,7 @@
           %p.lead
             Active:
             = "#{@caddy.active? ? 'Yes' : 'No'}"
-          %p.lead
-            Balance:
-            = number_to_currency(@balance)
-          %p.lead
-            Minimum Balance:
-            = number_to_currency(@minimum_balance)
-            = link_to 'Change', edit_account_path(@account), class: 'btn btn-sm btn-secondary' if current_user.is_admin?
-          %p.lead
-            Available Balance:
-            = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
+          
           -#
             %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
               %i.fa.fa-dollar

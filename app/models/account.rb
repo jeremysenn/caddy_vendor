@@ -154,6 +154,19 @@ class Account < ActiveRecord::Base
     self.Balance
   end
   
+#  def available_balance
+#    # If the account minimum balance is nil, set to zero
+#    unless self.MinBalance.blank?
+#      account_minimum_balance = self.MinBalance
+#      account_balance = self.Balance - account_minimum_balance
+#    else
+#      account_balance = 0
+#    end
+#    # The account available balance is the balance minus the minimum balance
+#    
+#    return account_balance
+#  end
+  
   def entity
     Entity.find_by_EntityID(self.EntityID)
   end
@@ -214,6 +227,14 @@ class Account < ActiveRecord::Base
     "#{customer.NameF} #{customer.NameL}" unless customer.blank?
   end
   
+  def first_name
+    customer.NameF unless customer.blank?
+  end
+  
+  def last_name
+    customer.NameL unless customer.blank?
+  end
+  
   def encrypt_account_number
     unless self.ActNbr.blank?
       encrypted = Decrypt.encryption(self.ActNbr) # Encrypt the account_number
@@ -272,6 +293,8 @@ class Account < ActiveRecord::Base
     Caddy.where(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber).first
   end
   
+  
+  
   #############################
   #     Class Methods         #
   #############################
@@ -304,6 +327,19 @@ class Account < ActiveRecord::Base
   
   def self.active_payee_accounts
     Account.active_payment_accounts + Account.active_money_order_accounts
+  end
+  
+  def self.to_csv
+    require 'csv'
+    attributes = %w{first_name last_name balance}
+    
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |account|
+        csv << attributes.map{ |attr| account.send(attr) }
+      end
+    end
   end
   
 end

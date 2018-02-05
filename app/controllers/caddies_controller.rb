@@ -200,7 +200,31 @@ class CaddiesController < ApplicationController
   end
   
   def caddies_with_balance
-    @caddy_customers = current_company.customers.caddies.joins(:accounts).where("accounts.Balance != ?", 0).page(params[:page]).per(20)
+    # Get all of company's caddy accounts where balance is not zero
+    @accounts = current_company.accounts.joins(:customer).where("customer.GroupID = ?", 13).where("Balance != ?", 0)
+    @total_amount = 0
+    @accounts.each do |account|
+      @total_amount = @total_amount + account.Balance
+    end
+    
+#    caddy_customers = current_company.customers.caddies.joins(:accounts).where("accounts.Balance != ? AND accounts.CompanyNumber = ?", 0, current_company.id)
+#    
+#    @caddy_customers = caddy_customers.page(params[:page]).per(20)
+#    @total_amount = 0
+#    accounts = []
+#    caddy_customers.each do |caddy_customer|
+#      account = caddy_customer.accounts.find_by(CompanyNumber: current_company.id)
+#      unless account.blank?
+#        @total_amount = @total_amount + account.Balance
+#        accounts << account
+#      end
+#    end
+    respond_to do |format|
+      format.html {}
+      format.csv { 
+        send_data @accounts.to_csv, filename: "caddies-with-balance-#{Time.now}.csv" 
+      }
+    end
   end
 
   private
