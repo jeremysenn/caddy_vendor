@@ -202,6 +202,10 @@ class User < ApplicationRecord
     end
   end
   
+  def phone_verified?
+    verification_code.blank?
+  end
+  
   #############################
   #     Class Methods         #
   #############################

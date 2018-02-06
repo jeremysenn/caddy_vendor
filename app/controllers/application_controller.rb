@@ -73,13 +73,21 @@ class ApplicationController < ActionController::Base
   
   # when a user logs in
   def after_sign_in_path_for(resource_or_scope)
-    if current_user.is_member? 
-      session[:member_id] = current_user.member.id
-    elsif current_user.is_caddy? # Set the caddy's caddy ID and company/club ID
-      session[:caddy_id] = current_user.caddy.id unless current_user.caddy.blank?
-      session[:company_id] = current_user.company_id
+    if current_user.phone_verified?
+      if current_user.is_member? 
+        session[:member_id] = current_user.member.id
+        root_path
+      elsif current_user.is_caddy? # Set the caddy's caddy ID and company/club ID
+        session[:caddy_id] = current_user.caddy.id unless current_user.caddy.blank?
+        session[:company_id] = current_user.company_id
+        show_caddy_customer_path(current_user.caddy_customer)
+      else
+        root_path
+      end
+    else
+      root_path
     end
-    root_path
+    
   end
   
 end

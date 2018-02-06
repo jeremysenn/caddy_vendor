@@ -106,7 +106,11 @@ class UsersController < ApplicationController
           # Make sure that code matches up with User's verification code
           @user.update_attribute(:verification_code, nil)
           flash[:notice] = "Phone verified."
-          redirect_to root_path
+          unless @user.is_caddy?
+            redirect_to root_path
+          else
+            redirect_to show_caddy_customer_path(@user.caddy_customer)
+          end
         else
           flash[:error] = "Code is incorrect."
           redirect_to root_path
