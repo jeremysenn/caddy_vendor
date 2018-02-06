@@ -23,31 +23,11 @@
   .tab-content
     .tab-pane.active{:id => "info"}
       %br
-      - if browser.device.mobile?
-        %h4 Info
-      %p.lead
-        Cell phone:
-        = @customer.PhoneMobile
-      %p.lead
-        Email:
-        = @customer.Email
-      %p.lead
-        Courses:
-        %br
-        - @customer.caddies.where(ClubCompanyNbr: current_company.id).each do |caddy|
-          = caddy.course.name
-          %br
-      %p.lead
-        Balance:
-        = number_to_currency(@balance)
-      %p.lead
-        Minimum Balance:
-        = number_to_currency(@minimum_balance)
-      %p.lead
-        Available Balance:
-        = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
-      - if @available_balance > 1
-        %p
+      %p
+        %a{href: events_path, class: 'btn btn-warning'}
+          %i.fa.fa-flag
+          Rounds
+        - if @available_balance > 1
           %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#sms_payment_qr_code"}
             %i.fa.fa-qrcode
             ATM Payment
@@ -74,6 +54,28 @@
                           %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
                           %button.btn.btn-primary{id: 'send_sms_payment_qr_code_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Submit"}} 
                             Submit
+      %p.lead
+        Available Balance:
+        = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
+      %p.lead
+        Balance:
+        = number_to_currency(@balance)
+      %p.lead
+        Minimum Balance:
+        = number_to_currency(@minimum_balance)
+      %p.lead
+        Phone:
+        = @customer.PhoneMobile
+      %p.lead
+        Email:
+        = @customer.Email
+      %p.lead
+        Courses:
+        %br
+        - @customer.caddies.where(ClubCompanyNbr: current_company.id).each do |caddy|
+          = caddy.course.name
+          %br
+      
 
     .tab-pane{:id => "transfers"}
       %br
