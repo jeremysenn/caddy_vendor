@@ -13,7 +13,7 @@ class User < ApplicationRecord
   after_save :set_company_id, :unless => :company_id
   
   before_create do |user|
-    user.verification_code = rand(000000..999999).to_s.rjust(6, "0")
+    user.verification_code = rand(100000..999999).to_s
   end
   
   after_commit :send_verification_code, on: [:create]
