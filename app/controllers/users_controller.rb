@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :pin_verification]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :pin_verification, :verify_phone]
   load_and_authorize_resource
 #  around_action :set_time_zone, if: :current_user
 
@@ -95,6 +95,25 @@ class UsersController < ApplicationController
         }
     end
   end
+  
+  # GET /users/1/verify_phone
+  def verify_phone
+    respond_to do |format|
+      format.html { 
+        code = params[:verification_code].to_i
+        Rails.logger.debug "User code: #{@user.verification_code}"
+        if code == @user.verification_code
+          # Make sure that code matches up with User's verification code
+          @user.update_attribute(:verification_code, nil)
+          flash[:notice] = "Phone verified."
+          redirect_to root_path
+        else
+          flash[:error] = "Code is incorrect."
+          redirect_to root_path
+        end
+        }
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -104,7 +123,7 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:company_id, :email, :password, :time_zone, :admin, :active, :role, :pin)
+      params.require(:user).permit(:company_id, :email, :password, :time_zone, :admin, :active, :role, :pin, :phone)
     end
     
 end

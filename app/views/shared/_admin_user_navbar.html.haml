@@ -33,38 +33,48 @@
           %a.nav-link{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
             %i.fa.fa-calendar
             Calendar
-      %li.nav-item.dropdown
-        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'customers' and (params[:action] == 'index' or params[:action] == 'show' or params[:action] == 'edit')) ? "active" : ""}
+      %li.nav-item
+        %a.nav-link{:href => customers_path, :class => (params[:controller] == 'customers' and not params[:balances] == 'true') ? "active" : ""} 
           %i.fa.fa-user-circle-o
           Members
-          %b.caret
-        %div.dropdown-menu
-          %a.dropdown-item{:href => customers_path, :class => (params[:controller] == 'customers' and not params[:balances] == 'true') ? "active" : ""} 
-            %i.fa.fa-search
+      -#
+        %li.nav-item.dropdown
+          %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'customers' and (params[:action] == 'index' or params[:action] == 'show' or params[:action] == 'edit')) ? "active" : ""}
+            %i.fa.fa-user-circle-o
             Members
-          %a.dropdown-item{:href => customers_path(balances: true), :class => (params[:controller] == 'customers' and params[:balances] == 'true') ? "active" : ""} 
-            %i.fa.fa-dollar
-            Members with balance
-      %li.nav-item.dropdown
-        %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'caddies') ? "active" : ""}
+            %b.caret
+          %div.dropdown-menu
+            %a.dropdown-item{:href => customers_path, :class => (params[:controller] == 'customers' and not params[:balances] == 'true') ? "active" : ""} 
+              %i.fa.fa-search
+              Members
+            %a.dropdown-item{:href => customers_path(balances: true), :class => (params[:controller] == 'customers' and params[:balances] == 'true') ? "active" : ""} 
+              %i.fa.fa-dollar
+              Members with balance
+      %li.nav-item
+        %a.nav-link{:href => caddies_path, :class => (params[:controller] == 'caddies' and params[:action] == 'index' and not params[:balances] == 'true') ? "active" : ""} 
           %i.fa.fa-vcard-o
           Caddies
-          %b.caret
-        %div.dropdown-menu
-          %a.dropdown-item{:href => caddies_path, :class => (params[:controller] == 'caddies' and params[:action] == 'index' and not params[:balances] == 'true') ? "active" : ""} 
-            %i.fa.fa-search
+      -#
+        %li.nav-item.dropdown
+          %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#", :class => (params[:controller] == 'caddies') ? "active" : ""}
+            %i.fa.fa-vcard-o
             Caddies
-          %a{:href => caddies_with_balance_caddies_path, :class => (params[:controller] == 'caddies' and params[:action] == 'caddies_with_balance') ? "active dropdown-item" : "dropdown-item"} 
-            %i.fa.fa-dollar
-            Caddy with balance
-          -#
-            %a{:href => vendor_payables_path, :class => (params[:controller] == 'vendor_payables') ? "active dropdown-item" : "dropdown-item"} 
+            %b.caret
+          %div.dropdown-menu
+            %a.dropdown-item{:href => caddies_path, :class => (params[:controller] == 'caddies' and params[:action] == 'index' and not params[:balances] == 'true') ? "active" : ""} 
+              %i.fa.fa-search
+              Caddies
+            %a{:href => caddies_with_balance_caddies_path, :class => (params[:controller] == 'caddies' and params[:action] == 'caddies_with_balance') ? "active dropdown-item" : "dropdown-item"} 
               %i.fa.fa-dollar
               Caddy with balance
-          -#
-            %a.dropdown-item{:href => caddies_path(balances: true), :class => (params[:controller] == 'caddies' and params[:action] == 'index' and params[:balances] == 'true') ? "active" : ""} 
-              %i.fa.fa-dollar
-              Caddies with balance
+            -#
+              %a{:href => vendor_payables_path, :class => (params[:controller] == 'vendor_payables') ? "active dropdown-item" : "dropdown-item"} 
+                %i.fa.fa-dollar
+                Caddy with balance
+            -#
+              %a.dropdown-item{:href => caddies_path(balances: true), :class => (params[:controller] == 'caddies' and params[:action] == 'index' and params[:balances] == 'true') ? "active" : ""} 
+                %i.fa.fa-dollar
+                Caddies with balance
       %li.nav-item
         %a.nav-link{:href => courses_path, :class => (params[:controller] == 'courses') ? "active" : ""} 
           %i.fa.fa-tree
@@ -95,9 +105,15 @@
           %a{:href => transfers_path, :class => (params[:controller] == 'transfers') ? "active dropdown-item" : "dropdown-item"} 
             %i.fa.fa-search
             Transfers
-          %a.dropdown-item{:href => balance_logs_path, :class => (params[:controller] == 'balance_logs' and params[:action] == 'index') ? "active" : ""} 
+          %a{:href => caddies_with_balance_caddies_path, :class => (params[:controller] == 'caddies' and params[:action] == 'caddies_with_balance') ? "active dropdown-item" : "dropdown-item"} 
+            %i.fa.fa-dollar
+            Caddies with balance
+          %a{:href => customers_path(balances: true), :class => (params[:controller] == 'customers' and params[:balances] == 'true') ? "active dropdown-item" : "dropdown-item"} 
+            %i.fa.fa-dollar
+            Members with balance
+          %a.dropdown-item{:href => balance_logs_path, :class => (params[:controller] == 'balance_logs' and params[:action] == 'index') ? "active dropdown-item" : "dropdown-item"} 
             %i.fa.fa-refresh
-            Balancing
+            Billing
           -#
             %a.dropdown-item{:href => reports_path, :class => (params[:controller] == 'reports' and params[:action] == 'index') ? "active" : ""} 
               %i.fa.fa-refresh
@@ -105,10 +121,7 @@
           %a{:href => sms_messages_path, :class => (params[:controller] == 'sms_messages') ? "active dropdown-item" : "dropdown-item"} 
             %i.fa.fa-commenting
             Text Messages
-          -#
-            %a.dropdown-item{:href => customers_path(balances: true), :class => (params[:controller] == 'customers') ? "active" : ""} 
-              %i.fa.fa-user-circle-o
-              Members with Balance
+          
       %li.nav-item.dropdown
         %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
           %i.fa.fa-gear

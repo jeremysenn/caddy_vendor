@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :confirmable
+         :recoverable, :rememberable, :trackable, :validatable
        
   belongs_to :company
   has_many :caddy_ratings
@@ -11,6 +11,12 @@ class User < ApplicationRecord
   validates_presence_of :role, :message => 'Please select type of user.'
   
   after_save :set_company_id, :unless => :company_id
+  
+  before_create do |user|
+    user.verification_code = rand(000000..999999).to_s.rjust(6, "0")
+  end
+  
+  after_commit :send_verification_code, on: [:create]
   
   #############################
   #     Instance Methods      #
@@ -78,11 +84,23 @@ class User < ApplicationRecord
   end
   
   def caddy
-    Caddy.all.joins(:customer).where("customer.Email = ?", email).first
+    # Find caddy by customer phone number
+    caddy_record = Caddy.all.joins(:customer).where("customer.PhoneMobile = ?", phone).first
+    if caddy_record.blank?
+      # If can't find customer record by phone number, find by email
+      caddy_record = Caddy.all.joins(:customer).where("customer.Email = ?", email).first
+    end
+    return caddy_record
   end
   
   def caddies
-    Caddy.all.joins(:customer).where("customer.Email = ?", email)
+    # Find caddies by customer phone number
+    caddy_records = Caddy.all.joins(:customer).where("customer.PhoneMobile = ?", phone)
+    if caddy_records.blank?
+      # If can't find customer record by phone number, find by email
+      caddy_records = Caddy.all.joins(:customer).where("customer.Email = ?", email)
+    end
+    return caddy_records
   end
   
   def unique_caddy_clubs
@@ -100,15 +118,33 @@ class User < ApplicationRecord
   end
   
   def caddy_customer
-    Customer.caddies.find_by(Email: email)
+    # Find customer by phone number
+    customer_record = Customer.caddies.find_by(PhoneMobile: phone)
+    if customer_record.blank?
+      # If can't find customer record by phone number, find by email
+      customer_record = Customer.caddies.find_by(Email: email)
+    end
+    return customer_record
   end
   
   def caddy_customers
-    Customer.caddies.where(Email: email)
+    # Find customers by phone number
+    customer_records = Customer.caddies.where(PhoneMobile: phone)
+    if customer_records.blank?
+      # If can't find customers by phone number, find by email
+      customer_records = Customer.caddies.where(Email: email)
+    end
+    return customer_records
   end
   
   def member
-    Customer.members.find_by(Email: email)
+    # Find customer by phone number
+    customer_record = Customer.members.find_by(PhoneMobile: phone)
+    if customer_record.blank?
+      # If can't find customer record by phone number, find by email
+      customer_record = Customer.members.find_by(Email: email)
+    end
+    return customer_record
   end
   
   def customer
@@ -156,6 +192,13 @@ class User < ApplicationRecord
       end
     else
       return nil
+    end
+  end
+  
+  def send_verification_code
+    unless phone.blank?
+      client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+      client.call(:send_sms, message: { Phone: phone, Msg: "Your CaddyVend verification code is: #{verification_code}"})
     end
   end
   

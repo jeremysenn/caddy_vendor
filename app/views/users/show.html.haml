@@ -2,6 +2,9 @@
   %br
   .card.card-block
     %p.lead
+      Phone:
+      = @user.phone
+    %p.lead
       Email:
       = @user.email
     %p.lead
@@ -10,6 +13,9 @@
     %p.lead
       Active:
       = "#{@user.active? ? 'Yes' : 'No'}"
+    %p.lead
+      Phone Verified:
+      = "#{@user.verification_code.blank? ? 'Yes' : 'No'}"
     %a{href: users_admin_index_path, class: 'btn btn-secondary'}
       Users
     = link_to 'Edit', edit_users_admin_path(@user), class: 'btn btn-primary'

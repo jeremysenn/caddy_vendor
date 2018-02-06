@@ -4,6 +4,41 @@
       - flash.each do |name, msg|
         %p= content_tag(:div, msg, class: "alert alert-info")
     - if user_signed_in?
+      - unless current_user.verification_code.blank?
+        :javascript
+          $(document).ready(function(){
+            $("#phone_verification").modal({show: true, backdrop: 'static', keyboard: false});
+            $('#phone_verification').on('shown.bs.modal', function () {
+              $('#verification_code').trigger('focus')
+            })
+          });
+        #phone_verification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+          .modal-dialog.modal-sm{:role => "document"}
+            .modal-content
+              .modal-header
+                .modal-title
+                  .lead 
+                    %i.fa.fa-mobile.fa-lg
+                    Verify Phone
+              .modal-body
+                - flash.each do |name, msg|
+                  - if msg.is_a?(String)
+                    %p
+                      %div{:class => "alert alert-dismissible alert-#{name.to_s == 'notice' ? 'success' : 'danger'}"}
+                        %button.close{"aria-hidden" => "true", "data-dismiss" => "alert", :type => "button"} &times;
+                        = content_tag :div, msg, :id => "flash_#{name}"
+                = form_tag verify_phone_users_admin_path(current_user), id: 'verify_phone_form', method: 'post' do |f|
+                  .row
+                    .col-xs-12
+                      %p.lead
+                        A 6-digit code has been sent to phone number:
+                        = "XXX-XXX-#{current_user.phone.last(4)}"
+                      .form-group
+                        %label.col-form-label{:for => "verification_code"} Please enter the 6-digit code
+                        = text_field_tag :verification_code, nil, :placeholder => "6-digit Code", class: "form-control", autofocus: true
+                  .modal-footer
+                    %button.btn.btn-success{id: 'verify_phone_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Verify"}} 
+                      Verify
       - if current_user.is_admin?
         = render 'welcome/admin_start_page_options'
       - elsif current_user.is_caddy?

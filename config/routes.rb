@@ -64,6 +64,7 @@ Rails.application.routes.draw do
   resources :users_admin, :controller => 'users' do
     member do
       post 'pin_verification'
+      post 'verify_phone'
     end
   end
   

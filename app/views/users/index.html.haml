@@ -34,11 +34,14 @@
                 %th Email
                 %th Role
                 %th Active
-                %th Confirmed
+                -#
+                  %th Confirmed
                 %th
             %tbody
               - @admin_users.each do |user|
-                %tr{class: "#{!user.confirmed? ? 'table-danger' : !user.active? ? 'table-warning' : ''}"}
+                -#
+                  %tr{class: "#{!user.confirmed? ? 'table-danger' : !user.active? ? 'table-warning' : ''}"}
+                %tr
                   %td= user.email
                   %td
                     - if user.is_member? and not user.member.blank?
@@ -48,7 +51,8 @@
                     - else
                       = user.role
                   %td= "#{user.active? ? 'Yes' : 'No'}"
-                  %td= "#{user.confirmed? ? 'Yes' : 'No'}"
+                  -#
+                    %td= "#{user.confirmed? ? 'Yes' : 'No'}"
                   %td
                     = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary'
       .tab-pane{:id => "members"}
@@ -60,11 +64,14 @@
                 %th Email
                 %th Role
                 %th Active
-                %th Confirmed
+                -#
+                  %th Confirmed
                 %th
             %tbody
               - @member_users.each do |user|
-                %tr{class: "#{!user.confirmed? ? 'table-danger' : !user.active? ? 'table-warning' : ''}"}
+                -#
+                  %tr{class: "#{!user.confirmed? ? 'table-danger' : !user.active? ? 'table-warning' : ''}"}
+                %tr
                   %td= user.email
                   %td
                     - if user.is_member? and not user.member.blank?
@@ -74,7 +81,8 @@
                     - else
                       = user.role
                   %td= "#{user.active? ? 'Yes' : 'No'}"
-                  %td= "#{user.confirmed? ? 'Yes' : 'No'}"
+                  -#
+                    %td= "#{user.confirmed? ? 'Yes' : 'No'}"
                   %td
                     = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary'
       .tab-pane{:id => "caddies"}
@@ -86,11 +94,14 @@
                 %th Email
                 %th Role
                 %th Active
-                %th Confirmed
+                -#
+                  %th Confirmed
                 %th
             %tbody
               - @caddy_users.each do |user|
-                %tr{class: "#{!user.confirmed? ? 'table-danger' : !user.active? ? 'table-warning' : ''}"}
+                -#
+                  %tr{class: "#{!user.confirmed? ? 'table-danger' : !user.active? ? 'table-warning' : ''}"}
+                %tr
                   %td= user.email
                   %td
                     - if user.is_member? and not user.member.blank?
@@ -100,6 +111,7 @@
                     - else
                       = user.role
                   %td= "#{user.active? ? 'Yes' : 'No'}"
-                  %td= "#{user.confirmed? ? 'Yes' : 'No'}"
+                  -#
+                    %td= "#{user.confirmed? ? 'Yes' : 'No'}"
                   %td
                     = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary' 
