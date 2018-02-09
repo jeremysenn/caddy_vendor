@@ -198,7 +198,7 @@ class User < ApplicationRecord
   def send_verification_code
     unless phone.blank?
       client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
-      client.call(:send_sms, message: { Phone: phone, Msg: "Your CaddyVend verification code is: #{verification_code}"})
+      client.call(:send_sms, message: { Phone: phone, Msg: "#{verification_code} is your CaddyVend verification code."})
     end
   end
   

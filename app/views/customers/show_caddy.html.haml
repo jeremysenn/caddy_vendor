@@ -69,12 +69,13 @@
       %p.lead
         Email:
         = @customer.Email
-      %p.lead
-        Courses:
-        %br
-        - @customer.caddies.where(ClubCompanyNbr: current_company.id).each do |caddy|
-          = caddy.course.name
+      -#
+        %p.lead
+          Courses:
           %br
+          - @customer.caddies.where(ClubCompanyNbr: current_company.id).each do |caddy|
+            = caddy.course.name
+            %br
       
 
     .tab-pane{:id => "transfers"}

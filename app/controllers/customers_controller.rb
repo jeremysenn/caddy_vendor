@@ -46,10 +46,10 @@ class CustomersController < ApplicationController
     @customer.accounts.build
 #    @type = params[:type]
     @customer.type = params[:type]
-    @customer.course_id = params[:course_id]
+#    @customer.course_id = params[:course_id]
     if @customer.type == "caddy"
       # Get the default minimum balance for this company's caddies
-      @default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: current_company.id, AccountTypeID: 6).first
+      @default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: current_user.company.id, AccountTypeID: 6).first
     end
   end
 
@@ -60,19 +60,23 @@ class CustomersController < ApplicationController
   # POST /customers
   # POST /customers.json
   def create
-    # Check to see if customer already exists
-    @customer = Customer.find_by(Email: customer_params[:Email])
-    
+    # Check to see if existing customer already exists, first searching by phone, then by email.
+    @customer = Customer.find_by(PhoneMobile: customer_params[:PhoneMobile])
+    if @customer.blank? and not customer_params[:Email].blank?
+      @customer = Customer.find_by(Email: customer_params[:Email])
+    end
+#    @customer.type = "#{@customer.GroupID == 13 ? 'caddy' : 'member' }"
     if @customer.blank?
       # If customer does not yet exist, create a new one
       @customer = Customer.new(customer_params)
     else
-      # If customer does does already exist, pass the course_id virtual attribute for creating the corresponding caddy row
-      @customer.course_id = customer_params[:course_id]
+      # Pass company_id virtual attribute in case customer's company is different from current user
+      @customer.company_id = customer_params[:company_id]
     end
     
     respond_to do |format|
-      if @customer.save
+      if @customer.accounts.where(CompanyNumber: current_user.company_id).blank? and @customer.save
+        # No existing customer accounts for this company and successfully saved
         format.html { 
           unless customer_params[:ParentCustID].blank?
             redirect_back fallback_location: @customer, notice: 'Family member was successfully created.'
@@ -82,6 +86,8 @@ class CustomersController < ApplicationController
                 redirect_to @customer, notice: 'Member was successfully created.' 
               elsif @customer.caddy?
                 redirect_to @customer.caddies.last, notice: 'Caddy was successfully created.'
+#                redirect_to edit_caddy_path(@customer.caddies.last), notice: 'Caddy was successfully created.'
+#                redirect_to caddies_path, notice: 'Caddy was successfully created.'
               else
                 redirect_to root_path, notice: 'Customer was successfully created.'
               end
@@ -93,7 +99,9 @@ class CustomersController < ApplicationController
           }
         format.json { render :show, status: :created, location: @customer }
       else
-        format.html { render :new }
+        format.html { 
+          render :new 
+          }
         format.json { render json: @customer.errors, status: :unprocessable_entity }
       end
     end
@@ -177,7 +185,7 @@ class CustomersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def customer_params
       params.require(:customer).permit(:ParentCustID, :CompanyNumber, :Active, :GroupID, :NameF, :NameL, :NameS, :PhoneMobile, :Email, 
-        :LangID, :Registration_Source, :Registration_Source_ext, :course_id, :type,
+        :LangID, :Registration_Source, :Registration_Source_ext, :course_id, :type, :company_id,
         accounts_attributes:[:CompanyNumber, :Balance, :MinBalance, :Active, :CustomerID, :ActNbr, :ActTypeID, :BankActNbr, :RoutingNbr, :_destroy,:id])
     end
 end

@@ -11,17 +11,6 @@
           Rounds
           %b.caret
         %div.dropdown-menu
-          -#
-            - if current_user.courses.count <= 1
-              %a.dropdown-item{:href => new_event_path, :class => (current_page? new_event_path) ? "active" : ""} 
-                %i.fa.fa-plus-circle
-                New Round
-            - else
-              - current_user.courses.each do |course|
-                %a.dropdown-item{:href => new_event_path(course_id: course.id), :class => (current_page? new_event_path(course_id: course.id)) ? "active" : ""} 
-                  %i.fa.fa-plus-circle
-                  = "#{course.name} Round"
-            
           %a.dropdown-item{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
             %i.fa.fa-search
             Rounds
@@ -34,7 +23,7 @@
             %i.fa.fa-calendar
             Calendar
       %li.nav-item
-        %a.nav-link{:href => customers_path, :class => (params[:controller] == 'customers' and not params[:balances] == 'true') ? "active" : ""} 
+        %a.nav-link{:href => customers_path, :class => ((params[:controller] == 'customers' and params[:action] == 'index') and not params[:balances] == 'true') ? "active" : ""} 
           %i.fa.fa-user-circle-o
           Members
       -#
@@ -75,10 +64,11 @@
               %a.dropdown-item{:href => caddies_path(balances: true), :class => (params[:controller] == 'caddies' and params[:action] == 'index' and params[:balances] == 'true') ? "active" : ""} 
                 %i.fa.fa-dollar
                 Caddies with balance
-      %li.nav-item
-        %a.nav-link{:href => courses_path, :class => (params[:controller] == 'courses') ? "active" : ""} 
-          %i.fa.fa-tree
-          Courses
+      -#
+        %li.nav-item
+          %a.nav-link{:href => courses_path, :class => (params[:controller] == 'courses') ? "active" : ""} 
+            %i.fa.fa-tree
+            Courses
       %li.nav-item
         %a.nav-link{:href => caddy_rank_descs_path, :class => (params[:controller] == 'caddy_rank_descs') ? "active" : ""} 
           %i.fa.fa-certificate

@@ -5,7 +5,7 @@ class Caddy < ApplicationRecord
   establish_connection :ez_cash
   
   belongs_to :company, :foreign_key => "ClubCompanyNbr"
-  belongs_to :course
+#  belongs_to :course
   belongs_to :customer, :foreign_key => "CustomerID"
   belongs_to :caddy_rank_desc, :foreign_key => "RankingID"
   has_many :players
@@ -71,14 +71,18 @@ class Caddy < ApplicationRecord
   end
   
   def withdrawals
-    account.withdrawals
+    unless account.blank?
+      account.withdrawals 
+    else
+      return []
+    end
   end
   
   def balance
     unless account.blank? or account.Balance.blank?
       return account.Balance
     else
-      0
+      return 0
     end
   end
   
@@ -173,7 +177,7 @@ class Caddy < ApplicationRecord
   
   def send_sms_notification(message_body)
     unless cell_phone_number.blank?
-      SendCaddySmsWorker.perform_async(cell_phone_number, id, self.CustomerID, self.course.ClubCompanyNumber, message_body)
+      SendCaddySmsWorker.perform_async(cell_phone_number, id, self.CustomerID, self.ClubCompanyNbr, message_body)
     end
   end
   

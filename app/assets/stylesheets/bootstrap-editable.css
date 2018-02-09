@@ -82,7 +82,11 @@
    color: red;  
 }
 
-.help-block {
+/*.help-block {
+   color: firebrick;  
+}*/
+
+.has-error {
    color: firebrick;  
 }
 

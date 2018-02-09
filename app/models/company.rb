@@ -5,7 +5,7 @@ class Company < ActiveRecord::Base
   establish_connection :ez_cash
   
   has_many :users
-  has_many :courses, :foreign_key => "ClubCompanyNumber"
+#  has_many :courses, :foreign_key => "ClubCompanyNumber"
   has_many :members, -> { members }, :foreign_key => "CompanyNumber", :class_name => 'Customer' # Use 'members' scope in Customer
 #  has_many :caddies, :through => :courses
   has_many :caddies, :foreign_key => "ClubCompanyNbr"
@@ -13,7 +13,9 @@ class Company < ActiveRecord::Base
 #  has_many :transactions, :through => :customers
   has_many :caddy_pay_rates, :foreign_key => "ClubCompanyID"#, :through => :courses
   has_many :caddy_rank_descs, :foreign_key => "ClubCompanyID"#, :through => :courses
-  has_many :events, through: :courses
+  has_many :events, :foreign_key => :course_id
+  has_many :players, through: :events
+#  has_many :events, through: :courses
 #  has_many :accounts, through: :customers
 #  has_many :accounts, through: :courses
   has_many :accounts, :foreign_key => "CompanyNumber" # This is all accounts that have this company ID
@@ -119,6 +121,14 @@ class Company < ActiveRecord::Base
   
   def account_minimum_balance
     company_act_default_min_bal.DefaultMinBal
+  end
+  
+  def grouped_caddies_by_rank_for_select
+    caddy_rank_descs.map{|c| c.grouped_for_select}
+  end
+  
+  def player_notes
+    players.where.not(note: [nil, '']).collect { |p| [ p.note ] }.insert(0,['None']).uniq
   end
   
   #############################

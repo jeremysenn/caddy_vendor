@@ -293,7 +293,9 @@ class Account < ActiveRecord::Base
     Caddy.where(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber).first
   end
   
-  
+  def caddy?
+    customer.caddy?
+  end
   
   #############################
   #     Class Methods         #

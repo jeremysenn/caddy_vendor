@@ -8,19 +8,21 @@ class EventsController < ApplicationController
   def index
     @start_date = event_params[:start_date] ||= Date.today.to_s
     @end_date = event_params[:end_date] ||= Date.today.to_s
-    unless event_params[:course_id].blank?
-      session[:course_id] = event_params[:course_id]
-      @course = Course.where(ClubCourseID: event_params[:course_id]).first
-      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
-    else
-      unless current_user.is_caddy?
-        @course = current_course.blank? ? current_user.company.courses.first : current_course
-      else
-        @course = current_course.blank? ? current_caddy.course.first : current_course
-      end
-    end
+    
+#    unless event_params[:course_id].blank?
+#      session[:course_id] = event_params[:course_id]
+#      @course = Course.where(ClubCourseID: event_params[:course_id]).first
+#      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
+#    else
+#      unless current_user.is_caddy?
+#        @course = current_course.blank? ? current_user.company.courses.first : current_course
+#      else
+#        @course = current_course.blank? ? current_caddy.course.first : current_course
+#      end
+#    end
+    
     if current_caddy.blank?
-      events = current_course.events.where(start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC")
+      events = current_company.events.where(start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC")
     else
       events = current_caddy.events.where(course_id: @course.id, start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC").uniq
     end
@@ -57,7 +59,7 @@ class EventsController < ApplicationController
   def new
     @event = Event.new
     @event.players.build
-    session[:course_id] = params[:course_id] unless params[:course_id].blank?
+#    session[:course_id] = params[:course_id] unless params[:course_id].blank?
   end
 
   # GET /events/1/edit

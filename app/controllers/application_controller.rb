@@ -9,13 +9,13 @@ class ApplicationController < ActionController::Base
     redirect_to root_url
   end
   
-  def current_course=(course)
-    session[:course_id] = course.id
-  end
+#  def current_course=(course)
+#    session[:course_id] = course.id
+#  end
   
-  def current_course_id
-    session[:course_id]
-  end
+#  def current_course_id
+#    session[:course_id]
+#  end
   
   def current_caddy=(caddy)
     session[:caddy_id] = caddy.id
@@ -37,17 +37,21 @@ class ApplicationController < ActionController::Base
     session[:company_id] = company.id
   end
   
-  # If don't find a course from session, return the current_user company's first course.
-  def current_course
-    Course.find_by(ClubCourseID: session[:course_id]) || current_company.courses.first
+  def current_company_id
+    session[:company_id]
   end
+  
+  # If don't find a course from session, return the current_user company's first course.
+#  def current_course
+#    Course.find_by(ClubCourseID: session[:course_id]) || current_company.courses.first
+#  end
   
   # If current_user is_caddy and don't find a caddy ID from session, return the current_user caddy ID.
   def current_caddy
     if current_user.is_caddy?
 #      Caddy.find_by(id: session[:caddy_id]) || current_user.caddy
 #      Caddy.all.joins(:customer).where("customer.Email = ?", current_user.email).where(ClubCompanyNbr: current_company.id).first || current_user.caddy
-      current_user.caddies.find_by(course_id: current_course.id)
+      current_user.caddies.where(ClubCompanyNbr: current_company.id)
     end
   end
   

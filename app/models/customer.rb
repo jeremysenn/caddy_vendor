@@ -24,21 +24,26 @@ class Customer < ActiveRecord::Base
   # Virtual Attributes
   attr_accessor :password
   attr_accessor :guest
-  attr_accessor :course_id
+#  attr_accessor :course_id
+  attr_accessor :company_id # Used to create new caddy and account when customer's company is different from current user
   attr_accessor :type
   
 #  before_save :encrypt_all_security_question_answers, :prepare_password
   after_save :match_account_active_status, if: :member?
-  after_commit :update_caddy_details, if: :new_caddy_being_added?, on: [:create, :update]
+  after_commit :create_caddy_and_account, if: :new_caddy_being_added?, on: [:create, :update]
 #  after_commit :create_account, if: :member?, on: [:create]
       
   accepts_nested_attributes_for :accounts
   
 #  validates :NameF, :NameL, :user_name, :PhoneMobile, :Answer1, :Answer2, :Answer3, presence: true
   validates :NameF, :NameL, presence: true
-  validates :Email, :PhoneMobile, presence: true
+#  validates :Email, :PhoneMobile, presence: true
+  validates :PhoneMobile, presence: true
 #  validates_uniqueness_of :Email
 #  validates_uniqueness_of :PhoneMobile
+#  validates :Email, uniqueness: {allow_blank: true}
+#  validates :PhoneMobile, uniqueness: true
+  
   
 #  validates_uniqueness_of :user_name
   
@@ -513,29 +518,44 @@ class Customer < ActiveRecord::Base
   end
   
   def update_caddy_details
-    # Get default minimum balance for this company's caddy accounts
-    course = Course.where(ClubCourseID: self.course_id).first
-#    Rails.logger.debug "************course ID: #{course.id}"
+#    course = Course.where(ClubCourseID: self.course_id).first
     
     # Look for existing account with this customer's ID and company number
-    caddy_account = Account.where(CustomerID: self.CustomerID, CompanyNumber: course.ClubCompanyNumber).first
+#    caddy_account = Account.where(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber).first
     
-    # Create a new account if there isn't already one for this customer within this company
-    if caddy_account.blank?
-      default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: course.ClubCompanyNumber, AccountTypeID: 6).first
-      unless default_minimum_balance_row.blank?
-        minimum_balance = default_minimum_balance_row.DefaultMinBal
-      else
-        minimum_balance = 0
-      end
-      Account.create(CustomerID: self.CustomerID, CompanyNumber: course.ClubCompanyNumber, MinBalance: minimum_balance, ActTypeID: 6)
-    end
+    # Create a new account and caddy if there isn't already one for this customer within this company
+#    if caddy_account.blank?
+#      # Get default minimum balance for this company's caddy accounts
+#      default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: self.CompanyNumber, AccountTypeID: 6).first
+#      unless default_minimum_balance_row.blank?
+#        minimum_balance = default_minimum_balance_row.DefaultMinBal
+#      else
+#        minimum_balance = 0
+#      end
+#      Account.create(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber, MinBalance: minimum_balance, ActTypeID: 6)
+#      Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber, RankingID: company.caddy_rank_descs.first.id)
+#    end
+    
+    Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber, RankingID: company.caddy_rank_descs.first.id)
     
     # Create a new caddy for course if a course_id is also being passed and there isn't already a caddy with these attributes
-    caddy = Caddy.where(CustomerID: self.CustomerID, ClubCompanyNbr: course.ClubCompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id).first
-    if caddy.blank?
-      Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: course.ClubCompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id)
+#    caddy = Caddy.where(CustomerID: self.CustomerID, ClubCompanyNbr: course.ClubCompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id).first
+#    if caddy.blank?
+#      Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: course.ClubCompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id)
+#    end
+  end
+  
+  def create_caddy_and_account
+    # Use company_id virtual attribute in case customer's company is different from current user
+    default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: company_id, AccountTypeID: 6).first
+    unless default_minimum_balance_row.blank?
+      minimum_balance = default_minimum_balance_row.DefaultMinBal
+    else
+      minimum_balance = 0
     end
+    
+    Account.create(CustomerID: self.CustomerID, CompanyNumber: company_id, MinBalance: minimum_balance, ActTypeID: 6)
+    Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: company_id, RankingID: company.caddy_rank_descs.first.id)
   end
   
 #  def create_account
@@ -576,7 +596,8 @@ class Customer < ActiveRecord::Base
   end
   
   def new_caddy_being_added?
-    self.caddy? and not self.course_id.blank?
+#    self.caddy? and not self.course_id.blank?
+    self.caddy?
   end
 
 end

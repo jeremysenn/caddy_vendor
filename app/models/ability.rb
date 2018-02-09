@@ -55,20 +55,21 @@ class Ability
       
       # Customers
       ############
-      can :manage, Customer do |customer|
-        unless customer.company.blank? or customer.company.CompanyNumber == 0
-          customer.company == user.company
-        else
-          true
-        end
-      end
+#      can :manage, Customer do |customer|
+#        unless customer.company.blank? or customer.company.CompanyNumber == 0
+#          customer.company == user.company
+#        else
+#          true
+#        end
+#      end
+      can :manage, Customer
       can :create, :customers
       
       # Events
       ############
       can :manage, Event do |event|
-        unless event.course.blank?
-          event.course.company == user.company
+        unless event.company.blank?
+          event.company == user.company
         else
           true
         end
@@ -78,7 +79,7 @@ class Ability
       # Players
       ############
       can :manage, Player do |player|
-        player.event.course.company == user.company
+        player.event.company == user.company
       end
       can :create, :players
       
@@ -101,8 +102,8 @@ class Ability
       # CaddyPayRates
       ############
       can :manage, CaddyPayRate do |caddy_pay_rate|
-        unless caddy_pay_rate.course.blank?
-          caddy_pay_rate.course.company == user.company
+        unless caddy_pay_rate.company.blank?
+          caddy_pay_rate.company == user.company
         else
           true
         end
@@ -112,8 +113,8 @@ class Ability
       # CaddyRankDescs
       ############
       can :manage, CaddyRankDesc do |caddy_rank_desc|
-        unless caddy_rank_desc.course.blank?
-          caddy_rank_desc.course.company == user.company
+        unless caddy_rank_desc.company.blank?
+          caddy_rank_desc.company == user.company
         else
           true
         end
@@ -134,7 +135,7 @@ class Ability
       ############
       can :manage, CaddyRating do |caddy_rating|
         unless caddy_rating.caddy.blank?
-          caddy_rating.caddy.course.company == user.company 
+          caddy_rating.caddy.company == user.company 
         else
           true
         end
@@ -270,8 +271,8 @@ class Ability
       # Events
       ############
       can :manage, Event do |event|
-        unless event.course.blank?
-          event.course.company == user.company
+        unless event.company.blank?
+          event.company == user.company
         else
           true
         end
@@ -281,7 +282,7 @@ class Ability
       # Players
       ############
       can :manage, Player do |player|
-        player.event.course.company == user.company
+        player.event.company == user.company
       end
       can :create, :players
       
@@ -295,7 +296,7 @@ class Ability
       # Caddies
       ############
       can :manage, Caddy do |caddy|
-        caddy.course.company == user.company
+        caddy.company == user.company
       end
       can :index, :caddies
       

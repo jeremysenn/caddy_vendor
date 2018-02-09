@@ -34,17 +34,17 @@
             Minimum Balance:
             = number_to_currency(@minimum_balance)
             = link_to 'Change', edit_account_path(@account), class: 'btn btn-sm btn-secondary' if current_user.is_admin?
-          
-          %p.lead 
-            %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => @caddy.average_rating, "data-rateit-readonly" => "true" }
-            %small
-              = link_to "#{@caddy.caddy_ratings.size} ratings", caddy_ratings_path(caddy_id: @caddy.id)
-              %br
-              .text-muted= "#{number_with_precision(@caddy.average_rating, precision: 1)} out of 5 stars"
-          %p.lead
-            Course:
-            = link_to @caddy.course.CourseName, @caddy.course
-            =# @caddy.company.CompanyName
+          -#
+            %p.lead 
+              %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => @caddy.average_rating, "data-rateit-readonly" => "true" }
+              %small
+                = link_to "#{@caddy.caddy_ratings.size} ratings", caddy_ratings_path(caddy_id: @caddy.id)
+                %br
+                .text-muted= "#{number_with_precision(@caddy.average_rating, precision: 1)} out of 5 stars"
+          -#
+            %p.lead
+              Course:
+              = link_to @caddy.course.CourseName, @caddy.course
           %p.lead
             Phone:
             = @caddy.cell_phone_number
@@ -72,7 +72,7 @@
             %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_company"}
               %i.fa.fa-dollar
               Pay by company
-          - if current_caddy.blank? and current_user.is_admin?
+          - if current_user.is_admin?
             %a{href: edit_caddy_path(@caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
               %i.fa.fa-edit
               Edit
@@ -96,7 +96,7 @@
       #caddy_transfers.collapse.show.in{"aria-expanded" => "true"}
         .pull-right
           %p
-            - if current_caddy.blank? and current_user.is_admin?
+            - if current_user.is_admin?
               %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
                 %i.fa.fa-dollar
                 Pay by member
@@ -202,7 +202,7 @@
     .tab-pane{:id => "messages"}
       %br
       #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
-        - if current_caddy.blank? and current_user.is_admin?
+        - if current_user.is_admin?
           .pull-right
             %p
               %a{href: '#', class: 'btn btn-primary', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
@@ -224,7 +224,7 @@
                     %td= link_to "Show", text_message, class: 'btn btn-secondary'
         - else
           %p.lead None
-      - if current_caddy.blank? and current_user.is_admin?
+      - if current_user.is_admin?
         #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
           .modal-dialog.modal-sm{:role => "document"}
             .modal-content

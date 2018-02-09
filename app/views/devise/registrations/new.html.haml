@@ -7,7 +7,7 @@
       .form-inputs
         = f.input :active, :as => :hidden, :input_html => { :value => true}
         = f.input :phone, required: true, autofocus: true
-        = f.input :email, label: "Email or Username", required: true
+        = f.input :email, label: "Email", hint: "Does not need to be valid, but must look like an email address", required: true
         .row.form-group
           %div{:class => "col-sm-12"}
             .btn-group-horizontal{"data-toggle" => "buttons"}

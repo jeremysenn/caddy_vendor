@@ -10,37 +10,37 @@ class CaddiesController < ApplicationController
   # GET /caddies.json
   def index
     respond_to do |format|
-      unless params[:course_id].blank?
-        @course = Course.where(ClubCourseID: params[:course_id]).first
-        @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
-      else
-        @course = current_course.blank? ? current_user.company.courses.first : current_course
-      end
+#      unless params[:course_id].blank?
+#        @course = Course.where(ClubCourseID: params[:course_id]).first
+#        @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
+#      else
+#        @course = current_course.blank? ? current_user.company.courses.first : current_course
+#      end
       format.html {
         unless params[:q].blank?
           @query_string = "%#{params[:q]}%"
-          caddies = @course.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ? OR customer.PhoneMobile like ?", @query_string, @query_string, @query_string) #.order("customer.NameL")
+          caddies = current_user.company.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ? OR customer.PhoneMobile like ?", @query_string, @query_string, @query_string) #.order("customer.NameL")
         else
           unless params[:balances].blank?
             caddies = Kaminari.paginate_array(current_user.company.caddies_with_balance)
           else
-            caddies = @course.caddies.joins(:customer) #.order("customer.NameL")
+            caddies = current_user.company.caddies.joins(:customer) #.order("customer.NameL")
           end
         end
         unless params[:caddy_rank_desc_id].blank?
           if params[:balances].blank?
             caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).order("#{caddies_sort_column} #{caddies_sort_direction}")
-            @caddies = caddies.page(params[:page]).per(20)
+            @caddies = caddies.page(params[:page]).per(10)
           else
             caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).order("#{caddies_sort_column} #{caddies_sort_direction}")
-            @caddies = caddies.page(params[:page]).per(20)
+            @caddies = caddies.page(params[:page]).per(10)
           end
         else
           if params[:balances].blank?
             caddies = caddies.order("#{caddies_sort_column} #{caddies_sort_direction}")
-            @caddies = caddies.page(params[:page]).per(20)
+            @caddies = caddies.page(params[:page]).per(10)
           else
-            @caddies = caddies.page(params[:page]).per(20)
+            @caddies = caddies.page(params[:page]).per(10)
           end
         end
         @all_caddies = caddies
@@ -48,7 +48,7 @@ class CaddiesController < ApplicationController
       format.json {
         @query_string = "%#{params[:q]}%"
 #        caddies = current_course.caddies
-        caddies = @course.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string)
+        caddies = current_user.company.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string)
         @caddies = caddies.collect{ |caddy| {id: caddy.id, text: "#{caddy.full_name}"} }
         render json: {results: @caddies}
       }
@@ -59,9 +59,10 @@ class CaddiesController < ApplicationController
   # GET /caddies/1
   # GET /caddies/1.json
   def show
-#    @course = @caddy.course
-#    @transfers = @caddy.transfers
-    # Get caddy account transfers, filtered by company_id
+    if current_user.is_caddy? and not params[:company_id].blank?
+      # Set current_company session variable for caddy user
+      session[:company_id] = params[:company_id]
+    end
     @transfers = @caddy.account_transfers.where(company_id: current_company.id).order('created_at DESC') unless @caddy.account_transfers.blank?
     @text_messages = @caddy.sms_messages.reverse
     # Get caddy account withdrawal transactions, filtered by company_id
@@ -72,7 +73,7 @@ class CaddiesController < ApplicationController
     @minimum_balance = @caddy.minimum_balance
     @available_balance = @caddy.available_balance
     @account = @caddy.account
-    session[:course_id] = @caddy.course.id
+#    session[:course_id] = @caddy.course.id
   end
 
   # GET /caddies/new
@@ -83,7 +84,7 @@ class CaddiesController < ApplicationController
 
   # GET /caddies/1/edit
   def edit
-    @course = @caddy.course
+#    @course = @caddy.course
   end
 
   # POST /caddies

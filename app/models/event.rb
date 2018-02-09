@@ -1,5 +1,6 @@
 class Event < ApplicationRecord
-  belongs_to :course
+#  belongs_to :course
+  belongs_to :company, :foreign_key => :course_id
   
   has_many :players, :dependent => :destroy
   accepts_nested_attributes_for :players, allow_destroy: true #, limit: 5
