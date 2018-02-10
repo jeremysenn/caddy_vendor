@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
     if current_user.is_caddy?
 #      Caddy.find_by(id: session[:caddy_id]) || current_user.caddy
 #      Caddy.all.joins(:customer).where("customer.Email = ?", current_user.email).where(ClubCompanyNbr: current_company.id).first || current_user.caddy
-      current_user.caddies.where(ClubCompanyNbr: current_company.id)
+      current_user.caddies.where(ClubCompanyNbr: current_company.id).first
     end
   end
   

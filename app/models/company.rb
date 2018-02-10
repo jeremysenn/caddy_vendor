@@ -29,6 +29,18 @@ class Company < ActiveRecord::Base
   
   accepts_nested_attributes_for :company_act_default_min_bal
   
+  attr_accessor :transaction_fee
+  
+  ### Start Virtual Attributes ###
+  def transaction_fee # Getter
+    transaction_fee_cents.to_d / 100 if transaction_fee_cents
+  end
+  
+  def transaction_fee=(dollars) # Setter
+    self.transaction_fee_cents = dollars.to_d * 100 if dollars.present?
+  end
+  ### End Virtual Attributes ###
+  
   #############################
   #     Instance Methods      #
   #############################

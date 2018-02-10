@@ -3,6 +3,7 @@
   %h3
     = @company.CompanyName
     .pull-right= link_to 'Edit company', edit_company_path(@company), class: 'btn btn-primary'
+  %p.lead= "Transaction Fee: #{number_to_currency(@company.transaction_fee)}"
   %p.lead
     = "Balance: #{number_to_currency(@company.balance)}"
     %br
@@ -14,10 +15,11 @@
       %a.nav-link.active{:href => "#transfers", :data => {:toggle => "tab"}} 
         %i.fa.fa-dollar.fa-lg
         Transfers
-    %li.nav-item
-      %a.nav-link{:href => "#courses", :data => {:toggle => "tab"}} 
-        %i.fa.fa-tree
-        Courses
+    -#
+      %li.nav-item
+        %a.nav-link{:href => "#courses", :data => {:toggle => "tab"}} 
+          %i.fa.fa-tree
+          Courses
     
 
   .tab-content
@@ -31,7 +33,7 @@
                 %th Tran ID
                 -#
                   %th Date/Time
-                %th Course
+                -# %th Course
                 %th From
                 %th To
                 %th Fee
@@ -49,7 +51,7 @@
                       None
                   -#
                     %td= transfer.created_at.in_time_zone(transfer.course.time_zone).strftime("%-m/%-d/%y %l:%M %p")
-                  %td= transfer.course.CourseName unless transfer.course.blank?
+                  -# %td= transfer.course.CourseName unless transfer.course.blank?
                   %td= transfer.customer.full_name unless transfer.customer.blank?
                   %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
                   %td= number_to_currency(transfer.caddy_fee)
@@ -64,23 +66,23 @@
         %p.lead None
 
       = paginate @transfers
-  
-    .tab-pane{:id => "courses"}
-      %br
-      .card.card-block
-        .table-responsive
-          %table.table.table-striped
-            %thead
-              %tr
-                %th Name
-                %th
-            %tbody
-              - @company.courses.each do |course|
+    -#
+      .tab-pane{:id => "courses"}
+        %br
+        .card.card-block
+          .table-responsive
+            %table.table.table-striped
+              %thead
                 %tr
-                  %td= course.name
-                  %td
-                    = link_to "Show", course, class: 'btn btn-secondary'
-                    = link_to 'Edit', edit_course_path(course), class: 'btn btn-primary'
+                  %th Name
+                  %th
+              %tbody
+                - @company.courses.each do |course|
+                  %tr
+                    %td= course.name
+                    %td
+                      = link_to "Show", course, class: 'btn btn-secondary'
+                      = link_to 'Edit', edit_course_path(course), class: 'btn btn-primary'
     
   
   

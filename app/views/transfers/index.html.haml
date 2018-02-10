@@ -56,13 +56,13 @@
           %tbody
             - @transfers.each do |transfer|
               %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                %td= "#{transfer.date_of_play.blank? ? 'N/A' : transfer.date_of_play.in_time_zone(transfer.course.time_zone).strftime('%-m/%-d/%y')}"
+                %td= "#{transfer.date_of_play.blank? ? 'N/A' : transfer.date_of_play.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y')}"
                 %td= "#{transfer.member_number.blank? ? 'N/A' : transfer.member_number}"
                 %td= "#{transfer.member_extension.blank? ? 'N/A' : transfer.member_extension}"
                 %td= number_to_currency(transfer.amount_billed)
                 %td= "#{transfer.player_name.blank? ? 'N/A' : transfer.player_name}"
                 %th= "#{transfer.member_name.blank? ? 'N/A' : transfer.member_name}"
-                %td= transfer.created_at.in_time_zone(transfer.course.time_zone).strftime("%-m/%-d/%y")
+                %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y")
                 %td= number_to_currency(transfer.amount_paid_to_caddy)
                 %td= transfer.caddy_name
                 %td= link_to transfer.reference_number, transaction_path(transfer.reference_number) unless transfer.reference_number.blank?
@@ -106,7 +106,7 @@
                       = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
                     - else
                       None
-                  %td= transfer.created_at.in_time_zone(transfer.course.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                  %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
                   %td
                     - unless transfer.customer.blank?
                       = transfer.customer.full_name 

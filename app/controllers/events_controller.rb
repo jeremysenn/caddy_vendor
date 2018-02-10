@@ -24,7 +24,7 @@ class EventsController < ApplicationController
     if current_caddy.blank?
       events = current_company.events.where(start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC")
     else
-      events = current_caddy.events.where(course_id: @course.id, start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC").uniq
+      events = current_caddy.events.where(start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC").uniq
     end
 #    @events = current_course.events
 #    session[:course_id] = params[:course_id] unless params[:course_id].blank?

@@ -9,6 +9,7 @@
 
         .form-inputs
           = f.input :company_id, as: :hidden, :input_html => {:value => current_user.company.id}
+          = f.input :phone
           = f.input :email#, disabled: true
           = f.input :active, inline_label: 'Active'
           - if not @user.verification_code.blank?

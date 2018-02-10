@@ -17,6 +17,7 @@ class User < ApplicationRecord
   end
   
   after_commit :send_verification_code, on: [:create]
+  after_commit :save_phone_as_pin, on: [:create]
   
   #############################
   #     Instance Methods      #
@@ -204,6 +205,14 @@ class User < ApplicationRecord
   
   def phone_verified?
     verification_code.blank?
+  end
+  
+  def save_phone_as_pin
+    if is_caddy? and not caddy.blank?
+      self.update_attribute(:pin, phone.to_i)
+    elsif is_member? and not member.blank?
+#      self.update_attribute(:pin, phone.to_i)
+    end
   end
   
   #############################

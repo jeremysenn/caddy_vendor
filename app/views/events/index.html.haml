@@ -21,7 +21,7 @@
       .pull-right
         %a{:href => new_event_path, class: 'btn btn-warning'}
           %i.fa.fa-plus-circle
-            Round
+          Round
         -#
           .btn-group
             %button#dropdownMenuButton.btn.btn-warning.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :type => "button"}
@@ -34,11 +34,10 @@
               - else
                 - current_user.courses_by_club(current_company.id).each do |course|
                   %a.dropdown-item{:href => new_event_path(course_id: course.id)}= course.name
-
-        %a{href: calendar_events_path, class: 'btn btn-secondary'}
-          %i.fa.fa-calendar
-          Calendar
-              
+        - if current_user.is_admin?
+          %a{href: calendar_events_path, class: 'btn btn-secondary'}
+            %i.fa.fa-calendar
+            Calendar
 
   %p.lead.text-muted= "#{pluralize(number_with_delimiter(@all_events.count), 'round')} found"
 

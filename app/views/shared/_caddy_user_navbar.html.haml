@@ -9,10 +9,14 @@
       - if current_user.active?
         %li.nav-item
           %a.nav-link{:href => events_path, :class => (params[:controller] == 'events') ? "active" : ""} 
+            %i.fa.fa-flag
             Rounds
         %li.nav-item
-          %a.nav-link{:href => show_caddy_customer_path(current_user.caddy_customer), :class => (params[:controller] == 'customers' and params[:action] == 'show_caddy') ? "active" : ""} 
-            Details
+          -#
+            %a.nav-link{:href => show_caddy_customer_path(current_user.caddy_customer), :class => (params[:controller] == 'customers' and params[:action] == 'show_caddy') ? "active" : ""} 
+          %a.nav-link{:href => caddy_path(current_caddy), :class => (params[:controller] == 'caddies') ? "active" : ""} 
+            %i.fa.fa-vcard-o
+            Account
         -#
           %li.nav-item.dropdown
             %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
