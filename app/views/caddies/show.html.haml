@@ -23,9 +23,10 @@
     .tab-pane.active{:id => "info"}
       %br
       %p
-        %a{href: events_path, class: 'btn btn-warning'}
-          %i.fa.fa-flag
-          Rounds
+        - if current_user.is_caddy?
+          %a{href: events_path, class: 'btn btn-warning'}
+            %i.fa.fa-flag
+            Rounds
         - if @available_balance > 1
           %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#sms_payment_qr_code"}
             %i.fa.fa-qrcode
@@ -83,7 +84,10 @@
       %p.lead
         Ranking:
         - unless @caddy_rank_desc.blank?
-          = link_to @caddy_rank_desc.description, @caddy_rank_desc
+          - if current_user.is_admin?
+            = link_to @caddy_rank_desc.description, @caddy_rank_desc
+          - else
+            = @caddy_rank_desc.description
         - else
           None
       -#
