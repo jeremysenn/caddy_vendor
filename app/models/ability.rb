@@ -180,7 +180,7 @@ class Ability
       end
       can :create, BalanceLog
       
-    elsif user.is_caddy? and user.active?
+    elsif user.is_caddy? and user.active? and user.phone_verified?
       ### Active Caddy User ###
       
       # Events

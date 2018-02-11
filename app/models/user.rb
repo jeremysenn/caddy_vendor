@@ -209,7 +209,7 @@ class User < ApplicationRecord
   
   def save_phone_as_pin
     if is_caddy? and not caddy.blank?
-      self.update_attribute(:pin, phone.to_i)
+      self.update_attribute(:pin, phone.last(4).to_i)
     elsif is_member? and not member.blank?
 #      self.update_attribute(:pin, phone.to_i)
     end
