@@ -265,7 +265,7 @@ class Ability
         transaction.company == user.company 
       end
       
-    elsif not user.is_admin? and user.active?
+    elsif not user.is_admin? and user.active? and user.phone_verified?
       ###  Non-admin, active user ### 
       # 
       # Events

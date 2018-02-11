@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_user, only: [:show, :edit, :update, :destroy, :pin_verification, :verify_phone]
-  load_and_authorize_resource
+  load_and_authorize_resource except: [:verify_phone]
 #  around_action :set_time_zone, if: :current_user
 
 
@@ -96,7 +96,7 @@ class UsersController < ApplicationController
     end
   end
   
-  # GET /users/1/verify_phone
+  # GET /users_admin/1/verify_phone
   def verify_phone
     respond_to do |format|
       format.html { 
@@ -106,11 +106,12 @@ class UsersController < ApplicationController
           # Make sure that code matches up with User's verification code
           @user.update_attribute(:verification_code, nil)
           flash[:notice] = "Phone verified."
-          unless @user.is_caddy?
-            redirect_to root_path
-          else
-            redirect_to show_caddy_customer_path(@user.caddy_customer)
-          end
+          redirect_to root_path
+#          unless @user.is_caddy?
+#            redirect_to root_path
+#          else
+#            redirect_to show_caddy_customer_path(@user.caddy_customer)
+#          end
         else
           flash[:error] = "Code is incorrect."
           redirect_to root_path
