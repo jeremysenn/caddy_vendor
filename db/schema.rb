@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180206160108) do
+ActiveRecord::Schema.define(version: 20180212165704) do
 
   create_table "caddy_ratings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "caddy_id"
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 20180206160108) do
     t.integer  "pin"
     t.string   "phone"
     t.integer  "verification_code"
+    t.integer  "customer_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree

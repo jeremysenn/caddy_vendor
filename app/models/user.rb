@@ -1,23 +1,26 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+  # :confirmable, :lockable, :timeoutable, :validatable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable
        
   belongs_to :company
   has_many :caddy_ratings
+  belongs_to :customer
   
   ROLES = %w[admin member caddy].freeze
-  validates_presence_of :role, :message => 'Please select type of user.'
+#  validates_presence_of :role, :message => 'Please select type of user.'
   
   after_save :set_company_id, :unless => :company_id
   
   before_create do |user|
     user.verification_code = rand(100000..999999).to_s
   end
+  before_create :set_role_and_customer_id
   
   after_commit :send_verification_code, on: [:create]
   after_commit :save_phone_as_pin, on: [:create]
+  
   
   #############################
   #     Instance Methods      #
@@ -212,6 +215,20 @@ class User < ApplicationRecord
       self.update_attribute(:pin, phone.last(4).to_i)
     elsif is_member? and not member.blank?
 #      self.update_attribute(:pin, phone.to_i)
+    end
+  end
+  
+  def set_role_and_customer_id
+    customer_record = Customer.find_by(PhoneMobile: phone)
+    unless customer_record.blank?
+      self.customer_id= customer_record.id
+      if customer_record.member?
+        self.role= "member"
+      elsif customer_record.caddy?
+        self.role= "caddy"
+      else
+        self.role= "admin"
+      end
     end
   end
   

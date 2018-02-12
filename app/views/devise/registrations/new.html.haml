@@ -7,16 +7,17 @@
       .form-inputs
         = f.input :active, :as => :hidden, :input_html => { :value => true}
         = f.input :phone, required: true, autofocus: true
-        = f.input :email, label: "Email", hint: "Does not need to be valid, but must look like an email address", required: true
-        .row.form-group
-          %div{:class => "col-sm-12"}
-            .btn-group-horizontal{"data-toggle" => "buttons"}
-              %label.btn.btn-secondary
-                = f.radio_button :role, "caddy", required: true
-                Caddy
-              %label.btn.btn-secondary
-                = f.radio_button :role, "member", required: true
-                Member
+        = f.input :email, as: :string, label: "Email or Username", required: true
+        -#
+          .row.form-group
+            %div{:class => "col-sm-12"}
+              .btn-group-horizontal{"data-toggle" => "buttons"}
+                %label.btn.btn-secondary
+                  = f.radio_button :role, "caddy", required: true
+                  Caddy
+                %label.btn.btn-secondary
+                  = f.radio_button :role, "member", required: true
+                  Member
         = f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length)
         = f.input :password_confirmation, required: true
       .form-actions

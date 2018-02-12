@@ -56,11 +56,11 @@ class ApplicationController < ActionController::Base
   end
   
   # If current_user is_member and don't find a member ID from session, return the current_user member ID.
-  def current_member
-    if current_user.is_member?
-      Customer.find_by(CustomerID: session[:member_id]) || current_user.member
-    end
-  end
+#  def current_member
+#    if current_user.is_member?
+#      Customer.find_by(CustomerID: session[:member_id]) || current_user.member
+#    end
+#  end
   
   # If don't find a company from session, return the current_user's company ID.
   def current_company
