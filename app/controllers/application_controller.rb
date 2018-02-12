@@ -84,7 +84,8 @@ class ApplicationController < ActionController::Base
       elsif current_user.is_caddy? # Set the caddy's caddy ID and company/club ID
         session[:caddy_id] = current_user.caddy.id unless current_user.caddy.blank?
         session[:company_id] = current_user.company_id
-        show_caddy_customer_path(current_user.caddy_customer)
+#        show_caddy_customer_path(current_user.caddy_customer)
+        caddy_path(current_user.caddy)
       else
         root_path
       end
