@@ -8,6 +8,10 @@
         %i.fa.fa-vcard-o.fa-lg
         = "Info" unless browser.device.mobile?
     %li.nav-item
+      %a.nav-link{:href => "#rounds", :data => {:toggle => "tab"}} 
+        %i.fa.fa-flag.fa-lg
+        = "Rounds" unless browser.device.mobile?
+    %li.nav-item
       %a.nav-link{:href => "#transfers", :data => {:toggle => "tab"}} 
         %i.fa.fa-dollar.fa-lg
         = "Transfers" unless browser.device.mobile?
@@ -23,10 +27,6 @@
     .tab-pane.active{:id => "info"}
       %br
       %p
-        - if current_user.is_caddy?
-          %a{href: events_path, class: 'btn btn-warning'}
-            %i.fa.fa-flag
-            Rounds
         - if @available_balance > 1
           %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#sms_payment_qr_code"}
             %i.fa.fa-qrcode
@@ -134,38 +134,60 @@
               %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
                 %i.fa.fa-dollar
                 Pay by member
-        = render 'pay_caddy_by_member'
+              = render 'pay_caddy_by_member'
         - unless @transfers.blank?
           .table-responsive
-            %table.table.table-striped
+            %table.table.table-striped.table-sm
               %thead
                 %tr
-                  %th Tran ID
-                  %th Date/Time
+                  %th Time
                   %th From
-                  %th Fee
-                  %th Tip
-                  %th Note
                   %th Total
                   %th
               %tbody
                 - @transfers.each do |transfer|
                   %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                    %td
-                      - unless transfer.ez_cash_tran_id.blank?
-                        = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
-                      - else
-                        None
                     %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
                     %td= transfer.customer.full_name unless transfer.customer.blank?
-                    %td= number_to_currency(transfer.caddy_fee)
-                    %td= number_to_currency(transfer.caddy_tip)
-                    %td= transfer.note
                     %td= number_to_currency(transfer.amount)
                     %td
                       - if transfer.reversed?
                         .text-danger Reversed
                       = link_to "Show", transfer, class: 'btn btn-secondary'
+        - else
+          %p.lead None
+
+    .tab-pane{:id => "rounds"}
+      %br
+      #caddy_rounds.collapse.show.in{"aria-expanded" => "true"}
+        .pull-right
+          %p
+            %a{:href => new_event_path, class: 'btn btn-warning'}
+              %i.fa.fa-plus-circle
+              Round
+        - unless @events.blank?
+          .table-responsive
+            %table.table.table-striped
+              %thead
+                %tr
+                  %th Time
+                  %th Player
+                  -# %th Status
+                  %th
+              %tbody
+                - @events.each do |event|
+                  %tr
+                    %td= event.start.strftime('%-m/%-d/%y %l:%M %p')
+                    -# %td= event.player_names_with_caddy_names
+                    %td= event.players.find_by(caddy_id: @caddy.id).member_name
+                    -# %td= "#{event.not_paid? ? 'Open' : 'Paid'}"
+                    %td.pull-left
+                      %a{:href => edit_event_path(event), class: 'btn btn-primary'} 
+                        %i.fa.fa-edit
+                        = "Edit" unless browser.device.mobile?
+                      %a{:href => event_path(event), class: 'btn btn-success'} 
+                        %i.fa.fa-dollar
+                        = "Payment" unless browser.device.mobile?
         - else
           %p.lead None
 

@@ -32,13 +32,13 @@
           %tbody
             - @transfers.each do |transfer|
               %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                %td= "#{transfer.date_of_play.blank? ? 'N/A' : transfer.date_of_play.in_time_zone(transfer.course.time_zone).strftime('%-m/%-d/%y')}"
+                %td= "#{transfer.date_of_play.blank? ? 'N/A' : transfer.date_of_play.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y')}"
                 %td= "#{transfer.member_number.blank? ? 'N/A' : transfer.member_number}"
                 %td= "#{transfer.member_extension.blank? ? 'N/A' : transfer.member_extension}"
                 %td= number_to_currency(transfer.amount_billed)
                 %td= "#{transfer.player_name.blank? ? 'N/A' : transfer.player_name}"
                 %th= "#{transfer.member_name.blank? ? 'N/A' : transfer.member_name}"
-                %td= transfer.created_at.in_time_zone(transfer.course.time_zone).strftime("%-m/%-d/%y")
+                %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y")
                 %td= number_to_currency(transfer.amount_paid_to_caddy)
                 %td= transfer.caddy_name
                 %td= link_to transfer.reference_number, transaction_path(transfer.reference_number) unless transfer.reference_number.blank?
@@ -47,8 +47,8 @@
       .form-inputs
         = f.input :CompanyNumber, :as => :hidden, :input_html => { :value => current_user.company_id}
         = f.input :EventID, :as => :hidden, :input_html => { :value => 4}
-        = f.input :StartDateTime, :as => :hidden, :input_html => { :value => @all_transfers.first.created_at.in_time_zone(@all_transfers.first.course.time_zone)}
-        = f.input :EndDateTime, :as => :hidden, :input_html => { :value => @all_transfers.last.created_at.in_time_zone(@all_transfers.last.course.time_zone)}
+        = f.input :StartDateTime, :as => :hidden, :input_html => { :value => @all_transfers.first.created_at.in_time_zone(current_user.time_zone)}
+        = f.input :EndDateTime, :as => :hidden, :input_html => { :value => @all_transfers.last.created_at.in_time_zone(current_user.time_zone)}
         = f.input :StartTranID, :as => :hidden, :input_html => { :value => @all_transfers.first.ez_cash_tran_id}
         = f.input :EndTranID, :as => :hidden, :input_html => { :value => @all_transfers.last.ez_cash_tran_id}
         = f.input :EventDateTime, :as => :hidden, :input_html => { :value => DateTime.now.in_time_zone(current_user.time_zone)}

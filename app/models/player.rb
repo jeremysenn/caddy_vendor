@@ -130,6 +130,14 @@ class Player < ApplicationRecord
     end
   end
   
+  def member_name
+    unless member.blank?
+      member.full_name
+    else
+      ''
+    end
+  end
+  
   #############################
   #     Class Methods         #
   #############################

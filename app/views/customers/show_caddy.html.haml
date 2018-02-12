@@ -95,7 +95,7 @@
               %tbody
                 - @transfers.each do |transfer|
                   %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                    %td= transfer.created_at.in_time_zone(transfer.course.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                    %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
                     %td= transfer.customer.full_name unless transfer.customer.blank?
                     %td= number_to_currency(transfer.amount)
                     %td
