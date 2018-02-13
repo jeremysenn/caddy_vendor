@@ -51,13 +51,13 @@
               .input-group
                 .input-group-addon
                   %i.fa.fa-dollar
-                = f.number_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee, class: "form-control input-lg col-xs-6", min: 0, readonly: (current_user.is_caddy? or player.paid? or player.payment_reversed?)
+                = f.number_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee, class: "form-control input-lg col-xs-6", min: 0, pattern: "[0-9]*", inputmode: "numeric", readonly: (current_user.is_caddy? or player.paid? or player.payment_reversed?)
             .form-group
               %strong Tip
               .input-group
                 .input-group-addon
                   %i.fa.fa-dollar
-                = f.number_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip, class: "form-control input-lg tip_field", in: 1...100, readonly: (player.paid? or player.payment_reversed?)
+                = f.number_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip, class: "form-control input-lg tip_field", in: 1...100, pattern: "[0-9]*", inputmode: "numeric", readonly: (player.paid? or player.payment_reversed?)
 
             =# f.hidden_field :amount, value: player.total, class: 'amount'
             =# f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure you want to pay this?' } unless player.paid?
