@@ -2,9 +2,8 @@
   %button.navbar-toggler.hidden-sm-up{"data-target" => "#exCollapsingNavbar2", "data-toggle" => "collapse", :type => "button"}
     \☰
   #exCollapsingNavbar2.collapse.navbar-toggleable-xs
-    %a.navbar-brand{:href => root_path} 
-      %i.fa.fa-flag
-      CaddyVend
+    %a.navbar-brand{:href => caddy_path(current_caddy)} 
+      Home
     %ul.nav.navbar-nav 
       - if current_user.active?
         %li.nav-item
@@ -17,6 +16,9 @@
           %a.nav-link{:href => caddy_path(current_caddy), :class => (params[:controller] == 'caddies') ? "active" : ""} 
             %i.fa.fa-vcard-o
             Account
+        %li.nav-item
+          %a.nav-link{:href => "https://www.TransactUSA.com", target: '_blank'} 
+            Powered by Transact
         -#
           %li.nav-item.dropdown
             %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}

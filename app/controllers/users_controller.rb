@@ -106,7 +106,12 @@ class UsersController < ApplicationController
           # Make sure that code matches up with User's verification code
           @user.update_attribute(:verification_code, nil)
           flash[:notice] = "Phone verified."
-          redirect_to root_path
+          if @user.pin.blank?
+            flash[:danger] = 'Please set your PIN.' 
+            redirect_to edit_user_registration_path(current_user)
+          else
+            redirect_to root_path
+          end
 #          unless @user.is_caddy?
 #            redirect_to root_path
 #          else

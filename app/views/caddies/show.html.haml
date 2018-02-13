@@ -1,4 +1,4 @@
-.container
+.container-fluid
   %br
   %h3.text-xs-center= @caddy.full_name
 
@@ -23,6 +23,10 @@
       %a.nav-link{:href => "#messages", :data => {:toggle => "tab"}} 
         %i.fa.fa-commenting.fa-lg
         = "Messages" unless browser.device.mobile?
+    %li.nav-item
+      %a.nav-link{:href => "#settings", :data => {:toggle => "tab"}} 
+        %i.fa.fa-gear.fa-lg
+        = "Settings" unless browser.device.mobile?
   .tab-content
     .tab-pane.active{:id => "info"}
       %br
@@ -128,6 +132,8 @@
     .tab-pane{:id => "transfers"}
       %br
       #caddy_transfers.collapse.show.in{"aria-expanded" => "true"}
+        - if browser.device.mobile?
+          %h3 Transfers 
         .pull-right
           %p
             - if current_user.is_admin?
@@ -147,44 +153,45 @@
               %tbody
                 - @transfers.each do |transfer|
                   %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                    %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                    %td= link_to transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p"), transfer
                     %td= transfer.customer.full_name unless transfer.customer.blank?
-                    %td= number_to_currency(transfer.amount)
                     %td
+                      = number_to_currency(transfer.amount)
                       - if transfer.reversed?
-                        .text-danger Reversed
-                      = link_to "Show", transfer, class: 'btn btn-secondary'
+                        .text-danger= (reversed)
         - else
           %p.lead None
 
     .tab-pane{:id => "rounds"}
       %br
       #caddy_rounds.collapse.show.in{"aria-expanded" => "true"}
-        .pull-right
-          %p
+        %h3
+          - if browser.device.mobile?
+            = "Rounds" 
+          - else
+            &nbsp;
+          .pull-right
             %a{:href => new_event_path, class: 'btn btn-warning'}
               %i.fa.fa-plus-circle
               Round
+        %br
         - unless @events.blank?
           .table-responsive
-            %table.table.table-striped
+            %table.table.table-striped.table-sm
               %thead
                 %tr
                   %th Time
-                  %th Player
+                  %th Member
                   -# %th Status
                   %th
               %tbody
                 - @events.each do |event|
                   %tr
-                    %td= event.start.strftime('%-m/%-d/%y %l:%M %p')
+                    %td= link_to event.start.strftime('%-m/%-d/%y %l:%M %p'), edit_event_path(event)
                     -# %td= event.player_names_with_caddy_names
                     %td= event.players.find_by(caddy_id: @caddy.id).member_name
                     -# %td= "#{event.not_paid? ? 'Open' : 'Paid'}"
-                    %td.pull-left
-                      %a{:href => edit_event_path(event), class: 'btn btn-primary'} 
-                        %i.fa.fa-edit
-                        = "Edit" unless browser.device.mobile?
+                    %td
                       %a{:href => event_path(event), class: 'btn btn-success'} 
                         %i.fa.fa-dollar
                         = "Payment" unless browser.device.mobile?
@@ -193,6 +200,8 @@
 
     .tab-pane{:id => "withdrawals"}
       %br
+      - if browser.device.mobile?
+        %h3 Withdrawals 
       #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
         - unless @withdrawal_transactions.blank?
           .table-responsive
@@ -224,6 +233,8 @@
     .tab-pane{:id => "messages"}
       %br
       #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
+        - if browser.device.mobile?
+          %h3 Messages
         - if current_user.is_admin?
           .pull-right
             %p
@@ -270,3 +281,24 @@
                         %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
                         %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Send"}} 
                           Send
+    .tab-pane{:id => "settings"}
+      %br
+      #caddy_settings.collapse.show.in{"aria-expanded" => "true"}
+        - if browser.device.mobile?
+          %h3 Settings
+        %p.lead
+          Phone:
+          = current_user.phone
+        %p.lead
+          Email:
+          = current_user.email
+        %p.lead
+          Role:
+          = current_user.role
+        %p.lead
+          Active:
+          = "#{current_user.active? ? 'Yes' : 'No'}"
+        %p.lead
+          Phone Verified:
+          = "#{current_user.verification_code.blank? ? 'Yes' : 'No'}"
+        = link_to 'Edit', edit_user_registration_path(current_user), class: 'btn btn-primary'

@@ -5,14 +5,14 @@
 jQuery ->
 
   $('.tip_field').on 'keyup', ->
-    caddy_fee = $(this).closest('.modal').find('#transfer_caddy_fee').val()
+    caddy_fee = $(this).closest('form').find('#transfer_caddy_fee').val()
     caddy_tip = $(this).val()
     #transaction_fee = $(this).closest('.modal').find('#transfer_fee').val()
     if caddy_tip > 0
       sum = parseFloat(caddy_fee) + parseFloat(caddy_tip)
     else
       sum = parseFloat(caddy_fee)
-    $(this).closest(".modal").find('#transfer_amount').val sum
+    $(this).closest("form").find('#transfer_amount').val sum
     return
 
   ### Edit in place ###

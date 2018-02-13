@@ -1,0 +1,3 @@
+- unless current_user.blank?
+  - if current_user.is_caddy?
+    = render 'shared/caddy_user_footer_navbar' 

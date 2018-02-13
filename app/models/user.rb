@@ -19,7 +19,8 @@ class User < ApplicationRecord
   before_create :set_role_and_customer_id
   
   after_commit :send_verification_code, on: [:create]
-  after_commit :save_phone_as_pin, on: [:create]
+  
+  validates :email, uniqueness: {allow_blank: false}
   
   
   #############################
@@ -30,25 +31,25 @@ class User < ApplicationRecord
 #    company.courses
 #  end
   
-  def courses
-    user_courses = []
-    caddies.each do |caddy|
-      user_courses = user_courses << caddy.course unless caddy.course.blank?
-    end
-    return user_courses
-  end
+#  def courses
+#    user_courses = []
+#    caddies.each do |caddy|
+#      user_courses = user_courses << caddy.course unless caddy.course.blank?
+#    end
+#    return user_courses
+#  end
+#  
+#  def courses_by_club(company_id)
+#    user_courses = []
+#    caddies_by_club(company_id).each do |caddy|
+#      user_courses = user_courses << caddy.course unless caddy.course.blank?
+#    end
+#    return user_courses
+#  end
   
-  def courses_by_club(company_id)
-    user_courses = []
-    caddies_by_club(company_id).each do |caddy|
-      user_courses = user_courses << caddy.course unless caddy.course.blank?
-    end
-    return user_courses
-  end
-  
-  def members
-    company.members
-  end
+#  def members
+#    company.members
+#  end
   
 #  def caddies
 #    company.caddies
@@ -97,14 +98,18 @@ class User < ApplicationRecord
     return caddy_record
   end
   
+#  def caddies
+#    # Find caddies by customer phone number
+#    caddy_records = Caddy.all.joins(:customer).where("customer.PhoneMobile = ?", phone)
+#    if caddy_records.blank?
+#      # If can't find customer record by phone number, find by email
+#      caddy_records = Caddy.all.joins(:customer).where("customer.Email = ?", email)
+#    end
+#    return caddy_records
+#  end
+
   def caddies
-    # Find caddies by customer phone number
-    caddy_records = Caddy.all.joins(:customer).where("customer.PhoneMobile = ?", phone)
-    if caddy_records.blank?
-      # If can't find customer record by phone number, find by email
-      caddy_records = Caddy.all.joins(:customer).where("customer.Email = ?", email)
-    end
-    return caddy_records
+    customer.caddies unless customer.blank?
   end
   
   def unique_caddy_clubs
@@ -117,11 +122,12 @@ class User < ApplicationRecord
     return clubs
   end
   
-  def caddy_customer(company_id)
-    Customer.caddies.where(Email: email, CompanyNumber: company_id).first
-  end
+#  def caddy_customer(company_id)
+#    Customer.caddies.where(Email: email, CompanyNumber: company_id).first
+#  end
   
   def caddy_customer
+    customer
     # Find customer by phone number
     customer_record = Customer.caddies.find_by(PhoneMobile: phone)
     if customer_record.blank?
@@ -142,22 +148,23 @@ class User < ApplicationRecord
   end
   
   def member
+    customer
     # Find customer by phone number
-    customer_record = Customer.members.find_by(PhoneMobile: phone)
-    if customer_record.blank?
-      # If can't find customer record by phone number, find by email
-      customer_record = Customer.members.find_by(Email: email)
-    end
-    return customer_record
+#    customer_record = Customer.members.find_by(PhoneMobile: phone)
+#    if customer_record.blank?
+#      # If can't find customer record by phone number, find by email
+#      customer_record = Customer.members.find_by(Email: email)
+#    end
+#    return customer_record
   end
   
-  def customer
-    if is_member?
-      member
-    elsif is_caddy?
-      caddy_customer
-    end
-  end
+#  def customer
+#    if is_member?
+#      member
+#    elsif is_caddy?
+#      caddy_customer
+#    end
+#  end
   
   def is_member?
     role == 'member'
@@ -208,14 +215,6 @@ class User < ApplicationRecord
   
   def phone_verified?
     verification_code.blank?
-  end
-  
-  def save_phone_as_pin
-    if is_caddy? and not caddy.blank?
-      self.update_attribute(:pin, phone.last(4).to_i)
-    elsif is_member? and not member.blank?
-#      self.update_attribute(:pin, phone.to_i)
-    end
   end
   
   def set_role_and_customer_id

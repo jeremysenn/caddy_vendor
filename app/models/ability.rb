@@ -266,50 +266,7 @@ class Ability
       end
       
     elsif not user.is_admin? and user.active? and user.phone_verified?
-      ###  Non-admin, active user ### 
-      # 
-      # Events
-      ############
-      can :manage, Event do |event|
-        unless event.company.blank?
-          event.company == user.company
-        else
-          true
-        end
-      end
-      can :create, :events
-      
-      # Players
-      ############
-      can :manage, Player do |player|
-        player.event.company == user.company
-      end
-      can :create, :players
-      
-      # Transfers
-      ############
-      can :manage, Transfer do |transfer|
-        transfer.company == user.company
-      end
-      can :create, :transfers
-      
-      # Caddies
-      ############
-      can :manage, Caddy do |caddy|
-        caddy.company == user.company
-      end
-      can :index, :caddies
-      
-      # Customers
-      ############
-#      can :manage, Customer do |customer|
-#        unless customer.company.blank? or customer.company.CompanyNumber == 0
-#          customer.company == user.company
-#        else
-#          true
-#        end
-#      end
-#      can :create, :customers
+      ###  Non-admin, non-member, non-caddy active user ### 
       
     end
     

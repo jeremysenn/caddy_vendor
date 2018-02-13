@@ -85,7 +85,12 @@ class ApplicationController < ActionController::Base
         session[:caddy_id] = current_user.caddy.id unless current_user.caddy.blank?
         session[:company_id] = current_user.company_id
 #        show_caddy_customer_path(current_user.caddy_customer)
-        caddy_path(current_user.caddy)
+        unless current_user.pin.blank?
+          caddy_path(current_user.caddy)
+        else
+          flash[:danger] = 'Please set your PIN.' 
+          edit_user_registration_path(current_user)
+        end
       else
         root_path
       end
