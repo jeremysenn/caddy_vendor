@@ -342,7 +342,8 @@ class Transfer < ApplicationRecord
   end
   
   def date_caddy_paid
-    created_at.in_time_zone(course.time_zone).to_date
+#    created_at.in_time_zone(course.time_zone).to_date
+    created_at.to_date
   end
   
   def caddy_name

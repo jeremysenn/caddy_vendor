@@ -21,6 +21,7 @@ class User < ApplicationRecord
   after_commit :send_verification_code, on: [:create]
   
   validates :email, uniqueness: {allow_blank: false}
+  validate :existing_customer_signing_up
   
   attr_accessor :signing_up
   
@@ -230,11 +231,13 @@ class User < ApplicationRecord
       else
         self.role= "admin"
       end
-    else
-      if signing_up == true
-        # If user is signing up but there is not existing customer record to connect to, rollback
-        raise ActiveRecord::Rollback
-      end
+    end
+  end
+  
+  def existing_customer_signing_up
+    customer_record = Customer.find_by(PhoneMobile: phone)
+    if customer_record.blank? && !signing_up.blank?
+      errors.add(:phone, "No associated customer record found")
     end
   end
   
