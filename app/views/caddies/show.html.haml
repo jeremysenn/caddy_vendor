@@ -192,7 +192,7 @@
                     %td= event.players.find_by(caddy_id: @caddy.id).member_name
                     -# %td= "#{event.not_paid? ? 'Open' : 'Paid'}"
                     %td
-                      %a{:href => event_path(event), class: 'btn btn-success'} 
+                      %a{:href => event_path(event), class: "btn #{event.not_paid? ? 'btn-success' : 'btn-secondary'}"} 
                         %i.fa.fa-dollar
                         = "Payment" unless browser.device.mobile?
         - else

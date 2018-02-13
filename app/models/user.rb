@@ -18,10 +18,11 @@ class User < ApplicationRecord
   end
   before_create :set_role_and_customer_id
   
-  after_commit :send_verification_code, on: [:create]
+  after_commit :send_verification_code, on: [:create], :if => :is_caddy? or :is_member?
   
   validates :email, uniqueness: {allow_blank: false}
   validate :existing_customer_signing_up
+  validates :pin, length: { is: 4 }
   
   attr_accessor :signing_up
   

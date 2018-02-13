@@ -16,6 +16,9 @@ class Transfer < ApplicationRecord
 
 #  validates_numericality_of :caddy_fee_cents, :greater_than => 0
 
+  validates :caddy_fee_cents, numericality: { greater_than_or_equal_to: 0}
+  validates :caddy_tip_cents, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 9900,  message: "Tip must be under $100" }
+
   # Virtual Attributes
   attr_accessor :generate_reversal
 
