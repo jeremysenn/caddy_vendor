@@ -12,7 +12,7 @@
           = f.input :phone, required: true, :input_html => {readonly: true}
         = f.input :email, as: :string, label: "Email or Username", required: true
         - if current_user.is_caddy?
-          = f.input :pin, as: :password, required: true, :input_html => {value: current_user.pin}, hint: "4-digit PIN for ATM withdrawals"
+          = f.input :pin, as: :password, required: true, :input_html => {value: current_user.pin, pattern: "[0-9]*", inputmode: "numeric"}, hint: "4-digit PIN for ATM withdrawals"
         -#
           - if current_user.is_admin?
             = f.input :admin
