@@ -5,7 +5,8 @@
       #player_total.pull-right
         = number_to_currency(@event.players_total_with_fee)
   %h3.lead
-    = @event.start.strftime("%-m/%-d/%y %l:%M %p")
+    =# @event.start.strftime("%-m/%-d/%y %l:%M %p")
+    = @event.start.strftime("%-m/%-d/%y")
 
   - if browser.device.mobile?
     - @players.each do |player|
