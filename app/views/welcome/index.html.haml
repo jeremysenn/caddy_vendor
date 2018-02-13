@@ -35,7 +35,7 @@
                         = "XXX-XXX-#{current_user.phone.last(4)}"
                       .form-group
                         %label.col-form-label{:for => "verification_code"} Please enter the 6-digit code
-                        = number_field_tag :verification_code, nil, :placeholder => "6-digit Code", class: "form-control", autofocus: true
+                        = number_field_tag :verification_code, nil, :placeholder => "6-digit Code", pattern: "[0-9]*", inputmode: "numeric", class: "form-control", autofocus: true
                   .modal-footer
                     %button.btn.btn-success{id: 'verify_phone_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Verify"}} 
                       Verify
