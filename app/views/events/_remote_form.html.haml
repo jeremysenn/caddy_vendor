@@ -1,5 +1,5 @@
 = form_for @event, :html => {class: 'form-horizontal event_form', role: 'form'}, remote: true do |f|
-  = f.hidden_field :course_id, value: current_course.id
+  = f.hidden_field :course_id, value: current_company.id
   = f.hidden_field :date_range, class: "date-range-picker"
   = f.hidden_field :start, value: Date.today, class: 'start_hidden'
   = f.hidden_field :end, value: Date.today, class: 'end_hidden'

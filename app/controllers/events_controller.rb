@@ -83,7 +83,11 @@ class EventsController < ApplicationController
           if params[:pay]
             redirect_to @event, notice: 'Event was successfully created.'
           else
-            redirect_to events_path, notice: 'Event was successfully created.' 
+            unless current_user.is_caddy?
+              redirect_to events_path, notice: 'Event was successfully created.' 
+            else
+              redirect_to current_caddy, notice: 'Event was successfully created.'
+            end
           end
           }
         format.json { render :show, status: :created, location: @event }
@@ -113,7 +117,11 @@ class EventsController < ApplicationController
           if params[:pay]
             redirect_to @event, notice: 'Event was successfully updated.'
           else
-            redirect_to events_path, notice: 'Event was successfully updated.' 
+            unless current_user.is_caddy?
+              redirect_to events_path, notice: 'Event was successfully updated.' 
+            else
+              redirect_to current_caddy, notice: 'Event was successfully updated.'
+            end
           end
           }
         format.json { render :show, status: :ok, location: @event }

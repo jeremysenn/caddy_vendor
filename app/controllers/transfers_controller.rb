@@ -65,7 +65,11 @@ class TransfersController < ApplicationController
 #        format.html { redirect_to :back, notice: 'Transfer was successfully created.' }
         format.html { 
           unless @transfer.ez_cash_tran_id.blank?
-            redirect_back fallback_location: root_path, notice: 'Transfer was successfully created.' 
+            unless current_user.is_caddy?
+              redirect_back fallback_location: root_path, notice: 'Transfer was successfully created.' 
+            else
+              redirect_to current_caddy, notice: 'Transfer was successfully created.'
+            end
           else
             redirect_back fallback_location: root_path, alert: 'There was a problem connecting to EZcash.' 
           end
