@@ -220,7 +220,7 @@ class User < ApplicationRecord
   def set_role_and_customer_id
     customer_record = Customer.find_by(PhoneMobile: phone)
     unless customer_record.blank?
-      self.customer_id= customer_record.id
+      self.customer_id = customer_record.id
       if customer_record.member?
         self.role= "member"
       elsif customer_record.caddy?
