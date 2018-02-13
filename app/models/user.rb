@@ -22,6 +22,8 @@ class User < ApplicationRecord
   
   validates :email, uniqueness: {allow_blank: false}
   
+  attr_accessor :signing_up
+  
   
   #############################
   #     Instance Methods      #
@@ -227,6 +229,11 @@ class User < ApplicationRecord
         self.role= "caddy"
       else
         self.role= "admin"
+      end
+    else
+      if signing_up == true
+        # If user is signing up but there is not existing customer record to connect to, rollback
+        raise ActiveRecord::Rollback
       end
     end
   end

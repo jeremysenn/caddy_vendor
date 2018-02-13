@@ -72,7 +72,7 @@ class ApplicationController < ActionController::Base
   # Permit additional parameters for Devise user
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:account_update, keys: [:time_zone, :admin, :active, :pin, :phone])
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :role, :phone, :active])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :role, :phone, :active, :signing_up])
   end
   
   # when a user logs in

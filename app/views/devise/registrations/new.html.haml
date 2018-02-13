@@ -6,6 +6,7 @@
       = f.error_notification
       .form-inputs
         = f.input :active, :as => :hidden, :input_html => { :value => true}
+        = f.input :signing_up, :as => :hidden, :input_html => { :value => true}
         = f.input :phone, required: true, autofocus: true
         = f.input :email, as: :string, label: "Email or Username", required: true
         -#
