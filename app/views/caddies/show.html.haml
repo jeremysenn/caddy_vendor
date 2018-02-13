@@ -158,7 +158,7 @@
                     %td
                       = number_to_currency(transfer.amount)
                       - if transfer.reversed?
-                        .text-danger= (reversed)
+                        .text-danger= "(reversed)"
         - else
           %p.lead None
 
@@ -180,14 +180,14 @@
             %table.table.table-striped.table-sm
               %thead
                 %tr
-                  %th Time
+                  %th Start
                   %th Member
                   -# %th Status
                   %th
               %tbody
                 - @events.each do |event|
                   %tr
-                    %td= link_to event.start.strftime('%-m/%-d/%y %l:%M %p'), edit_event_path(event)
+                    %td= link_to event.start.strftime('%-m/%-d/%y'), edit_event_path(event)
                     -# %td= event.player_names_with_caddy_names
                     %td= event.players.find_by(caddy_id: @caddy.id).member_name
                     -# %td= "#{event.not_paid? ? 'Open' : 'Paid'}"

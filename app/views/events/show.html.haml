@@ -26,24 +26,6 @@
           %p.lead
             %strong Guest
             = player.note
-        -#
-          %p.lead
-            %strong Charge
-            $
-            - unless player.paid? or current_user.is_caddy?
-              %a{href: nil, class: 'caddy_fee', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_caddy_fee", "data-value" => player.fee.blank? ? player.caddy_pay_rate : player.fee}
-                = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
-            - else
-              = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
-        -#
-          %p.lead
-            %strong Tip
-            $
-            - unless player.paid?
-              %a{href: nil, class: 'tip', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_tip", "data-value" => player.tip.blank? ? '0' : player.tip}
-                = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
-            - else
-              = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
         - unless current_user.is_caddy?
           %p.lead
             %strong Transaction Fee
@@ -63,21 +45,21 @@
             = f.hidden_field :fee, value: player.transaction_fee.blank? ? current_company.transaction_fee : player.transaction_fee , class: 'transaction_fee'
             = f.hidden_field :fee_to_account_id, value: current_user.company.account.id unless current_user.company.account.blank?
             =# f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
-            = f.text_field :amount, value: player.total, class: 'amount'
+            = f.hidden_field :amount, value: player.total, class: 'amount'
             .form-group
               %strong Charge
               .input-group
                 .input-group-addon
                   %i.fa.fa-dollar
-                = f.number_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee, class: "form-control input-lg col-xs-6", readonly: current_user.is_caddy?
+                = f.number_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee, class: "form-control input-lg col-xs-6", min: 0, readonly: (current_user.is_caddy? or player.paid? or player.payment_reversed?)
             .form-group
               %strong Tip
               .input-group
                 .input-group-addon
                   %i.fa.fa-dollar
-                = f.number_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip, class: "form-control input-lg tip_field"
+                = f.number_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip, class: "form-control input-lg tip_field", in: 1...100, readonly: (player.paid? or player.payment_reversed?)
 
-            = f.hidden_field :amount, value: player.total, class: 'amount'
+            =# f.hidden_field :amount, value: player.total, class: 'amount'
             =# f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure you want to pay this?' } unless player.paid?
             - unless player.paid? or player.payment_reversed?
               .pull-right
@@ -120,24 +102,24 @@
               %td= player.caddy_type
               %td= player.round
               %td= player.note
-              %td{class: "#{(player.paid? or current_user.is_caddy?) ? '' : 'text-primary'}"}
+              %td{class: "#{(player.paid? or current_user.is_caddy? or player.payment_reversed?) ? '' : 'text-primary'}"}
                 $
-                - unless player.paid? or current_user.is_caddy?
+                - unless player.paid? or current_user.is_caddy? or player.payment_reversed?
                   %a{href: nil, class: 'caddy_fee', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_caddy_fee", "data-value" => player.fee.blank? ? player.caddy_pay_rate : player.fee}
                     = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
                 - else
                   = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
-              %td{class: "#{player.paid? ? '' : 'text-primary'}"}
+              %td{class: "#{(player.paid? or player.payment_reversed?) ? '' : 'text-primary'}"}
                 $
-                - unless player.paid?
+                - unless player.paid? or player.payment_reversed?
                   %a{href: nil, class: 'tip', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_tip", "data-value" => player.tip.blank? ? '0' : player.tip}
                     = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
                 - else
                   = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
               - unless current_user.is_caddy?
-                %td{class: "#{player.paid? ? '' : 'text-primary'}"}
+                %td{class: "#{(player.paid? or player.payment_reversed?) ? '' : 'text-primary'}"}
                   $
-                  - unless player.paid?
+                  - unless player.paid? or player.payment_reversed?
                     %a{href: nil, class: 'transaction_fee', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_transaction_fee", "data-value" => player.transaction_fee.blank? ? current_company.transaction_fee : player.transaction_fee}
                       = number_with_precision("#{player.transaction_fee.blank? ? current_company.transaction_fee : player.transaction_fee}", precision: 2)
                   - else
@@ -173,5 +155,7 @@
                 =# link_to 'Rate', new_caddy_rating_path(player_id: player.id), class: 'btn btn-warning' unless player.caddy_rating.present?
   - if current_user.is_admin?             
     = link_to "Done", events_path, class: 'btn btn-primary'
+  - elsif current_user.is_caddy?
+    = link_to "Done", caddy_path(current_caddy), class: 'btn btn-primary'
   - else
     = link_to "Done", :back, class: 'btn btn-primary'
