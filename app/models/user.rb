@@ -47,9 +47,9 @@ class User < ApplicationRecord
 #    return user_courses
 #  end
   
-#  def members
-#    company.members
-#  end
+  def members
+    company.members
+  end
   
 #  def caddies
 #    company.caddies
