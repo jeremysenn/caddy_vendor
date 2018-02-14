@@ -22,7 +22,7 @@ class User < ApplicationRecord
   
   validates :email, uniqueness: {allow_blank: false}
   validate :existing_customer_signing_up
-  validates :pin, length: { is: 4, allow_blank: false }
+  validates :pin, length: { is: 4, allow_blank: true }
   
   attr_accessor :signing_up
   
