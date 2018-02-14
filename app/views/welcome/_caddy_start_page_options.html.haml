@@ -1,8 +1,6 @@
 .row.form-group
   .text-xs-center
-    -#
-      %p.lead Caddy User
-  - unless current_user.active? and current_caddy.active?
+  - unless current_user.active? and (current_caddy.present? and current_caddy.active?)
     %p= content_tag(:div, "Your administrator must activate your account.", class: "alert alert-danger")
   - else
     .col-xs-6
