@@ -149,13 +149,12 @@
               = render 'pay_caddy_by_member'
         - unless @transfers.blank?
           .table-responsive
-            %table.table.table-striped.table-sm
+            %table.table.table-striped{class: "#{browser.device.mobile? ? 'table-sm' : ''}"}
               %thead
                 %tr
                   %th Time
                   %th From
                   %th Total
-                  %th
               %tbody
                 - @transfers.each do |transfer|
                   %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
@@ -183,7 +182,7 @@
         %br
         - unless @events.blank?
           .table-responsive
-            %table.table.table-striped.table-sm
+            %table.table.table-striped{class: "#{browser.device.mobile? ? 'table-sm' : ''}"}
               %thead
                 %tr
                   %th Start
@@ -211,7 +210,7 @@
       #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
         - unless @withdrawal_transactions.blank?
           .table-responsive
-            %table.table.table-striped
+            %table.table.table-striped{class: "#{browser.device.mobile? ? 'table-sm' : ''}"}
               %thead
                 %tr
                   %th ID
@@ -249,7 +248,7 @@
                 Text Message
         - unless @text_messages.blank?
           .table-responsive
-            %table.table.table-striped
+            %table.table.table-striped{class: "#{browser.device.mobile? ? 'table-sm' : ''}"}
               %thead
                 %tr
                   %th Sent
