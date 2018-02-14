@@ -9,7 +9,7 @@ class Transfer < ApplicationRecord
   
   after_create :ezcash_payment_transaction_web_service_call, unless: :reversed?
   after_create :send_member_sms_notification, unless: :reversed?
-  after_create :ezcash_send_sms_web_service_call, if: :contains_player?
+#  after_create :ezcash_send_sms_web_service_call, if: :contains_player?
   after_update :ezcash_reverse_transaction_web_service_call
   
 #  validates :from_account, :to_account, :amount, :fee, presence: true
