@@ -12,8 +12,8 @@
           = f.input :phone, required: true, :input_html => {readonly: true}
         = f.input :email, as: :string, label: "Email or Username", required: true
         -# if current_user.is_caddy?
-        %input{:autofocus => "", :inputmode => "numeric", :max => "9999", :min => "1111", :pattern => "[0-9]*", :style => "-webkit-text-security: disc;", :type => "number"}/
 
+        = f.input :pin, as: :password, required: true, :input_html => {value: current_user.pin, pattern: "[0-9]*", inputmode: "numeric", type: "number", :style => "-webkit-text-security: disc;"}, hint: "4-digit PIN for ATM withdrawals"
         = f.input :current_password, hint: "we need your current password to confirm your changes", required: true
         -#
           - if current_user.is_admin?
