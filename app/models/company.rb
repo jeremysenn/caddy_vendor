@@ -143,6 +143,10 @@ class Company < ActiveRecord::Base
     players.where.not(note: [nil, '']).collect { |p| [ p.note ] }.insert(0,['None']).uniq
   end
   
+  def name
+    self.CompanyName
+  end
+  
   #############################
   #     Class Methods      #
   #############################

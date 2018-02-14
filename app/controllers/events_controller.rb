@@ -153,19 +153,20 @@ class EventsController < ApplicationController
   def calendar
     @start = params[:start] ||= Date.today.to_s
     @end = params[:end] ||= Date.today.to_s
-    session[:course_id] = params[:course_id] unless params[:course_id].blank?
-    unless event_params[:course_id].blank?
-      session[:course_id] = event_params[:course_id]
-      @course = Course.where(ClubCourseID: event_params[:course_id]).first
-      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
-    else
-      unless current_user.is_caddy?
-        @course = current_course.blank? ? current_user.company.courses.first : current_course
-      else
-        @course = current_course.blank? ? current_caddy.course : current_course
-      end
-    end
-    @events = @course.events.where(start: @start.to_date.beginning_of_day..@end.to_date.end_of_day)
+#    session[:course_id] = params[:course_id] unless params[:course_id].blank?
+#    unless event_params[:course_id].blank?
+#      session[:course_id] = event_params[:course_id]
+#      @course = Course.where(ClubCourseID: event_params[:course_id]).first
+#      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
+#    else
+#      unless current_user.is_caddy?
+#        @course = current_course.blank? ? current_user.company.courses.first : current_course
+#      else
+#        @course = current_course.blank? ? current_caddy.course : current_course
+#      end
+#    end
+#    @events = @course.events.where(start: @start.to_date.beginning_of_day..@end.to_date.end_of_day)
+    @events = current_user.company.events.where(start: @start.to_date.beginning_of_day..@end.to_date.end_of_day)
   end
 
   private

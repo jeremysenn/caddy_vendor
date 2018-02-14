@@ -1,4 +1,4 @@
-.container-fluid
+%div{class: "#{browser.device.mobile? ? 'container-fluid' : 'container'}"}
   %br
   %p
     = form_tag events_path, id: 'events_form', method: 'get', class: 'form-inline' do |f|

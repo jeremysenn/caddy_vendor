@@ -5,7 +5,7 @@
     %a.navbar-brand{:href => caddy_path(current_caddy)} 
       Home
     %ul.nav.navbar-nav 
-      - if current_user.active?
+      - if current_user.active? and current_caddy.active?
         %li.nav-item
           %a.nav-link{:href => events_path, :class => (params[:controller] == 'events') ? "active" : ""} 
             %i.fa.fa-flag

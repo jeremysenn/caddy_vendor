@@ -187,7 +187,7 @@ class Ability
       ############
       can :manage, Event do |event|
         user.caddies.each do |caddy|
-          if event.include_caddy?(caddy)
+          if event.include_caddy?(caddy) and caddy.active?
             true
           end
         end
@@ -202,7 +202,7 @@ class Ability
       # Caddies
       ############
       can :manage, Caddy do |caddy|
-        caddy == user.caddy or user.caddies.include?(caddy)
+        (caddy == user.caddy or user.caddies.include?(caddy)) and caddy.active?
       end  
       can :create, Caddy
       cannot :index, Caddy

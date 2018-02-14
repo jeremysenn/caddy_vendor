@@ -1,4 +1,4 @@
-.container-fluid
+%div{class: "#{browser.device.mobile? ? 'container-fluid' : 'container'}"}
   %br
   %h3.text-xs-center= @caddy.full_name
 
@@ -84,12 +84,13 @@
         %p.lead
           Course:
           = link_to @caddy.course.CourseName, @caddy.course
-      %p.lead
-        Phone:
-        = @caddy.cell_phone_number
-      %p.lead
-        Email:
-        = @caddy.email
+      -#
+        %p.lead
+          Phone:
+          = @caddy.cell_phone_number
+        %p.lead
+          Email:
+          = @caddy.email
       %p.lead
         Ranking:
         - unless @caddy_rank_desc.blank?
@@ -103,9 +104,9 @@
         %p.lead
           Checked In:
           = "#{@caddy.checkin_today? ? @caddy.CheckedIn.in_time_zone(@caddy.course.time_zone).strftime('%l:%M %p') : 'No'}" 
-      %p.lead
-        Active:
-        = "#{@caddy.active? ? 'Yes' : 'No'}"
+        %p.lead
+          Active:
+          = "#{@caddy.active? ? 'Yes' : 'No'}"
 
       -#
         %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
@@ -293,17 +294,11 @@
           %h3 Settings
         %p.lead
           Phone:
-          = current_user.phone
+          = @caddy.customer.PhoneMobile
         %p.lead
           Email:
-          = current_user.email
-        %p.lead
-          Role:
-          = current_user.role
+          = @caddy.customer.Email
         %p.lead
           Active:
-          = "#{current_user.active? ? 'Yes' : 'No'}"
-        %p.lead
-          Phone Verified:
-          = "#{current_user.verification_code.blank? ? 'Yes' : 'No'}"
-        = link_to 'Edit', edit_user_registration_path(current_user), class: 'btn btn-primary'
+          = "#{@caddy.active? ? 'Yes' : 'No'}"
+        =# link_to 'Edit', edit_user_registration_path(current_user), class: 'btn btn-primary'

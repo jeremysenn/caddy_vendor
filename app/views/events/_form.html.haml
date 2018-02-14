@@ -2,6 +2,8 @@
   = f.hidden_field :course_id, value: current_company.id
   = f.hidden_field :date_range, class: "date-range-picker"
   = f.hidden_field :round, value: '18'
+  - if current_user.is_caddy?
+    %p= current_company.name
   -#
     .row.form-group
       %div{:class => "col-sm-12"}
@@ -99,7 +101,12 @@
       - unless current_user.is_caddy?
         = f.submit "Payment", :class => 'btn btn-success', name: 'pay'
       - else
-        = f.submit "Add to Balance", :class => 'btn btn-success', name: 'pay'
+        =# f.submit "Add to Balance", :class => 'btn btn-success', name: 'pay'
+        = button_tag(type: "submit", class: "btn btn-success", name: 'pay') do
+          %span
+            %i.fa.fa-dollar
+            Add to Balance
+
       %button.btn.btn-primary{:type => "submit"} 
         Save
       - unless @event.contains_paid_players?
