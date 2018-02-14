@@ -93,9 +93,18 @@ class TransfersController < ApplicationController
         format.html { 
 #          redirect_to @transfer, notice: 'Transfer was successfully updated.'
           unless transfer_params[:generate_reversal] == "true"
-            redirect_back fallback_location: @transfer, notice: 'Transfer was successfully updated.' 
+            unless current_user.is_caddy?
+#              redirect_back fallback_location: @transfer, notice: 'Transfer was successfully updated.' 
+              redirect_to root_path, notice: 'Transfer was successfully updated.' 
+            else
+              redirect_to current_caddy, notice: 'Transfer was successfully updated.'
+            end
           else
-            redirect_back fallback_location: @transfer, notice: 'Transfer was reversed.'
+            unless current_user.is_caddy?
+              redirect_to root_path, notice: 'Transfer was reversed.' 
+            else
+              redirect_to current_caddy, notice: 'Transfer was reversed.'
+            end
           end
           }
         format.json { render :show, status: :ok, location: @transfer }
