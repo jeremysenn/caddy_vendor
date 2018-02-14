@@ -60,7 +60,7 @@
                             %button.btn.btn-primary{id: 'send_sms_payment_qr_code_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Submit"}} 
                               Submit
           - elsif current_user.is_admin?
-            %a{href: barcode_caddy_path(caddy), class: 'btn btn-success'}
+            %a{href: '#', class: 'btn btn-success'}
               %i.fa.fa-qrcode
               ATM Payment
       %p.lead
