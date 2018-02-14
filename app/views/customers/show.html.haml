@@ -51,13 +51,13 @@
         %p.lead
           Bank Account Number:
           XXXXXX
-          =# @customer.club_account(current_company.id).decrypted_bank_account_number.last(4)
-          = @customer.club_account(current_company.id).BankActNbr.last(4)
+          =# @customer.club_account(current_company.id).decrypted_bank_account_number
+          = @customer.club_account(current_company.id).BankActNbr
         %p.lead
           Bank Routing Number:
           XXXXXX
-          =# @customer.club_account(current_company.id).decrypted_bank_routing_number.last(4)
-          = @customer.club_account(current_company.id).RoutingNbr.last(4)
+          =# @customer.club_account(current_company.id).decrypted_bank_routing_number
+          = @customer.club_account(current_company.id).RoutingNbr
       - if @customer.primary?
         %p.lead
           Balance:
