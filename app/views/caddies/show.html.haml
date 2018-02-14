@@ -32,32 +32,37 @@
       %br
       %p
         - if @available_balance > 1
-          %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#sms_payment_qr_code"}
-            %i.fa.fa-qrcode
-            ATM Payment
-          #sms_payment_qr_code.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
-            .modal-dialog.modal-sm{:role => "document"}
-              .modal-content
-                .modal-header
-                  %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
-                    %span{"aria-hidden" => "true"} ×
-                  .modal-title
-                    .lead 
-                      ATM Payment
-                .modal-body
-                  %p.lead
-                    Please enter your PIN:
-                  = form_tag pin_verification_users_admin_path(current_user.id), id: 'send_caddy_sms_payment_verification_form', method: 'post' do |f|
-                    =# hidden_field_tag :caddy_id, @caddy.id
-                    .col-xs-9
-                      = text_field_tag :pin, nil, placeholder: "Your PIN", class: "form-control input-lg", autofocus: true, required: true
-                    .row
-                      .col-xs-12
-                        .pull-right
-                          %br
-                          %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
-                          %button.btn.btn-primary{id: 'send_sms_payment_qr_code_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Submit"}} 
-                            Submit
+          - if current_user.is_caddy?
+            %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#sms_payment_qr_code"}
+              %i.fa.fa-qrcode
+              ATM Payment
+            #sms_payment_qr_code.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+              .modal-dialog.modal-sm{:role => "document"}
+                .modal-content
+                  .modal-header
+                    %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+                      %span{"aria-hidden" => "true"} ×
+                    .modal-title
+                      .lead 
+                        ATM Payment
+                  .modal-body
+                    %p.lead
+                      Please enter your PIN:
+                    = form_tag pin_verification_users_admin_path(current_user.id), id: 'send_caddy_sms_payment_verification_form', method: 'post' do |f|
+                      =# hidden_field_tag :caddy_id, @caddy.id
+                      .col-xs-9
+                        = text_field_tag :pin, nil, placeholder: "Your PIN", class: "form-control input-lg", autofocus: true, required: true
+                      .row
+                        .col-xs-12
+                          .pull-right
+                            %br
+                            %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
+                            %button.btn.btn-primary{id: 'send_sms_payment_qr_code_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Submit"}} 
+                              Submit
+          - elsif current_user.is_admin?
+            %a{href: barcode_caddy_path(caddy), class: 'btn btn-success'}
+              %i.fa.fa-qrcode
+              ATM Payment
       %p.lead
         Available Balance:
         = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
