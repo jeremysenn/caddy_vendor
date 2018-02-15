@@ -145,3 +145,9 @@ jQuery ->
     # Select tip input field contents
     $(this).select()
     return
+
+  if /iPad|iPhone|iPod/g.test navigator.userAgent
+    (($) ->
+      $.fn.focus = ->
+        arguments[0]
+    )(jQuery)
