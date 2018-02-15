@@ -59,9 +59,11 @@ class CaddiesController < ApplicationController
   # GET /caddies/1
   # GET /caddies/1.json
   def show
-    if current_user.is_caddy? and not params[:company_id].blank?
+    if current_user.is_caddy?
       # Set current_company session variable for caddy user
-      session[:company_id] = params[:company_id]
+      session[:company_id] = params[:company_id] unless params[:company_id].blank?
+      # Set current_caddy session variable for caddy user
+      session[:caddy_id] = @caddy.id
     end
     @transfers = @caddy.account_transfers.where(company_id: current_company.id).order('created_at DESC') unless @caddy.account_transfers.blank?
     @text_messages = @caddy.sms_messages.reverse
