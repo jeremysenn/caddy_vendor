@@ -78,7 +78,7 @@ class TransfersController < ApplicationController
       else
         format.html { 
 #          render :new 
-          redirect_back fallback_location: root_path, alert: "#{@transfer.errors.full_messages.to_sentence}"
+          redirect_back fallback_location: root_path, alert: "There was a problem creating transfer. #{@transfer.errors.full_messages.to_sentence}"
           }
         format.json { render json: @transfer.errors, status: :unprocessable_entity }
       end
