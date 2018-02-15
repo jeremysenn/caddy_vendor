@@ -46,25 +46,27 @@
             = f.hidden_field :fee, value: player.transaction_fee.blank? ? current_company.transaction_fee : player.transaction_fee , class: 'transaction_fee'
             = f.hidden_field :fee_to_account_id, value: current_user.company.account.id unless current_user.company.account.blank?
             =# f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
-            =# f.hidden_field :amount, value: player.total, class: 'amount'
+            
             .form-group
               %strong Tip
               .input-group
                 .input-group-addon
                   %i.fa.fa-dollar
                 = f.number_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip, class: "form-control input-lg tip_field", pattern: "[0-9]*", inputmode: "numeric", readonly: (player.paid? or player.payment_reversed?), autofocus: true
-            .form-group
+            .form-group.lead
               %strong Charge
-              .input-group
-                .input-group-addon
-                  %i.fa.fa-dollar
-                = f.number_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee, class: "form-control input-lg col-xs-6", pattern: "[0-9]*", inputmode: "numeric", readonly: (current_user.is_caddy? or player.paid? or player.payment_reversed?)
-            .form-group
+              - unless current_user.is_caddy? or player.paid? or player.payment_reversed?
+                .input-group
+                  .input-group-addon
+                    %i.fa.fa-dollar
+                  = f.number_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee, class: "form-control input-lg col-xs-6", pattern: "[0-9]*", inputmode: "numeric"
+              - else
+                = f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
+                = number_to_currency(player.fee.blank? ? player.caddy_pay_rate : player.fee)
+            .form-group.lead
+              = f.hidden_field :amount, value: player.total, class: 'amount'
               %strong Total
-              .input-group
-                .input-group-addon
-                  %i.fa.fa-dollar
-                = f.text_field :amount, value: player.total, class: "form-control input-lg col-xs-6", readonly: true
+              %span#player_total= number_to_currency(player.total)
 
             =# f.hidden_field :amount, value: player.total, class: 'amount'
             =# f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure you want to pay this?' } unless player.paid?
