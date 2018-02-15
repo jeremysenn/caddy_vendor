@@ -141,13 +141,7 @@ jQuery ->
     return
   ### End Edit in place ###
 
-  $('.tip_field').on 'click', ->
+  $('.tip_field').on 'click touchstart', ->
     # Select tip input field contents
     $(this).select()
     return
-
-  if /iPad|iPhone|iPod/g.test navigator.userAgent
-    (($) ->
-      $.fn.focus = ->
-        arguments[0]
-    )(jQuery)
