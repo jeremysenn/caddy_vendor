@@ -94,8 +94,8 @@ class TransfersController < ApplicationController
 #          redirect_to @transfer, notice: 'Transfer was successfully updated.'
           unless transfer_params[:generate_reversal] == "true"
             unless current_user.is_caddy?
-#              redirect_back fallback_location: @transfer, notice: 'Transfer was successfully updated.' 
-              redirect_to root_path, notice: 'Transfer was successfully updated.' 
+              redirect_back fallback_location: root_path, notice: 'Transfer was successfully updated.' 
+#              redirect_to root_path, notice: 'Transfer was successfully updated.' 
             else
               redirect_to current_caddy, notice: 'Transfer was successfully updated.'
             end

@@ -70,7 +70,7 @@
 
             =# f.hidden_field :amount, value: player.total, class: 'amount'
             =# f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure you want to pay this?' } unless player.paid?
-            - unless player.paid? or player.payment_reversed?
+            - unless player.paid? #or player.payment_reversed?
               .pull-right
                 %button.btn.btn-success{id: 'pay_caddy_round_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Pay", confirm: 'Are you sure you want to pay this?'}} 
                   %i.fa.fa-dollar
@@ -107,7 +107,8 @@
             %th
         %tbody
           - @players.each do |player|
-            %tr{class: "#{(player.transfer and player.transfer.reversed?) ? 'table-danger' : '' }"}
+            -# %tr{class: "#{(player.transfer and player.transfer.reversed?) ? 'table-danger' : '' }"}
+            %tr
               %td= player.member.full_name
               - unless current_user.is_caddy?
                 %td= player.caddy.full_name
@@ -121,17 +122,19 @@
                     = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
                 - else
                   = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
-              %td{class: "#{(player.paid? or player.payment_reversed?) ? '' : 'text-primary'}"}
+              -# %td{class: "#{(player.paid? or player.payment_reversed?) ? '' : 'text-primary'}"}
+              %td{class: "#{(player.paid?) ? '' : 'text-primary'}"}
                 $
-                - unless player.paid? or player.payment_reversed?
+                - unless player.paid? #or player.payment_reversed?
                   %a{href: nil, class: 'tip', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_tip", "data-value" => player.tip.blank? ? '0' : player.tip}
                     = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
                 - else
                   = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
               - unless current_user.is_caddy?
-                %td{class: "#{(player.paid? or player.payment_reversed?) ? '' : 'text-primary'}"}
+                -# %td{class: "#{(player.paid? or player.payment_reversed?) ? '' : 'text-primary'}"}
+                %td{class: "#{(player.paid?) ? '' : 'text-primary'}"}
                   $
-                  - unless player.paid? or player.payment_reversed?
+                  - unless player.paid? #or player.payment_reversed?
                     %a{href: nil, class: 'transaction_fee', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_transaction_fee", "data-value" => player.transaction_fee.blank? ? current_company.transaction_fee : player.transaction_fee}
                       = number_with_precision("#{player.transaction_fee.blank? ? current_company.transaction_fee : player.transaction_fee}", precision: 2)
                   - else
@@ -149,7 +152,7 @@
                   = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
                   = f.hidden_field :amount, value: player.total, class: 'amount'
                   =# f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure you want to pay this?' } unless player.paid?
-                  - unless player.paid? or player.payment_reversed?
+                  - unless player.paid? #or player.payment_reversed?
                     %button.btn.btn-success{id: 'pay_caddy_round_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Pay", confirm: 'Are you sure you want to pay this?'}} 
                       %i.fa.fa-dollar
                       Pay
@@ -161,8 +164,9 @@
                     = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }
                 - elsif player.paid?
                   .text-success Paid
-                - if (player.transfer and player.transfer.reversed?)
-                  .text-danger Reversed
+                -#
+                  - if (player.transfer and player.transfer.reversed?)
+                    .text-danger Reversed
                 =# "Paid" if player.paid?
                 =# link_to 'Rate', new_caddy_rating_path(player_id: player.id), class: 'btn btn-warning' unless player.caddy_rating.present?
   - if current_user.is_admin?             
