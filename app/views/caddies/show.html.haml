@@ -23,10 +23,11 @@
       %a.nav-link{:href => "#messages", :data => {:toggle => "tab"}} 
         %i.fa.fa-commenting.fa-lg
         = "Messages" unless browser.device.mobile?
-    %li.nav-item
-      %a.nav-link{:href => "#settings", :data => {:toggle => "tab"}} 
-        %i.fa.fa-gear.fa-lg
-        = "Settings" unless browser.device.mobile?
+    -#
+      %li.nav-item
+        %a.nav-link{:href => "#settings", :data => {:toggle => "tab"}} 
+          %i.fa.fa-gear.fa-lg
+          = "Settings" unless browser.device.mobile?
   .tab-content
     .tab-pane.active{:id => "info"}
       %br
@@ -286,18 +287,19 @@
                         %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
                         %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Send"}} 
                           Send
-    .tab-pane{:id => "settings"}
-      %br
-      #caddy_settings.collapse.show.in{"aria-expanded" => "true"}
-        - if browser.device.mobile?
-          %h3 Settings
-        %p.lead
-          Phone:
-          = @caddy.customer.PhoneMobile
-        %p.lead
-          Email:
-          = @caddy.customer.Email
-        %p.lead
-          Active:
-          = "#{@caddy.active? ? 'Yes' : 'No'}"
-        =# link_to 'Edit', edit_user_registration_path(current_user), class: 'btn btn-primary'
+    -#
+      .tab-pane{:id => "settings"}
+        %br
+        #caddy_settings.collapse.show.in{"aria-expanded" => "true"}
+          - if browser.device.mobile?
+            %h3 Settings
+          %p.lead
+            Phone:
+            = @caddy.customer.PhoneMobile
+          %p.lead
+            Email:
+            = @caddy.customer.Email
+          %p.lead
+            Active:
+            = "#{@caddy.active? ? 'Yes' : 'No'}"
+          =# link_to 'Edit', edit_user_registration_path(current_user), class: 'btn btn-primary'
