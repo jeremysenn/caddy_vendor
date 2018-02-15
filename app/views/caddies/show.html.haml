@@ -85,13 +85,12 @@
         %p.lead
           Course:
           = link_to @caddy.course.CourseName, @caddy.course
-      -#
-        %p.lead
-          Phone:
-          = @caddy.cell_phone_number
-        %p.lead
-          Email:
-          = @caddy.email
+      %p.lead
+        Phone:
+        = @caddy.cell_phone_number
+      %p.lead
+        Email:
+        = @caddy.email
       %p.lead
         Ranking:
         - unless @caddy_rank_desc.blank?
