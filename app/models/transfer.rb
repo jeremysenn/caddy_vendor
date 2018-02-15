@@ -160,7 +160,7 @@ class Transfer < ApplicationRecord
 #          end
 
           # Create a new transfer to represent the reversal
-          Transfer.create(from_account_id: from_account_id, to_account_id: to_account_id, customer_id: customer_id, player_id: player_id, 
+          Transfer.create(from_account_id: from_account_id, to_account_id: to_account_id, customer_id: customer_id, player_id: nil, 
             caddy_fee_cents: caddy_fee_cents, caddy_tip_cents: caddy_tip_cents, amount_cents: amount_cents, fee_cents: fee_cents, ez_cash_tran_id: response.body[:ez_cash_txn_response][:tran_id], 
             reversed: true, fee_to_account_id: fee_to_account_id, member_balance_cleared: member_balance_cleared, company_id: company_id, note: note,
             club_credit_transaction_id: club_credit_transaction_id)
