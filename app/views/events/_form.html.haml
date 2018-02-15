@@ -98,14 +98,15 @@
   .row.form-group
     %div{:class => "col-sm-12"}
       = link_to 'Cancel', :back, class: 'btn btn-secondary'
-      - unless current_user.is_caddy?
-        = f.submit "Payment", :class => 'btn btn-success', name: 'pay'
-      - else
-        =# f.submit "Add to Balance", :class => 'btn btn-success', name: 'pay'
-        = button_tag(type: "submit", class: "btn btn-success", name: 'pay') do
-          %span
-            %i.fa.fa-dollar
-            Add to Balance
+      -#
+        - unless current_user.is_caddy?
+          = f.submit "Payment", :class => 'btn btn-success', name: 'pay'
+        - else
+          =# f.submit "Add to Balance", :class => 'btn btn-success', name: 'pay'
+          = button_tag(type: "submit", class: "btn btn-success", name: 'pay') do
+            %span
+              %i.fa.fa-dollar
+              Add to Balance
 
       %button.btn.btn-primary{:type => "submit"} 
         Save
