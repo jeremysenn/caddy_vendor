@@ -54,8 +54,7 @@ jQuery ->
   #        return
 
   $(document).on "turbolinks:load", ->
-    #for bootstrap 3 use 'shown.bs.tab' instead of 'shown' in the next line
-    $('a[data-toggle="tab"]').on 'click', (e) ->
+    $('a[data-toggle="tab"]').on 'show.bs.tab', (e) ->
       #save the latest tab
       localStorage.setItem 'lastTab', $(e.target).attr('href')
       return
