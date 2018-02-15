@@ -45,7 +45,7 @@
               %i.fa.fa-dollar
               Members with balance
       %li.nav-item
-        %a.nav-link{:href => caddies_path, :class => (params[:controller] == 'caddies' and params[:action] == 'index' and not params[:balances] == 'true') ? "active" : ""} 
+        %a.nav-link{:href => caddies_path, :class => (params[:controller] == 'caddies' and not params[:balances] == 'true') ? "active" : ""} 
           %i.fa.fa-vcard-o
           Caddies
       -#
