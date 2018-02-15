@@ -180,8 +180,8 @@
             %a{:href => new_event_path, class: 'btn btn-warning'}
               %i.fa.fa-plus-circle
               Round
-        %br
         - unless @events.blank?
+          %br
           .table-responsive
             %table.table.table-striped{class: "#{browser.device.mobile? ? 'table-sm' : ''}"}
               %thead
