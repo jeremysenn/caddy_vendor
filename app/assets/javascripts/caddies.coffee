@@ -53,4 +53,16 @@ jQuery ->
   #        alert 'There was a problem sending the verification code'
   #        return
 
+  $(document).on "turbolinks:load", ->
+    #for bootstrap 3 use 'shown.bs.tab' instead of 'shown' in the next line
+    $('a[data-toggle="tab"]').on 'click', (e) ->
+      #save the latest tab
+      localStorage.setItem 'lastTab', $(e.target).attr('href')
+      return
+    #go to the latest tab, if it exists:
+    lastTab = localStorage.getItem('lastTab')
+    if lastTab
+      $('a[href="' + lastTab + '"]').click()
+    return
+
     

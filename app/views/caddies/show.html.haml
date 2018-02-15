@@ -4,13 +4,13 @@
 
   %ul.nav.nav-tabs
     %li.nav-item
-      %a.nav-link.active{:href => "#info", :data => {:toggle => "tab"}} 
-        %i.fa.fa-vcard-o.fa-lg
-        = "Info" unless browser.device.mobile?
-    %li.nav-item
-      %a.nav-link{:href => "#rounds", :data => {:toggle => "tab"}} 
+      %a.nav-link.active{:href => "#rounds", :data => {:toggle => "tab"}} 
         %i.fa.fa-flag.fa-lg
         = "Rounds" unless browser.device.mobile?
+    %li.nav-item
+      %a.nav-link{:href => "#info", :data => {:toggle => "tab"}} 
+        %i.fa.fa-qrcode.fa-lg
+        = "Info" unless browser.device.mobile?
     %li.nav-item
       %a.nav-link{:href => "#transfers", :data => {:toggle => "tab"}} 
         %i.fa.fa-dollar.fa-lg
@@ -29,7 +29,7 @@
           %i.fa.fa-gear.fa-lg
           = "Settings" unless browser.device.mobile?
   .tab-content
-    .tab-pane.active{:id => "info"}
+    .tab-pane{:id => "info"}
       %br
       %p
         - if @available_balance > 1
@@ -168,7 +168,7 @@
         - else
           %p.lead None
 
-    .tab-pane{:id => "rounds"}
+    .tab-pane.active{:id => "rounds"}
       %br
       #caddy_rounds.collapse.show.in{"aria-expanded" => "true"}
         %h3
