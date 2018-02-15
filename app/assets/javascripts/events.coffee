@@ -141,7 +141,7 @@ jQuery ->
     return
   ### End Edit in place ###
 
-  $('#transfer_caddy_tip').focus ->
+  $('.tip_field').on 'click', ->
     # Select tip input field contents
-    @select()
+    $(this).select()
     return
