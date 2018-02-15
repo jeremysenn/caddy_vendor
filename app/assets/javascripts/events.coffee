@@ -141,7 +141,7 @@ jQuery ->
     return
   ### End Edit in place ###
 
-  $('.tip_field').on 'click', ->
-    # Select tip input field contents
-    $(this).select()
-    return
+  #$('.tip_field').on 'click', ->
+  #  # Select tip input field contents
+  #  $(this).select()
+  #  return

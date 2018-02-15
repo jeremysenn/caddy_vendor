@@ -62,13 +62,17 @@ class Player < ApplicationRecord
     status == 'closed'
   end
   
+  def paid?
+    status == 'paid'
+  end
+  
 #  def paid?
 #    status == 'paid' and not payment_reversed?
 #  end
   
-  def paid?
-    transfer.present? and not payment_reversed?
-  end
+#  def paid?
+#    transfer.present? and not payment_reversed?
+#  end
   
   def payment_reversed?
     transfer.reversed? unless transfer.blank?
