@@ -68,10 +68,15 @@ class TransfersController < ApplicationController
             unless current_user.is_caddy?
               redirect_back fallback_location: root_path, notice: 'Transfer was successfully created.' 
             else
-              redirect_to current_caddy, notice: 'Transfer was successfully created.'
+#              redirect_to current_caddy, notice: 'Transfer was successfully created.'
+              redirect_back fallback_location: current_caddy, notice: 'Transfer was successfully created.' 
             end
           else
-            redirect_back fallback_location: root_path, alert: 'There was a problem connecting to EZcash.' 
+            unless current_user.is_caddy?
+              redirect_back fallback_location: root_path, alert: 'There was a problem connecting to EZcash.' 
+            else
+              redirect_back fallback_location: current_caddy, alert: 'There was a problem connecting to EZcash.' 
+            end
           end
           }
         format.json { render :show, status: :created, location: @transfer }
@@ -97,14 +102,16 @@ class TransfersController < ApplicationController
               redirect_back fallback_location: root_path, notice: 'Transfer was successfully updated.' 
 #              redirect_to root_path, notice: 'Transfer was successfully updated.' 
             else
-              redirect_to current_caddy, notice: 'Transfer was successfully updated.'
+#              redirect_to current_caddy, notice: 'Transfer was successfully updated.'
+              redirect_back fallback_location: current_caddy, notice: 'Transfer was successfully updated.' 
             end
           else
             unless current_user.is_caddy?
 #              redirect_to root_path, notice: 'Transfer was reversed.' 
               redirect_back fallback_location: root_path, notice: 'Transfer was reversed.' 
             else
-              redirect_to current_caddy, notice: 'Transfer was reversed.'
+#              redirect_to current_caddy, notice: 'Transfer was reversed.'
+              redirect_back fallback_location: current_caddy, notice: 'Transfer was reversed.'
             end
           end
           }
