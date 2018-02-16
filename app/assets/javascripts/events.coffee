@@ -18,8 +18,8 @@ jQuery ->
 
   ### Sum each player right away by simulating keyup/touchend ###
   $(document).on 'ready page:load', ->
-    $('.tip_field').keyup()
-    $('.tip_field').touchend()
+    $('.tip_field').trigger('keyup')
+    $('.tip_field').trigger('touchend')
 
   ### Edit in place ###
   # turn to inline mode
