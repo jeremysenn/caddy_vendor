@@ -17,7 +17,7 @@ jQuery ->
       return
 
   ### Add everything up on page load to make sure everything is correct ###
-  $(document).on 'ready page:load', ->
+  $(document).on 'turbolinks:load', ->
     $('.transfer_tip_field').each ->
       caddy_fee = parseFloat($(this).closest('tr').find('#transfer_caddy_fee:first').val())
       caddy_tip = parseFloat($(this).closest('tr').find('#transfer_caddy_tip:first').val())
