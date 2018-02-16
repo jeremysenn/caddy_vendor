@@ -79,15 +79,16 @@
                   - else
                     Add to Balance
           = "No account for Caddy" if player.caddy.account.blank?
-          - if player.paid? and (player.transfer and player.transfer.reversable?) and not player.transfer.member_balance_cleared?
+          - if player.paid? #and (player.transfer and player.transfer.reversable?) and not player.transfer.member_balance_cleared?
             = form_for player.transfer, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
               = f.hidden_field :generate_reversal, value: true
               .pull-right
                 = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }
           - elsif player.paid?
             .text-success Paid
-          - if (player.transfer and player.transfer.reversed?)
-            .text-danger Reversed
+          -#
+            - if (player.transfer and player.transfer.reversed?)
+              .text-danger Reversed
 
   - else
     .table-responsive
