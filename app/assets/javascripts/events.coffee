@@ -195,7 +195,7 @@ jQuery ->
   #  false
 
   $('.tip_field').on 'focus click touchstart', (e) ->
-    $(this).get(0).setSelectionRange 0, 9999
+    $(this).setSelectionRange 0, 9999
     #$(this).css("color", "blue");
     e.preventDefault()
     return
