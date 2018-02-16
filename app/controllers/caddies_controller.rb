@@ -240,7 +240,7 @@ class CaddiesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def caddy_params
       params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym, :RankingID, :CheckedIn, :ClubCompanyNbr, :active, :CustomerID, :course_id,
-        customer_attributes:[:PhoneMobile, :NameF, :NameL, :Email, :_destroy, :id])
+        customer_attributes:[:PhoneMobile, :NameF, :NameL, :Email, :_destroy, :id, :company_id])
     end
     
     def set_time_zone(&block)
