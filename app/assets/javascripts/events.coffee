@@ -22,6 +22,14 @@ jQuery ->
 
   # Edit in place caddy tip
   $(document).on 'turbolinks:load', ->
+    # Select value automatically
+    $('.tip').editable().on 'shown', (ev, editable) ->
+      setTimeout (->
+        editable.input.$input.select()
+        return
+      ), 0
+      return
+
     $('#players').editable
       selector: '.tip'
       tpl: "<input type='text' style='width: 75px'>"
@@ -63,6 +71,15 @@ jQuery ->
         return
 
     # Edit in place caddy fee
+
+    # Select value automatically
+    $('.caddy_fee').editable().on 'shown', (ev, editable) ->
+      setTimeout (->
+        editable.input.$input.select()
+        return
+      ), 0
+      return
+
     $('#players').editable
       selector: '.caddy_fee'
       tpl: "<input type='text' style='width: 75px'>"
@@ -104,6 +121,15 @@ jQuery ->
         return  
 
     # Edit in place transaction fee
+
+    # Select value automatically
+    $('.transaction_fee').editable().on 'shown', (ev, editable) ->
+      setTimeout (->
+        editable.input.$input.select()
+        return
+      ), 0
+      return
+
     $('#players').editable
       selector: '.transaction_fee'
       tpl: "<input type='text' style='width: 75px'>"
