@@ -59,14 +59,17 @@
                 = number_to_currency(player.tip.blank? ? 0 : player.tip)
             .form-group.lead
               %strong Charge
-              - unless current_user.is_caddy? or player.paid? or player.payment_reversed?
+              - unless current_user.is_caddy? or player.paid? # or player.payment_reversed?
                 .input-group
                   .input-group-addon
                     %i.fa.fa-dollar
-                  = f.number_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee, class: "form-control input-lg col-xs-6", pattern: "[0-9]*", inputmode: "numeric"
+                  =# f.number_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee, class: "form-control input-lg col-xs-6", pattern: "[0-9]*", inputmode: "numeric"
+                  = f.number_field :caddy_fee, value: player.caddy_pay_rate, class: "form-control input-lg col-xs-6", pattern: "[0-9]*", inputmode: "numeric"
               - else
-                = f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
-                = number_to_currency(player.fee.blank? ? player.caddy_pay_rate : player.fee)
+                =# f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
+                =# number_to_currency(player.fee.blank? ? player.caddy_pay_rate : player.fee)
+                = f.hidden_field :caddy_fee, value: player.caddy_pay_rate
+                = number_to_currency(player.caddy_pay_rate)
             .form-group.lead
               = f.hidden_field :amount, value: player.total, class: 'amount'
               %strong Total
