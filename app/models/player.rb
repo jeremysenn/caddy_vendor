@@ -71,7 +71,7 @@ class Player < ApplicationRecord
 #  end
   
   def paid?
-    transfer.present? #and not payment_reversed?
+#    transfer.present? #and not payment_reversed?
     not transfers.blank? and not transfers.last.reversed?
   end
   

@@ -70,7 +70,9 @@ class Event < ApplicationRecord
   end
   
   def not_paid?
-    players.where(status: [nil, 'open', 'closed']).count > 0
+#    players.where(status: [nil, 'open', 'closed']).count > 0
+    unpaid_players = players.select { |p| not p.paid? }
+    return unpaid_players.count > 0
   end
   
   def contains_paid_players?
