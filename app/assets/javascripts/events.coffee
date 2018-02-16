@@ -23,14 +23,12 @@ jQuery ->
       caddy_tip = parseFloat($(this).closest('tr').find('#transfer_caddy_tip:first').val())
       sum = caddy_fee + caddy_tip
       $(this).closest('tr').find('#transfer_amount:first').val sum
-      alert sum
       return
     $('.tip_field').each ->
       caddy_fee = parseFloat($(this).closest('form').find('#transfer_caddy_fee').val())
       caddy_tip = parseFloat($(this).closest('form').find('#transfer_caddy_tip').val())
       sum = caddy_fee + caddy_tip
       $(this).closest("form").find('#transfer_amount').val sum
-      alert sum
       return
     sum = 0
     # Add up all the amounts
