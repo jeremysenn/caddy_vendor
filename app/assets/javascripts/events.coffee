@@ -32,17 +32,16 @@ jQuery ->
       $(this).closest("form").find('#transfer_amount').val sum
       alert sum
       return
-    if $('.transfer_tip_field').length() > 0
-      sum = 0
-      # Add up all the amounts
-      $('.amount').each ->
-        sum += Number($(this).val())
-        return
-      # Add up all the transaction fees
-      $('.transaction_fee').each ->
-        sum += Number($(this).val())
-        return
-      $('#player_total').text '$' + sum.toFixed(2)
+    sum = 0
+    # Add up all the amounts
+    $('.amount').each ->
+      sum += Number($(this).val())
+      return
+    # Add up all the transaction fees
+    $('.transaction_fee').each ->
+      sum += Number($(this).val())
+      return
+    $('#player_total').text '$' + sum.toFixed(2)
 
   ### Edit in place ###
   # turn to inline mode
