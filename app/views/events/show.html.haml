@@ -80,10 +80,10 @@
                     Add to Balance
           = "No account for Caddy" if player.caddy.account.blank?
           - if player.paid? #and (player.transfer and player.transfer.reversable?) and not player.transfer.member_balance_cleared?
-            = form_for player.transfers.last, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
+            = form_for player.transfers.last, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_reversal_form'} do |f|
               = f.hidden_field :generate_reversal, value: true
               .pull-right
-              = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }
+                = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }
             .text-success Paid
           -#
             - elsif player.paid?
