@@ -13,7 +13,7 @@ jQuery ->
       else
         sum = parseFloat(caddy_fee)
       $(this).closest("form").find('#transfer_amount').val sum
-      $(this).closest("form").find('#player_total').html '$' + sum
+      $(this).closest("form").find('#player_total_amount').html '$' + sum
       return
 
   ### Add everything up on page load to make sure everything is correct ###
