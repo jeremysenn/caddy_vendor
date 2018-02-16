@@ -202,6 +202,7 @@ jQuery ->
   $(document).on 'turbolinks:load', ->
     $('.tip_field').on 'click touchend', ->
       $(this).select()
+      $(this).setSelectionRange(0, 9999)
     return
 
   
