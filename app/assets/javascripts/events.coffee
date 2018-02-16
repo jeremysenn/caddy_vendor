@@ -16,9 +16,8 @@ jQuery ->
       $(this).closest("form").find('#player_total').html '$' + sum
       return
 
-  ### Sum each player right away by simulating keyup/touchend ###
   $(document).on 'ready page:load', ->
-    $('.editable-input').submit()
+    $('.editable-input').editable().submit()
     $('.tip_field').trigger('keyup')
     $('.tip_field').trigger('touchend')
 
