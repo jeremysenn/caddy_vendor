@@ -177,7 +177,7 @@ jQuery ->
   #  $(this).select()
   #  return
 
-  $('.tip_field').on 'click focus', ->
+  $('.tip_field').on 'click focus touchend', ->
     # Select tip input field contents
     #$(this).select()
     #$(this).setSelectionRange(0, this.value.length)
