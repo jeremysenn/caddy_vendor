@@ -49,10 +49,14 @@
             
             .form-group
               %strong Tip
-              .input-group
-                .input-group-addon
-                  %i.fa.fa-dollar
-                = f.number_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip, class: "form-control input-lg tip_field", pattern: "[0-9]*", inputmode: "numeric", readonly: (player.paid?), autofocus: (index == 0)
+              - unless player.paid?
+                .input-group
+                  .input-group-addon
+                    %i.fa.fa-dollar
+                  = f.number_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip, class: "form-control input-lg tip_field", pattern: "[0-9]*", inputmode: "numeric", readonly: (player.paid?), autofocus: (index == 0)
+              - else
+                = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
+                = number_to_currency(player.tip.blank? ? 0 : player.tip)
             .form-group.lead
               %strong Charge
               - unless current_user.is_caddy? or player.paid? or player.payment_reversed?
