@@ -171,3 +171,8 @@ jQuery ->
   #  # Select tip input field contents
   #  $(this).select()
   #  return
+
+  $('.tip_field').on 'click touchend', ->
+    # Select tip input field contents
+    $(this).select()
+    return
