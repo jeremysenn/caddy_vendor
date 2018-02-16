@@ -101,7 +101,8 @@ class TransfersController < ApplicationController
             end
           else
             unless current_user.is_caddy?
-              redirect_to root_path, notice: 'Transfer was reversed.' 
+#              redirect_to root_path, notice: 'Transfer was reversed.' 
+              redirect_back fallback_location: root_path, notice: 'Transfer was reversed.' 
             else
               redirect_to current_caddy, notice: 'Transfer was reversed.'
             end
