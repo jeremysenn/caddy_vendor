@@ -84,8 +84,10 @@
               = f.hidden_field :generate_reversal, value: true
               .pull-right
                 = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }
-          - elsif player.paid?
             .text-success Paid
+          -#
+            - elsif player.paid?
+              .text-success Paid
           -#
             - if (player.transfer and player.transfer.reversed?)
               .text-danger Reversed
