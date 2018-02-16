@@ -188,7 +188,7 @@ jQuery ->
     #), 1
     #return
 
-  $('.tip_field').focus(->
+  $('.tip_field').focusin(->
     @setSelectionRange 0, 9999
     false
   ).mouseup ->
