@@ -23,7 +23,7 @@ jQuery ->
   # Edit in place caddy tip
   $(document).on 'turbolinks:load', ->
     # Select value automatically
-    $('.tip').editable().on 'shown', (ev, editable) ->
+    $('.tip').on 'shown', (ev, editable) ->
       setTimeout (->
         editable.input.$input.select()
         return
@@ -73,7 +73,7 @@ jQuery ->
     # Edit in place caddy fee
 
     # Select value automatically
-    $('.caddy_fee').editable().on 'shown', (ev, editable) ->
+    $('.caddy_fee').on 'shown', (ev, editable) ->
       setTimeout (->
         editable.input.$input.select()
         return
@@ -123,7 +123,7 @@ jQuery ->
     # Edit in place transaction fee
 
     # Select value automatically
-    $('.transaction_fee').editable().on 'shown', (ev, editable) ->
+    $('.transaction_fee').on 'shown', (ev, editable) ->
       setTimeout (->
         editable.input.$input.select()
         return
@@ -200,7 +200,7 @@ jQuery ->
   #  return
 
   $(document).on 'turbolinks:load', ->
-    $('.tip_field').on 'click touchend', ->
+    $('.tip_field').on 'click focus touchend', ->
       $(this).select()
       $(this).setSelectionRange(0, 9999)
     return
