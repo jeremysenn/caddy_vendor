@@ -199,10 +199,10 @@ jQuery ->
   #  #e.preventDefault()
   #  return
 
-  $(document).on 'turbolinks:load', ->
-    $('.tip_field').on 'click focus touchend', ->
-      $(this).select()
-      $(this).setSelectionRange(0, 9999)
-    return
+  #$(document).on 'turbolinks:load', ->
+  #  $('.tip_field').on 'click focus touchend', ->
+  #    $(this).select()
+  #    $(this).setSelectionRange(0, 9999)
+  #  return
 
   
