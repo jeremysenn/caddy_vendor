@@ -181,8 +181,12 @@ jQuery ->
     # Select tip input field contents
     #$(this).select()
     #$(this).setSelectionRange(0, this.value.length)
-    $(this).focus()
-    $(this).setSelectionRange(0, 9999)
+    #$(this).focus()
+    #$(this).setSelectionRange(0, 9999)
+    setTimeout (->
+      $(this).setSelectionRange 0, 9999
+      return
+    ), 1
     return
 
   
