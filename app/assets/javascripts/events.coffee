@@ -3,18 +3,18 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 jQuery ->
-
-  $('.tip_field').on 'keyup touchend', ->
-    caddy_fee = $(this).closest('form').find('#transfer_caddy_fee').val()
-    caddy_tip = $(this).val()
-    #transaction_fee = $(this).closest('.modal').find('#transfer_fee').val()
-    if caddy_tip > 0
-      sum = parseFloat(caddy_fee) + parseFloat(caddy_tip)
-    else
-      sum = parseFloat(caddy_fee)
-    $(this).closest("form").find('#transfer_amount').val sum
-    $(this).closest("form").find('#player_total').html '$' + sum
-    return
+  $(document).on 'turbolinks:load', ->
+    $('.tip_field').on 'keyup touchend', ->
+      caddy_fee = $(this).closest('form').find('#transfer_caddy_fee').val()
+      caddy_tip = $(this).val()
+      #transaction_fee = $(this).closest('.modal').find('#transfer_fee').val()
+      if caddy_tip > 0
+        sum = parseFloat(caddy_fee) + parseFloat(caddy_tip)
+      else
+        sum = parseFloat(caddy_fee)
+      $(this).closest("form").find('#transfer_amount').val sum
+      $(this).closest("form").find('#player_total').html '$' + sum
+      return
 
   ### Edit in place ###
   # turn to inline mode
