@@ -100,6 +100,7 @@
   .row.form-group
     %div{:class => "col-sm-12"}
       = link_to 'Cancel', :back, class: 'btn btn-secondary'
+      = f.submit "Save", :class => 'btn btn-primary'
       -#
         - unless current_user.is_caddy?
           = f.submit "Payment", :class => 'btn btn-success', name: 'pay'
@@ -110,8 +111,6 @@
               %i.fa.fa-dollar
               Add to Balance
 
-      %button.btn.btn-primary{:type => "submit"} 
-        Save
       - unless @event.contains_paid_players?
         %p
           .pull-right
