@@ -177,12 +177,11 @@ jQuery ->
   #  $(this).select()
   #  return
 
-  $('.tip_field').on 'click', ->
+  $('.tip_field').on 'click focus', ->
     # Select tip input field contents
-    $(this).select()
+    #$(this).select()
     #$(this).setSelectionRange(0, this.value.length)
     #$(this).setSelectionRange(0, 9999)
-    $(this).focus()
     setTimeout (->
       $(this).setSelectionRange 0, 9999
       return
