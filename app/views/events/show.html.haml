@@ -47,7 +47,7 @@
             = f.hidden_field :fee_to_account_id, value: current_user.company.account.id unless current_user.company.account.blank?
             =# f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
             
-            .form-group
+            .form-group.lead
               %strong Tip
               - unless player.paid?
                 .input-group
