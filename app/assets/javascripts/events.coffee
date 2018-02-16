@@ -194,10 +194,14 @@ jQuery ->
   #).mouseup ->
   #  false
 
-  $('.tip_field').on 'focus click touchstart', (e) ->
-    $(this).setSelectionRange 0, 9999
-    $(this).css("color", "blue");
-    e.preventDefault()
+  #$('.tip_field').on 'focus click touchstart', (e) ->
+  #  $(this).setSelectionRange(0, 9999)
+  #  #e.preventDefault()
+  #  return
+
+  $(document).on 'turbolinks:load', ->
+    $('.tip_field').on 'click touchend', ->
+      $(this).select()
     return
 
   
