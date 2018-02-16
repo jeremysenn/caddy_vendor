@@ -188,10 +188,16 @@ jQuery ->
     #), 1
     #return
 
-  $('.tip_field').focusin(->
-    @setSelectionRange 0, 9999
-    false
-  ).mouseup ->
-    false
+  #$('.tip_field').focus(->
+  #  @setSelectionRange 0, 9999
+  #  false
+  #).mouseup ->
+  #  false
+
+  $('.tip_field').on 'focus click touchstart', (e) ->
+    $(this).get(0).setSelectionRange 0, 9999
+    #$(this).css("color", "blue");
+    e.preventDefault()
+    return
 
   
