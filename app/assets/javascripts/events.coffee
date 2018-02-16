@@ -4,7 +4,7 @@
 
 jQuery ->
 
-  $('.tip_field').on 'keyup', ->
+  $('.tip_field').on 'keyup touchend', ->
     caddy_fee = $(this).closest('form').find('#transfer_caddy_fee').val()
     caddy_tip = $(this).val()
     #transaction_fee = $(this).closest('.modal').find('#transfer_fee').val()
