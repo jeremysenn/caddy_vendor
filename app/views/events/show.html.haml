@@ -121,9 +121,9 @@
               %td= player.caddy_type
               %td= player.round
               %td= player.note
-              %td{class: "#{(player.paid? or current_user.is_caddy? or player.payment_reversed?) ? '' : 'text-primary'}"}
+              %td{class: "#{(player.paid? or current_user.is_caddy? ) ? '' : 'text-primary'}"}
                 $
-                - unless player.paid? or current_user.is_caddy? or player.payment_reversed?
+                - unless player.paid? or current_user.is_caddy? #or player.payment_reversed?
                   %a{href: nil, class: 'caddy_fee', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_caddy_fee", "data-value" => player.fee.blank? ? player.caddy_pay_rate : player.fee}
                     = number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
                 - else
