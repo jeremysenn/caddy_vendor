@@ -17,9 +17,18 @@ jQuery ->
       return
 
   $(document).on 'ready page:load', ->
-    $('.editable-input').editable().submit()
-    $('.tip_field').trigger('keyup')
-    $('.tip_field').trigger('touchend')
+    $('.transfer_tip_field').each ->
+      caddy_fee = parseFloat($(this).closest('tr').find('#transfer_caddy_fee:first').val())
+      caddy_tip = parseFloat($(this).closest('tr').find('#transfer_caddy_tip:first').val())
+      sum = caddy_fee + caddy_tip
+      $(this).closest('tr').find('#transfer_amount:first').val sum
+      return
+    $('.tip_field').each ->
+      caddy_fee = $(this).closest('form').find('#transfer_caddy_fee').val()
+      caddy_tip = $(this).val()
+      sum = caddy_fee + caddy_tip
+      $(this).closest("form").find('#transfer_amount').val sum
+      return
 
   ### Edit in place ###
   # turn to inline mode
