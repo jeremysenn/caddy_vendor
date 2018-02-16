@@ -16,6 +16,11 @@ jQuery ->
       $(this).closest("form").find('#player_total').html '$' + sum
       return
 
+  ### Sum each player right away by simulating keyup/touchend ###
+  $(document).on 'ready page:load', ->
+    $('.tip_field').keyup()
+    $('.tip_field').touchend()
+
   ### Edit in place ###
   # turn to inline mode
   $.fn.editable.defaults.mode = 'inline';
