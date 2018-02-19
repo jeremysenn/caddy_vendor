@@ -34,10 +34,10 @@ jQuery ->
     # Add up all the amounts
     $('.amount').each ->
       sum += Number($(this).val())
-      alert 'here we are'
       return
     # Add up all the transaction fees
     $('.transaction_fee').each ->
+      alert 'here we are'
       sum += Number($(this).val())
       return
     $('#player_total').text '$' + sum.toFixed(2)
