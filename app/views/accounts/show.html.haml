@@ -1,0 +1,10 @@
+.container
+  %br
+  %h3
+    Account for
+    = @account.customer.full_name
+  %p.lead= "Balance: #{number_to_currency(@account.Balance)}"
+  %p.lead= "Minimum Balance: #{number_to_currency(@account.MinBalance)}"
+
+  %p= link_to 'Edit', edit_account_path(@account), class: 'btn btn-primary'
+  

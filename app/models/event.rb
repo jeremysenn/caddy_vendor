@@ -1,5 +1,6 @@
 class Event < ApplicationRecord
-  belongs_to :course
+#  belongs_to :course
+  belongs_to :company, :foreign_key => :course_id
   
   has_many :players, :dependent => :destroy
   accepts_nested_attributes_for :players, allow_destroy: true #, limit: 5
@@ -69,7 +70,9 @@ class Event < ApplicationRecord
   end
   
   def not_paid?
-    players.where(status: [nil, 'open', 'closed']).count > 0
+#    players.where(status: [nil, 'open', 'closed']).count > 0
+    unpaid_players = players.select { |p| not p.paid? }
+    return unpaid_players.count > 0
   end
   
   def contains_paid_players?
@@ -86,6 +89,15 @@ class Event < ApplicationRecord
   
   def paid?
     status == 'paid'
+  end
+  
+  def include_caddy?(caddy)
+    found_players = players.where(caddy_id: caddy.id)
+    if found_players.blank?
+      return false
+    else
+      return true
+    end
   end
   
   #############################

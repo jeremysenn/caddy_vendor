@@ -242,19 +242,20 @@ class Transaction < ActiveRecord::Base
     account.customer unless account.blank?
   end
   
-  def company
-    unless customer.blank?
-      customer.company
-    else
-      unless from_account.blank?  
-        from_account.company 
-      else
-        unless to_account.blank?
-          to_account.company 
-        end
-      end
-    end
-  end
+#  def company
+#    
+#    unless customer.blank?
+#      customer.company
+#    else
+#      unless from_account.blank?  
+#        from_account.company 
+#      else
+#        unless to_account.blank?
+#          to_account.company 
+#        end
+#      end
+#    end
+#  end
   
   def amount_with_fee
     unless self.ChpFee.blank? or self.ChpFee.zero?
@@ -338,6 +339,19 @@ class Transaction < ActiveRecord::Base
     client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
     response = client.call(:ez_cash_txn, message: { FromActID: from_account_id, ToActID: to_account_id, Amount: amount})
     Rails.logger.debug "Response body: #{response.body}"
+  end
+  
+  def self.ezcash_get_barcode_png_web_service_call(customer_id, company_number, scale)
+    client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+    response = client.call(:get_customer_barcode_png, message: { CustomerID: customer_id, CompanyNumber: company_number, Scale: scale})
+    
+    Rails.logger.debug "Response body: #{response.body}"
+    
+    unless response.body[:get_customer_barcode_png_response].blank? or response.body[:get_customer_barcode_png_response][:return].blank?
+      return response.body[:get_customer_barcode_png_response][:return]
+    else
+      return ""
+    end
   end
   
 end

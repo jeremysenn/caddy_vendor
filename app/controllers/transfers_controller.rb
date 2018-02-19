@@ -23,7 +23,7 @@ class TransfersController < ApplicationController
     end
     @transfers_total_amount = 0
     transfers.each do |transfer|
-      @transfers_total_amount = @transfers_total_amount + transfer.amount
+      @transfers_total_amount = @transfers_total_amount + transfer.amount_billed
     end
     respond_to do |format|
       format.html {
@@ -65,16 +65,25 @@ class TransfersController < ApplicationController
 #        format.html { redirect_to :back, notice: 'Transfer was successfully created.' }
         format.html { 
           unless @transfer.ez_cash_tran_id.blank?
-            redirect_back fallback_location: root_path, notice: 'Transfer was successfully created.' 
+            unless current_user.is_caddy?
+              redirect_back fallback_location: root_path, notice: 'Transfer was successfully created.' 
+            else
+#              redirect_to current_caddy, notice: 'Transfer was successfully created.'
+              redirect_back fallback_location: current_caddy, notice: 'Transfer was successfully created.' 
+            end
           else
-            redirect_back fallback_location: root_path, alert: 'There was a problem connecting to EZcash.' 
+            unless current_user.is_caddy?
+              redirect_back fallback_location: root_path, alert: 'There was a problem connecting to EZcash.' 
+            else
+              redirect_back fallback_location: current_caddy, alert: 'There was a problem connecting to EZcash.' 
+            end
           end
           }
         format.json { render :show, status: :created, location: @transfer }
       else
         format.html { 
 #          render :new 
-          redirect_back fallback_location: root_path, alert: 'There was a problem connecting to EZcash.'
+          redirect_back fallback_location: root_path, alert: "There was a problem creating transfer. #{@transfer.errors.full_messages.to_sentence}"
           }
         format.json { render json: @transfer.errors, status: :unprocessable_entity }
       end
@@ -87,8 +96,24 @@ class TransfersController < ApplicationController
     respond_to do |format|
       if @transfer.update(transfer_params)
         format.html { 
-#          redirect_to @transfer, notice: 'Transfer was successfully updated.' 
-          redirect_back fallback_location: @transfer, notice: 'Transfer was successfully updated.' 
+#          redirect_to @transfer, notice: 'Transfer was successfully updated.'
+          unless transfer_params[:generate_reversal] == "true"
+            unless current_user.is_caddy?
+              redirect_back fallback_location: root_path, notice: 'Transfer was successfully updated.' 
+#              redirect_to root_path, notice: 'Transfer was successfully updated.' 
+            else
+#              redirect_to current_caddy, notice: 'Transfer was successfully updated.'
+              redirect_back fallback_location: current_caddy, notice: 'Transfer was successfully updated.' 
+            end
+          else
+            unless current_user.is_caddy?
+#              redirect_to root_path, notice: 'Transfer was reversed.' 
+              redirect_back fallback_location: root_path, notice: 'Transfer was reversed.' 
+            else
+#              redirect_to current_caddy, notice: 'Transfer was reversed.'
+              redirect_back fallback_location: current_caddy, notice: 'Transfer was reversed.'
+            end
+          end
           }
         format.json { render :show, status: :ok, location: @transfer }
       else
@@ -120,7 +145,7 @@ class TransfersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def transfer_params
       params.fetch(:transfer, {}).permit(:amount, :caddy_fee, :caddy_tip, :to_account, :from_account, :fee, :customer_id, :company_id, 
-        :player_id, :reversed, :fee_to_account_id, :note, :start_date, :end_date, :type)
+        :player_id, :reversed, :fee_to_account_id, :note, :start_date, :end_date, :type, :generate_reversal)
     end
     
     ### Secure the transfers sort direction ###

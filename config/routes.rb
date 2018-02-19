@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
   
+  resources :balance_logs do
+    member do
+      get :transfers
+      get :ach_report
+      get :ach_credit_report
+    end
+  end
+  resources :accounts
   resources :sms_messages
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
@@ -12,6 +20,7 @@ Rails.application.routes.draw do
   resources :customers do
     member do
       get :clear_account_balance
+      get :show_caddy
     end
     collection do
       get :clear_all_account_balances
@@ -30,9 +39,13 @@ Rails.application.routes.draw do
   resources :caddies do
     member do
       get 'pay'
+      get 'barcode'
+      get 'send_verification_code'
+      get 'verify_phone'
     end
     collection do
       get 'send_group_text_message'
+      get 'caddies_with_balance'
     end
   end
   resources :members
@@ -46,8 +59,14 @@ Rails.application.routes.draw do
   resources :caddy_rank_descs
   
   resources :caddy_ratings
+  
 #  resources :users
-  resources :users_admin, :controller => 'users'
+  resources :users_admin, :controller => 'users' do
+    member do
+      post 'pin_verification'
+      post 'verify_phone'
+    end
+  end
   
   resources :vendor_payables
   

@@ -6,31 +6,10 @@
       %i.fa.fa-flag
       CaddyVend
     %ul.nav.navbar-nav  
-      %li.nav-item
-        %a.nav-link{:href => events_path, :class => (current_page? events_path) ? "active" : ""} 
-          %i.fa.fa-calendar
-          Calendar
-      -#
-        %li.nav-item
-          %a.nav-link{:href => customers_path, :class => (params[:controller] == 'customers') ? "active" : ""} 
-            %i.fa.fa-user-circle-o
-            Members
-      %li.nav-item
-        %a.nav-link{:href => caddies_path, :class => (params[:controller] == 'caddies') ? "active" : ""} 
-          %i.fa.fa-vcard-o
-          Caddies
       .float-xs-right
         %li.nav-item.dropdown
-          %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+        %li.nav-item
+          %a.nav-link{:href => edit_user_registration_path(current_user)} 
             %i.fa.fa-gear
-            More
-            %b.caret
-          %div.dropdown-menu
-            %a{:href => edit_user_registration_path(current_user), :class => "dropdown-item"} 
-              %i.fa.fa-user
-              = current_user.email
+            Settings
         %li.nav-item= link_to 'Log out', destroy_user_session_path, method: :delete, data: { confirm: 'Are you sure you want to sign out?' }, class: 'btn btn-outline-danger nav-link'
-      -#
-        .float-xs-right
-          %li.nav-item= link_to current_user.email, edit_user_registration_path(current_user), class: "nav-link #{current_page?(edit_user_registration_path(current_user)) ? 'active' : ''}"
-      

@@ -13,7 +13,7 @@
         = link_to @transfer.club_credit_transaction_id, transaction_path(@transfer.club_credit_transaction_id)
     %p.lead
       DateTime of transfer:
-      = @transfer.created_at.in_time_zone(@transfer.course.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+      = @transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
     %p.lead
       From:
       - unless @from.blank?
@@ -37,12 +37,16 @@
       = @transfer.note
     %p.lead
       Total:
-      = number_to_currency(@transfer.amount)
+      = number_to_currency(@transfer.amount_billed)
     - if @transfer.reversed?
       %p.lead.text-danger
-        Reversed
+        Reversal transfer
+    - if not @transfer.reversed? and @transfer.player and @transfer.player.payment_reversed?
+      %p.lead.text-danger
+        This transfer was reversed
   = form_for @transfer, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
-    = f.hidden_field :reversed, value: true
+    =# f.hidden_field :reversed, value: true
+    = f.hidden_field :generate_reversal, value: true
     = link_to 'Back', :back, class: 'btn btn-secondary'
-    - if @transfer.reversable?
+    - if @transfer.reversable? and (current_user.is_admin? or current_user.is_caddy?)
       = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }

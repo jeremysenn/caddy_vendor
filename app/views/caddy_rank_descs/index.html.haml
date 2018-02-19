@@ -1,44 +1,39 @@
 .container
   %br
-  - unless current_course.blank?
-    - if current_user.courses.count <= 1
-      %br
-      %p.lead
-        - unless current_course.blank?
-          = current_course.name 
-        - else
-          = current_user.courses.first.name unless current_user.courses.blank?
-        = link_to "New caddy rank", new_caddy_rank_desc_path(course_id: @course.id), class: 'btn btn-warning' unless @course.blank?
-    - else
-      %p
-        = form_tag caddy_rank_descs_path, id: 'courses_form', method: 'get', class: 'form-inline' do |f|
-          = select_tag :course_id, options_from_collection_for_select(current_user.courses, "id", "name", @course.id), onchange: "$(this).parent('form').submit();", class: "form-control"
-          .pull-right
-            = link_to "New caddy rank", new_caddy_rank_desc_path(course_id: @course.id), class: 'btn btn-warning' unless @course.blank?
-            
+  %h4
+    %p= link_to "New caddy rank", new_caddy_rank_desc_path, class: 'btn btn-warning'
+    -#
+      - if current_company.courses.count <= 1
+        %br
+        %p.lead
+          - unless current_course.blank?
+            = current_course.name 
+          - else
+            = current_company.courses.first.name unless current_company.courses.blank?
+      - else
+        %p
+          = form_tag caddy_rank_descs_path, id: 'courses_form', method: 'get', class: 'form-inline' do |f|
+            = select_tag :course_id, options_from_collection_for_select(current_company.courses, "id", "name", @course.id), onchange: "$(this).parent('form').submit();", class: "form-control"
 
-  - @caddy_rank_descs.group_by{|crd| crd.course}.each do |course, caddy_rank_descs|
-    .card.card-block
-      %h4.card-title Caddy Ranks
-      .table-responsive
-        %table.table.table-striped
-          %thead
+  -# @caddy_rank_descs.group_by{|crd| crd.course}.each do |course, caddy_rank_descs|
+  .card.card-block
+    %h4.card-title Caddy Ranks
+    .table-responsive
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Ranking
+            %th Description
+            %th
+        %tbody
+          - @caddy_rank_descs.each do |caddy_rank_desc|
             %tr
-              %th Ranking
-              %th Description
-              %th
-          %tbody
-            - caddy_rank_descs.each do |caddy_rank_desc|
-              %tr
-                %td= caddy_rank_desc.RankingAcronym
-                %td= caddy_rank_desc.RankingDescription
-                %td
-                  = link_to 'Show', caddy_rank_desc, class: 'btn btn-secondary'
-                  = link_to 'Edit', edit_caddy_rank_desc_path(caddy_rank_desc), class: 'btn btn-primary'
-                  - if caddy_rank_desc.caddies.blank? and caddy_rank_desc.caddy_pay_rates.blank?
-                    = link_to 'Delete', caddy_rank_desc, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }
-                  - else
-                    %button.btn.btn-danger{"data-content" => "You must first remove this Caddy Rank from all Caddies and Caddy Pay Rates.", "data-toggle" => "popover", :title => "Delete Caddy Rank", "data-placement" => "top", :type => "button"} Delete
-
-  - if @caddy_rank_descs.blank?
-    %p= link_to "New #{current_course.name} caddy rank desc", new_caddy_rank_desc_path(course_id: current_course.id), class: 'btn btn-primary' unless current_course.blank?
+              %td= caddy_rank_desc.RankingAcronym
+              %td= caddy_rank_desc.RankingDescription
+              %td
+                = link_to 'Show', caddy_rank_desc, class: 'btn btn-secondary'
+                = link_to 'Edit', edit_caddy_rank_desc_path(caddy_rank_desc), class: 'btn btn-primary'
+                - if caddy_rank_desc.caddies.blank? and caddy_rank_desc.caddy_pay_rates.blank?
+                  = link_to 'Delete', caddy_rank_desc, :method => :delete, class: 'btn btn-danger', :data => { :confirm => 'Are you sure?' }
+                - else
+                  %button.btn.btn-danger{"data-content" => "You must first remove this Caddy Rank from all Caddies and Caddy Pay Rates.", "data-toggle" => "popover", :title => "Delete Caddy Rank", "data-placement" => "top", :type => "button"} Delete

@@ -6,13 +6,14 @@ class CaddyRankDescsController < ApplicationController
   # GET /caddy_rank_descs
   # GET /caddy_rank_descs.json
   def index
-    unless params[:course_id].blank?
-      @course = Course.where(ClubCourseID: params[:course_id]).first
-      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
-    else
-      @course = current_course.blank? ? current_user.company.courses.first : current_course
-    end
-    @caddy_rank_descs = @course.caddy_rank_descs.order(:RankingAcronym)
+#    unless params[:course_id].blank?
+#      @course = Course.where(ClubCourseID: params[:course_id]).first
+#      @course = current_course.blank? ? current_company.courses.first : current_course if @course.blank?
+#    else
+#      @course = current_course.blank? ? current_company.courses.first : current_course
+#    end
+#    @caddy_rank_descs = @course.caddy_rank_descs.order(:RankingAcronym)
+    @caddy_rank_descs = current_user.company.caddy_rank_descs.order(:RankingAcronym)
   end
 
   # GET /caddy_rank_descs/1
@@ -25,12 +26,12 @@ class CaddyRankDescsController < ApplicationController
   # GET /caddy_rank_descs/new
   def new
     @caddy_rank_desc = CaddyRankDesc.new
-    @course = Course.find(params[:course_id])
+#    @course = Course.find(params[:course_id])
   end
 
   # GET /caddy_rank_descs/1/edit
   def edit
-    @course = @caddy_rank_desc.course
+#    @course = @caddy_rank_desc.course
   end
 
   # POST /caddy_rank_descs
@@ -81,6 +82,6 @@ class CaddyRankDescsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def caddy_rank_desc_params
-      params.require(:caddy_rank_desc).permit(:ClubCompanyID, :RankingAcronym, :RankingDescription)
+      params.require(:caddy_rank_desc).permit(:ClubCompanyID, :RankingAcronym, :RankingDescription, :course_id)
     end
 end

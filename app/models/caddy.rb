@@ -4,14 +4,15 @@ class Caddy < ApplicationRecord
   
   establish_connection :ez_cash
   
-#  belongs_to :company, :foreign_key => "ClubCompanyNbr"
-  belongs_to :course, :foreign_key => "ClubCompanyNbr"
+  belongs_to :company, :foreign_key => "ClubCompanyNbr"
+#  belongs_to :course
   belongs_to :customer, :foreign_key => "CustomerID"
   belongs_to :caddy_rank_desc, :foreign_key => "RankingID"
   has_many :players
   has_many :transfers, through: :players
   has_many :caddy_ratings
   has_many :sms_messages
+  has_many :events, through: :players
   
 #  has_and_belongs_to_many :courses
 
@@ -52,30 +53,58 @@ class Caddy < ApplicationRecord
     customer.blank? ? '' : customer.PhoneMobile
   end
   
+  def email
+    customer.blank? ? '' : customer.Email
+  end
+  
 #  def customer
 #    Customer.where(CustomerID: self.CustomerID).first
 #  end
   
   def account
-    customer.account unless customer.blank?
+#    customer.account unless customer.blank?
+    Account.where(CustomerID: self.CustomerID, CompanyNumber: self.ClubCompanyNbr).first
+  end
+  
+  def transactions
+    account.transactions
+  end
+  
+  def withdrawals
+    unless account.blank?
+      account.withdrawals 
+    else
+      return []
+    end
   end
   
   def balance
-#    unless account.blank?
-#      account.Balance
-#    end
-    vp = vendor_payable
-    unless vp.blank?
-      vendor_payable_balance = vp.Balance
-      account_balance = account.Balance
-      # Get the lesser of the two balances
-      if vendor_payable_balance <= account_balance
-        return vendor_payable_balance
-      else
-        return account_balance
-      end
+    unless account.blank? or account.Balance.blank?
+      return account.Balance
     else
       return 0
+    end
+  end
+  
+  def available_balance
+    # If the account minimum balance is nil, set to zero
+    unless account.blank? or account.MinBalance.blank?
+      account_minimum_balance = account.MinBalance
+      account_balance = account.Balance - account_minimum_balance
+    else
+      account_balance = 0
+    end
+    # The account available balance is the balance minus the minimum balance
+    
+    return account_balance
+    
+  end
+  
+  def minimum_balance
+    unless account.blank? or account.MinBalance.blank?
+      return account.MinBalance
+    else
+      0
     end
   end
   
@@ -85,7 +114,7 @@ class Caddy < ApplicationRecord
   end
   
   def holds_balance?
-    balance != 0
+    balance > 0
   end
   
   def acronym
@@ -148,7 +177,14 @@ class Caddy < ApplicationRecord
   
   def send_sms_notification(message_body)
     unless cell_phone_number.blank?
-      SendCaddySmsWorker.perform_async(cell_phone_number, id, self.CustomerID, self.course.ClubCompanyNumber, message_body)
+      SendCaddySmsWorker.perform_async(cell_phone_number, id, self.CustomerID, self.ClubCompanyNbr, message_body)
+    end
+  end
+  
+  def send_verification_code
+    unless cell_phone_number.blank?
+      client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+      client.call(:send_sms, message: { Phone: cell_phone_number, Msg: "Your verification code is: #{pin}"})
     end
   end
   
@@ -156,8 +192,13 @@ class Caddy < ApplicationRecord
     Transfer.where(to_account_id: account.id).or(Transfer.where(from_account_id: account.id)) unless account.blank?
   end
   
-  def company
-    course.company unless course.blank?
+#  def company
+#    course.company unless course.blank?
+#  end
+
+  def generate_pin
+    self.pin = rand(0000..9999).to_s.rjust(4, "0")
+    save
   end
   
   #############################

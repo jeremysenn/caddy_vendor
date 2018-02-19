@@ -1,105 +1,125 @@
 = form_for @event, :html => {class: 'form-horizontal event_form', role: 'form'} do |f|
-  = f.hidden_field :course_id, value: current_course.id
+  = f.hidden_field :course_id, value: current_company.id
   = f.hidden_field :date_range, class: "date-range-picker"
   = f.hidden_field :round, value: '18'
+  - if current_user.is_caddy?
+    %p= current_company.name
+  -#
+    .row.form-group
+      %div{:class => "col-sm-12"}
+        %div{:class => "col-sm-3"}
+          %p= current_course.name
+          =# select_tag :course_id, options_from_collection_for_select(current_company.courses, "id", "name", @event.course_id), class: "form-control"
   .row.form-group
     %div{:class => "col-sm-12"}
-      %div{:class => "col-sm-3"}
-        %p.lead= current_course.name
+      = f.datetime_select :start, default: Time.now.in_time_zone(current_user.time_zone), minute_step: 15, ampm: true, use_short_month: true, discard_year: true
+      -#
+        %label.col-sm-2.control-label{for: "event_start"}
+          Start
+        %div{:class => "col-sm-10"}
+          = f.datetime_select :start, default: Time.now.in_time_zone(current_user.time_zone), minute_step: 15, ampm: true
+          -#
+            to
+            = f.datetime_select :end, value: Time.now.in_time_zone(current_user.time_zone), minute_step: 15, ampm: true
   .row.form-group
     %div{:class => "col-sm-12"}
-      %label.col-sm-2.control-label.lead{for: "event_start"}
-        Start
-      %div{:class => "col-sm-10"}
-        = f.datetime_select :start, default: Time.now.in_time_zone(current_course.time_zone), minute_step: 15, ampm: true
-        -#
-          to
-          = f.datetime_select :end, value: Time.now.in_time_zone(current_user.time_zone), minute_step: 15, ampm: true
-  .row.form-group
-    %div{:class => "col-sm-12"}
-      %label.col-sm-2.control-label.lead{for: "event_players"} 
-        Players
-      %div{:class => "col-sm-10"}
-        = f.nested_fields_for :players do |ff|
-          .card.player_fields{class: "#{ff.object.payment_reversed? ? 'card-outline-danger' : ''}" }
-            - if ff.object.paid?
-              %p.card-header.lead.text-success Paid
+      -#
+        %label.col-sm-2.control-label{for: "event_players"} 
+          Players
+        %div{:class => "col-sm-10"}
+      = f.nested_fields_for :players do |ff|
+        -#.card.player_fields{class: "#{ff.object.payment_reversed? ? 'card-outline-danger' : ''}" }
+        .card.player_fields
+          -#
             - elsif ff.object.payment_reversed?
-              %p.card-header.lead.text-danger Payment Reversed
+              %p.card-header.text-danger Payment Reversed
+          - if ff.object.paid?
+            %p.card-header.text-success Paid
+          - else
+            %p.card-header
+              = ff.remove_nested_fields_link "<i class='fa fa-trash-o'></i>".html_safe, class: 'btn btn-sm btn-danger', role: 'button', data: { confirm: 'Are you sure you want to delete?' }
+          .card-block
+            - unless ff.object.paid?
+              .row.form-group
+                .col-sm-6
+                  = ff.select :member_id, current_company.members.active.order(:NameL).collect { |m| [ m.full_name_with_member_number, m.id ] }, {prompt: '-- Select member --'}, class: "member_select form-control", style: "width: 100%;"
+                .col-sm-6
+                  - if browser.device.mobile?
+                    %br
+                  - if current_caddy.blank?
+                    = ff.select :caddy_id, grouped_options_for_select(current_company.grouped_caddies_by_rank_for_select, ff.object.caddy_id), {prompt: '-- Select caddy --'}, class: "caddy_select form-control", style: "width: 100%;"
+                  - else
+                    = ff.hidden_field :caddy_id, value: current_caddy.id
+                    = current_caddy.full_name
+
             - else
-              %p.card-header
-                = ff.remove_nested_fields_link "<i class='fa fa-trash-o'></i>".html_safe, class: 'btn btn-sm btn-danger', role: 'button', data: { confirm: 'Are you sure you want to delete?' }
-            .card-block
+              .row.form-group
+                .col-sm-6
+                  %p= ff.object.member.full_name
+                .col-sm-6
+                  %p= ff.object.caddy.full_name
+            .row.form-group
               - unless ff.object.paid?
-                .row.form-group
-                  .col-sm-6
-                    =# ff.collection_select :member_id, current_user.members, :id, :full_name, class: 'input-lg form-control', required: true
-                    =# ff.select :member_id, current_user.members.order(:NameL).collect { |m| [ m.full_name_by_last_name, m.id ] }, {required: true, include_blank: false}, class: "form-control"
-                    = ff.select :member_id, current_user.members.active.order(:NameL).collect { |m| [ m.full_name_with_member_number, m.id ] }, {prompt: '-- Select member --'}, required: true, class: "member_select form-control", style: "width: 100%;"
-                  .col-sm-6
-                    =# ff.collection_select :caddy_id, current_course.caddies, :id, :full_name, class: 'input-lg form-control', required: true
-                    =# ff.select :caddy_id, current_course.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "form-control"
-                    =# ff.select :caddy_id, current_course.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "js-example-basic-single form-control"
-                    =# ff.select :caddy_id, current_course.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
-                    =# ff.select :caddy_id, grouped_options_for_select(current_course.grouped_caddies_by_status_for_select, ff.object.caddy_id), {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
-                    = ff.select :caddy_id, grouped_options_for_select(current_course.grouped_caddies_by_rank_for_select, ff.object.caddy_id), {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
+                .col-xs-6
+                  = ff.select :round, [["Eighteen holes", 18], ["Nine holes", 9]], {required: true, include_blank: false}, class: "form-control"
+                .col-xs-6
+                  = ff.select :caddy_type, current_company.caddy_types, {required: true, include_blank: false}, class: "form-control"
+                  -#
+                    - unless current_user.company.id == 4
+                      = ff.select :caddy_type, ["Carry", "Chase"], {required: true, include_blank: false}, class: "form-control"
+                    - else
+                      = ff.select :caddy_type, ["Carry", "Chase", "Forecaddy", "Shadow", "Car Wash"], {required: true, include_blank: false}, class: "form-control"
 
               - else
-                .row.form-group
-                  .col-sm-6
-                    %p.lead= ff.object.member.full_name
-                  .col-sm-6
-                    %p.lead= ff.object.caddy.full_name
-              .row.form-group
+                .col-sm-6
+                  %p= ff.object.round_as_string
+                .col-sm-6
+                  %p= ff.object.caddy_type
+            .row.form-group
+              .col-sm-4
+                - unless ff.object.note.blank?
+                  %p Guest
+                -#
+                  #note_field.collapse.show{class: "#{ff.object.note.blank? ? '' : 'in'}"}
+                  =# ff.text_field :note, placeholder: 'Guest', class: 'input-lg form-control'
                 - unless ff.object.paid?
-                  .col-sm-6
-                    = ff.select :round, [["Eighteen holes", 18], ["Nine holes", 9]], {required: true, include_blank: false}, class: "form-control"
-                  .col-sm-6
-                    = ff.select :caddy_type, current_course.caddy_types, {required: true, include_blank: false}, class: "form-control"
-                    -#
-                      - unless current_user.company.id == 4
-                        = ff.select :caddy_type, ["Carry", "Chase"], {required: true, include_blank: false}, class: "form-control"
-                      - else
-                        = ff.select :caddy_type, ["Carry", "Chase", "Forecaddy", "Shadow", "Car Wash"], {required: true, include_blank: false}, class: "form-control"
-                    
+                  = ff.select :note, current_company.player_notes, {prompt: 'Guest'},class: "note_select form-control", style: "width: 100%;"
                 - else
-                  .col-sm-6
-                    %p.lead= ff.object.round_as_string
-                  .col-sm-6
-                    %p.lead= ff.object.caddy_type
-              .row.form-group
-                .col-sm-4
-                  - unless ff.object.note.blank?
-                    %p.lead Guest
-                  -#
-                    #note_field.collapse.show{class: "#{ff.object.note.blank? ? '' : 'in'}"}
-                    =# ff.text_field :note, placeholder: 'Guest', class: 'input-lg form-control'
-                  - unless ff.object.paid?
-                    = ff.select :note, current_course.player_notes, {prompt: 'Guest'},class: "note_select form-control", style: "width: 100%;"
-                  - else
-                    = ff.object.note
-                
-        = f.add_nested_fields_link :players, "<i class='fa fa-plus'></i> Add Player".html_safe, class: 'more_players_link btn btn-warning'
+                  = ff.object.note
+
+      = f.add_nested_fields_link :players, "<i class='fa fa-plus'></i> Add Player".html_safe, class: 'more_players_link btn btn-warning'
   .row.form-group
     %div{:class => "col-sm-12"}
-      %label.col-sm-2.control-label.lead{for: "event_notes"} 
-        Notes
-      .col-sm-10
-        = f.text_area :notes, placeholder:'Notes', class: 'input-lg form-control'
+      = f.text_area :notes, placeholder:'Notes', class: 'input-lg form-control'
+      -#
+        %label.col-sm-2.control-label{for: "event_notes"} 
+          Notes
+        .col-sm-10
+          = f.text_area :notes, placeholder:'Notes', class: 'input-lg form-control'
   
   .row.form-group
     %div{:class => "col-sm-12"}
       = link_to 'Cancel', :back, class: 'btn btn-secondary'
-      = f.submit "Payment", :class => 'btn btn-success', name: 'pay'
-      %button.btn.btn-primary{:type => "submit"} 
-        Save
+      = f.submit "Save", :class => 'btn btn-primary'
+      -#
+        - unless current_user.is_caddy?
+          = f.submit "Payment", :class => 'btn btn-success', name: 'pay'
+        - else
+          =# f.submit "Add to Balance", :class => 'btn btn-success', name: 'pay'
+          = button_tag(type: "submit", class: "btn btn-success", name: 'pay') do
+            %span
+              %i.fa.fa-dollar
+              Add to Balance
+
       - unless @event.contains_paid_players?
-        = link_to 'Delete',                      |
-              @event,                                 |
-              method: :delete,                       |
-              class: 'btn btn-danger',               |
-              data: { confirm: 'Are you sure?' },    |
-              remote: true unless @event.new_record? |
+        %p
+          .pull-right
+            = link_to 'Delete',
+                  @event,
+                  method: :delete,
+                  class: 'btn btn-danger btn-sm',
+                  data: { confirm: 'Are you sure?' },
+                  remote: true unless @event.new_record?
 
 :javascript
   //$('.event_form').on('click', '.add_nested_fields_link', function() {

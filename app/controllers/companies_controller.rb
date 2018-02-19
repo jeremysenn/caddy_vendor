@@ -12,7 +12,8 @@ class CompaniesController < ApplicationController
   # GET /companies/1
   # GET /companies/1.json
   def show
-    @members = @company.members.order(:NameL).page(params[:page]).per(240)
+#    @members = @company.members.order(:NameL).page(params[:page]).per(240)
+    @transfers = @company.transfers.order(created_at: :desc).page(params[:page]).per(20)
   end
 
   # GET /companies/new
@@ -72,6 +73,6 @@ class CompaniesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def company_params
-      params.require(:company).permit(:CompanyName)
+      params.require(:company).permit(:CompanyName, :transaction_fee, company_act_default_min_bal_attributes: [:DefaultMinBal, :id])
     end
 end

@@ -1,0 +1,10 @@
+.container
+  %div{:class => "col-sm-6"}
+    %br
+    %h3 
+      Editing account for
+      = @account.customer.full_name
+    %br
+    .card.card-block
+      = render 'form'
+

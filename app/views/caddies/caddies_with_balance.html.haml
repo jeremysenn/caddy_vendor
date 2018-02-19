@@ -1,0 +1,39 @@
+.container-fluid
+  %br
+   
+  %p
+    .lead.text-muted
+      = "#{pluralize(@accounts.count, 'caddy')} found"
+      - unless @accounts.blank?
+        .pull-right
+          %a{href: caddies_with_balance_caddies_path(format: "csv"), class: 'btn btn-primary'}
+            %i.fa.fa-download
+            CSV Report
+        %br
+  .card.card-block
+    %h4.card-title 
+      %i.fa.fa-vcard-o
+      Caddies with a balance
+      .pull-right= number_to_currency(@total_amount)
+    - unless @accounts.blank?
+      .table-responsive
+        %table.table.table-striped
+          %thead
+            %tr
+              %th= "First Name"
+              %th= "Last Name"
+              %th Balance
+          %tbody
+            - @accounts.each do |account|
+              %tr
+                %td= account.first_name
+                %td= account.last_name
+                %td= number_to_currency(account.Balance)
+                
+    - else
+      %p.lead No caddies found
+
+    =# paginate @caddy_customers
+      
+
+

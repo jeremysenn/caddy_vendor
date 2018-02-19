@@ -25,6 +25,9 @@ Rails.application.configure do
 
     config.cache_store = :null_store
   end
+  
+  # Send emails
+  config.action_mailer.perform_deliveries = true
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
@@ -32,6 +35,18 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
   
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  
+  config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: "tranact.com",
+    authentication: "plain",
+    enable_starttls_auto: true,
+    user_name: ENV["GMAIL_USERNAME"],
+    password: ENV["GMAIL_PASSWORD"]
+  }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -55,5 +70,12 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   
   routes.default_url_options = {:host => 'http://app.caddyvend.com'}
+  
+  Rails.application.config.middleware.use ExceptionNotification::Rack,
+  :email => {
+    :ignore_exceptions => ['ActionView::TemplateError'] + ExceptionNotifier.ignored_exceptions,
+    :sender_address => %{"CaddyVend Exception Notifier" <notifier@tranact.com>},
+    :exception_recipients => %w{jeremy@tranact.com shark@tranact.com}
+  }
   
 end

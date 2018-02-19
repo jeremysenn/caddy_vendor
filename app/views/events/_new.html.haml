@@ -4,7 +4,8 @@
       .modal-header
         %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button", onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"} ×
         .modal-title 
-          %h4= current_course.name
+          -#
+            %h4= current_course.name
           #new_event_start
       .modal-body
         = render 'remote_form', event: @event

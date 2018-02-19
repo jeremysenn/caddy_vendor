@@ -1,11 +1,16 @@
 .row.form-group
   .col-xs-12.col-sm-6
     %a.btn.btn-secondary.btn-lg.btn-block{:href => events_path, :role => "button"}
+      %i.fa.fa-flag
       Rounds
   .col-xs-12.col-sm-6
-    %a.btn.btn-secondary.btn-lg.btn-block{:href => courses_path, :role => "button"}
-      %i.fa.fa-tree
-      Courses 
+    -#
+      %a.btn.btn-secondary.btn-lg.btn-block{:href => courses_path, :role => "button"}
+        %i.fa.fa-tree
+        Courses 
+    %a.btn.btn-secondary.btn-lg.btn-block{:href => balance_logs_path, :role => "button"} 
+      %i.fa.fa-refresh
+      Billing
 .row.form-group
   .col-xs-12.col-sm-6
     %a.btn.btn-secondary.btn-lg.btn-block{:href => customers_path, :role => "button"}

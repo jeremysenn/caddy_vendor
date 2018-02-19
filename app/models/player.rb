@@ -17,8 +17,12 @@ class Player < ApplicationRecord
   #     Instance Methods      #
   #############################
   
-  def course
-    event.course
+#  def course
+#    event.course
+#  end
+  
+  def company
+    event.company
   end
   
   def carry?
@@ -38,7 +42,7 @@ class Player < ApplicationRecord
   def total_with_fee
     player_tip = tip.blank? ? 0 : tip
     player_fee = fee.blank? ? caddy_pay_rate : fee
-    transaction_fee =  transfer_transaction_fee.blank? ? course.transaction_fee : transfer_transaction_fee
+    transaction_fee =  transfer_transaction_fee.blank? ? company.transaction_fee : transfer_transaction_fee
     return (player_fee + player_tip + transaction_fee)
   end
   
@@ -59,11 +63,16 @@ class Player < ApplicationRecord
   end
   
 #  def paid?
+#    status == 'paid'
+#  end
+  
+#  def paid?
 #    status == 'paid' and not payment_reversed?
 #  end
   
   def paid?
-    transfer.present? and not payment_reversed?
+#    transfer.present? #and not payment_reversed?
+    not transfers.blank? and not transfers.last.reversed?
   end
   
   def payment_reversed?
@@ -87,7 +96,7 @@ class Player < ApplicationRecord
   end
   
   def caddy_pay_rate
-   pay_rate = CaddyPayRate.where(ClubCompanyID: course.id, RankingID: caddy.caddy_rank_desc.id, Type: caddy_type, NbrHoles: round).first
+   pay_rate = CaddyPayRate.where(ClubCompanyID: company.id, RankingID: caddy.caddy_rank_desc.id, Type: caddy_type, NbrHoles: round).first
    unless pay_rate.blank?
      pay_rate.Payrate
    else
@@ -100,7 +109,12 @@ class Player < ApplicationRecord
 #  end
   
   def transfer
-    transfers.last unless transfers.blank?
+    reversed_transfer = transfers.find_by(reversed: true)
+    if reversed_transfer.blank? # No reversed transfer
+      transfers.last unless transfers.blank?
+    else
+      reversed_transfer
+    end
   end
   
   def check_caddy_out
@@ -118,6 +132,14 @@ class Player < ApplicationRecord
   def send_sms_notification_to_caddy
     unless caddy.blank? or caddy.cell_phone_number.blank?
       SendCaddyNewRoundNotificationSmsWorker.perform_async(id)
+    end
+  end
+  
+  def member_name
+    unless member.blank?
+      member.full_name
+    else
+      ''
     end
   end
   

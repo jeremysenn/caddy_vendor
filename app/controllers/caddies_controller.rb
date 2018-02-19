@@ -1,6 +1,6 @@
 class CaddiesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_caddy, only: [:show, :edit, :update, :pay, :destroy]
+  before_action :set_caddy, only: [:show, :edit, :update, :pay, :barcode, :send_verification_code, :verify_phone,:destroy]
   load_and_authorize_resource
   around_action :set_time_zone, if: :current_user
 
@@ -10,37 +10,37 @@ class CaddiesController < ApplicationController
   # GET /caddies.json
   def index
     respond_to do |format|
-      unless params[:course_id].blank?
-        @course = Course.where(ClubCourseID: params[:course_id]).first
-        @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
-      else
-        @course = current_course.blank? ? current_user.company.courses.first : current_course
-      end
+#      unless params[:course_id].blank?
+#        @course = Course.where(ClubCourseID: params[:course_id]).first
+#        @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
+#      else
+#        @course = current_course.blank? ? current_user.company.courses.first : current_course
+#      end
       format.html {
         unless params[:q].blank?
           @query_string = "%#{params[:q]}%"
-          caddies = @course.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ? OR customer.PhoneMobile like ?", @query_string, @query_string, @query_string) #.order("customer.NameL")
+          caddies = current_user.company.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ? OR customer.PhoneMobile like ?", @query_string, @query_string, @query_string) #.order("customer.NameL")
         else
           unless params[:balances].blank?
             caddies = Kaminari.paginate_array(current_user.company.caddies_with_balance)
           else
-            caddies = @course.caddies.joins(:customer) #.order("customer.NameL")
+            caddies = current_user.company.caddies.joins(:customer) #.order("customer.NameL")
           end
         end
         unless params[:caddy_rank_desc_id].blank?
           if params[:balances].blank?
             caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).order("#{caddies_sort_column} #{caddies_sort_direction}")
-            @caddies = caddies.page(params[:page]).per(20)
+            @caddies = caddies.page(params[:page]).per(10)
           else
             caddies = caddies.where(RankingID: params[:caddy_rank_desc_id]).order("#{caddies_sort_column} #{caddies_sort_direction}")
-            @caddies = caddies.page(params[:page]).per(20)
+            @caddies = caddies.page(params[:page]).per(10)
           end
         else
           if params[:balances].blank?
             caddies = caddies.order("#{caddies_sort_column} #{caddies_sort_direction}")
-            @caddies = caddies.page(params[:page]).per(20)
+            @caddies = caddies.page(params[:page]).per(10)
           else
-            @caddies = caddies.page(params[:page]).per(20)
+            @caddies = caddies.page(params[:page]).per(10)
           end
         end
         @all_caddies = caddies
@@ -48,7 +48,7 @@ class CaddiesController < ApplicationController
       format.json {
         @query_string = "%#{params[:q]}%"
 #        caddies = current_course.caddies
-        caddies = @course.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string)
+        caddies = current_user.company.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string)
         @caddies = caddies.collect{ |caddy| {id: caddy.id, text: "#{caddy.full_name}"} }
         render json: {results: @caddies}
       }
@@ -59,23 +59,35 @@ class CaddiesController < ApplicationController
   # GET /caddies/1
   # GET /caddies/1.json
   def show
-    @course = @caddy.course
-#    @transfers = @caddy.transfers
-    # Get caddy account transfers, filtered by company_id
-    @transfers = @caddy.account_transfers.where(company_id: current_user.company_id).order('created_at DESC') unless @caddy.account_transfers.blank?
+    if current_user.is_caddy?
+      # Set current_company session variable for caddy user
+      session[:company_id] = params[:company_id] unless params[:company_id].blank?
+      # Set current_caddy session variable for caddy user
+      session[:caddy_id] = @caddy.id
+    end
+    @transfers = @caddy.account_transfers.where(company_id: current_company.id).order('created_at DESC') unless @caddy.account_transfers.blank?
     @text_messages = @caddy.sms_messages.reverse
     # Get caddy account withdrawal transactions, filtered by company_id
-    @withdrawal_transactions = @caddy.customer.transactions.where(DevCompanyNbr: current_user.company_id).withdrawals.last(20).reverse
+#    @withdrawal_transactions = @caddy.customer.transactions.where(DevCompanyNbr: current_company.id).withdrawals.last(20).reverse
+    @withdrawal_transactions = @caddy.withdrawals.last(20).reverse
+    @caddy_rank_desc = @caddy.caddy_rank_desc
+    @balance = @caddy.balance
+    @minimum_balance = @caddy.minimum_balance
+    @available_balance = @caddy.available_balance
+    @account = @caddy.account
+#    session[:course_id] = @caddy.course.id
+    @events = @caddy.events.order("start DESC").last(20).uniq
   end
 
   # GET /caddies/new
   def new
     @caddy = Caddy.new
+    @caddy.build_customer
   end
 
   # GET /caddies/1/edit
   def edit
-    @course = @caddy.course
+#    @course = @caddy.course
   end
 
   # POST /caddies
@@ -107,34 +119,17 @@ class CaddiesController < ApplicationController
       end
     end
   end
-  
-#  def send_group_text_message
-#    respond_to do |format|
-#      format.html {
-#        unless params[:q].blank?
-#          @query_string = "%#{params[:q]}%"
-#          caddies = current_user.caddies.active.joins(:customer).where("customer.NameF like ? OR NameL like ?", @query_string, @query_string).order("customer.NameL")
-#        else
-#          unless params[:balances].blank?
-#            caddies = current_user.company.caddies_with_balance
-#          else
-#            caddies = current_user.caddies.active.joins(:customer).order("customer.NameL")
-#          end
-#        end
-#        unless params[:caddy_rank_desc_id].blank?
-#          @caddies = caddies.where(RankingID: params[:caddy_rank_desc_id])
-#        else
-#          @caddies = caddies
-#        end
-#        @message_body = params[:message_body]
-#        @caddies.each do |caddy|
-#          caddy.send_sms_notification(@message_body)
-#        end
-#        redirect_back fallback_location: customers_path, notice: 'Text message sent to caddies.'
-#      }
-#    end
-#  end
 
+  # DELETE /caddies/1
+  # DELETE /caddies/1.json
+  def destroy
+    @caddy.destroy
+    respond_to do |format|
+      format.html { redirect_to caddies_url, notice: 'Caddy was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+  
   def send_group_text_message
     respond_to do |format|
       format.html {
@@ -144,10 +139,20 @@ class CaddiesController < ApplicationController
             caddy = Caddy.where(id: caddy_id).first
             caddy.send_sms_notification(@message_body) unless caddy.blank?
           end
-          redirect_back fallback_location: customers_path, notice: 'Text message sent to caddies.'
+          redirect_back fallback_location: customers_path, notice: 'Text message sent.'
         else
           redirect_back fallback_location: customers_path, alert: 'You must select at least one caddy to text message.'
         end
+      }
+    end
+  end
+  
+  def send_verification_code
+    respond_to do |format|
+#      format.html {}
+      format.json { 
+        @caddy.generate_pin
+        @caddy.send_verification_code
       }
     end
   end
@@ -157,23 +162,72 @@ class CaddiesController < ApplicationController
     amount = params[:amount].to_f.abs unless params[:amount].blank?
     note = params[:note]
     unless member.blank?
-      Transfer.create(company_id: current_user.company.id, from_account_id: member.account_id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount, note: note)
+      Transfer.create(company_id: current_company.id, from_account_id: member.club_account(current_company.id).id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount, note: note)
     else
       course = @caddy.course
       transaction_id = course.perform_one_sided_credit_transaction(amount)
       Rails.logger.debug "*********************************Club transaction ID: #{transaction_id}"
-      Transfer.create(company_id: current_user.company.id, from_account_id: current_user.company.account.id, to_account_id: @caddy.account.id, amount: amount, note: note, club_credit_transaction_id: transaction_id)
+      Transfer.create(company_id: current_company.id, from_account_id: current_company.account.id, to_account_id: @caddy.account.id, amount: amount, note: note, club_credit_transaction_id: transaction_id)
     end
     redirect_back fallback_location: @caddy, notice: 'Caddy payment submitted.'
   end
-
-  # DELETE /caddies/1
-  # DELETE /caddies/1.json
-  def destroy
-    @caddy.destroy
+  
+  # GET /caddies/1/barcode
+  # GET /caddies/1/barcode.json
+  def barcode
+    if current_user.is_caddy?
+      if params[:code] == @caddy.pin
+        # Make sure that code matches up with Caddy's saved pin
+        @base64_barcode_string = Transaction.ezcash_get_barcode_png_web_service_call(@caddy.CustomerID, current_user.company_id, 5)
+      else
+        redirect_to @caddy, alert: 'Verification code is incorrect.' 
+      end
+    elsif current_user.is_admin?
+      # Admin can view barcode
+      @base64_barcode_string = Transaction.ezcash_get_barcode_png_web_service_call(@caddy.CustomerID, current_user.company_id, 5)
+    end
+  end
+  
+  # GET /caddies/1/verify_phone
+  def verify_phone
     respond_to do |format|
-      format.html { redirect_to caddies_url, notice: 'Caddy was successfully destroyed.' }
-      format.json { head :no_content }
+      format.html { 
+        code = params[:verification_code]
+        if code == @caddy.pin
+          # Make sure that code matches up with Caddy's saved pin
+          redirect_to barcode_caddy_path(@caddy, code: @caddy.pin) 
+        else
+          redirect_to @caddy, alert: 'Verification code is incorrect.' 
+        end
+        }
+    end
+  end
+  
+  def caddies_with_balance
+    # Get all of company's caddy accounts where balance is not zero
+    @accounts = current_company.accounts.joins(:customer).where("customer.GroupID = ?", 13).where("Balance != ?", 0)
+    @total_amount = 0
+    @accounts.each do |account|
+      @total_amount = @total_amount + account.Balance
+    end
+    
+#    caddy_customers = current_company.customers.caddies.joins(:accounts).where("accounts.Balance != ? AND accounts.CompanyNumber = ?", 0, current_company.id)
+#    
+#    @caddy_customers = caddy_customers.page(params[:page]).per(20)
+#    @total_amount = 0
+#    accounts = []
+#    caddy_customers.each do |caddy_customer|
+#      account = caddy_customer.accounts.find_by(CompanyNumber: current_company.id)
+#      unless account.blank?
+#        @total_amount = @total_amount + account.Balance
+#        accounts << account
+#      end
+#    end
+    respond_to do |format|
+      format.html {}
+      format.csv { 
+        send_data @accounts.to_csv, filename: "caddies-with-balance-#{Time.now}.csv" 
+      }
     end
   end
 
@@ -185,7 +239,8 @@ class CaddiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def caddy_params
-      params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym, :RankingID, :CheckedIn, :ClubCompanyNbr, :active, customer_attributes:[:PhoneMobile, :NameF, :NameL, :_destroy,:id])
+      params.require(:caddy).permit(:first_name, :last_name, :RankingAcronym, :RankingID, :CheckedIn, :ClubCompanyNbr, :active, :CustomerID, :course_id,
+        customer_attributes:[:PhoneMobile, :NameF, :NameL, :Email, :_destroy, :id, :company_id])
     end
     
     def set_time_zone(&block)
