@@ -424,16 +424,16 @@ class Transfer < ApplicationRecord
     unless member.blank? or member.phone.blank?
       unless player.blank?
         unless reversed?
-          message_body = "You have been billed $#{amount_billed} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type}."
+          message_body = "You have been billed #{ ActiveSupport::NumberHelper.number_to_currency(amount_billed, precision: 2)} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type}."
         else
-          message_body = "The bill of $#{amount_billed} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type} has been reversed."
+          message_body = "The bill of #{ActiveSupport::NumberHelper.number_to_currency(amount_billed.abs, precision: 2)} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type} has been reversed."
         end
         SendMemberSmsWorker.perform_async(member.phone, member.id, company_id, message_body)
       else
         unless reversed?
-          message_body = "You have been billed $#{amount_billed} by #{company.name} for #{caddy.full_name}."
+          message_body = "You have been billed #{ActiveSupport::NumberHelper.number_to_currency(amount_billed, precision: 2)} by #{company.name} for #{caddy.full_name}."
         else
-          message_body = "The bill of $#{amount_billed} by #{company.name} for #{caddy.full_name} has been reversed."
+          message_body = "The bill of #{ActiveSupport::NumberHelper.number_to_currency(amount_billed.abs, precision: 2)} by #{company.name} for #{caddy.full_name} has been reversed."
         end
         SendMemberSmsWorker.perform_async(member.phone, member.id, company_id, message_body)
       end
