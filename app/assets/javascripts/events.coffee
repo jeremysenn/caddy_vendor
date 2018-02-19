@@ -29,17 +29,18 @@ jQuery ->
       caddy_tip = parseFloat($(this).closest('form').find('#transfer_caddy_tip').val())
       sum = caddy_fee + caddy_tip
       $(this).closest("form").find('#transfer_amount').val sum
+      $(this).closest("form").find('#player_total_amount').text '$' + sum.toFixed(2)
       return
-    sum = 0
-    # Add up all the amounts
+    total = 0
+    # Add up all the amounts to show all players total at top of admin page
     $('.amount').each ->
-      sum += Number($(this).val())
+      total += Number($(this).val())
       return
     # Add up all the transaction fees
     $('.transaction_fee').each ->
-      sum += Number($(this).val())
+      total += Number($(this).val())
       return
-    $('#player_total').text '$' + sum.toFixed(2)
+    $('#player_total').text '$' + total.toFixed(2)
 
   ### Edit in place ###
   # turn to inline mode
@@ -47,7 +48,7 @@ jQuery ->
 
   # Edit in place caddy tip
   $(document).on 'turbolinks:load', ->
-    # Select value automatically
+    # Select/highlight value automatically
     $('.tip').on 'shown', (ev, editable) ->
       setTimeout (->
         editable.input.$input.select()

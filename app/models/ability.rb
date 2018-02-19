@@ -243,6 +243,12 @@ class Ability
         user_record == user 
       end
       
+      # SmsMessages
+      ############
+      can :manage, SmsMessage do |sms_message|
+        user.caddies.include?(sms_message.caddy)
+      end
+      
     elsif user.is_member? and user.active?
       ###  Active Member User ###  
       

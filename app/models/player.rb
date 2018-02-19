@@ -143,6 +143,14 @@ class Player < ApplicationRecord
     end
   end
   
+  def last_transfer_reversed?
+    unless transfers.blank?
+      transfers.last.reversed?
+    else
+      false
+    end
+  end
+  
   #############################
   #     Class Methods         #
   #############################
