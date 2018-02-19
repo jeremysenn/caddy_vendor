@@ -34,6 +34,7 @@ jQuery ->
     # Add up all the amounts
     $('.amount').each ->
       sum += Number($(this).val())
+      alert 'here we are'
       return
     # Add up all the transaction fees
     $('.transaction_fee').each ->
@@ -47,7 +48,7 @@ jQuery ->
 
   # Edit in place caddy tip
   $(document).on 'turbolinks:load', ->
-    # Select value automatically
+    # Select/highlight value automatically
     $('.tip').on 'shown', (ev, editable) ->
       setTimeout (->
         editable.input.$input.select()
