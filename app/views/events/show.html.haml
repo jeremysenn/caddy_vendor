@@ -64,11 +64,11 @@
                   .input-group-addon
                     %i.fa.fa-dollar
                   =# f.number_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee, class: "form-control input-lg col-xs-6", pattern: "[0-9]*", inputmode: "numeric"
-                  = f.number_field :caddy_fee, value: player.caddy_pay_rate, class: "form-control input-lg col-xs-6", pattern: "[0-9]*", inputmode: "numeric"
+                  = f.number_field :caddy_fee, value: (player.fee.blank? or player.last_transfer_reversed?) ? player.caddy_pay_rate : player.fee, class: "form-control input-lg col-xs-6", pattern: "[0-9]*", inputmode: "numeric"
               - else
                 =# f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
                 =# number_to_currency(player.fee.blank? ? player.caddy_pay_rate : player.fee)
-                = f.hidden_field :caddy_fee, value: player.caddy_pay_rate
+                = f.hidden_field :caddy_fee, value: (player.fee.blank? or player.last_transfer_reversed?) ? player.caddy_pay_rate : player.fee
                 = number_to_currency(player.caddy_pay_rate)
             .form-group.lead
               %strong Total
