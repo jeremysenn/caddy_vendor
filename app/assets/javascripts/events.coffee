@@ -30,16 +30,16 @@ jQuery ->
       sum = caddy_fee + caddy_tip
       $(this).closest("form").find('#transfer_amount').val sum
       return
-    total = 0
+    #total = 0
     # Add up all the amounts
-    $('.amount').each ->
-      total += Number($(this).val())
-      return
+    #$('.amount').each ->
+    #  total += Number($(this).val())
+    #  return
     # Add up all the transaction fees
-    $('.transaction_fee').each ->
-      total += Number($(this).val())
-      return
-    $('#player_total').text '$' + total.toFixed(2)
+    #$('.transaction_fee').each ->
+    #  total += Number($(this).val())
+    #  return
+    #$('#player_total').text '$' + total.toFixed(2)
 
   ### Edit in place ###
   # turn to inline mode
