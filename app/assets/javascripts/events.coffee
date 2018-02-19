@@ -39,7 +39,6 @@ jQuery ->
     $('.transaction_fee').each ->
       total += Number($(this).val())
       return
-    alert total
     $('#player_total').text '$' + total.toFixed(2)
 
   ### Edit in place ###
