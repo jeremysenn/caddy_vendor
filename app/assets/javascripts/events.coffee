@@ -33,6 +33,7 @@ jQuery ->
     total = 0
     # Add up all the amounts
     $('.amount').each ->
+      alert total
       total += Number($(this).val())
       return
     # Add up all the transaction fees
