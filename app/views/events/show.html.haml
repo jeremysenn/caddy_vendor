@@ -72,7 +72,7 @@
                 = number_to_currency(player.caddy_pay_rate)
             .form-group.lead
               %strong Total
-              = f.text_field :amount, value: player.total, class: 'amount'
+              = f.hidden_field :amount, value: player.total, class: 'amount'
               %span#player_total_amount= number_to_currency(player.total)
 
             =# f.hidden_field :amount, value: player.total, class: 'amount'
