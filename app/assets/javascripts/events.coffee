@@ -32,7 +32,7 @@ jQuery ->
       $(this).closest("form").find('#player_total_amount').text '$' + sum.toFixed(2)
       return
     total = 0
-    # Add up all the amounts
+    # Add up all the amounts to show all players total at top of admin page
     $('.amount').each ->
       total += Number($(this).val())
       return
