@@ -6,9 +6,9 @@ class Course < ApplicationRecord
   
   belongs_to :company, :foreign_key => "ClubCompanyNumber"
   has_many :events
-  has_many :caddies, :foreign_key => "ClubCompanyNbr"
-  has_many :caddy_pay_rates, :foreign_key => "ClubCompanyID"
-  has_many :caddy_rank_descs, :foreign_key => "ClubCompanyID"
+  has_many :caddies
+  has_many :caddy_pay_rates
+  has_many :caddy_rank_descs
 #  has_many :transfers #, through: :events
   has_many :accounts
   has_many :players, through: :events

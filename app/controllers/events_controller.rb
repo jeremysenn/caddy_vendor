@@ -1,21 +1,31 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_event, only: [:show, :edit, :update, :destroy]
-  load_and_authorize_resource except: [:index, :new, :create, :edit, :update, :destroy]
+  load_and_authorize_resource #except: [:index, :new, :create, :edit, :update, :destroy]
 
   # GET /events
   # GET /events.json
   def index
     @start_date = event_params[:start_date] ||= Date.today.to_s
     @end_date = event_params[:end_date] ||= Date.today.to_s
-    unless event_params[:course_id].blank?
-      session[:course_id] = event_params[:course_id]
-      @course = Course.where(ClubCourseID: event_params[:course_id]).first
-      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
+    
+#    unless event_params[:course_id].blank?
+#      session[:course_id] = event_params[:course_id]
+#      @course = Course.where(ClubCourseID: event_params[:course_id]).first
+#      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
+#    else
+#      unless current_user.is_caddy?
+#        @course = current_course.blank? ? current_user.company.courses.first : current_course
+#      else
+#        @course = current_course.blank? ? current_caddy.course.first : current_course
+#      end
+#    end
+    
+    if current_caddy.blank?
+      events = current_company.events.where(start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC")
     else
-      @course = current_course.blank? ? current_user.company.courses.first : current_course
+      events = current_caddy.events.where(start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC").uniq
     end
-    events = current_course.events.where(start: @start_date.to_date.beginning_of_day..@end_date.to_date.end_of_day).order("start DESC")
 #    @events = current_course.events
 #    session[:course_id] = params[:course_id] unless params[:course_id].blank?
 #    unless current_course.blank?
@@ -38,13 +48,18 @@ class EventsController < ApplicationController
   # GET /events/1
   # GET /events/1.json
   def show
+    if current_caddy.blank?
+      @players = @event.players
+    else
+      @players = @event.players.where(caddy_id: current_caddy.id)
+    end
   end
 
   # GET /events/new
   def new
     @event = Event.new
     @event.players.build
-    session[:course_id] = params[:course_id] unless params[:course_id].blank?
+#    session[:course_id] = params[:course_id] unless params[:course_id].blank?
   end
 
   # GET /events/1/edit
@@ -68,7 +83,11 @@ class EventsController < ApplicationController
           if params[:pay]
             redirect_to @event, notice: 'Event was successfully created.'
           else
-            redirect_to events_path, notice: 'Event was successfully created.' 
+            unless current_user.is_caddy?
+              redirect_to events_path, notice: 'Event was successfully created.' 
+            else
+              redirect_to current_caddy, notice: 'Event was successfully created.'
+            end
           end
           }
         format.json { render :show, status: :created, location: @event }
@@ -98,7 +117,11 @@ class EventsController < ApplicationController
           if params[:pay]
             redirect_to @event, notice: 'Event was successfully updated.'
           else
-            redirect_to events_path, notice: 'Event was successfully updated.' 
+            unless current_user.is_caddy?
+              redirect_to events_path, notice: 'Event was successfully updated.' 
+            else
+              redirect_to current_caddy, notice: 'Event was successfully updated.'
+            end
           end
           }
         format.json { render :show, status: :ok, location: @event }
@@ -130,15 +153,20 @@ class EventsController < ApplicationController
   def calendar
     @start = params[:start] ||= Date.today.to_s
     @end = params[:end] ||= Date.today.to_s
-    session[:course_id] = params[:course_id] unless params[:course_id].blank?
-    unless event_params[:course_id].blank?
-      session[:course_id] = event_params[:course_id]
-      @course = Course.where(ClubCourseID: event_params[:course_id]).first
-      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
-    else
-      @course = current_course.blank? ? current_user.company.courses.first : current_course
-    end
-    @events = @course.events.where(start: @start.to_date.beginning_of_day..@end.to_date.end_of_day)
+#    session[:course_id] = params[:course_id] unless params[:course_id].blank?
+#    unless event_params[:course_id].blank?
+#      session[:course_id] = event_params[:course_id]
+#      @course = Course.where(ClubCourseID: event_params[:course_id]).first
+#      @course = current_course.blank? ? current_user.company.courses.first : current_course if @course.blank?
+#    else
+#      unless current_user.is_caddy?
+#        @course = current_course.blank? ? current_user.company.courses.first : current_course
+#      else
+#        @course = current_course.blank? ? current_caddy.course : current_course
+#      end
+#    end
+#    @events = @course.events.where(start: @start.to_date.beginning_of_day..@end.to_date.end_of_day)
+    @events = current_user.company.events.where(start: @start.to_date.beginning_of_day..@end.to_date.end_of_day)
   end
 
   private

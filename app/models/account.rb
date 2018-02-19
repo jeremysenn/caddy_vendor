@@ -12,8 +12,13 @@ class Account < ActiveRecord::Base
   
   attr_accessor :last_4_of_pan
   
-  validates :ActNbr, confirmation: true
+#  validates :ActNbr, confirmation: true
 #  validates :ActNbr_confirmation, presence: true
+#  validates :MinBalance, numericality: { :greater_than_or_equal_to => 0 }
+#  validates :MinBalance, numericality: true
+
+  before_save :encrypt_bank_account_number
+  before_save :encrypt_bank_routing_number
   
   #############################
   #     Instance Methods      #
@@ -63,6 +68,10 @@ class Account < ActiveRecord::Base
 #    transactions = Transaction.where(from_acct_id: decrypted_account_number, tran_code: 'WDL') + Transaction.where(to_acct_id: decrypted_account_number, tran_code: 'WDL')
     transactions = Transaction.where(from_acct_id: id, tran_code: 'ALL') + Transaction.where(to_acct_id: id, tran_code: 'ALL')
     return transactions
+  end
+  
+  def withdrawals
+    withdrawal_transactions + withdrawal_all_transactions
   end
   
   def credit_transactions
@@ -121,6 +130,16 @@ class Account < ActiveRecord::Base
     Decrypt.decryption(decoded_acctnbr)
   end
   
+  def decrypted_bank_account_number
+    decoded_acctnbr = Base64.decode64(self.BankActNbr).unpack("H*").first
+    Decrypt.decryption(decoded_acctnbr)
+  end
+  
+  def decrypted_bank_routing_number
+    decoded_acctnbr = Base64.decode64(self.RoutingNbr).unpack("H*").first
+    Decrypt.decryption(decoded_acctnbr)
+  end
+  
   def standby_auth
     StandbyAuth.find_by_account_nbr(account_number_with_leading_zeros)
   end
@@ -134,6 +153,19 @@ class Account < ActiveRecord::Base
 #    (standby_auth.avail_bal / 100) unless standby_auth.blank?
     self.Balance
   end
+  
+#  def available_balance
+#    # If the account minimum balance is nil, set to zero
+#    unless self.MinBalance.blank?
+#      account_minimum_balance = self.MinBalance
+#      account_balance = self.Balance - account_minimum_balance
+#    else
+#      account_balance = 0
+#    end
+#    # The account available balance is the balance minus the minimum balance
+#    
+#    return account_balance
+#  end
   
   def entity
     Entity.find_by_EntityID(self.EntityID)
@@ -195,12 +227,38 @@ class Account < ActiveRecord::Base
     "#{customer.NameF} #{customer.NameL}" unless customer.blank?
   end
   
+  def first_name
+    customer.NameF unless customer.blank?
+  end
+  
+  def last_name
+    customer.NameL unless customer.blank?
+  end
+  
   def encrypt_account_number
     unless self.ActNbr.blank?
       encrypted = Decrypt.encryption(self.ActNbr) # Encrypt the account_number
       encrypted_and_encoded = Base64.strict_encode64(encrypted) # Base 64 encode it; strict_encode64 doesn't add the \n character on the end
       self.ActNbr = encrypted_and_encoded
       self.save
+    end
+  end
+  
+  def encrypt_bank_account_number
+    unless self.BankActNbr.blank?
+      encrypted = Decrypt.encryption(self.BankActNbr) # Encrypt the bank account number
+      encrypted_and_encoded = Base64.strict_encode64(encrypted) # Base 64 encode it; strict_encode64 doesn't add the \n character on the end
+      self.BankActNbr = encrypted_and_encoded
+#      self.update_attribute(:BankActNbr, encrypted_and_encoded)
+    end
+  end
+  
+  def encrypt_bank_routing_number
+    unless self.RoutingNbr.blank?
+      encrypted = Decrypt.encryption(self.RoutingNbr) # Encrypt the bank routing number
+      encrypted_and_encoded = Base64.strict_encode64(encrypted) # Base 64 encode it; strict_encode64 doesn't add the \n character on the end
+      self.RoutingNbr = encrypted_and_encoded
+#      self.update_attribute(:RoutingNbr, encrypted_and_encoded)
     end
   end
   
@@ -229,6 +287,14 @@ class Account < ActiveRecord::Base
   
   def balance
     self.Balance
+  end
+  
+  def caddy
+    Caddy.where(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber).first
+  end
+  
+  def caddy?
+    customer.caddy?
   end
   
   #############################
@@ -263,6 +329,19 @@ class Account < ActiveRecord::Base
   
   def self.active_payee_accounts
     Account.active_payment_accounts + Account.active_money_order_accounts
+  end
+  
+  def self.to_csv
+    require 'csv'
+    attributes = %w{first_name last_name balance}
+    
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |account|
+        csv << attributes.map{ |attr| account.send(attr) }
+      end
+    end
   end
   
 end

@@ -29,7 +29,8 @@ class Ability
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
     
-    if user.admin? and user.active?
+    if user.is_admin? and user.active?
+      ### Active Admin User ###
       
       # Companies
       ############
@@ -48,25 +49,27 @@ class Ability
       # Caddies
       ############
       can :manage, Caddy do |caddy|
-        caddy.course.company == user.company
+        caddy.company == user.company
       end
+      can :create, Caddy
       
       # Customers
       ############
-      can :manage, Customer do |customer|
-        unless customer.company.blank? or customer.company.CompanyNumber == 0
-          customer.company == user.company
-        else
-          true
-        end
-      end
+#      can :manage, Customer do |customer|
+#        unless customer.company.blank? or customer.company.CompanyNumber == 0
+#          customer.company == user.company
+#        else
+#          true
+#        end
+#      end
+      can :manage, Customer
       can :create, :customers
       
       # Events
       ############
       can :manage, Event do |event|
-        unless event.course.blank?
-          event.course.company == user.company
+        unless event.company.blank?
+          event.company == user.company
         else
           true
         end
@@ -76,7 +79,7 @@ class Ability
       # Players
       ############
       can :manage, Player do |player|
-        player.event.course.company == user.company
+        player.event.company == user.company
       end
       can :create, :players
       
@@ -99,8 +102,8 @@ class Ability
       # CaddyPayRates
       ############
       can :manage, CaddyPayRate do |caddy_pay_rate|
-        unless caddy_pay_rate.course.blank?
-          caddy_pay_rate.course.company == user.company
+        unless caddy_pay_rate.company.blank?
+          caddy_pay_rate.company == user.company
         else
           true
         end
@@ -110,8 +113,8 @@ class Ability
       # CaddyRankDescs
       ############
       can :manage, CaddyRankDesc do |caddy_rank_desc|
-        unless caddy_rank_desc.course.blank?
-          caddy_rank_desc.course.company == user.company
+        unless caddy_rank_desc.company.blank?
+          caddy_rank_desc.company == user.company
         else
           true
         end
@@ -132,7 +135,7 @@ class Ability
       ############
       can :manage, CaddyRating do |caddy_rating|
         unless caddy_rating.caddy.blank?
-          caddy_rating.caddy.course.company == user.company 
+          caddy_rating.caddy.company == user.company 
         else
           true
         end
@@ -164,52 +167,107 @@ class Ability
         vendor_payable.company == user.company
       end
       
-    elsif not user.admin? and user.active?
-      # Non-admin, active user
-      # 
+      # Accounts
+      ############
+      can :manage, Account do |account|
+        account.company == user.company 
+      end
+      
+      # BalanceLogs
+      ############
+      can :manage, BalanceLog do |balance_log|
+        balance_log.company == user.company
+      end
+      can :create, BalanceLog
+      
+    elsif user.is_caddy? and user.active? and user.phone_verified?
+      ### Active Caddy User ###
+      
       # Events
       ############
       can :manage, Event do |event|
-        unless event.course.blank?
-          event.course.company == user.company
-        else
-          true
+        user.caddies.each do |caddy|
+          if event.include_caddy?(caddy) and caddy.active?
+            true
+          end
         end
+#        unless event.course.blank?
+#          event.course.company == user.company
+#        else
+#          true
+#        end
       end
       can :create, :events
+    
+      # Caddies
+      ############
+      can :manage, Caddy do |caddy|
+        (caddy == user.caddy or user.caddies.include?(caddy)) and caddy.active?
+      end  
+      can :create, Caddy
+      cannot :index, Caddy
       
       # Players
       ############
       can :manage, Player do |player|
-        player.event.course.company == user.company
+        # Companies must match, and player caddy must match the currently logged in caddy
+#        player.event.course.company == user.company && player.caddy_id == user.caddy.id
+        user.caddies.include?(player.caddy)
       end
-      can :create, :players
       
       # Transfers
       ############
       can :manage, Transfer do |transfer|
-        transfer.company == user.company
+        # Companies must match, and transfer's player caddy must match the currently logged in caddy
+        user.caddies.include?(transfer.caddy)
       end
-      can :create, :transfers
+      can :create, Transfer
       
-      # Caddies
+      # Transactions
       ############
-      can :manage, Caddy do |caddy|
-        caddy.course.company == user.company
+      can :manage, Transaction do |transaction|
+        transaction.company == user.company 
       end
-      can :index, :caddies
       
       # Customers
       ############
-#      can :manage, Customer do |customer|
-#        unless customer.company.blank? or customer.company.CompanyNumber == 0
-#          customer.company == user.company
-#        else
-#          true
-#        end
-#      end
-#      can :create, :customers
-    
+      can :create, Customer
+      can :manage, Customer do |customer|
+        user.caddy_customers.include?(customer)
+      end
+      cannot :index, Customer
+      
+      # Users
+      ############
+      can :manage, User do |user_record|
+        user_record == user 
+      end
+      
+    elsif user.is_member? and user.active?
+      ###  Active Member User ###  
+      
+      # Customers
+      ############
+      can :manage, Customer do |customer|
+        customer.company == user.company && customer == user.member
+      end
+      
+      # Transfers
+      ############
+      can :manage, Transfer do |transfer|
+        # Companies must match, and transfer's player caddy must match the currently logged in caddy
+        transfer.company == user.company && transfer.player.member_id == user.member.id
+      end
+      
+      # Transactions
+      ############
+      can :manage, Transaction do |transaction|
+        transaction.company == user.company 
+      end
+      
+    elsif not user.is_admin? and user.active? and user.phone_verified?
+      ###  Non-admin, non-member, non-caddy active user ### 
+      
     end
     
   end

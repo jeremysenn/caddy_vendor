@@ -33,5 +33,35 @@ jQuery ->
       return
 
   $('.member_select').select2 theme: 'bootstrap'
+  $('.caddy_customers_select').select2
+    theme: 'bootstrap'
+    minimumInputLength: 3
+
+  
+  ### Send caddy verification code ###
+  #$(document).on "turbolinks:load", ->
+  #  $('#send_caddy_verification_code').on 'click', ->
+  #    caddy_id = $(this).data( "caddy-id" )
+  #    #alert caddy_id
+  #    $.ajax
+  #      url: "/caddies/" + caddy_id + "/send_verification_code"
+  #      dataType: 'json'
+  #      success: (data) ->
+  #        return
+  #      error: ->
+  #        $('#sms_payment_verification').modal('toggle')
+  #        alert 'There was a problem sending the verification code'
+  #        return
+
+  $(document).on "turbolinks:load", ->
+    $('a[data-toggle="tab"]').on 'show.bs.tab', (e) ->
+      #save the latest tab
+      localStorage.setItem 'lastTab', $(e.target).attr('href')
+      return
+    #go to the latest tab, if it exists:
+    lastTab = localStorage.getItem('lastTab')
+    if lastTab
+      $('a[href="' + lastTab + '"]').click()
+    return
 
     

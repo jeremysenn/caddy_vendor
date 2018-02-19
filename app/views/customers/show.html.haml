@@ -4,18 +4,18 @@
     %h3.card-header
       %i.fa.fa-user-circle-o
       = @customer.full_name
-      .pull-right
-        %a{href: edit_customer_path(@customer), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
-          %i.fa.fa-edit
-          Edit
+      - if current_user.is_admin?
+        .pull-right
+          %a{href: edit_customer_path(@customer), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
+            %i.fa.fa-edit
+            Edit
     .card-block
       %p.lead
         Email:
         = @customer.Email
-      -#
-        %p.lead
-          Phone:
-          = @customer.PhoneMobile
+      %p.lead
+        Phone:
+        = @customer.PhoneMobile
       %p.lead
         Member Number:
         = "#{@customer.member_number.blank? ? 'None' : @customer.member_number}"
@@ -30,10 +30,11 @@
               = link_to add_on_member.full_name, add_on_member
           - else
             None
-          %br
-          %a{class: 'btn btn-secondary btn-sm', "data-toggle" => "modal", "data-target" => "#add_family_member"}
-            %i.fa.fa-plus
-            Add family
+          - if current_user.is_admin?
+            %br
+            %a{class: 'btn btn-secondary btn-sm', "data-toggle" => "modal", "data-target" => "#add_family_member"}
+              %i.fa.fa-plus
+              Add family
           -#
             %a{class: 'btn btn-secondary btn-sm', "data-toggle" => "modal", "data-target" => "#add_guest_member"}
               %i.fa.fa-plus
@@ -47,8 +48,19 @@
         = "#{@customer.active? ? 'Yes' : 'No'}"
       - if @customer.primary?
         %p.lead
+          Bank Account Number:
+          XXXXXX
+          =# @customer.club_account(current_company.id).decrypted_bank_account_number
+          = @customer.club_account(current_company.id).BankActNbr
+        %p.lead
+          Bank Routing Number:
+          XXXXXX
+          =# @customer.club_account(current_company.id).decrypted_bank_routing_number
+          = @customer.club_account(current_company.id).RoutingNbr
+      - if @customer.primary?
+        %p.lead
           Balance:
-          = number_to_currency(@customer.account.balance)
+          = number_to_currency(@customer.club_account(current_company.id).balance)
           -#
             - if @customer.balance < 0
               %a{href: clear_account_balance_customer_path(@customer), class: 'btn btn-sm btn-danger', :data => { :confirm => "Are you sure you want to clear this member's balance? This action cannot be undone." }}
@@ -84,7 +96,7 @@
                       = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
                     - else
                       None
-                  %td= transfer.created_at.in_time_zone(transfer.course.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                  %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
                   %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
                   %td= number_to_currency(transfer.caddy_fee)
                   %td= number_to_currency(transfer.caddy_tip)
@@ -115,7 +127,7 @@
             = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 14 : @customer.GroupID}" }
             = f.input :NameF, label: 'First Name'
             = f.input :NameL, label: 'Last Name'
-            = f.input :PhoneMobile, label: 'Phone' if current_user.admin?
+            = f.input :PhoneMobile, label: 'Phone' if current_user.is_admin?
             - unless current_user.not_admin? and not @customer.active?
               = f.input :Active, as: :boolean, inline_label: 'Active'
           .modal-footer
@@ -139,7 +151,7 @@
             = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 14 : @customer.GroupID}" }
             = f.input :NameF, label: 'First Name'
             = f.input :NameL, label: 'Last Name'
-            = f.input :PhoneMobile, label: 'Phone' if current_user.admin?
+            = f.input :PhoneMobile, label: 'Phone' if current_user.is_admin?
             = f.input :NameS, as: :hidden, :input_html => { :value => @customer.member_number }
             - unless current_user.not_admin? and not @customer.active?
               = f.input :Active, as: :boolean, inline_label: 'Active'

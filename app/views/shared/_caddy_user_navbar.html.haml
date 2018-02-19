@@ -1,0 +1,49 @@
+%nav.navbar.navbar-fixed-top.navbar-dark.bg-inverse
+  %button.navbar-toggler.hidden-sm-up{"data-target" => "#exCollapsingNavbar2", "data-toggle" => "collapse", :type => "button"}
+    \☰
+  #exCollapsingNavbar2.collapse.navbar-toggleable-xs
+    - if current_user.active? and current_caddy.present? and current_caddy.active?
+      %a.navbar-brand{:href => caddy_path(current_caddy)} 
+        Home
+    %ul.nav.navbar-nav 
+      - if current_user.active? and current_caddy.present? and current_caddy.active?
+        -#
+          %li.nav-item
+            %a.nav-link{:href => events_path, :class => (params[:controller] == 'events') ? "active" : ""} 
+              %i.fa.fa-flag
+              Rounds
+        %li.nav-item
+          -#
+            %a.nav-link{:href => show_caddy_customer_path(current_user.caddy_customer), :class => (params[:controller] == 'customers' and params[:action] == 'show_caddy') ? "active" : ""} 
+          %a.nav-link{:href => caddy_path(current_caddy), :class => (params[:controller] == 'caddies') ? "active" : ""} 
+            %i.fa.fa-vcard-o
+            Account
+        %li.nav-item
+          %a.nav-link{:href => "https://www.TransactUSA.com", target: '_blank'} 
+            Powered by Transact
+        -#
+          %li.nav-item.dropdown
+            %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+              Details
+              %b.caret
+            %div.dropdown-menu
+              - current_user.caddies_by_club(current_company.id).each do |caddy|
+                %a.dropdown-item{:href => caddy_path(caddy), :class => current_course == caddy.course ? "active" : ""}= caddy.course.name
+      .float-xs-right
+        - unless current_company.blank?
+          %li.nav-item.dropdown
+            %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+              = current_company.CompanyName
+              %b.caret
+            %div.dropdown-menu
+              -#
+                - current_user.unique_caddy_clubs.each do |club|
+                  %a.dropdown-item{:href => root_path(company_id: club.id), :class => current_company == club ? "active" : ""} 
+                    = club.CompanyName
+              - current_user.caddies.each do |caddy|
+                %a.dropdown-item{:href => caddy_path(caddy, company_id: caddy.ClubCompanyNbr), :class => current_company == caddy.company ? "active" : ""}= caddy.company.CompanyName
+        %li.nav-item
+          %a.nav-link{:href => edit_user_registration_path(current_user)} 
+            %i.fa.fa-gear
+            Settings
+        %li.nav-item= link_to 'Log out', destroy_user_session_path, method: :delete, data: { confirm: 'Are you sure you want to sign out?' }, class: 'btn btn-outline-danger nav-link'

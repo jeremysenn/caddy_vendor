@@ -2,14 +2,14 @@
   = f.error_notification
 
   .form-inputs
-    =# f.collection_select :ClubCompanyID, current_user.courses.order(:CourseName), :ClubCourseID, :CourseName, {selected: params[:course_id]}
-    = f.input :ClubCompanyID, :as => :hidden, :input_html => { :value => "#{@caddy_pay_rate.new_record? ? @course.id : @caddy_pay_rate.course.id}" }
+    =# f.collection_select :course_id, current_company.courses.order(:CourseName), :ClubCourseID, :CourseName, {selected: params[:course_id]}, class: "form-control"
+    = f.input :ClubCompanyID, :as => :hidden, :input_html => { :value => current_company.id}
     =# f.input :RankingAcronym, collection: @course.caddy_rankings_array.uniq, include_blank: false
-    = f.association :caddy_rank_desc, collection: @course.caddy_rank_descs, label_method: :RankingAcronym, label: "Ranking", value_method: :id, include_blank: false
+    = f.association :caddy_rank_desc, collection: current_user.company.caddy_rank_descs, label_method: :RankingAcronym, label: "Ranking", value_method: :id, include_blank: false
     =# f.input :Type, collection: ["Carry", "Chase"], include_blank: false
     .form-group
       %label Type
-      = f.select :Type, current_course.caddy_types, {:include_blank => false, required: true}, class: "caddy_type_select form-control", style: "width: 100%;"
+      = f.select :Type, current_user.company.caddy_types, {:include_blank => false, required: true}, class: "caddy_type_select form-control", style: "width: 100%;"
     = f.input :NbrHoles, collection: [9, 18], include_blank: false
     = f.input :Payrate, as: :string
 

@@ -2,28 +2,59 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :CompanyNumber, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? current_user.company_id : @customer.CompanyNumber}" }
-    = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 14 : @customer.GroupID}" }
-    = f.input :NameF, label: 'First Name'
-    = f.input :NameL, label: 'Last Name'
-    = f.input :Email, label: 'Email'
-    = f.input :Registration_Source, label: 'Member Number'
-    = f.input :Registration_Source_ext, as: :string, label: 'Member Extension'
-    =# f.input :PhoneMobile, label: 'Phone' if current_user.admin?
-    = f.simple_fields_for :account do |account_form|
-      =# account_form.input :ActNbr, label: 'Member Number'
-      - if account_form.object.new_record?
-        = account_form.input :CompanyNumber, :as => :hidden, :input_html => { :value => current_user.company_id }
-        = account_form.input :Balance, :as => :hidden, :input_html => { :value => 0 }
-        = account_form.input :MinBalance, :as => :hidden, :input_html => { :value => -1000000 }
-        = account_form.input :ActTypeID, :as => :hidden, :input_html => { :value => 1018 }
-        
+    - unless current_user.is_caddy?
+      = f.input :CompanyNumber, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? current_user.company_id : @customer.CompanyNumber}" }
+      = f.input :company_id, :as => :hidden, :input_html => { :value => current_user.company_id }
+      = f.input :LangID, :as => :hidden, :input_html => { :value => 1 }
+      = f.input :NameF, label: 'First Name'
+      = f.input :NameL, label: 'Last Name'
+      = f.input :PhoneMobile, label: 'Phone'
+      = f.input :Email, label: 'Email'
+      - unless @customer.type == 'caddy'
+        = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 14 : @customer.GroupID}" }
+        = f.input :Registration_Source, label: 'Member Number'
+        = f.input :Registration_Source_ext, as: :string, label: 'Member Extension'
+        -#
+          = f.simple_fields_for :accounts do |account_form|
+            = account_form.input :BankActNbr, label: 'Account Number', as: :string
+            = account_form.input :RoutingNbr, label: 'Routing Number', as: :string
+        = f.simple_fields_for :accounts do |account_form|
+          = account_form.input :BankActNbr, label: 'Account Number', as: :string, :input_html => { :value => "#{account_form.object.BankActNbr.blank? ? '' : account_form.object.decrypted_bank_account_number}" }
+          = account_form.input :RoutingNbr, label: 'Routing Number', as: :string, :input_html => { :value => "#{account_form.object.RoutingNbr.blank? ? '' : account_form.object.decrypted_bank_routing_number}" }
+          - if account_form.object.new_record?
+            = account_form.input :CompanyNumber, :as => :hidden, :input_html => { :value => current_user.company_id }
+            = account_form.input :Balance, :as => :hidden, :input_html => { :value => 0 }
+            = account_form.input :MinBalance, :as => :hidden, :input_html => { :value => -1000000 }
+            = account_form.input :ActTypeID, :as => :hidden, :input_html => { :value => 1018 }
+      - else
+        = f.input :GroupID, :as => :hidden, :input_html => { :value => "#{@customer.new_record? ? 13 : @customer.GroupID}" }
+        =# f.input :course_id, :as => :hidden, :input_html => { :value => @customer.course_id}
+        = f.simple_fields_for :accounts do |account_form|
+          - if account_form.object.new_record?
+            = account_form.input :CompanyNumber, :as => :hidden, :input_html => { :value => current_user.company.id }
+            = account_form.input :Balance, :as => :hidden, :input_html => { :value => 0 }
+            = account_form.input :MinBalance, :as => :hidden, :input_html => { :value => @default_minimum_balance_row.blank? ? 0 : @default_minimum_balance_row.DefaultMinBal }
+            = account_form.input :ActTypeID, :as => :hidden, :input_html => { :value => 6 }
+        -#
+          - unless current_user.not_admin? and not account_form.object.active?
+            = account_form.input :Active, as: :boolean, inline_label: 'Account Active'
+      - unless current_user.not_admin? and not @customer.active?
+        = f.input :Active, as: :boolean, inline_label: 'Active'
+    - else
+      = f.input :CompanyNumber, label: "Club Number"
+      = f.input :GroupID, :as => :hidden, :input_html => { :value => 13 }
+      = f.input :NameF, :as => :hidden, :input_html => { :value => current_user.caddy_customer.NameF }
+      = f.input :NameL, :as => :hidden, :input_html => { :value => current_user.caddy_customer.NameL }
+      = f.input :Email, :as => :hidden, :input_html => { :value => current_user.caddy_customer.Email }
+      = f.input :PhoneMobile, :as => :hidden, :input_html => { :value => current_user.caddy_customer.PhoneMobile }
+      = f.input :Active, :as => :hidden, :input_html => { :value => 1 }
+      = f.input :LangID, :as => :hidden, :input_html => { :value => 1 }
       -#
-        - unless current_user.not_admin? and not account_form.object.active?
-          = account_form.input :Active, as: :boolean, inline_label: 'Account Active'
-    - unless current_user.not_admin? and not @customer.active?
-      = f.input :Active, as: :boolean, inline_label: 'Active'
+        = f.simple_fields_for :accounts do |account_form|
+          - if account_form.object.new_record?
+            = account_form.input :Balance, :as => :hidden, :input_html => { :value => 0 }
+            = account_form.input :ActTypeID, :as => :hidden, :input_html => { :value => 6 }
 
   .form-actions
     = link_to 'Cancel', :back, class: 'btn btn-secondary'
-    = f.button :submit, 'Save member', class: 'btn btn-primary'
+    = f.button :submit, 'Save', class: 'btn btn-primary'

@@ -5,23 +5,41 @@ class Company < ActiveRecord::Base
   establish_connection :ez_cash
   
   has_many :users
-  has_many :courses, :foreign_key => "ClubCompanyNumber"
+#  has_many :courses, :foreign_key => "ClubCompanyNumber"
   has_many :members, -> { members }, :foreign_key => "CompanyNumber", :class_name => 'Customer' # Use 'members' scope in Customer
 #  has_many :caddies, :through => :courses
   has_many :caddies, :foreign_key => "ClubCompanyNbr"
   has_many :customers, :foreign_key => "CompanyNumber"
 #  has_many :transactions, :through => :customers
-  has_many :caddy_pay_rates, :through => :courses
-  has_many :caddy_rank_descs, :through => :courses
-  has_many :events, through: :courses
+  has_many :caddy_pay_rates, :foreign_key => "ClubCompanyID"#, :through => :courses
+  has_many :caddy_rank_descs, :foreign_key => "ClubCompanyID"#, :through => :courses
+  has_many :events, :foreign_key => :course_id
+  has_many :players, through: :events
+#  has_many :events, through: :courses
 #  has_many :accounts, through: :customers
 #  has_many :accounts, through: :courses
-  has_many :accounts
+  has_many :accounts, :foreign_key => "CompanyNumber" # This is all accounts that have this company ID
   has_many :caddy_ratings, through: :users
   has_many :transfers
   has_many :transactions, :foreign_key => "DevCompanyNbr"
   has_many :vendor_payables, :foreign_key => "CompanyNbr"
   has_many :sms_messages
+  has_one :company_act_default_min_bal, :foreign_key => "CompanyNumber"
+  has_many :balance_logs, :foreign_key => "CompanyNumber"
+  
+  accepts_nested_attributes_for :company_act_default_min_bal
+  
+  attr_accessor :transaction_fee
+  
+  ### Start Virtual Attributes ###
+  def transaction_fee # Getter
+    transaction_fee_cents.to_d / 100 if transaction_fee_cents
+  end
+  
+  def transaction_fee=(dollars) # Setter
+    self.transaction_fee_cents = dollars.to_d * 100 if dollars.present?
+  end
+  ### End Virtual Attributes ###
   
   #############################
   #     Instance Methods      #
@@ -29,6 +47,10 @@ class Company < ActiveRecord::Base
   
   def account
     Account.where(CompanyNumber: self.CompanyNumber, CustomerID: nil).last
+  end
+  
+  def club_accounts
+    Account.where(CompanyNumber: self.CompanyNumber, CustomerID: nil)
   end
   
   def caddy_rankings_array
@@ -64,7 +86,7 @@ class Company < ActiveRecord::Base
   end
   
   def members_with_balance
-    members.joins(:account).where("accounts.Balance != ?", 0)
+    members.joins(:accounts).where("accounts.Balance != ?", 0)
   end
   
   def caddies_with_balance
@@ -107,6 +129,22 @@ class Company < ActiveRecord::Base
       total = total + vp.Balance
     end
     return total
+  end
+  
+  def account_minimum_balance
+    company_act_default_min_bal.DefaultMinBal
+  end
+  
+  def grouped_caddies_by_rank_for_select
+    caddy_rank_descs.map{|c| c.grouped_for_select}
+  end
+  
+  def player_notes
+    players.where.not(note: [nil, '']).collect { |p| [ p.note ] }.insert(0,['None']).uniq
+  end
+  
+  def name
+    self.CompanyName
   end
   
   #############################

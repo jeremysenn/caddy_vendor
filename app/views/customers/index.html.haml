@@ -10,7 +10,9 @@
               %i.fa.fa-search
         %small.text-muted Search by first name, last name, or member number.
         .pull-right
-          = link_to 'New member', new_customer_path, class: 'btn btn-warning'
+          %a{href: new_customer_path(type: 'member'), class: 'btn btn-warning'}
+            %i.fa.fa-plus-circle
+            Member
   %p.lead.text-muted= "#{pluralize(@all_members.count, 'member')} found"
   .card.card-block
     %h4.card-title 
@@ -45,7 +47,7 @@
                 %td= "#{member.active? ? 'Yes' : 'No'}"
                 %td 
                   - if member.primary?
-                    = number_to_currency(member.account.balance)
+                    = number_to_currency(member.accounts.first.balance)
                   - else
                     N/A
                 %td
@@ -64,4 +66,3 @@
       %p.lead No members found
 
     = paginate @members
-  = link_to 'New member', new_customer_path, class: 'btn btn-primary' if params[:balances].blank?

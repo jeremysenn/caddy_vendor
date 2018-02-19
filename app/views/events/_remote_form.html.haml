@@ -1,5 +1,5 @@
 = form_for @event, :html => {class: 'form-horizontal event_form', role: 'form'}, remote: true do |f|
-  = f.hidden_field :course_id, value: current_course.id
+  = f.hidden_field :course_id, value: current_company.id
   = f.hidden_field :date_range, class: "date-range-picker"
   = f.hidden_field :start, value: Date.today, class: 'start_hidden'
   = f.hidden_field :end, value: Date.today, class: 'end_hidden'
@@ -22,16 +22,13 @@
               - unless ff.object.paid?
                 .row.form-group
                   .col-sm-6
-                    =# ff.collection_select :member_id, current_user.members, :id, :full_name, class: 'input-lg form-control', required: true
-                    =# ff.select :member_id, current_user.members.order(:NameL).collect { |m| [ m.full_name_by_last_name, m.id ] }, {required: true, include_blank: false}, class: "form-control"
-                    = ff.select :member_id, current_user.members.active.order(:NameL).collect { |m| [ m.full_name_with_member_number, m.id ] }, {prompt: '-- Select member --'}, required: true, class: "member_select form-control", style: "width: 100%;"
+                    = ff.select :member_id, current_company.members.active.order(:NameL).collect { |m| [ m.full_name_with_member_number, m.id ] }, {prompt: '-- Select member --'}, required: true, class: "member_select form-control", style: "width: 100%;"
                   .col-sm-6
-                    =# ff.collection_select :caddy_id, current_course.caddies, :id, :full_name, class: 'input-lg form-control', required: true
-                    =# ff.select :caddy_id, current_course.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "form-control"
-                    =# ff.select :caddy_id, current_course.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {required: true, include_blank: false}, class: "js-example-basic-single form-control"
-                    =# ff.select :caddy_id, current_course.caddies.sort_by {|c| c.last_name}.collect { |c| [ c.full_name, c.id ] }, {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
-                    =# ff.select :caddy_id, grouped_options_for_select(current_course.grouped_caddies_by_status_for_select, ff.object.caddy_id), {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
-                    = ff.select :caddy_id, grouped_options_for_select(current_course.grouped_caddies_by_rank_for_select, ff.object.caddy_id), {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
+                    - if current_caddy.blank?
+                      = ff.select :caddy_id, grouped_options_for_select(current_course.grouped_caddies_by_rank_for_select, ff.object.caddy_id), {prompt: '-- Select caddy --'}, required: true, class: "caddy_select form-control", style: "width: 100%;"
+                    - else
+                      = ff.hidden_field :caddy_id, value: current_caddy.id
+                      = current_caddy.full_name
 
               - else
                 .row.form-group
@@ -73,7 +70,7 @@
   .row.form-group
     %div{:class => "col-sm-12"}
       %button.btn.btn-secondary{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button", onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"} Cancel
-      = f.submit "Payment", :class => 'btn btn-success', name: 'pay', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();" #if current_user.admin?
+      = f.submit "Payment", :class => 'btn btn-success', name: 'pay', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();" #if current_user.is_admin?
       = f.submit "Save", :class => 'btn btn-primary', onclick: "$('.modal-backdrop').remove(); $('.modal').hide();"
       - unless @event.contains_paid_players?
         = link_to 'Delete',                      |

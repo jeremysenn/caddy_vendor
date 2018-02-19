@@ -7,14 +7,21 @@ class Transfer < ApplicationRecord
 #  after_create :transfer_web_service_call
   after_save :update_player, if: :contains_player?
   
-  after_create :ezcash_payment_transaction_web_service_call
-  after_create :ezcash_send_sms_web_service_call, if: :contains_player?
+  after_create :ezcash_payment_transaction_web_service_call, unless: :reversed?
+  after_create :send_member_sms_notification, unless: :reversed?
+#  after_create :ezcash_send_sms_web_service_call, if: :contains_player?
   after_update :ezcash_reverse_transaction_web_service_call
   
 #  validates :from_account, :to_account, :amount, :fee, presence: true
 #  validate :amount_not_greater_than_available
 
 #  validates_numericality_of :caddy_fee_cents, :greater_than => 0
+
+  validates :caddy_fee_cents, numericality: { greater_than_or_equal_to: 0}
+  validates :caddy_tip_cents, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 9900,  message: "Tip must be under $100" }
+
+  # Virtual Attributes
+  attr_accessor :generate_reversal
 
   #############################
   #     Instance Methods      #
@@ -49,7 +56,12 @@ class Transfer < ApplicationRecord
   end
   
   def caddy_tip # Getter
-    caddy_tip_cents.to_d / 100 if caddy_tip_cents
+    unless reversed
+      caddy_tip_cents.to_d / 100 if caddy_tip_cents
+    else
+      # Return negative value if transfer has been reversed
+      -(caddy_tip_cents.to_d / 100) if caddy_tip_cents
+    end
   end
   
   def caddy_tip=(dollars) # Setter
@@ -96,7 +108,7 @@ class Transfer < ApplicationRecord
   def ezcash_payment_transaction_web_service_call
     client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
     response = client.call(:ez_cash_txn, message: { FromActID: from_account_id, ToActID: to_account_id, Amount: amount, Fee: fee, FeeActId: fee_to_account_id})
-    Rails.logger.debug "**************Response body: #{response.body}"
+    Rails.logger.debug "************** ezcash_payment_transaction_web_service_call response body: #{response.body}"
     if response.success?
       unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
         self.update_attribute(:ez_cash_tran_id, response.body[:ez_cash_txn_response][:tran_id])
@@ -136,17 +148,23 @@ class Transfer < ApplicationRecord
   end
   
   def ezcash_reverse_transaction_web_service_call
-    if reversed?
+    if self.generate_reversal == "true"
       client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
       response = client.call(:ez_cash_txn, message: { TranID: ez_cash_tran_id })
       Rails.logger.debug "****************Response body for reversing transfer: #{response.body}"
       if response.success?
         unless response.body[:ez_cash_txn_response].blank? or response.body[:ez_cash_txn_response][:return].to_i > 0
-          unless club_credit_transaction_id.blank?
-            # Also need to reverse the original one-side course credit transaction if there was one with this transfer
-#            club_credit_transaction = Transaction.find(club_credit_transaction_id)
-            company.perform_one_sided_credit_transaction(-amount_paid_total) # Use negative of transfer's total amount paid
-          end
+#          unless club_credit_transaction_id.blank?
+#            # Also need to reverse the original one-side course credit transaction if there was one with this transfer
+#            company.perform_one_sided_credit_transaction(-amount_paid_total) # Use negative of transfer's total amount paid
+#          end
+
+          # Create a new transfer to represent the reversal
+          Transfer.create(from_account_id: from_account_id, to_account_id: to_account_id, customer_id: customer_id, player_id: player.id, 
+            caddy_fee_cents: caddy_fee_cents, caddy_tip_cents: caddy_tip_cents, amount_cents: amount_cents, fee_cents: fee_cents, ez_cash_tran_id: response.body[:ez_cash_txn_response][:tran_id], 
+            reversed: true, fee_to_account_id: fee_to_account_id, member_balance_cleared: member_balance_cleared, company_id: company_id, note: note,
+            club_credit_transaction_id: club_credit_transaction_id)
+
           return true
         else
           raise ActiveRecord::Rollback
@@ -221,7 +239,11 @@ class Transfer < ApplicationRecord
   end
   
   def reversable?
-    not ez_cash_tran_id.blank? and not reversed?
+    unless player and player.payment_reversed?
+      not ez_cash_tran_id.blank? and not reversed?
+    else
+      false
+    end
   end
   
   def member
@@ -256,12 +278,20 @@ class Transfer < ApplicationRecord
   
   ### Start methods for use with generating CSV file ###
   def date_of_play # Date of play
+   
     unless player.blank? or player.event.blank?
-      player.event.start.in_time_zone(course.time_zone).to_date
+      player.event.start.to_date
     else
       # Use transfer's created_at date if there is no player/round associated with transfer
-      created_at.in_time_zone(course.time_zone).to_date
+      created_at.to_date
     end
+    
+#    unless player.blank? or player.event.blank?
+#      player.event.start.in_time_zone(course.time_zone).to_date
+#    else
+#      # Use transfer's created_at date if there is no player/round associated with transfer
+#      created_at.in_time_zone(course.time_zone).to_date
+#    end
   end
   
   def member_number # Member number
@@ -316,7 +346,8 @@ class Transfer < ApplicationRecord
   end
   
   def date_caddy_paid
-    created_at.in_time_zone(course.time_zone).to_date
+#    created_at.in_time_zone(course.time_zone).to_date
+    created_at.to_date
   end
   
   def caddy_name
@@ -386,6 +417,18 @@ class Transfer < ApplicationRecord
   def caddy_type
     unless player.blank?
       player.caddy_type
+    end
+  end
+  
+  def send_member_sms_notification
+    unless member.blank? or member.phone.blank?
+      unless player.blank?
+        message_body = "You have been billed $#{amount_billed} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type}."
+        SendMemberSmsWorker.perform_async(member.phone, member.id, company_id, message_body)
+      else
+        message_body = "You have been billed $#{amount_billed} by #{company.name} for #{caddy.full_name}."
+        SendMemberSmsWorker.perform_async(member.phone, member.id, company_id, message_body)
+      end
     end
   end
   

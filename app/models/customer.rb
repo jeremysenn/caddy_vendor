@@ -8,26 +8,43 @@ class Customer < ActiveRecord::Base
   
   has_many :bill_payments
   has_many :transfers
-  has_one :account, :foreign_key => "CustomerID"
+#  has_one :account, :foreign_key => "CustomerID"
+  has_many :accounts, :foreign_key => "CustomerID"
   has_many :transactions, :through => :account
 #  has_one :vendor_payable, :foreign_key => "CustID"
   has_many :vendor_payables, :foreign_key => "CustID"
   has_many :sms_messages
+  has_many :caddies, :foreign_key => "CustomerID"
+  has_one :user
   
   scope :members, -> { where(GroupID: 14) }
   scope :caddies, -> { where(GroupID: 13) }
   scope :active, -> { where(Active: true) }
   
+  
+  # Virtual Attributes
   attr_accessor :password
   attr_accessor :guest
+#  attr_accessor :course_id
+  attr_accessor :company_id # Used to create new caddy and account when customer's company is different from current user
+  attr_accessor :type
   
 #  before_save :encrypt_all_security_question_answers, :prepare_password
-  after_save :match_account_active_status
-  
-  accepts_nested_attributes_for :account
+  after_save :match_account_active_status, if: :member?
+  after_commit :create_caddy_and_account, if: :new_caddy_being_added?, on: [:create, :update]
+#  after_commit :create_account, if: :member?, on: [:create]
+      
+  accepts_nested_attributes_for :accounts
   
 #  validates :NameF, :NameL, :user_name, :PhoneMobile, :Answer1, :Answer2, :Answer3, presence: true
   validates :NameF, :NameL, presence: true
+#  validates :Email, :PhoneMobile, presence: true
+  validates :PhoneMobile, presence: true
+#  validates_uniqueness_of :Email
+#  validates_uniqueness_of :PhoneMobile
+#  validates :Email, uniqueness: {allow_blank: true}
+#  validates :PhoneMobile, uniqueness: true
+  
   
 #  validates_uniqueness_of :user_name
   
@@ -47,8 +64,17 @@ class Customer < ActiveRecord::Base
   #     Instance Methods      #
   #############################
   
-  def accounts
-    Account.where(CustomerID: id)
+#  def accounts
+#    Account.where(CustomerID: id)
+#  end
+  
+  def club_account(company_id)
+    account = accounts.find_by(CompanyNumber: company_id)
+    unless account.blank?
+      return account
+    else
+      return accounts.first
+    end
   end
   
   def active_accounts
@@ -396,13 +422,20 @@ class Customer < ActiveRecord::Base
   end
   
   def match_account_active_status
-    unless account.blank?
+    accounts.each do |account|
       if self.Active == account.Active
         nil
       else
         account.update_attribute(:Active, self.Active)
       end
     end
+#    unless account.blank?
+#      if self.Active == account.Active
+#        nil
+#      else
+#        account.update_attribute(:Active, self.Active)
+#      end
+#    end
   end
   
   def phone
@@ -477,9 +510,59 @@ class Customer < ActiveRecord::Base
     self.GroupID == 13
   end
   
+  def member?
+    self.GroupID == 14
+  end
+  
   def vendor_payables_with_balance
     vendor_payables.where("Balance > ?", 0)
   end
+  
+  def update_caddy_details
+#    course = Course.where(ClubCourseID: self.course_id).first
+    
+    # Look for existing account with this customer's ID and company number
+#    caddy_account = Account.where(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber).first
+    
+    # Create a new account and caddy if there isn't already one for this customer within this company
+#    if caddy_account.blank?
+#      # Get default minimum balance for this company's caddy accounts
+#      default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: self.CompanyNumber, AccountTypeID: 6).first
+#      unless default_minimum_balance_row.blank?
+#        minimum_balance = default_minimum_balance_row.DefaultMinBal
+#      else
+#        minimum_balance = 0
+#      end
+#      Account.create(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber, MinBalance: minimum_balance, ActTypeID: 6)
+#      Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber, RankingID: company.caddy_rank_descs.first.id)
+#    end
+    
+    Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: self.CompanyNumber, RankingID: company.caddy_rank_descs.first.id)
+    
+    # Create a new caddy for course if a course_id is also being passed and there isn't already a caddy with these attributes
+#    caddy = Caddy.where(CustomerID: self.CustomerID, ClubCompanyNbr: course.ClubCompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id).first
+#    if caddy.blank?
+#      Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: course.ClubCompanyNumber, course_id: course.id, RankingID: course.caddy_rank_descs.first.id)
+#    end
+  end
+  
+  def create_caddy_and_account
+    # Use company_id virtual attribute in case customer's company is different from current user
+    current_company_record = Company.find(company_id)
+    default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: company_id, AccountTypeID: 6).first
+    unless default_minimum_balance_row.blank?
+      minimum_balance = default_minimum_balance_row.DefaultMinBal
+    else
+      minimum_balance = 0
+    end
+    
+    Account.create(CustomerID: self.CustomerID, CompanyNumber: company_id, MinBalance: minimum_balance, ActTypeID: 6)
+    Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: company_id, RankingID: current_company_record.caddy_rank_descs.first.id)
+  end
+  
+#  def create_account
+#    Account.create(CustomerID: self.CustomerID, CompanyNumber: self.CompanyNumber, Balance: 0, MinBalance: -1000000, ActTypeID: 1018)
+#  end
   
   #############################
   #     Class Methods      #
@@ -512,6 +595,11 @@ class Customer < ActiveRecord::Base
 #      self.pwd_hash = Digest::SHA1.hexdigest(password + user_salt).upcase
       self.pwd_hash = Digest::SHA1.hexdigest(user_salt + password).upcase
     end
+  end
+  
+  def new_caddy_being_added?
+#    self.caddy? and not self.course_id.blank?
+    self.caddy?
   end
 
 end

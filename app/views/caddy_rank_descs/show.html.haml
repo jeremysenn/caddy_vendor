@@ -7,9 +7,10 @@
     %p.lead
       Description:
       = @caddy_rank_desc.RankingDescription
-    %p.lead
-      Course:
-      = link_to @caddy_rank_desc.course.name, @caddy_rank_desc.course
+    -#
+      %p.lead
+        Course:
+        = link_to @caddy_rank_desc.course.name, @caddy_rank_desc.course
   
   %br
   .card.card-block

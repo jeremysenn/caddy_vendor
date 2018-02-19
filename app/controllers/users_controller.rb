@@ -1,19 +1,23 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
-  load_and_authorize_resource
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :pin_verification, :verify_phone]
+  load_and_authorize_resource except: [:verify_phone]
 #  around_action :set_time_zone, if: :current_user
 
 
   # GET /users
   # GET /users.json
   def index
-    unless params[:q].blank?
-      @query_string = "%#{params[:q]}%"
-      @users = current_user.company.users.where("email like ?", @query_string)
-    else
-      @users = current_user.company.users
-    end
+#    unless params[:q].blank?
+#      @query_string = "%#{params[:q]}%"
+#      @users = current_user.company.users.where("email like ?", @query_string)
+#    else
+#      @users = current_user.company.users
+#    end
+    @users = current_user.company.users
+    @admin_users = @users.where(role: 'admin')
+    @member_users = @users.where(role: 'member')
+    @caddy_users = @users.where(role: 'caddy')
   end
 
   # GET /users/1
@@ -69,6 +73,57 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def pin_verification
+    respond_to do |format|
+      format.html { 
+        pin = params[:pin]
+        # Make sure that pin matches up with User's saved pin
+        if pin == @user.pin.to_s
+          response = @user.ezcash_send_mms_cust_barcode_web_service_call
+          if response == true
+            flash[:notice] = "A text message has been sent to you with your payment QR Code."
+            redirect_back(fallback_location: root_path)
+          else
+            flash[:error] = "There was a problem sending your QR Code."
+            redirect_back(fallback_location: root_path)
+          end
+        else
+          flash[:error] = "There was a problem with your PIN."
+          redirect_back(fallback_location: root_path)
+        end
+        }
+    end
+  end
+  
+  # GET /users_admin/1/verify_phone
+  def verify_phone
+    respond_to do |format|
+      format.html { 
+        code = params[:verification_code].to_i
+        Rails.logger.debug "User code: #{@user.verification_code}"
+        if code == @user.verification_code
+          # Make sure that code matches up with User's verification code
+          @user.update_attribute(:verification_code, nil)
+          flash[:notice] = "Phone verified."
+          if @user.pin.blank?
+            flash[:danger] = 'Please set your PIN.' 
+            redirect_to edit_user_registration_path(current_user)
+          else
+            redirect_to root_path
+          end
+#          unless @user.is_caddy?
+#            redirect_to root_path
+#          else
+#            redirect_to show_caddy_customer_path(@user.caddy_customer)
+#          end
+        else
+          flash[:error] = "Code is incorrect."
+          redirect_to root_path
+        end
+        }
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -78,7 +133,7 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:company_id, :email, :password, :time_zone, :admin, :active)
+      params.require(:user).permit(:company_id, :email, :password, :time_zone, :admin, :active, :role, :pin, :phone)
     end
     
 end

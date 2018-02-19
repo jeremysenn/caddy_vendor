@@ -1,0 +1,147 @@
+.container-fluid
+  %br
+  .card
+    %h3.card-header= @balance_log.description
+    .card-block
+      %p.lead
+        DateTime:
+        = @balance_log.EventDateTime.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y %l:%M %p')
+      %p.lead
+        Start:
+        = @balance_log.StartDateTime.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y %l:%M %p')
+      %p.lead
+        End:
+        = @balance_log.EndDateTime.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y %l:%M %p')
+      %p.lead
+        Processed:
+        = @balance_log.Processed? ? 'Yes' : 'No'
+      %p.lead 
+        Start Tran ID
+        = link_to @balance_log.StartTranID, transaction_path(@balance_log.StartTranID)
+      %p.lead 
+        End Tran ID
+        = link_to @balance_log.EndTranID, transaction_path(@balance_log.EndTranID)
+      
+      %p.lead
+        Amount:
+        = number_to_currency(@balance_log.TotalAmount)
+
+  %ul.nav.nav-tabs
+    %li.nav-item
+      %a.nav-link.active{:href => "#transfers", :data => {:toggle => "tab"}} 
+        %i.fa.fa-dollar.fa-lg
+        Transfers
+    - unless @balance_log.CSVReport.blank?
+      %li.nav-item
+        %a.nav-link{:href => "#csv", :data => {:toggle => "tab"}} 
+          ACH Report
+    - unless @balance_log.CSVCreditReport.blank?
+      %li.nav-item
+        %a.nav-link{:href => "#credit_csv", :data => {:toggle => "tab"}} 
+          ACH Credit Report
+
+  .tab-content
+    .tab-pane.active{:id => "transfers"}
+      %br
+      - unless @transfers.blank?
+        %a{href: transfers_balance_log_path(format: "csv"), class: 'btn btn-primary'}
+          %i.fa.fa-download
+          Download
+        %h4.text-primary
+          .pull-right= number_to_currency(@transfers_total_amount)
+
+        .table-responsive
+          %table.table.table-striped
+            %thead
+              %tr
+                %th Date of play
+                %th Member number
+                %th Member extension
+                %th Amount billed
+                %th Player name
+                %th Member name
+                %th Date caddy paid
+                %th Amount paid to caddy
+                %th Caddy name
+                %th Reference number
+                %th Note
+                %th
+            %tbody
+              - @transfers.each do |transfer|
+                %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
+                  %td= "#{transfer.date_of_play.blank? ? 'N/A' : transfer.date_of_play.in_time_zone(current_user.time_zone).strftime('%-m/%-d/%y')}"
+                  %td= "#{transfer.member_number.blank? ? 'N/A' : transfer.member_number}"
+                  %td= "#{transfer.member_extension.blank? ? 'N/A' : transfer.member_extension}"
+                  %td= number_to_currency(transfer.amount_billed)
+                  %td= "#{transfer.player_name.blank? ? 'N/A' : transfer.player_name}"
+                  %th= "#{transfer.member_name.blank? ? 'N/A' : transfer.member_name}"
+                  %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y")
+                  %td= number_to_currency(transfer.amount_paid_to_caddy)
+                  %td= transfer.caddy_name
+                  %td= link_to transfer.reference_number, transaction_path(transfer.reference_number) unless transfer.reference_number.blank?
+                  %td= transfer.note
+                  %td
+                    - if transfer.reversed?
+                      .text-danger Reversal
+                    = link_to "Show", transfer, class: 'btn btn-secondary'
+        -#
+          .table-responsive
+            %table.table.table-striped
+              %thead
+                %tr
+                  %th Tran ID
+                  %td DateTime
+                  %th To
+                  %th Fee
+                  %th Tip
+                  %th Transaction Fee
+                  %th Total
+                  %th
+              %tbody
+                - @transfers.each do |transfer| 
+                  %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
+                    %td
+                      - unless transfer.ez_cash_tran_id.blank?
+                        = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
+                      - else
+                        None
+                    %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+                    %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
+                    %td= number_to_currency(transfer.caddy_fee)
+                    %td= number_to_currency(transfer.caddy_tip)
+                    %td= number_to_currency(transfer.fee)
+                    %td= number_to_currency(transfer.amount_paid_total)
+                    %td
+                      - if transfer.reversed?
+                        .text-danger Reversed
+                      = link_to "Show", transfer, class: 'btn btn-secondary'
+      - else
+        %p.lead None
+
+    - unless @balance_log.CSVReport.blank?
+      .tab-pane{:id => "csv"}
+        %br
+        %p
+          %a{href: ach_report_balance_log_path(format: "csv"), class: 'btn btn-primary'}
+            %i.fa.fa-download
+            Download  
+        .table-responsive
+          %table.table.table-striped
+            - CSV.parse(@balance_log.CSVReport).each do |row|
+              %tr
+                - row.each do |element|
+                  %td= element
+
+    - unless @balance_log.CSVCreditReport.blank?
+      .tab-pane{:id => "credit_csv"}
+        %br
+        %p
+          %a{href: ach_credit_report_balance_log_path(format: "csv"), class: 'btn btn-primary'}
+            %i.fa.fa-download
+            Download  
+        .table-responsive
+          %table.table.table-striped
+            - CSV.parse(@balance_log.CSVCreditReport).each do |row|
+              %tr
+                - row.each do |element|
+                  %td= element
