@@ -8,7 +8,7 @@ class Transfer < ApplicationRecord
   after_save :update_player, if: :contains_player?
   
   after_create :ezcash_payment_transaction_web_service_call, unless: :reversed?
-  after_create :send_member_sms_notification, unless: :reversed?
+  after_create :send_member_sms_notification
 #  after_create :ezcash_send_sms_web_service_call, if: :contains_player?
   after_update :ezcash_reverse_transaction_web_service_call
   
@@ -423,10 +423,18 @@ class Transfer < ApplicationRecord
   def send_member_sms_notification
     unless member.blank? or member.phone.blank?
       unless player.blank?
-        message_body = "You have been billed $#{amount_billed} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type}."
+        unless reversed?
+          message_body = "You have been billed $#{amount_billed} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type}."
+        else
+          message_body = "The bill of $#{amount_billed} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type} has been reversed."
+        end
         SendMemberSmsWorker.perform_async(member.phone, member.id, company_id, message_body)
       else
-        message_body = "You have been billed $#{amount_billed} by #{company.name} for #{caddy.full_name}."
+        unless reversed?
+          message_body = "You have been billed $#{amount_billed} by #{company.name} for #{caddy.full_name}."
+        else
+          message_body = "The bill of $#{amount_billed} by #{company.name} for #{caddy.full_name} has been reversed."
+        end
         SendMemberSmsWorker.perform_async(member.phone, member.id, company_id, message_body)
       end
     end
