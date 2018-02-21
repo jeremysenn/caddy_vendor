@@ -166,7 +166,7 @@ class CaddiesController < ApplicationController
       if transfer.save
         redirect_back fallback_location: @caddy, notice: 'Caddy payment submitted.'
       else
-        redirect_back fallback_location: @caddy, notice: 'There was a problem creating the caddy payment.'
+        redirect_back fallback_location: @caddy, alert: 'There was a problem creating the caddy payment.'
       end
     else
       course = @caddy.course
@@ -176,7 +176,7 @@ class CaddiesController < ApplicationController
       if Transfer.save
         redirect_back fallback_location: @caddy, notice: 'Caddy payment submitted.'
       else
-        redirect_back fallback_location: @caddy, notice: 'There was a problem creating the caddy payment.'
+        redirect_back fallback_location: @caddy, alert: 'There was a problem creating the caddy payment.'
       end
     end
     
