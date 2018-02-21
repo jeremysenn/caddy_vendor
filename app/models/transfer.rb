@@ -106,7 +106,6 @@ class Transfer < ApplicationRecord
   end
   
   def ezcash_payment_transaction_web_service_call
-    Rails.logger.debug "*************** WE ARE HERE ****************"
     client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
     response = client.call(:ez_cash_txn, message: { FromActID: from_account_id, ToActID: to_account_id, Amount: amount, Fee: fee, FeeActId: fee_to_account_id})
     Rails.logger.debug "************** ezcash_payment_transaction_web_service_call response body: #{response.body}"
