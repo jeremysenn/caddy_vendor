@@ -76,7 +76,8 @@ class CaddiesController < ApplicationController
     @available_balance = @caddy.available_balance
     @account = @caddy.account
 #    session[:course_id] = @caddy.course.id
-    @events = @caddy.events.order("start DESC").last(20).uniq
+#    @events = @caddy.events.order("start DESC").last(50).uniq
+    @events = @caddy.events.last(50).uniq
   end
 
   # GET /caddies/new
