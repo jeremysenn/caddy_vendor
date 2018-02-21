@@ -43,6 +43,10 @@ class Player < ApplicationRecord
     player_tip = tip.blank? ? 0 : tip
     player_fee = fee.blank? ? caddy_pay_rate : fee
     transaction_fee =  transfer_transaction_fee.blank? ? company.transaction_fee : transfer_transaction_fee
+    if transaction_fee.blank?
+      # If both transfer_transaction_fee and company.transaction_fee are nil, set to zero so that math works below
+      transaction_fee = 0
+    end
     return (player_fee + player_tip + transaction_fee)
   end
   
