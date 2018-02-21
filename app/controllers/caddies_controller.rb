@@ -162,7 +162,8 @@ class CaddiesController < ApplicationController
     amount = params[:amount].to_f.abs unless params[:amount].blank?
     note = params[:note]
     unless member.blank?
-      if Transfer.create(company_id: current_company.id, from_account_id: member.club_account(current_company.id).id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount, note: note)
+      transfer = Transfer.new(company_id: current_company.id, from_account_id: member.club_account(current_company.id).id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount, note: note)
+      if transfer.save
         redirect_back fallback_location: @caddy, notice: 'Caddy payment submitted.'
       else
         redirect_back fallback_location: @caddy, notice: 'There was a problem creating the caddy payment.'
@@ -171,7 +172,8 @@ class CaddiesController < ApplicationController
       course = @caddy.course
       transaction_id = course.perform_one_sided_credit_transaction(amount)
       Rails.logger.debug "*********************************Club transaction ID: #{transaction_id}"
-      if Transfer.create(company_id: current_company.id, from_account_id: current_company.account.id, to_account_id: @caddy.account.id, amount: amount, note: note, club_credit_transaction_id: transaction_id)
+      transfer = Transfer.new(company_id: current_company.id, from_account_id: current_company.account.id, to_account_id: @caddy.account.id, amount: amount, note: note, club_credit_transaction_id: transaction_id)
+      if Transfer.save
         redirect_back fallback_location: @caddy, notice: 'Caddy payment submitted.'
       else
         redirect_back fallback_location: @caddy, notice: 'There was a problem creating the caddy payment.'
