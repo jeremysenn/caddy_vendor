@@ -10,7 +10,7 @@
             - else
               = select_tag 'event[course_id]', options_from_collection_for_select(current_user.courses_by_club(current_company.id), "id", "name", @course.id), class: "form-control"
       .form-group
-        = text_field_tag 'event[start_date]', nil, :placeholder => "Start Date", value: "#{@start_date.blank? ? Date.today : @start_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-autoclose' => true, readonly: true
+        = text_field_tag 'event[start_date]', nil, :placeholder => "Start Date", value: "#{@start_date.blank? ? Date.today : @start_date}", class: "form-control", 'data-provide' => 'datepicker', 'data-date-format' => "yyyy-mm-dd", 'data-date-start-date' => "2018-01-01", 'data-date-autoclose' => true, readonly: true
       .form-group
         To
       .form-group
