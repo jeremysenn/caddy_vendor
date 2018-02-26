@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
 #      Caddy.all.joins(:customer).where("customer.Email = ?", current_user.email).where(ClubCompanyNbr: current_company.id).first || current_user.caddy
 #      current_user.caddies.where(ClubCompanyNbr: current_company.id).first
 #      current_user.caddies.first
-      Caddy.find_by(id: session[:caddy_id]) || current_user.caddies.first
+      Caddy.find_by(id: session[:caddy_id]) || current_user.caddies.where(active: true).first
     end
   end
   
@@ -66,7 +66,23 @@ class ApplicationController < ActionController::Base
   
   # If don't find a company from session, return the current_user's company ID.
   def current_company
-    Company.find_by(CompanyNumber: session[:company_id]) || current_user.company
+    if current_user.is_caddy?
+      unless current_caddy.blank?
+        current_caddy.company
+      else
+        unless session[:company_id].blank?
+          Company.find_by(CompanyNumber: session[:company_id])
+        else
+          current_user.company
+        end
+      end
+    else
+      unless session[:company_id].blank?
+        Company.find_by(CompanyNumber: session[:company_id])
+      else
+        current_user.company
+      end
+    end
   end
   
   protected
