@@ -94,10 +94,10 @@ class User < ApplicationRecord
   
   def caddy
     # Find caddy by customer phone number
-    caddy_record = Caddy.all.joins(:customer).where("customer.PhoneMobile = ?", phone).first
+    caddy_record = Caddy.active.joins(:customer).where("customer.PhoneMobile = ?", phone).first
     if caddy_record.blank?
       # If can't find customer record by phone number, find by email
-      caddy_record = Caddy.all.joins(:customer).where("customer.Email = ?", email).first
+      caddy_record = Caddy.active.joins(:customer).where("customer.Email = ?", email).first
     end
     return caddy_record
   end
