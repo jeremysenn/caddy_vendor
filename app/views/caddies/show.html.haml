@@ -64,6 +64,10 @@
             %a{href: barcode_caddy_path(@caddy), class: 'btn btn-success'}
               %i.fa.fa-qrcode
               ATM Payment
+            - unless @caddy.customer.user.blank?
+              %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: 'btn btn-warning'}
+                %i.fa.fa-comment
+                Text Barcode
       %p.lead
         Available Balance:
         = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
