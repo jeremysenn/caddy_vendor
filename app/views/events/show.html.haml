@@ -46,20 +46,20 @@
             = f.hidden_field :fee, value: player.transaction_fee.blank? ? current_company.transaction_fee : player.transaction_fee , class: 'transaction_fee'
             = f.hidden_field :fee_to_account_id, value: current_user.company.account.id unless current_user.company.account.blank?
             =# f.hidden_field :caddy_fee, value: player.fee.blank? ? player.caddy_pay_rate : player.fee
-            
-            .form-group.lead
-              %strong Tip
-              - unless player.paid?
-                .input-group
-                  .input-group-addon
-                    %i.fa.fa-dollar
-                  = f.number_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip, class: "form-control input-lg tip_field", pattern: "[0-9]*", inputmode: "numeric", readonly: (player.paid?), autofocus: (index == 0)
-              - else
-                = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
-                = number_to_currency(player.tip.blank? ? 0 : player.tip)
+            - if current_user.company.include_tip?
+              .form-group.lead
+                %strong Tip
+                - unless player.paid?
+                  .input-group
+                    .input-group-addon
+                      %i.fa.fa-dollar
+                    = f.number_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip, class: "form-control input-lg tip_field", pattern: "[0-9]*", inputmode: "numeric", readonly: (player.paid?), autofocus: (index == 0)
+                - else
+                  = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
+                  = number_to_currency(player.tip.blank? ? 0 : player.tip)
             .form-group.lead
               %strong Charge
-              - unless current_user.is_caddy? or player.paid? # or player.payment_reversed?
+              - unless (current_user.is_caddy? and not current_user.company.payee_can_edit_payment?) or player.paid? # or player.payment_reversed?
                 .input-group
                   .input-group-addon
                     %i.fa.fa-dollar
@@ -110,7 +110,8 @@
             %th Round
             %th Guest
             %th Charge
-            %th Tip
+            - if current_user.company.include_tip?
+              %th Tip
             - unless current_user.is_caddy?
               %th Fee
             %th
@@ -124,9 +125,9 @@
               %td= player.caddy_type
               %td= player.round
               %td= player.note
-              %td{class: "#{(player.paid? or current_user.is_caddy? ) ? '' : 'text-primary'}"}
+              %td{class: "#{(player.paid? or (current_user.is_caddy? and not current_user.company.payee_can_edit_payment?) ) ? '' : 'text-primary'}"}
                 $
-                - unless player.paid? or current_user.is_caddy? #or player.payment_reversed?
+                - unless player.paid? or (current_user.is_caddy? and not current_user.company.payee_can_edit_payment?) #or player.payment_reversed?
                   %a{href: nil, class: 'caddy_fee', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_caddy_fee", "data-value" => player.caddy_pay_rate}
                     =# number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
                     = number_with_precision("#{(player.fee.blank? or player.last_transfer_reversed?) ? player.caddy_pay_rate : player.fee}", precision: 0)
@@ -134,13 +135,14 @@
                   =# number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
                   = number_with_precision("#{(player.fee.blank? or player.last_transfer_reversed?) ? player.caddy_pay_rate : player.fee}", precision: 0)
               -# %td{class: "#{(player.paid? or player.payment_reversed?) ? '' : 'text-primary'}"}
-              %td{class: "#{(player.paid?) ? '' : 'text-primary'}"}
-                $
-                - unless player.paid? #or player.payment_reversed?
-                  %a{href: nil, class: 'tip', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_tip", "data-value" => player.tip.blank? ? '0' : player.tip}
+              - if current_user.company.include_tip?
+                %td{class: "#{(player.paid?) ? '' : 'text-primary'}"}
+                  $
+                  - unless player.paid? #or player.payment_reversed?
+                    %a{href: nil, class: 'tip', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_tip", "data-value" => player.tip.blank? ? '0' : player.tip}
+                      = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
+                  - else
                     = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
-                - else
-                  = number_with_precision("#{player.tip.blank? ? '0' : player.tip}", precision: 0)
               - unless current_user.is_caddy?
                 -# %td{class: "#{(player.paid? or player.payment_reversed?) ? '' : 'text-primary'}"}
                 %td{class: "#{(player.paid?) ? '' : 'text-primary'}"}

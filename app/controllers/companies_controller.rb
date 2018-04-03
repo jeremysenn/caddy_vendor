@@ -73,6 +73,6 @@ class CompaniesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def company_params
-      params.require(:company).permit(:CompanyName, :transaction_fee, company_act_default_min_bal_attributes: [:DefaultMinBal, :id])
+      params.require(:company).permit(:CompanyName, :transaction_fee, :payee_can_edit_payment, :include_tip, company_act_default_min_bal_attributes: [:DefaultMinBal, :id])
     end
 end

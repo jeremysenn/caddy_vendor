@@ -8,7 +8,12 @@
     = "Balance: #{number_to_currency(@company.balance)}"
     %br
     = "Account Minimum Balance: #{number_to_currency(@company.account_minimum_balance)}"
-  
+  %p.lead
+    %strong Payment Screen:
+    %br
+    = "Caddy can edit payment amount: #{@company.payee_can_edit_payment? ? 'Yes' : 'No'}"
+    %br
+    = "Include tips: #{@company.include_tip? ? 'Yes' : 'No'}"
 
   %ul.nav.nav-tabs
     %li.nav-item
