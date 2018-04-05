@@ -599,7 +599,7 @@ class Customer < ActiveRecord::Base
   
   def new_caddy_being_added?
 #    self.caddy? and not self.course_id.blank?
-    self.caddy?
+    self.caddy? and self.caddy.blank?
   end
 
 end
