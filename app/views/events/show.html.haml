@@ -57,6 +57,8 @@
                 - else
                   = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
                   = number_to_currency(player.tip.blank? ? 0 : player.tip)
+            - else
+              = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip
             .form-group.lead
               %strong Charge
               - unless (current_user.is_caddy? and not current_user.company.payee_can_edit_payment?) or player.paid? # or player.payment_reversed?
