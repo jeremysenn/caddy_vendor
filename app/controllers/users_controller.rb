@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :pin_verification, :verify_phone]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :pin_verification, :verify_phone, :text_barcode]
   load_and_authorize_resource except: [:verify_phone]
 #  around_action :set_time_zone, if: :current_user
 
@@ -120,6 +120,21 @@ class UsersController < ApplicationController
         else
           flash[:error] = "Code is incorrect."
           redirect_to root_path
+        end
+        }
+    end
+  end
+  
+  def text_barcode
+    respond_to do |format|
+      format.html { 
+        response = @user.ezcash_send_mms_cust_barcode_web_service_call
+        if response == true
+          flash[:notice] = "A text message has been sent with payment QR Code."
+          redirect_back(fallback_location: root_path)
+        else
+          flash[:error] = "There was a problem sending QR Code."
+          redirect_back(fallback_location: root_path)
         end
         }
     end

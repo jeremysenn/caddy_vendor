@@ -65,6 +65,7 @@ Rails.application.routes.draw do
     member do
       post 'pin_verification'
       post 'verify_phone'
+      get 'text_barcode'
     end
   end
   
