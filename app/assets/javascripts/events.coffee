@@ -15,6 +15,22 @@ jQuery ->
       $(this).closest("form").find('#transfer_amount').val sum
       $(this).closest("form").find('#player_total_amount').html '$' + sum
       return
+    $('.caddy_fee_field').on 'keyup touchend', ->
+      caddy_fee = $(this).val()
+      caddy_tip = $(this).closest('form').find('#transfer_caddy_tip').val()
+      
+      if caddy_tip > 0 && caddy_fee > 0
+        sum = parseFloat(caddy_fee) + parseFloat(caddy_tip)
+      else if caddy_tip > 0 || caddy_fee > 0
+        if caddy_fee > 0
+          sum = parseFloat(caddy_fee)
+        else if caddy_tip > 0
+          sum = parseFloat(caddy_tip)
+      else
+        sum = 0
+      $(this).closest("form").find('#transfer_amount').val sum
+      $(this).closest("form").find('#player_total_amount').html '$' + sum
+      return
 
   ### Add everything up on page load to make sure everything is correct ###
   $(document).on 'turbolinks:load', ->
