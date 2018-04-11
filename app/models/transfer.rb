@@ -163,7 +163,7 @@ class Transfer < ApplicationRecord
           Transfer.create(from_account_id: from_account_id, to_account_id: to_account_id, customer_id: customer_id, player_id: player_id, 
             caddy_fee_cents: caddy_fee_cents, caddy_tip_cents: caddy_tip_cents, amount_cents: amount_cents, fee_cents: fee_cents, ez_cash_tran_id: response.body[:ez_cash_txn_response][:tran_id], 
             reversed: true, fee_to_account_id: fee_to_account_id, member_balance_cleared: member_balance_cleared, company_id: company_id, note: note,
-            club_credit_transaction_id: club_credit_transaction_id)
+            club_credit_transaction_id: club_credit_transaction_id,  original_transfer_id: id)
 
           return true
         else
@@ -239,7 +239,7 @@ class Transfer < ApplicationRecord
   end
   
   def reversable?
-    unless player and player.payment_reversed?
+    unless (player and player.payment_reversed?) or not reversal_transfer.blank?
       not ez_cash_tran_id.blank? and not reversed?
     else
       false
@@ -277,10 +277,7 @@ class Transfer < ApplicationRecord
   end
   
   def reversal_transfer
-#    Transfer.where(from_account_id: from_account_id, to_account_id: to_account_id, customer_id: customer_id, player_id: player_id, 
-#      caddy_fee_cents: caddy_fee_cents, caddy_tip_cents: caddy_tip_cents, amount_cents: amount_cents, fee_cents: fee_cents, 
-#      reversed: true, fee_to_account_id: fee_to_account_id, member_balance_cleared: member_balance_cleared, company_id: company_id, note: note,
-#      club_credit_transaction_id: club_credit_transaction_id)
+    Transfer.find_by(original_transfer_id: id)
   end
   
   ### Start methods for use with generating CSV file ###
