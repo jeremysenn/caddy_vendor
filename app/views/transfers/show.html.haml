@@ -41,7 +41,7 @@
     - if @transfer.reversed?
       %p.lead.text-danger
         Reversal transfer
-    - if not @transfer.reversed? and @transfer.player and @transfer.player.payment_reversed?
+    - if (not @transfer.reversed? and @transfer.player and @transfer.player.payment_reversed?) or @transfer.reversal_transfer.present?
       %p.lead.text-danger
         This transfer was reversed
   = form_for @transfer, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
