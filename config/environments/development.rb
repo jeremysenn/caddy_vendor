@@ -34,7 +34,7 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
   
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.default_url_options = { host: ENV["APPLICATION_HOST"], port: 3000 }
   
   config.action_mailer.delivery_method = :smtp
 
@@ -69,7 +69,8 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   
-  routes.default_url_options = {:host => 'http://71.41.52.58:3000'}
+#  routes.default_url_options = {:host => 'http://71.41.52.58:3000'}
+  Rails.application.routes.default_url_options[:host] = "http://#{ENV["APPLICATION_HOST"]}:3000"
   
   Rails.application.config.middleware.use ExceptionNotification::Rack,
   :email => {

@@ -84,7 +84,8 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   
-  routes.default_url_options = {:host => 'http://71.41.52.58:3000/'}
+#  routes.default_url_options = {:host => 'http://71.41.52.58:3000/'}
+  Rails.application.routes.default_url_options[:host] = "http://#{ENV["APPLICATION_HOST"]}:3000"
   
   Rails.application.config.middleware.use ExceptionNotification::Rack,
   :email => {
