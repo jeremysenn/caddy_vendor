@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :validatable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  # :lockable, :timeoutable, :validatable and :omniauthable
+  devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable
        
   belongs_to :company
@@ -13,16 +13,18 @@ class User < ApplicationRecord
   
   after_save :set_company_id, :unless => :company_id
   
-  before_create do |user|
-    user.verification_code = rand(100000..999999).to_s
-  end
+#  before_create do |user|
+#    user.verification_code = rand(100000..999999).to_s
+#  end
+#  after_commit :send_verification_code, on: [:create], :if => :is_caddy? or :is_member?
+  
   before_create :set_role_and_customer_id
+  after_create :send_confirmation_sms_message
   
-  after_commit :send_verification_code, on: [:create], :if => :is_caddy? or :is_member?
-  
-  validates :email, uniqueness: {allow_blank: false}
+  validates :email, uniqueness: {allow_blank: true}
   validate :existing_customer_signing_up
   validates :pin, length: { is: 4, allow_blank: true }
+  validates :phone, uniqueness: {allow_blank: false}
   
   attr_accessor :signing_up
   
@@ -230,12 +232,20 @@ class User < ApplicationRecord
           self.role= "member"
         elsif customer_record.caddy?
           self.role= "caddy"
+        end
+      else
+        if self.company_id.blank?
+          return nil
         else
           self.role= "admin"
         end
       end
     else
-      self.role= "admin"
+      if self.company_id.blank?
+        return nil
+      else
+        self.role= "admin"
+      end
     end
   end
   
@@ -243,6 +253,15 @@ class User < ApplicationRecord
     customer_record = Customer.find_by(PhoneMobile: phone)
     if customer_record.blank? && !signing_up.blank?
       errors.add(:phone, "No associated customer record found")
+    end
+  end
+  
+  def send_confirmation_sms_message
+    unless phone.blank?
+      confirmation_link = "#{Rails.application.routes.default_url_options[:host]}/users/confirmation?confirmation_token=#{self.confirmation_token}"
+      message = "Confirm your Caddy Vend account by clicking the link below. #{confirmation_link}"
+      client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+      client.call(:send_sms, message: { Phone: phone, Msg: "#{message}"})
     end
   end
   

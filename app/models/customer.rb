@@ -548,16 +548,18 @@ class Customer < ActiveRecord::Base
   
   def create_caddy_and_account
     # Use company_id virtual attribute in case customer's company is different from current user
-    current_company_record = Company.find(company_id)
-    default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: company_id, AccountTypeID: 6).first
-    unless default_minimum_balance_row.blank?
-      minimum_balance = default_minimum_balance_row.DefaultMinBal
-    else
-      minimum_balance = 0
+    unless company_id.blank?
+      current_company_record = Company.find_by(company_id)
+      default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: company_id, AccountTypeID: 6).first
+      unless default_minimum_balance_row.blank?
+        minimum_balance = default_minimum_balance_row.DefaultMinBal
+      else
+        minimum_balance = 0
+      end
+
+      Account.create(CustomerID: self.CustomerID, CompanyNumber: company_id, MinBalance: minimum_balance, ActTypeID: 6)
+      Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: company_id, RankingID: current_company_record.caddy_rank_descs.first.id)
     end
-    
-    Account.create(CustomerID: self.CustomerID, CompanyNumber: company_id, MinBalance: minimum_balance, ActTypeID: 6)
-    Caddy.create(CustomerID: self.CustomerID, ClubCompanyNbr: company_id, RankingID: current_company_record.caddy_rank_descs.first.id)
   end
   
 #  def create_account

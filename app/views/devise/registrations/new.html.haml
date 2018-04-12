@@ -8,17 +8,20 @@
         = f.input :active, :as => :hidden, :input_html => { :value => true}
         = f.input :signing_up, :as => :hidden, :input_html => { :value => true}
         = f.input :phone, required: true, autofocus: true
-        = f.input :email, as: :string, label: "Email or Username", required: true
+        = f.input :email, as: :string, label: "Email"
         -#
           .row.form-group
             %div{:class => "col-sm-12"}
               .btn-group-horizontal{"data-toggle" => "buttons"}
-                %label.btn.btn-secondary
-                  = f.radio_button :role, "caddy", required: true
+                %label.btn.btn-secondary.active
+                  = f.radio_button :role, "caddy", required: true, :checked => true
                   Caddy
                 %label.btn.btn-secondary
                   = f.radio_button :role, "member", required: true
                   Member
+                %label.btn.btn-secondary
+                  = f.radio_button :role, "admin", required: true
+                  Admin
         = f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length)
         = f.input :password_confirmation, required: true
       .form-actions
