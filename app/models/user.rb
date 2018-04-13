@@ -135,12 +135,12 @@ class User < ApplicationRecord
   def caddy_customer
     customer
     # Find customer by phone number
-    customer_record = Customer.caddies.find_by(PhoneMobile: phone)
-    if customer_record.blank?
-      # If can't find customer record by phone number, find by email
-      customer_record = Customer.caddies.find_by(Email: email)
-    end
-    return customer_record
+#    customer_record = Customer.caddies.find_by(PhoneMobile: phone)
+#    if customer_record.blank?
+#      # If can't find customer record by phone number, find by email
+#      customer_record = Customer.caddies.find_by(Email: email)
+#    end
+#    return customer_record
   end
   
   def caddy_customers
