@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:password]
   before_action :set_user, only: [:show, :edit, :update, :destroy, :pin_verification, :verify_phone, :text_barcode]
-  load_and_authorize_resource except: [:verify_phone]
+  load_and_authorize_resource except: [:verify_phone, :password]
 #  around_action :set_time_zone, if: :current_user
 
 
@@ -135,6 +135,22 @@ class UsersController < ApplicationController
           redirect_back(fallback_location: root_path)
         else
           flash[:error] = "There was a problem sending QR Code."
+          redirect_back(fallback_location: root_path)
+        end
+        }
+    end
+  end
+  
+  # Change password by text message
+  def password
+    respond_to do |format|
+      format.html { 
+        @user = User.find_by(phone: user_params[:phone])
+        unless @user.blank?
+          flash[:notice] = "A text message has been sent."
+          redirect_to root_path
+        else
+          flash[:error] = "There was a problem."
           redirect_back(fallback_location: root_path)
         end
         }

@@ -27,3 +27,7 @@
       .form-actions
         = f.button :submit, "Sign up", class: 'btn btn-primary'
     = render "devise/shared/links"
+
+:javascript
+  // Force phone format
+  $("#user_phone").mask("9999999999");

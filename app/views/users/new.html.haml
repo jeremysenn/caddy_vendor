@@ -31,3 +31,7 @@
         .form-actions
           = link_to 'Cancel', :back, class: 'btn btn-secondary'
           = f.button :submit, class: 'btn btn-primary'
+
+:javascript
+  // Force phone format
+  $("#user_phone").mask("9999999999");
