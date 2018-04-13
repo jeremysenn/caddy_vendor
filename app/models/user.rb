@@ -19,7 +19,7 @@ class User < ApplicationRecord
 #  after_commit :send_verification_code, on: [:create], :if => :is_caddy? or :is_member?
   
   before_create :set_role_and_customer_id
-  after_create :send_confirmation_sms_message
+#  after_create :send_confirmation_sms_message
   
   validates :email, uniqueness: {allow_blank: true}
   validate :existing_customer_signing_up
