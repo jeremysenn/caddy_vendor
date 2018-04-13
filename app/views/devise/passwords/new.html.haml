@@ -8,13 +8,15 @@
         = f.input :email, required: true, autofocus: true
       .form-actions
         = f.button :submit, "Email me reset password instructions", class: 'btn btn-primary'
+    -#
+      %br
+      = simple_form_for(User.new, url: password_users_admin_index_path, html: { method: :post }) do |f|
+        = f.error_notification
+        .form-inputs
+          = f.input :phone, required: true, autofocus: true
+        .form-actions
+          = f.button :submit, "Text me reset password instructions", class: 'btn btn-primary'
 
-    = simple_form_for(User.new, url: password_users_admin_index_path, html: { method: :post }) do |f|
-      = f.error_notification
-      .form-inputs
-        = f.input :phone, required: true, autofocus: true
-      .form-actions
-        = f.button :submit, "Text me reset password instructions", class: 'btn btn-primary'
     = render "devise/shared/links"
 
 :javascript
