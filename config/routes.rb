@@ -67,6 +67,9 @@ Rails.application.routes.draw do
       post 'verify_phone'
       get 'text_barcode'
     end
+    collection do
+      post 'password'
+    end
   end
   
   resources :vendor_payables

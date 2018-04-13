@@ -549,7 +549,7 @@ class Customer < ActiveRecord::Base
   def create_caddy_and_account
     # Use company_id virtual attribute in case customer's company is different from current user
     unless company_id.blank?
-      current_company_record = Company.find_by(company_id)
+      current_company_record = Company.find_by(CompanyNumber: company_id)
       default_minimum_balance_row = CompanyActDefaultMinBal.where(CompanyNumber: company_id, AccountTypeID: 6).first
       unless default_minimum_balance_row.blank?
         minimum_balance = default_minimum_balance_row.DefaultMinBal
