@@ -109,6 +109,9 @@
           Checked In:
           = "#{@caddy.checkin_today? ? @caddy.CheckedIn.in_time_zone(@caddy.course.time_zone).strftime('%l:%M %p') : 'No'}" 
       %p.lead
+        Portal User:
+        = "#{@caddy.user.blank? ? 'No' : 'Yes'}"
+      %p.lead
         Active:
         = "#{@caddy.active? ? 'Yes' : 'No'}"
 

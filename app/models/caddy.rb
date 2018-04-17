@@ -201,6 +201,14 @@ class Caddy < ApplicationRecord
     save
   end
   
+  def user
+    unless customer.blank?
+      customer.user
+    else
+      nil
+    end
+  end
+  
   #############################
   #     Class Methods         #
   #############################

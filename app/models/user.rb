@@ -21,7 +21,7 @@ class User < ApplicationRecord
   before_create :set_role_and_customer_id
 #  after_create :send_confirmation_sms_message
   
-  validates :email, uniqueness: {allow_blank: true}
+#  validates :email, uniqueness: {allow_blank: true}
   validate :existing_customer_signing_up
   validates :pin, length: { is: 4, allow_blank: true }
   validates :phone, uniqueness: {allow_blank: false}
@@ -96,10 +96,10 @@ class User < ApplicationRecord
   
   def caddy
     # Find caddy by customer phone number
-    caddy_record = Caddy.active.joins(:customer).where("customer.PhoneMobile = ?", phone).first
+    caddy_record = Caddy.joins(:customer).where("customer.PhoneMobile = ?", phone).first
     if caddy_record.blank?
       # If can't find customer record by phone number, find by email
-      caddy_record = Caddy.active.joins(:customer).where("customer.Email = ?", email).first
+      caddy_record = Caddy.joins(:customer).where("customer.Email = ?", email).first
     end
     return caddy_record
   end
