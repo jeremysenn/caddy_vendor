@@ -107,7 +107,7 @@ class ApplicationController < ActionController::Base
           caddy_path(current_user.caddy)
         else
           flash[:danger] = 'Please set your PIN.' 
-          edit_user_registration_path(current_user)
+          edit_user_registration_path(current_user, set_pin: true)
         end
       else
         root_path
