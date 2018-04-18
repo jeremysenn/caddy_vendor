@@ -72,7 +72,14 @@ class BalanceLogsController < ApplicationController
 
     respond_to do |format|
       if @balance_log.save
-        format.html { redirect_to @balance_log, notice: 'BalanceLog was successfully created.' }
+        format.html { 
+          if @balance_log.processed?
+            redirect_to @balance_log, notice: 'BalanceLog was successfully created.' 
+          else
+            flash[:error] = "There was a problem processing the balance log. ACH Report Total: #{@balance_log.TotalAmount}"
+            redirect_back(fallback_location: root_path)
+          end
+          }
         format.json { render :show, status: :created, location: @balance_log }
       else
         format.html { 

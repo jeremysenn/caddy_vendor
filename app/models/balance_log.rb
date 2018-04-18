@@ -36,6 +36,10 @@ class BalanceLog < ActiveRecord::Base
     end
   end
   
+  def processed?
+    self.Processed == 1
+  end
+  
   #############################
   #     Class Methods         #
   #############################

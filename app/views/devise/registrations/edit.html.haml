@@ -6,49 +6,26 @@
     = simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
       = f.error_notification
       .form-inputs
-        - if current_user.is_admin?
-          = f.input :phone, required: true
-        - else
-          = f.input :phone, required: true, :input_html => {readonly: true}
-        = f.input :email, as: :string, label: "Email or Username", required: true
-        -# if current_user.is_caddy?
-
-        = f.input :pin, as: :password, required: true, :input_html => {value: current_user.pin, pattern: "[0-9]*", inputmode: "numeric", type: "number", :style => "-webkit-text-security: disc;"}, hint: "4-digit PIN for ATM withdrawals"
-        = f.input :current_password, hint: "we need your current password to confirm your changes", required: true
-        -#
+        - unless current_user.pin.blank? and current_user.is_caddy?
           - if current_user.is_admin?
-            = f.input :admin
-            = f.input :active
-        = f.input :time_zone, priority: /US/, collection: ActiveSupport::TimeZone.us_zones, required: true, as: :time_zone
-        - if devise_mapping.confirmable? && resource.pending_reconfirmation?
-          %p
-            Currently waiting confirmation for: #{resource.unconfirmed_email}
-        = f.input :password, autocomplete: "off", hint: "leave it blank if you don't want to change it", required: false
-        = f.input :password_confirmation, required: false
+            = f.input :phone, required: true
+          - else
+            = f.input :phone, required: true, :input_html => {readonly: true}
+          = f.input :email, as: :string, label: "Email or Username", required: true
+          = f.input :pin, as: :password, required: true, :input_html => {value: current_user.pin, pattern: "[1-9]*", inputmode: "numeric", type: "number", :style => "-webkit-text-security: disc;"}, hint: "4-digit PIN for ATM withdrawals - cannot start with 0."
+          = f.input :current_password, hint: "we need your current password to confirm your changes", required: true
+          = f.input :time_zone, priority: /US/, collection: ActiveSupport::TimeZone.us_zones, required: true, as: :time_zone
+          - if devise_mapping.confirmable? && resource.pending_reconfirmation?
+            %p
+              Currently waiting confirmation for: #{resource.unconfirmed_email}
+          = f.input :password, autocomplete: "off", hint: "leave it blank if you don't want to change it", required: false
+          = f.input :password_confirmation, required: false
+        - else
+          = f.input :pin, as: :password, required: true, :input_html => {value: current_user.pin, pattern: "[1-9]*", inputmode: "numeric", type: "number", :style => "-webkit-text-security: disc;"}, hint: "4-digit PIN for ATM withdrawals - cannot start with 0."
+          = f.input :current_password, hint: "we need your current password to confirm your changes", required: true
       .form-actions
         = link_to "Cancel", :back, class: 'btn btn-secondary'
         = f.button :submit, "Update", class: 'btn btn-primary'
-  -#
-    - if current_user.is_caddy?
-      %div{:class => "col-sm-6"}
-        %br
-        .card.card-block
-          %h2 Caddy Details
-          %p 
-            Role:
-            = current_user.role
-          %p 
-            Active:
-            = "#{current_user.active? ? 'Yes' : 'No'}"
-          %p
-            Clubs:
-            %br
-            - current_user.unique_caddy_clubs.each do |club|
-              = club.CompanyName
-              %br
-          %p
-            Customer ID:
-            = current_user.caddy_customer.CustomerID
 
 :javascript
   // Force phone format
