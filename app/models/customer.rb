@@ -442,6 +442,10 @@ class Customer < ActiveRecord::Base
     self.PhoneMobile
   end
   
+  def email
+    self.Email
+  end
+  
   def account_id
     if primary?
       account.id
