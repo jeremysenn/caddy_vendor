@@ -604,8 +604,9 @@ class Customer < ActiveRecord::Base
   end
   
   def new_caddy_being_added?
-#    self.caddy? and not self.course_id.blank?
-    self.caddy? and self.caddy.blank?
+    # Caddy customer, that does not have a caddy for this company
+    caddy_record = caddies.find_by(ClubCompanyNbr: self.company_id)
+    self.caddy? and caddy_record.blank?
   end
 
 end
