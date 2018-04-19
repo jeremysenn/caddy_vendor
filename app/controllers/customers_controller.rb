@@ -100,7 +100,8 @@ class CustomersController < ApplicationController
         format.json { render :show, status: :created, location: @customer }
       else
         format.html { 
-          render :new 
+          redirect_back fallback_location: root_path, alert: "There was a problem creating."
+#          render :new 
           }
         format.json { render json: @customer.errors, status: :unprocessable_entity }
       end
@@ -112,7 +113,7 @@ class CustomersController < ApplicationController
   def update
     respond_to do |format|
       if @customer.update(customer_params)
-        format.html { redirect_to @customer, notice: 'Member was successfully updated.' }
+        format.html { redirect_to @customer, notice: 'Successfully updated.' }
         format.json { render :show, status: :ok, location: @customer }
       else
         format.html { render :edit }
