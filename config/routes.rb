@@ -71,6 +71,7 @@ Rails.application.routes.draw do
       post 'password'
     end
   end
+  match 'users/:id' => 'users#destroy', :via => :delete, :as => :admin_destroy_user
   
   resources :vendor_payables
   

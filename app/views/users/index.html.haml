@@ -57,6 +57,7 @@
                     %td= "#{user.confirmed? ? 'Yes' : 'No'}"
                   %td
                     = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary'
+                    = link_to 'Delete', admin_destroy_user_path(user), class: 'btn btn-danger', :method => :delete, :data => { :confirm => 'Are you sure? This cannot be undone.' }
       .tab-pane{:id => "members"}
         %br
         .table-responsive
@@ -89,6 +90,7 @@
                     %td= "#{user.confirmed? ? 'Yes' : 'No'}"
                   %td
                     = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary'
+                    = link_to 'Delete', admin_destroy_user_path(user), class: 'btn btn-danger', :method => :delete, :data => { :confirm => 'Are you sure? This cannot be undone.' }
       .tab-pane{:id => "caddies"}
         %br
         .table-responsive
@@ -121,3 +123,4 @@
                     %td= "#{user.confirmed? ? 'Yes' : 'No'}"
                   %td
                     = link_to 'Edit', edit_users_admin_path(user), class: 'btn btn-primary' 
+                    = link_to 'Delete', admin_destroy_user_path(user), class: 'btn btn-danger', :method => :delete, :data => { :confirm => 'Are you sure? This cannot be undone.' }
