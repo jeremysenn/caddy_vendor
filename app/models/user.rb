@@ -21,7 +21,7 @@ class User < ApplicationRecord
   before_create :set_role_and_customer_id
 #  after_create :send_confirmation_sms_message
   
-#  validates :email, uniqueness: {allow_blank: true}
+  validates :email, uniqueness: {allow_blank: true}
   validate :existing_customer_signing_up
   validates :pin, length: { is: 4, allow_blank: true }
   validates :phone, uniqueness: {allow_blank: false}
