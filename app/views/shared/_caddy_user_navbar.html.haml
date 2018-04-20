@@ -40,7 +40,7 @@
                 - current_user.unique_caddy_clubs.each do |club|
                   %a.dropdown-item{:href => root_path(company_id: club.id), :class => current_company == club ? "active" : ""} 
                     = club.CompanyName
-              - current_user.caddies.each do |caddy|
+              - current_user.caddies.active.each do |caddy|
                 %a.dropdown-item{:href => caddy_path(caddy, company_id: caddy.ClubCompanyNbr), :class => current_company == caddy.company ? "active" : ""}= caddy.company.CompanyName
         %li.nav-item
           %a.nav-link{:href => edit_user_registration_path(current_user)} 
