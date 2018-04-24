@@ -265,6 +265,15 @@ class User < ApplicationRecord
     end
   end
   
+  def send_new_password_instructions_sms(new_password)
+    unless phone.blank?
+      login_link = "#{Rails.application.routes.default_url_options[:host]}/users/sign_in"
+      message = "Your password has been temporary set to '#{new_password}'. Please use it to login by following the link below, then create a new password by going to your Settings. #{login_link}"
+      client = Savon.client(wsdl: "#{ENV['EZCASH_WSDL_URL']}")
+      client.call(:send_sms, message: { Phone: phone, Msg: "#{message}"})
+    end
+  end
+  
   #############################
   #     Class Methods         #
   #############################

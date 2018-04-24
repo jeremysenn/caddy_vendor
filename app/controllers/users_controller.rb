@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:password]
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :pin_verification, :verify_phone, :text_barcode]
-  load_and_authorize_resource except: [:verify_phone, :password]
+  before_action :authenticate_user!
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :pin_verification, :verify_phone, :text_barcode, :reset_password]
+  load_and_authorize_resource except: [:verify_phone]
 #  around_action :set_time_zone, if: :current_user
 
 
@@ -142,17 +142,23 @@ class UsersController < ApplicationController
   end
   
   # Change password by text message
-  def password
+  def reset_password
     respond_to do |format|
       format.html { 
-        @user = User.find_by(phone: user_params[:phone])
-        unless @user.blank?
-          flash[:notice] = "A text message has been sent."
-          redirect_to root_path
-        else
-          flash[:error] = "There was a problem."
-          redirect_back(fallback_location: root_path)
-        end
+        new_password = Devise.friendly_token(10)
+        @user.reset_password(new_password, new_password)
+        @user.send_new_password_instructions_sms(new_password)
+        flash[:notice] = "A temporary password has been set, and text message instructions have been sent."
+        redirect_back(fallback_location: root_path)
+        
+#        unless @user.blank?
+#          flash[:notice] = "A temporary password has set and text message instructions sent."
+#          redirect_back(fallback_location: root_path)
+#        else
+#          flash[:error] = "There was a problem."
+#          redirect_back(fallback_location: root_path)
+#        end
+        
         }
     end
   end
