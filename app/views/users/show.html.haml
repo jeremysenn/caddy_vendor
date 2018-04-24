@@ -19,3 +19,7 @@
     %a{href: users_admin_index_path, class: 'btn btn-secondary'}
       Users
     = link_to 'Edit', edit_users_admin_path(@user), class: 'btn btn-primary'
+    .pull-right
+      %a{href: reset_password_users_admin_path(@user), class: 'btn btn-danger', data: {:confirm => 'Are you sure?'}}
+        %i.fa.fa-warning
+        Reset Password

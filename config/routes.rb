@@ -66,9 +66,7 @@ Rails.application.routes.draw do
       post 'pin_verification'
       post 'verify_phone'
       get 'text_barcode'
-    end
-    collection do
-      post 'password'
+      get 'reset_password'
     end
   end
   match 'users/:id' => 'users#destroy', :via => :delete, :as => :admin_destroy_user
