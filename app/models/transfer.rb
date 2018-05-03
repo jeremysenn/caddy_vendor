@@ -308,7 +308,7 @@ class Transfer < ApplicationRecord
   end
   
   def member_extension # Member extension
-    unless player.blank?
+    unless player.blank? or player.member.blank?
       player.member.member_extension
     else
       customer.member_extension unless customer.blank?
