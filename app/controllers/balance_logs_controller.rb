@@ -41,7 +41,7 @@ class BalanceLogsController < ApplicationController
     @end_date = params[:end_date] ||= Date.today.to_s
     @last_balance_log = current_company.balance_logs.processed.last
     unless @last_balance_log.blank?
-      @start_date = @last_balance_log.EventDateTime
+      @start_date = @last_balance_log.EndDateTime
     else
       @start_date = Date.today.to_s
     end
