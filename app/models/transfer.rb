@@ -300,7 +300,7 @@ class Transfer < ApplicationRecord
   end
   
   def member_number # Member number
-    unless player.blank?
+    unless player.blank? or player.member.blank?
       player.member.member_number 
     else
       customer.member_number unless customer.blank?
