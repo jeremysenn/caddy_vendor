@@ -85,7 +85,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   
 #  routes.default_url_options = {:host => 'http://71.41.52.58:3000/'}
-  Rails.application.routes.default_url_options[:host] = "http://#{ENV["APPLICATION_HOST"]}:3000"
+  Rails.application.routes.default_url_options[:host] = "http://#{ENV["APPLICATION_HOST"]}"
   
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
