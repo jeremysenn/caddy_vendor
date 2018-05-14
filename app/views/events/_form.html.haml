@@ -1,7 +1,7 @@
 = form_for @event, :html => {class: 'form-horizontal event_form', role: 'form'} do |f|
   = f.hidden_field :course_id, value: current_company.id
   = f.hidden_field :date_range, class: "date-range-picker"
-  = f.hidden_field :round, value: '18'
+  =# f.hidden_field :round, value: '18'
   - if current_user.is_caddy?
     %p= current_company.name
   -#
@@ -61,9 +61,9 @@
             .row.form-group
               - unless ff.object.paid?
                 .col-xs-6
-                  = ff.select :round, [["Eighteen holes", 18], ["Nine holes", 9]], {required: true, include_blank: false}, class: "form-control"
+                  = ff.select :round, [["Eighteen holes", 18], ["Nine holes", 9]], {required: true, prompt: '-- Select holes --'}, class: "form-control"
                 .col-xs-6
-                  = ff.select :caddy_type, current_company.caddy_types, {required: true, include_blank: false}, class: "form-control"
+                  = ff.select :caddy_type, current_company.caddy_types, {required: true, prompt: '-- Select type --'}, class: "form-control"
                   -#
                     - unless current_user.company.id == 4
                       = ff.select :caddy_type, ["Carry", "Chase"], {required: true, include_blank: false}, class: "form-control"
