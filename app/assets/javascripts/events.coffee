@@ -209,42 +209,19 @@ jQuery ->
     return
   ### End Edit in place ###
 
-  #$('.tip_field').on 'click', ->
-  #  # Select tip input field contents
-  #  $(this).select()
-  #  return
-
-  #$('.tip_field').on 'click touchend', ->
-    # Select tip input field contents
-  #  $(this).select()
-  #  return
-
-  #$('.tip_field').on 'click focus touchend', ->
-    # Select tip input field contents
-    #$(this).select()
-    #$(this).setSelectionRange(0, this.value.length)
-    #$(this).setSelectionRange(0, 9999)
-    #setTimeout (->
-    #  $(this).setSelectionRange 0, 9999
-    #  return
-    #), 1
-    #return
-
-  #$('.tip_field').focus(->
-  #  @setSelectionRange 0, 9999
-  #  false
-  #).mouseup ->
-  #  false
-
-  #$('.tip_field').on 'focus click touchstart', (e) ->
-  #  $(this).setSelectionRange(0, 9999)
-  #  #e.preventDefault()
-  #  return
-
-  #$(document).on 'turbolinks:load', ->
-  #  $('.tip_field').on 'click focus touchend', ->
-  #    $(this).select()
-  #    $(this).setSelectionRange(0, 9999)
-  #  return
+  ### Pay Caddy Confirmation Details###
+  $(document).on 'turbolinks:load', ->
+    $('#players').on 'click', '.caddy_payment_button', (e) ->
+      #user click on caddy pay button
+      round = $(this).closest('form').find('#round:first').val()
+      type = $(this).closest('form').find('#caddy_type:first').val()
+      amount = Number($(this).closest('form').find('#transfer_amount:first').val())
+      confirm1 = confirm('Are you sure you want to pay ' + '$' + amount.toFixed(2) + ' for ' + round + ' ' + type + '?' )
+      if confirm1
+        return
+      else
+        e.preventDefault()
+        return
+  ### End Pay Caddy Confirmation Details ###
 
   
