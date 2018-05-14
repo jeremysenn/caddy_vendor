@@ -11,6 +11,14 @@
         -#
           - unless current_company.courses.count <= 1
             = select_tag :course_id, options_from_collection_for_select(current_company.courses, "id", "name", @course.id), class: "form-control"
+        - if params[:balances].blank?
+          .btn-group.btn-group-toggle{"data-toggle" => "buttons"}
+            %label.btn.btn-secondary{class: "#{@caddy_status == 'active' ? 'active' : ''}"}
+              = radio_button_tag :caddy_status, 'active', checked: @caddy_status == 'active' ? true : false
+              Active
+            %label.btn.btn-secondary{class: "#{@caddy_status == 'inactive' ? 'active' : ''}"}
+              = radio_button_tag :caddy_status, 'inactive', checked: @caddy_status == 'inactive' ? true : false
+              Inactive
         = select_tag :caddy_rank_desc_id, options_from_collection_for_select(current_user.company.caddy_rank_descs, "ID", "RankingAcronym", params[:caddy_rank_desc_id]), prompt: "Choose Rank", class: "form-control"
         = search_field_tag :q, params[:q], :placeholder => "Search caddies", class: "form-control input-lg", autofocus: true
         %button.btn.btn-primary{id: 'caddy_search_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i>"}} 
