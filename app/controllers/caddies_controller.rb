@@ -17,14 +17,15 @@ class CaddiesController < ApplicationController
 #        @course = current_course.blank? ? current_user.company.courses.first : current_course
 #      end
       format.html {
+        @caddy_status = params[:caddy_status] ||= 'active'
         unless params[:q].blank?
           @query_string = "%#{params[:q]}%"
-          caddies = current_user.company.caddies.joins(:customer).where("customer.NameF like ? OR NameL like ? OR customer.PhoneMobile like ?", @query_string, @query_string, @query_string) #.order("customer.NameL")
+          caddies = current_user.company.caddies.where(active: "#{@caddy_status == 'active'}").joins(:customer).where("customer.NameF like ? OR NameL like ? OR customer.PhoneMobile like ?", @query_string, @query_string, @query_string) #.order("customer.NameL")
         else
           unless params[:balances].blank?
             caddies = Kaminari.paginate_array(current_user.company.caddies_with_balance)
           else
-            caddies = current_user.company.caddies.joins(:customer) #.order("customer.NameL")
+            caddies = current_user.company.caddies.where(active: "#{@caddy_status == 'active'}").joins(:customer) #.order("customer.NameL")
           end
         end
         unless params[:caddy_rank_desc_id].blank?
