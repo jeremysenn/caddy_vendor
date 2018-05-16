@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :pin_verification, :verify_phone, :text_barcode, :reset_password]
   load_and_authorize_resource except: [:verify_phone]
 #  around_action :set_time_zone, if: :current_user
+  skip_before_action :verify_authenticity_token, only: [:pin_verification]
 
 
   # GET /users
