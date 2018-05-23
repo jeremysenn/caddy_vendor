@@ -215,8 +215,9 @@ jQuery ->
       #user click on caddy pay button
       round = $(this).closest('form').find('#round:first').val()
       type = $(this).closest('form').find('#caddy_type:first').val()
+      member_name = $(this).closest('form').find('#member_name:first').val()
       amount = Number($(this).closest('form').find('#transfer_amount:first').val())
-      confirm1 = confirm('Are you sure you want to pay ' + '$' + amount.toFixed(2) + ' for ' + round + ' ' + type + '?' )
+      confirm1 = confirm('Are you sure you want to pay ' + member_name + ' $' + amount.toFixed(2) + ' for ' + round + ' ' + type + '?' )
       if confirm1
         return
       else

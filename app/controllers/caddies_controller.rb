@@ -65,6 +65,10 @@ class CaddiesController < ApplicationController
       session[:company_id] = params[:company_id] unless params[:company_id].blank?
       # Set current_caddy session variable for caddy user
       session[:caddy_id] = @caddy.id
+      @events = @caddy.events.where(created_at: 1.month.ago..Time.now).uniq.reverse
+    else
+#      @events = @caddy.events.last(50).uniq.reverse
+      @events = @caddy.events.last(50).uniq.reverse
     end
     @transfers = @caddy.account_transfers.where(company_id: current_company.id).order('created_at DESC') unless @caddy.account_transfers.blank?
     @text_messages = @caddy.sms_messages.reverse
@@ -78,7 +82,6 @@ class CaddiesController < ApplicationController
     @account = @caddy.account
 #    session[:course_id] = @caddy.course.id
 #    @events = @caddy.events.order("start DESC").last(50).uniq
-    @events = @caddy.events.last(50).uniq.reverse
   end
 
   # GET /caddies/new

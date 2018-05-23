@@ -43,6 +43,7 @@
               = f.hidden_field :player_id, value: player.id
               = hidden_field_tag :round, player.round
               = hidden_field_tag :caddy_type, player.caddy_type
+              = hidden_field_tag :member_name, player.member.full_name
               = f.hidden_field :company_id, value: current_company.id
               = f.hidden_field :from_account, value: "#{player.member.primary? ? player.member.club_account(current_company.id).id : player.member.parent_customer.club_account(current_company.id).id}"
               = f.hidden_field :to_account, value: player.caddy.account.id unless player.caddy.account.blank?
@@ -164,6 +165,7 @@
                   = f.hidden_field :player_id, value: player.id
                   = hidden_field_tag :round, player.round
                   = hidden_field_tag :caddy_type, player.caddy_type
+                  = hidden_field_tag :member_name, player.member.full_name
                   = f.hidden_field :company_id, value: current_company.id
                   = f.hidden_field :from_account, value: "#{player.member.primary? ? player.member.club_account(current_company.id).id : player.member.parent_customer.club_account(current_company.id).id}"
                   = f.hidden_field :to_account, value: player.caddy.account.id unless player.caddy.account.blank?
