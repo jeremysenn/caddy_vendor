@@ -86,7 +86,8 @@ class EventsController < ApplicationController
             unless current_user.is_caddy?
               redirect_to events_path, notice: 'Event was successfully created.' 
             else
-              redirect_to current_caddy, notice: 'Event was successfully created.'
+#              redirect_to current_caddy, notice: 'Event was successfully created.'
+              redirect_to @event, notice: 'Event was successfully created.'
             end
           end
           }
@@ -120,7 +121,8 @@ class EventsController < ApplicationController
             unless current_user.is_caddy?
               redirect_to events_path, notice: 'Event was successfully updated.' 
             else
-              redirect_to current_caddy, notice: 'Event was successfully updated.'
+#              redirect_to current_caddy, notice: 'Event was successfully updated.'
+              redirect_to @event, notice: 'Event was successfully updated.'
             end
           end
           }
