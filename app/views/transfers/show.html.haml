@@ -48,5 +48,5 @@
     =# f.hidden_field :reversed, value: true
     = f.hidden_field :generate_reversal, value: true
     = link_to 'Back', :back, class: 'btn btn-secondary'
-    - if @transfer.reversable? and (current_user.is_admin? or current_user.is_caddy?)
+    - if @transfer.reversable? and current_user.is_admin?
       = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }
