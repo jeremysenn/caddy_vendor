@@ -429,14 +429,14 @@ class Transfer < ApplicationRecord
     unless member.blank? or member.phone.blank?
       unless player.blank?
         unless reversed?
-          message_body = "You have been billed #{ ActiveSupport::NumberHelper.number_to_currency(amount_billed, precision: 2)} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type}."
+          message_body = "You have been billed #{ ActiveSupport::NumberHelper.number_to_currency(amount_billed, precision: 2)} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type} on #{date_of_play}."
         else
           message_body = "The bill of #{ActiveSupport::NumberHelper.number_to_currency(amount_billed.abs, precision: 2)} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type} has been REVERSED."
         end
         SendMemberSmsWorker.perform_async(member.phone, member.id, company_id, message_body)
       else
         unless reversed?
-          message_body = "You have been billed #{ActiveSupport::NumberHelper.number_to_currency(amount_billed, precision: 2)} by #{company.name} for #{caddy.full_name}."
+          message_body = "You have been billed #{ActiveSupport::NumberHelper.number_to_currency(amount_billed, precision: 2)} by #{company.name} for #{caddy.full_name} on #{date_of_play}."
         else
           message_body = "The bill of #{ActiveSupport::NumberHelper.number_to_currency(amount_billed.abs, precision: 2)} by #{company.name} for #{caddy.full_name} has been REVERSED."
         end
@@ -449,13 +449,13 @@ class Transfer < ApplicationRecord
     unless member.blank? or member.email.blank?
       unless player.blank?
         unless reversed?
-          message_body = "You have been billed #{ ActiveSupport::NumberHelper.number_to_currency(amount_billed, precision: 2)} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type}."
+          message_body = "You have been billed #{ ActiveSupport::NumberHelper.number_to_currency(amount_billed, precision: 2)} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type} on #{date_of_play}."
         else
           message_body = "The bill of #{ActiveSupport::NumberHelper.number_to_currency(amount_billed.abs, precision: 2)} by #{company.name} for #{caddy.full_name} #{player.round} #{player.caddy_type} has been REVERSED."
         end
       else
         unless reversed?
-          message_body = "You have been billed #{ActiveSupport::NumberHelper.number_to_currency(amount_billed, precision: 2)} by #{company.name} for #{caddy.full_name}."
+          message_body = "You have been billed #{ActiveSupport::NumberHelper.number_to_currency(amount_billed, precision: 2)} by #{company.name} for #{caddy.full_name} on #{date_of_play}."
         else
           message_body = "The bill of #{ActiveSupport::NumberHelper.number_to_currency(amount_billed.abs, precision: 2)} by #{company.name} for #{caddy.full_name} has been REVERSED."
         end
