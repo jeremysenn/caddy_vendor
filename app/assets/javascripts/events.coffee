@@ -14,6 +14,16 @@ jQuery ->
         sum = parseFloat(caddy_fee)
       $(this).closest("form").find('#transfer_amount').val sum
       $(this).closest("form").find('#player_total_amount').html '$' + sum
+      sum = 0
+      # Add up all the amounts
+      $('.amount').each ->
+        sum += Number($(this).val())
+        return
+      # Add up all the transaction fees
+      $('.transaction_fee').each ->
+        sum += Number($(this).val())
+        return
+      $('#player_total').text '$' + sum.toFixed(2)
       return
     $('.caddy_fee_field').on 'keyup touchend', ->
       caddy_fee = $(this).val()
@@ -30,6 +40,15 @@ jQuery ->
         sum = 0
       $(this).closest("form").find('#transfer_amount').val sum
       $(this).closest("form").find('#player_total_amount').html '$' + sum
+      # Add up all the amounts
+      $('.amount').each ->
+        sum += Number($(this).val())
+        return
+      # Add up all the transaction fees
+      $('.transaction_fee').each ->
+        sum += Number($(this).val())
+        return
+      $('#player_total').text '$' + sum.toFixed(2)
       return
 
   ### Add everything up on page load to make sure everything is correct ###

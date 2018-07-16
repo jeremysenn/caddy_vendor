@@ -18,7 +18,7 @@ class Transfer < ApplicationRecord
 
 #  validates_numericality_of :caddy_fee_cents, :greater_than => 0
 
-  validates :caddy_fee_cents, numericality: { greater_than_or_equal_to: 0}
+  validates :caddy_fee_cents, numericality: { greater_than_or_equal_to: 200,  message: "Caddy fee must be greater than or equal to $2"}
   validates :caddy_tip_cents, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 99900,  message: "Tip must be under $1000" }
 
   # Virtual Attributes

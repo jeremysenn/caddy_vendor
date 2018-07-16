@@ -135,7 +135,7 @@
               %td{class: "#{(player.paid? or (current_user.is_caddy? and not current_user.company.payee_can_edit_payment?) ) ? '' : 'text-primary'}"}
                 $
                 - unless player.paid? or (current_user.is_caddy? and not current_user.company.payee_can_edit_payment?) #or player.payment_reversed?
-                  %a{href: nil, class: 'caddy_fee', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_caddy_fee", "data-value" => player.caddy_pay_rate}
+                  %a{href: nil, class: 'caddy_fee', "data-pk" => player.id, "data-url" => "/players/#{player.id}/update_caddy_fee", "data-value" => (player.fee.blank? or player.last_transfer_reversed?) ? player.caddy_pay_rate : player.fee}
                     =# number_with_precision("#{player.fee.blank? ? player.caddy_pay_rate : player.fee}", precision: 0)
                     = number_with_precision("#{(player.fee.blank? or player.last_transfer_reversed?) ? player.caddy_pay_rate : player.fee}", precision: 0)
                 - else
@@ -171,7 +171,8 @@
                   = f.hidden_field :to_account, value: player.caddy.account.id unless player.caddy.account.blank?
                   = f.hidden_field :fee, value: player.transaction_fee.blank? ? current_company.transaction_fee : player.transaction_fee , class: 'transaction_fee'
                   = f.hidden_field :fee_to_account_id, value: current_user.company.account.id unless current_user.company.account.blank?
-                  = f.hidden_field :caddy_fee, value: player.caddy_pay_rate
+                  =# f.hidden_field :caddy_fee, value: player.caddy_pay_rate
+                  = f.hidden_field :caddy_fee, value: (player.fee.blank? or player.last_transfer_reversed?) ? player.caddy_pay_rate : player.fee
                   = f.hidden_field :caddy_tip, value: player.tip.blank? ? 0 : player.tip, class: 'transfer_tip_field'
                   = f.hidden_field :amount, value: player.total, class: 'amount'
                   =# f.submit "Pay", :class => 'btn btn-success', data: { confirm: 'Are you sure you want to pay this?' } unless player.paid?
