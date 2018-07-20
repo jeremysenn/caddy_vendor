@@ -69,11 +69,11 @@ class Customer < ActiveRecord::Base
 #  end
   
   def club_account(company_id)
-    account = accounts.find_by(CompanyNumber: company_id)
+    account = primary_member.accounts.find_by(CompanyNumber: company_id)
     unless account.blank?
       return account
     else
-      return accounts.first
+      return primary_member.accounts.first
     end
   end
   
