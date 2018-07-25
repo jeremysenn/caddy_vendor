@@ -103,11 +103,11 @@ Rails.application.configure do
     password: ENV["GMAIL_PASSWORD"]
   }
   
-  Rails.application.config.middleware.use ExceptionNotification::Rack,
-  :email => {
-    :ignore_exceptions => ['ActionView::TemplateError'] + ExceptionNotifier.ignored_exceptions,
-    :sender_address => %{"CaddyVend Exception Notifier" <notifier@tranact.com>},
-    :exception_recipients => %w{jeremy@tranact.com shark@tranact.com}
-  }
+#  Rails.application.config.middleware.use ExceptionNotification::Rack,
+#  :email => {
+#    :ignore_exceptions => ['ActionView::TemplateError'] + ExceptionNotifier.ignored_exceptions,
+#    :sender_address => %{"CaddyVend Exception Notifier" <notifier@tranact.com>},
+#    :exception_recipients => %w{jeremy@tranact.com shark@tranact.com}
+#  }
   
 end
