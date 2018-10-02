@@ -199,11 +199,14 @@
               %tbody
                 - @events.each do |event|
                   %tr
-                    %td= link_to event.start.strftime('%-m/%-d/%y'), edit_event_path(event)
+                    %td= event.start.strftime('%-m/%-d/%y')
                     -# %td= event.player_names_with_caddy_names
                     %td= event.players.find_by(caddy_id: @caddy.id).member_name
                     -# %td= "#{event.not_paid? ? 'Open' : 'Paid'}"
                     %td
+                      %a{:href => edit_event_path(event), class: "btn btn-primary"} 
+                        %i.fa.fa-edit
+                        = "Edit" unless browser.device.mobile?
                       %a{:href => event_path(event), class: "btn #{event.not_paid? ? 'btn-success' : 'btn-secondary'}"} 
                         %i.fa.fa-dollar
                         = "Payment" unless browser.device.mobile?

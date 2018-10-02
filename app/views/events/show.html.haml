@@ -195,9 +195,12 @@
                     .text-danger Reversed
                 =# "Paid" if player.paid?
                 =# link_to 'Rate', new_caddy_rating_path(player_id: player.id), class: 'btn btn-warning' unless player.caddy_rating.present?
+  %a{:href => edit_event_path(@event), class: "btn btn-primary"} 
+    %i.fa.fa-edit
+    Edit
   - if current_user.is_admin?             
-    = link_to "Done", events_path, class: 'btn btn-primary'
+    = link_to "Done", events_path, class: 'btn btn-secondary'
   - elsif current_user.is_caddy?
-    = link_to "Done", caddy_path(current_caddy), class: 'btn btn-primary'
+    = link_to "Done", caddy_path(current_caddy), class: 'btn btn-secondary'
   - else
-    = link_to "Done", :back, class: 'btn btn-primary'
+    = link_to "Done", :back, class: 'btn btn-secondary'
