@@ -99,6 +99,9 @@ gem 'yaml_db'
 # Do some browser detection with Ruby. Includes ActionController integration.
 gem 'browser'
 
+# Image uploading
+gem 'carrierwave'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri

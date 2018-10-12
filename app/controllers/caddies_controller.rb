@@ -65,10 +65,10 @@ class CaddiesController < ApplicationController
       session[:company_id] = params[:company_id] unless params[:company_id].blank?
       # Set current_caddy session variable for caddy user
       session[:caddy_id] = @caddy.id
-      @events = @caddy.events.where(created_at: 1.month.ago..Time.now).uniq.reverse
+      @events = @caddy.events.where(created_at: 1.month.ago..Time.now).distinct.reverse
     else
 #      @events = @caddy.events.last(50).uniq.reverse
-      @events = @caddy.events.last(50).uniq.reverse
+      @events = @caddy.events.last(50).distinct.reverse
     end
     @transfers = @caddy.account_transfers.where(company_id: current_company.id).order('created_at DESC') unless @caddy.account_transfers.blank?
     @text_messages = @caddy.sms_messages.reverse
@@ -167,9 +167,12 @@ class CaddiesController < ApplicationController
     amount = params[:amount].to_f.abs unless params[:amount].blank?
     note = params[:note]
     unless member.blank?
-      transfer = Transfer.new(company_id: current_company.id, from_account_id: member.club_account(current_company.id).id, to_account_id: @caddy.account.id, customer_id: member.id, amount: amount, note: note, caddy_fee_cents: amount * 100, caddy_tip_cents: 0)
+      transfer = Transfer.new(company_id: current_company.id, from_account_id: member.club_account(current_company.id).id, 
+        to_account_id: @caddy.account.id, customer_id: member.id, amount: amount, 
+        note: note, caddy_fee_cents: amount * 100, caddy_tip_cents: 0)
+      transfer.file = params[:file]
       if transfer.save
-        redirect_back fallback_location: @caddy, notice: 'Caddy payment submitted.'
+        redirect_back fallback_location: @caddy, notice: "Member's caddy payment submitted."
       else
         redirect_back fallback_location: @caddy, alert: 'There was a problem creating the caddy payment.'
       end

@@ -4,6 +4,8 @@ class Transfer < ApplicationRecord
   belongs_to :ez_cash_transaction, class_name: "Transaction", :foreign_key => "ezcash_tran_id"
   belongs_to :company
   
+  mount_uploader :file, FileUploader
+  
 #  after_create :transfer_web_service_call
   after_save :update_player, if: :contains_player?
   

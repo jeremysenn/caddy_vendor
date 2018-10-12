@@ -44,9 +44,13 @@
     - if (not @transfer.reversed? and @transfer.player and @transfer.player.payment_reversed?) or @transfer.reversal_transfer.present?
       %p.lead.text-danger
         This transfer was reversed
+    - unless @transfer.file.file.nil?
+      .col-sm-6
+        %img{:src => @transfer.file.url, class: 'img-fluid'}
   = form_for @transfer, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
     =# f.hidden_field :reversed, value: true
     = f.hidden_field :generate_reversal, value: true
     = link_to 'Back', :back, class: 'btn btn-secondary'
     - if @transfer.reversable? and current_user.is_admin?
       = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }
+  

@@ -38,7 +38,7 @@ Rails.application.routes.draw do
   end
   resources :caddies do
     member do
-      get 'pay'
+      post 'pay'
       get 'barcode'
       get 'send_verification_code'
       get 'verify_phone'
