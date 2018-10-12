@@ -32,11 +32,16 @@ jQuery ->
 
       return
 
-  $('.member_select').select2 theme: 'bootstrap'
-  $('.caddy_customers_select').select2
-    theme: 'bootstrap'
-    minimumInputLength: 3
-
+  $(document).on 'turbolinks:before-cache', ->
+    $('.member_select').select2 'destroy'
+    $('caddy_customers_select').select2 'destroy'
+    return
+  $(document).on 'turbolinks:load', ->
+    $('.member_select').select2 theme: 'bootstrap'
+    $('.caddy_customers_select').select2
+      theme: 'bootstrap'
+      minimumInputLength: 3
+    return
   
   ### Send caddy verification code ###
   #$(document).on "turbolinks:load", ->
