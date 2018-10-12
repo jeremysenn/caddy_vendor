@@ -1,56 +1,56 @@
-.container
-  %br
-  .card.card-block
-    %p.lead
-      EZcash Tran ID:
-      - unless @transfer.ez_cash_tran_id.blank?
-        = link_to @transfer.ez_cash_tran_id, transaction_path(@transfer.ez_cash_tran_id)
-      - else
-        None
-    - unless @transfer.club_credit_transaction_id.blank?
+%div{class: "#{browser.device.mobile? ? 'container-fluid' : 'container'}"}  
+  %div{class: "#{browser.device.mobile? ? 'row' : ''}"}
+    %br
+    .card.card-block
       %p.lead
-        One-sided Company Credit EZcash Tran ID:
-        = link_to @transfer.club_credit_transaction_id, transaction_path(@transfer.club_credit_transaction_id)
-    %p.lead
-      DateTime of transfer:
-      = @transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
-    %p.lead
-      From:
-      - unless @from.blank?
-        = @from.full_name 
-      - else
-        = current_user.company.CompanyName
-    %p.lead
-      To:
-      = @to.full_name unless @to.blank?
-    %p.lead
-      Caddy Fee:
-      = number_to_currency(@transfer.caddy_fee)
-    %p.lead
-      Tip:
-      = number_to_currency(@transfer.caddy_tip)
-    %p.lead
-      Transaction Fee:
-      = number_to_currency(@transfer.fee)
-    %p.lead
-      Note:
-      = @transfer.note
-    %p.lead
-      Total:
-      = number_to_currency(@transfer.amount_billed)
-    - if @transfer.reversed?
-      %p.lead.text-danger
-        Reversal transfer
-    - if (not @transfer.reversed? and @transfer.player and @transfer.player.payment_reversed?) or @transfer.reversal_transfer.present?
-      %p.lead.text-danger
-        This transfer was reversed
-    - unless @transfer.file.file.nil?
-      .col-sm-6
-        %img{:src => @transfer.file.url, class: 'img-fluid'}
-  = form_for @transfer, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
-    =# f.hidden_field :reversed, value: true
-    = f.hidden_field :generate_reversal, value: true
-    = link_to 'Back', :back, class: 'btn btn-secondary'
-    - if @transfer.reversable? and current_user.is_admin?
-      = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }
-  
+        EZcash Tran ID:
+        - unless @transfer.ez_cash_tran_id.blank?
+          = link_to @transfer.ez_cash_tran_id, transaction_path(@transfer.ez_cash_tran_id)
+        - else
+          None
+      - unless @transfer.club_credit_transaction_id.blank?
+        %p.lead
+          One-sided Company Credit EZcash Tran ID:
+          = link_to @transfer.club_credit_transaction_id, transaction_path(@transfer.club_credit_transaction_id)
+      %p.lead
+        DateTime of transfer:
+        = @transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p")
+      %p.lead
+        From:
+        - unless @from.blank?
+          = @from.full_name 
+        - else
+          = current_user.company.CompanyName
+      %p.lead
+        To:
+        = @to.full_name unless @to.blank?
+      %p.lead
+        Caddy Fee:
+        = number_to_currency(@transfer.caddy_fee)
+      %p.lead
+        Tip:
+        = number_to_currency(@transfer.caddy_tip)
+      %p.lead
+        Transaction Fee:
+        = number_to_currency(@transfer.fee)
+      %p.lead
+        Note:
+        = @transfer.note
+      %p.lead
+        Total:
+        = number_to_currency(@transfer.amount_billed)
+      - if @transfer.reversed?
+        %p.lead.text-danger
+          Reversal transfer
+      - if (not @transfer.reversed? and @transfer.player and @transfer.player.payment_reversed?) or @transfer.reversal_transfer.present?
+        %p.lead.text-danger
+          This transfer was reversed
+      - unless @transfer.file.file.nil?
+        .col-sm-6
+          %img{:src => @transfer.file.url, class: 'img-fluid'}
+    = form_for @transfer, :html => {class: 'form-horizontal', role: 'form', id: 'transfer_form'} do |f|
+      =# f.hidden_field :reversed, value: true
+      = f.hidden_field :generate_reversal, value: true
+      = link_to 'Back', :back, class: 'btn btn-secondary'
+      - if @transfer.reversable? and current_user.is_admin?
+        = f.submit "Reverse", :class => 'btn btn-danger', data: { confirm: 'Are you sure you want to reverse this transfer?' }
