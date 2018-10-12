@@ -68,7 +68,7 @@ class CaddiesController < ApplicationController
       @events = @caddy.events.where(created_at: 1.month.ago..Time.now).distinct.reverse
     else
 #      @events = @caddy.events.last(50).uniq.reverse
-      @events = @caddy.events.last(50).distinct.reverse
+      @events = @caddy.events.where(created_at: 1.month.ago..Time.now).distinct.reverse
     end
     @transfers = @caddy.account_transfers.where(company_id: current_company.id).order('created_at DESC') unless @caddy.account_transfers.blank?
     @text_messages = @caddy.sms_messages.reverse
