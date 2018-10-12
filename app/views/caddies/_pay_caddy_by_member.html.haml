@@ -15,12 +15,12 @@
             .input-group
               %span.input-group-addon
                 %i.fa.fa-dollar
-              = number_field_tag :amount, nil, :placeholder => "Amount", class: "form-control input-lg", required: true, step: '1'
+              = number_field_tag :amount, nil, :placeholder => "Amount", class: "form-control input-lg", step: '1', :inputmode => "numeric", :min => "0", :pattern => "[0-9]*", required: true
           %p
             .input-group
               %span.input-group-addon
                 %i.fa.fa-hashtag
-              = number_field_tag :reference_number, nil, :placeholder => "Reference Number", class: "form-control input-lg", required: true, step: '1'
+              = number_field_tag :reference_number, nil, :placeholder => "Reference Number", class: "form-control input-lg", step: '1', :inputmode => "numeric", :min => "0", :pattern => "[0-9]*"
           %p= text_area_tag :note, nil, :placeholder => "Note", class: "form-control input-lg", style: "width: 100%;"
           %p= file_field_tag :file
           .modal-footer
