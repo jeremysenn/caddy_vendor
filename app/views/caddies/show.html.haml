@@ -1,42 +1,45 @@
 %div{class: "#{browser.device.mobile? ? 'container-fluid' : 'container'}"}
-  %br
-  %h3.text-xs-center= @caddy.full_name
+  %div{class: "#{browser.device.mobile? ? 'row' : ''}"}
+    %br
+    - unless current_user.is_caddy?
+      %h3.text-xs-center= @caddy.full_name
 
-  %ul.nav.nav-tabs
-    %li.nav-item
-      %a.nav-link.active{:href => "#rounds", :data => {:toggle => "tab"}} 
-        %i.fa.fa-flag.fa-lg
-        = "Rounds" unless browser.device.mobile?
-    %li.nav-item
-      %a.nav-link{:href => "#info", :data => {:toggle => "tab"}} 
-        %i.fa.fa-qrcode.fa-lg
-        = "Info" unless browser.device.mobile?
-    %li.nav-item
-      %a.nav-link{:href => "#transfers", :data => {:toggle => "tab"}} 
-        %i.fa.fa-dollar.fa-lg
-        = "Transfers" unless browser.device.mobile?
-    %li.nav-item
-      %a.nav-link{:href => "#withdrawals", :data => {:toggle => "tab"}} 
-        %i.fa.fa-bolt.fa-lg
-        = "Withdrawals" unless browser.device.mobile?
-    %li.nav-item
-      %a.nav-link{:href => "#messages", :data => {:toggle => "tab"}} 
-        %i.fa.fa-commenting.fa-lg
-        = "Messages" unless browser.device.mobile?
-    -#
+    %ul.nav.nav-tabs
       %li.nav-item
-        %a.nav-link{:href => "#settings", :data => {:toggle => "tab"}} 
-          %i.fa.fa-gear.fa-lg
-          = "Settings" unless browser.device.mobile?
-  .tab-content
-    .tab-pane{:id => "info"}
-      %br
-      %p
+        %a.nav-link.active{:href => "#rounds", :data => {:toggle => "tab"}} 
+          %i.fa.fa-flag.fa-lg
+          = "Rounds" unless browser.device.mobile?
+      %li.nav-item
+        %a.nav-link{:href => "#info", :data => {:toggle => "tab"}} 
+          %i.fa.fa-info-circle.fa-lg
+          = "Info" unless browser.device.mobile?
+      %li.nav-item
+        %a.nav-link{:href => "#transfers", :data => {:toggle => "tab"}} 
+          %i.fa.fa-dollar.fa-lg
+          = "Transfers" unless browser.device.mobile?
+      %li.nav-item
+        %a.nav-link{:href => "#withdrawals", :data => {:toggle => "tab"}} 
+          %i.fa.fa-bolt.fa-lg
+          = "Withdrawals" unless browser.device.mobile?
+      %li.nav-item
+        %a.nav-link{:href => "#messages", :data => {:toggle => "tab"}} 
+          %i.fa.fa-commenting.fa-lg
+          = "Messages" unless browser.device.mobile?
+      -#
+        %li.nav-item
+          %a.nav-link{:href => "#settings", :data => {:toggle => "tab"}} 
+            %i.fa.fa-gear.fa-lg
+            = "Settings" unless browser.device.mobile?
+    .tab-content
+      .tab-pane{:id => "info"}
+        %br
         - if @available_balance > 1
           - if current_user.is_caddy?
-            %a{href: barcode_caddy_path(@caddy), class: 'btn btn-success'}
-              %i.fa.fa-qrcode
-              ATM Payment
+            .pull-right
+              %p
+                %a{href: barcode_caddy_path(@caddy), class: 'btn btn-primary'}
+                  %i.fa.fa-qrcode
+                  ATM
             -#
               %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#sms_payment_qr_code"}
                 %i.fa.fa-qrcode
@@ -65,254 +68,262 @@
                               %button.btn.btn-primary{id: 'send_sms_payment_qr_code_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Submit"}} 
                                 Submit
           - elsif current_user.is_admin?
-            %a{href: barcode_caddy_path(@caddy), class: 'btn btn-success'}
-              %i.fa.fa-qrcode
-              ATM Payment
-            - unless @caddy.customer.user.blank?
-              %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: 'btn btn-warning'}
-                %i.fa.fa-comment
-                Text Barcode
-      %p.lead
-        Available Balance:
-        = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
-      %p.lead
-        Balance:
-        = number_to_currency(@balance)
-      %p.lead
-        Minimum Balance:
-        = number_to_currency(@minimum_balance)
-        = link_to 'Change', edit_account_path(@account), class: 'btn btn-sm btn-secondary' if @account.present? and current_user.is_admin?
-      -#
-        %p.lead 
-          %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => @caddy.average_rating, "data-rateit-readonly" => "true" }
-          %small
-            = link_to "#{@caddy.caddy_ratings.size} ratings", caddy_ratings_path(caddy_id: @caddy.id)
-            %br
-            .text-muted= "#{number_with_precision(@caddy.average_rating, precision: 1)} out of 5 stars"
-      -#
+            .pull-right
+              %a{href: barcode_caddy_path(@caddy), class: 'btn btn-success'}
+                %i.fa.fa-qrcode
+                ATM
+              - unless @caddy.customer.user.blank?
+                %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: 'btn btn-warning'}
+                  %i.fa.fa-comment
+                  Text Barcode
         %p.lead
-          Course:
-          = link_to @caddy.course.CourseName, @caddy.course
-      %p.lead
-        Phone:
-        = @caddy.cell_phone_number
-      %p.lead
-        Email:
-        = @caddy.email
-      %p.lead
-        Ranking:
-        - unless @caddy_rank_desc.blank?
-          - if current_user.is_admin?
-            = link_to @caddy_rank_desc.description, @caddy_rank_desc
-          - else
-            = @caddy_rank_desc.description
-        - else
-          None
-      -#
+          Available Balance:
+          = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
         %p.lead
-          Checked In:
-          = "#{@caddy.checkin_today? ? @caddy.CheckedIn.in_time_zone(@caddy.course.time_zone).strftime('%l:%M %p') : 'No'}" 
-      %p.lead
-        Portal User:
-        = "#{@caddy.user.blank? ? 'No' : 'Yes'}"
-      %p.lead
-        Active:
-        = "#{@caddy.active? ? 'Yes' : 'No'}"
-
-      -#
-        %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
-          %i.fa.fa-dollar
-          Pay by member
-      -#
-        %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_company"}
-          %i.fa.fa-dollar
-          Pay by company
-      - if current_user.is_admin?
-        %a{href: edit_caddy_path(@caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
-          %i.fa.fa-edit
-          Edit
-      =# render 'pay_caddy_by_member'
-      =# render 'pay_caddy_by_company'
-      -#
-        - if @caddy.checkin_today? 
-          = f.input_field :CheckedIn, as: :hidden, value: nil
-          = button_tag(type: 'submit', class: "btn btn-warning", "data-turbolinks" => "false", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check Out" }) do
-            %i.fa.fa-sign-out
-            Check Out
-        - else
-          = f.input_field :CheckedIn, as: :hidden, value: DateTime.now
-          = button_tag(type: 'submit', class: "btn btn-secondary", "data-turbolinks" => "false", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check In" }) do
-            %i.fa.fa-sign-in
-            Check In
-      =# link_to 'Rate caddy', new_caddy_rating_path(caddy_id: @caddy.id), class: 'btn btn-warning'
-
-    .tab-pane{:id => "transfers"}
-      %br
-      #caddy_transfers.collapse.show.in{"aria-expanded" => "true"}
-        - if browser.device.mobile?
-          %h3 Transfers 
-        .pull-right
-          %p
-            -# if current_user.is_admin?
-            %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
-              %i.fa.fa-dollar
-              Pay by member
-            = render 'pay_caddy_by_member'
-        - unless @transfers.blank?
-          .table-responsive
-            %table.table.table-striped{class: "#{browser.device.mobile? ? 'table-sm' : ''}"}
-              %thead
-                %tr
-                  %th Time
-                  %th From
-                  %th Total
-              %tbody
-                - @transfers.each do |transfer|
-                  %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                    %td= link_to transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y %l:%M %p"), transfer
-                    %td= transfer.customer.full_name unless transfer.customer.blank?
-                    %td
-                      = number_to_currency(transfer.amount)
-                      - if transfer.reversed?
-                        .text-danger= "(reversed)"
-        - else
-          %p.lead None
-
-    .tab-pane.active{:id => "rounds"}
-      %br
-      #caddy_rounds.collapse.show.in{"aria-expanded" => "true"}
-        %h3
-          - if browser.device.mobile?
-            = "Rounds" 
+          Balance:
+          = number_to_currency(@balance)
+        %p.lead
+          Minimum Balance:
+          = number_to_currency(@minimum_balance)
+          = link_to 'Change', edit_account_path(@account), class: 'btn btn-sm btn-secondary' if @account.present? and current_user.is_admin?
+        -#
+          %p.lead 
+            %div.rateit{"data-rateit-resetable" => "false", "data-rateit-value" => @caddy.average_rating, "data-rateit-readonly" => "true" }
+            %small
+              = link_to "#{@caddy.caddy_ratings.size} ratings", caddy_ratings_path(caddy_id: @caddy.id)
+              %br
+              .text-muted= "#{number_with_precision(@caddy.average_rating, precision: 1)} out of 5 stars"
+        -#
+          %p.lead
+            Course:
+            = link_to @caddy.course.CourseName, @caddy.course
+        %p.lead
+          Phone:
+          = @caddy.cell_phone_number
+        %p.lead
+          Email:
+          = @caddy.email
+        %p.lead
+          Ranking:
+          - unless @caddy_rank_desc.blank?
+            - if current_user.is_admin?
+              = link_to @caddy_rank_desc.description, @caddy_rank_desc
+            - else
+              = @caddy_rank_desc.description
           - else
-            &nbsp;
-          .pull-right
-            %a{:href => new_event_path, class: 'btn btn-warning'}
-              %i.fa.fa-plus-circle
-              Round
-        - unless @events.blank?
-          %br
-          .table-responsive
-            %table.table.table-striped{class: "#{browser.device.mobile? ? 'table-sm' : ''}"}
-              %thead
-                %tr
-                  %th Start
-                  %th Member
-                  -# %th Status
-                  %th
-              %tbody
-                - @events.each do |event|
-                  %tr
-                    %td= event.start.strftime('%-m/%-d/%y')
-                    -# %td= event.player_names_with_caddy_names
-                    %td= event.players.find_by(caddy_id: @caddy.id).member_name
-                    -# %td= "#{event.not_paid? ? 'Open' : 'Paid'}"
-                    %td
-                      %a{:href => edit_event_path(event), class: "btn btn-primary"} 
-                        %i.fa.fa-edit
-                        = "Edit" unless browser.device.mobile?
-                      %a{:href => event_path(event), class: "btn #{event.not_paid? ? 'btn-success' : 'btn-secondary'}"} 
-                        %i.fa.fa-dollar
-                        = "Payment" unless browser.device.mobile?
-        - else
-          %p.lead None
+            None
+        -#
+          %p.lead
+            Checked In:
+            = "#{@caddy.checkin_today? ? @caddy.CheckedIn.in_time_zone(@caddy.course.time_zone).strftime('%l:%M %p') : 'No'}" 
+        %p.lead
+          Portal User:
+          = "#{@caddy.user.blank? ? 'No' : 'Yes'}"
+        %p.lead
+          Active:
+          = "#{@caddy.active? ? 'Yes' : 'No'}"
 
-    .tab-pane{:id => "withdrawals"}
-      %br
-      - if browser.device.mobile?
-        %h3 Withdrawals 
-      #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
-        - unless @withdrawal_transactions.blank?
-          .table-responsive
-            %table.table.table-striped{class: "#{browser.device.mobile? ? 'table-sm' : ''}"}
-              %thead
-                %tr
-                  %th ID
-                  %th Date/Time
-                  %th Code
-                  %th Status
-                  %th Requested
-                  %th Authorized
-                  %th Description
-                  %th
-              %tbody
-                - @withdrawal_transactions.each do |withdrawal_transaction|
-                  %tr
-                    %td= withdrawal_transaction.id
-                    %td= withdrawal_transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
-                    %td= withdrawal_transaction.error_code_description
-                    %td= withdrawal_transaction.status_description
-                    %td= number_to_currency(withdrawal_transaction.amt_req)
-                    %td= number_to_currency(withdrawal_transaction.amt_auth)
-                    %td= withdrawal_transaction.Description
-                    %td= link_to "Show", withdrawal_transaction, class: 'btn btn-secondary'
-        - else
-          %p.lead None
-
-    .tab-pane{:id => "messages"}
-      %br
-      #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
-        - if browser.device.mobile?
-          %h3 Messages
+        -#
+          %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
+            %i.fa.fa-dollar
+            Pay by member
+        -#
+          %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_company"}
+            %i.fa.fa-dollar
+            Pay by company
         - if current_user.is_admin?
-          .pull-right
-            %p
-              %a{href: '#', class: 'btn btn-primary', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
-                %i.fa.fa-commenting
-                Text Message
-        - unless @text_messages.blank?
-          .table-responsive
-            %table.table.table-striped{class: "#{browser.device.mobile? ? 'table-sm' : ''}"}
-              %thead
-                %tr
-                  %th Sent
-                  %th Message Body
-                  %th
-              %tbody
-                - @text_messages.each do |text_message|
-                  %tr
-                    %td= text_message.created_at.strftime("%-m/%-d/%y %l:%M %p")
-                    %td= text_message.body
-                    %td= link_to "Show", text_message, class: 'btn btn-secondary'
-        - else
-          %p.lead None
-      - if current_user.is_admin?
-        #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
-          .modal-dialog.modal-sm{:role => "document"}
-            .modal-content
-              .modal-header
-                %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
-                  %span{"aria-hidden" => "true"} ×
-                .modal-title
-                  .lead 
-                    %i.fa.fa-commenting
-                    Text Message
-              .modal-body
-                = form_tag send_group_text_message_caddies_path, id: 'send_caddies_sms_form', method: 'get' do |f|
-                  = hidden_field_tag "caddy_ids[]", [@caddy.id]
-                  .row
-                    .col-xs-12
-                      = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 8, style: 'width:100%', autofocus: true
-                  .row
-                    .col-xs-12
-                      .pull-right
-                        %br
-                        %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
-                        %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Send"}} 
-                          Send
-    -#
-      .tab-pane{:id => "settings"}
+          %a{href: edit_caddy_path(@caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
+            %i.fa.fa-edit
+            Edit
+        =# render 'pay_caddy_by_member'
+        =# render 'pay_caddy_by_company'
+        -#
+          - if @caddy.checkin_today? 
+            = f.input_field :CheckedIn, as: :hidden, value: nil
+            = button_tag(type: 'submit', class: "btn btn-warning", "data-turbolinks" => "false", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check Out" }) do
+              %i.fa.fa-sign-out
+              Check Out
+          - else
+            = f.input_field :CheckedIn, as: :hidden, value: DateTime.now
+            = button_tag(type: 'submit', class: "btn btn-secondary", "data-turbolinks" => "false", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check In" }) do
+              %i.fa.fa-sign-in
+              Check In
+        =# link_to 'Rate caddy', new_caddy_rating_path(caddy_id: @caddy.id), class: 'btn btn-warning'
+
+      .tab-pane{:id => "transfers"}
         %br
-        #caddy_settings.collapse.show.in{"aria-expanded" => "true"}
+        #caddy_transfers.collapse.show.in{"aria-expanded" => "true"}
           - if browser.device.mobile?
-            %h3 Settings
-          %p.lead
-            Phone:
-            = @caddy.customer.PhoneMobile
-          %p.lead
-            Email:
-            = @caddy.customer.Email
-          %p.lead
-            Active:
-            = "#{@caddy.active? ? 'Yes' : 'No'}"
-          =# link_to 'Edit', edit_user_registration_path(current_user), class: 'btn btn-primary'
+            %h3 
+              Transfers 
+              .pull-right
+                %p
+                  -# if current_user.is_admin?
+                  %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
+                    %i.fa.fa-dollar
+                    Pay
+          - else
+            .pull-right
+              %p
+                %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
+                  %i.fa.fa-dollar
+                  Pay
+          = render 'pay_caddy_by_member'
+          - unless @transfers.blank?
+            .table-responsive
+              %table.table.table-striped.table-hover
+                %thead
+                  %tr
+                    %th Date
+                    %th From
+                    %th Total
+                %tbody
+                  - @transfers.each do |transfer|
+                    %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
+                      %td= link_to transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y"), transfer
+                      %td= transfer.customer.full_name unless transfer.customer.blank?
+                      %td
+                        = number_to_currency(transfer.amount)
+                        - if transfer.reversed?
+                          .text-danger= "(reversed)"
+          - else
+            %p.lead None
+
+      .tab-pane.active{:id => "rounds"}
+        %br
+        #caddy_rounds.collapse.show.in{"aria-expanded" => "true"}
+          %h3
+            - if browser.device.mobile?
+              = "Rounds" 
+            - else
+              &nbsp;
+            .pull-right
+              %a{:href => new_event_path, class: 'btn btn-warning'}
+                %i.fa.fa-plus-circle
+                Round
+          - unless @events.blank?
+            %br
+            .table-responsive
+              %table.table.table-striped{class: "#{browser.device.mobile? ? 'table-sm' : ''}"}
+                %thead
+                  %tr
+                    %th Start
+                    %th Member
+                    -# %th Status
+                    %th
+                %tbody
+                  - @events.each do |event|
+                    %tr
+                      %td= event.start.strftime('%-m/%-d/%y')
+                      -# %td= event.player_names_with_caddy_names
+                      %td= event.players.find_by(caddy_id: @caddy.id).member_name
+                      -# %td= "#{event.not_paid? ? 'Open' : 'Paid'}"
+                      %td
+                        %a{:href => edit_event_path(event), class: "btn btn-primary"} 
+                          %i.fa.fa-edit
+                          = "Edit" unless browser.device.mobile?
+                        %a{:href => event_path(event), class: "btn #{event.not_paid? ? 'btn-success' : 'btn-secondary'}"} 
+                          %i.fa.fa-dollar
+                          = "Payment" unless browser.device.mobile?
+          - else
+            %p.lead None
+
+      .tab-pane{:id => "withdrawals"}
+        %br
+        - if browser.device.mobile?
+          %h3 Withdrawals 
+        #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
+          - unless @withdrawal_transactions.blank?
+            .table-responsive
+              %table.table.table-striped{class: "#{browser.device.mobile? ? 'table-sm' : ''}"}
+                %thead
+                  %tr
+                    %th ID
+                    %th Date/Time
+                    %th Code
+                    %th Status
+                    %th Requested
+                    %th Authorized
+                    %th Description
+                    %th
+                %tbody
+                  - @withdrawal_transactions.each do |withdrawal_transaction|
+                    %tr
+                      %td= withdrawal_transaction.id
+                      %td= withdrawal_transaction.date_time.strftime("%-m/%-d/%y %l:%M %p")
+                      %td= withdrawal_transaction.error_code_description
+                      %td= withdrawal_transaction.status_description
+                      %td= number_to_currency(withdrawal_transaction.amt_req)
+                      %td= number_to_currency(withdrawal_transaction.amt_auth)
+                      %td= withdrawal_transaction.Description
+                      %td= link_to "Show", withdrawal_transaction, class: 'btn btn-secondary'
+          - else
+            %p.lead None
+
+      .tab-pane{:id => "messages"}
+        %br
+        #caddy_text_messages.collapse.show.in{"aria-expanded" => "true"}
+          - if browser.device.mobile?
+            %h3 Messages
+          - if current_user.is_admin?
+            .pull-right
+              %p
+                %a{href: '#', class: 'btn btn-primary', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
+                  %i.fa.fa-commenting
+                  Text Message
+          - unless @text_messages.blank?
+            .table-responsive
+              %table.table.table-striped{class: "#{browser.device.mobile? ? 'table-sm' : ''}"}
+                %thead
+                  %tr
+                    %th Sent
+                    %th Message Body
+                    %th
+                %tbody
+                  - @text_messages.each do |text_message|
+                    %tr
+                      %td= text_message.created_at.strftime("%-m/%-d/%y %l:%M %p")
+                      %td= text_message.body
+                      %td= link_to "Show", text_message, class: 'btn btn-secondary'
+          - else
+            %p.lead None
+        - if current_user.is_admin?
+          #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+            .modal-dialog.modal-sm{:role => "document"}
+              .modal-content
+                .modal-header
+                  %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+                    %span{"aria-hidden" => "true"} ×
+                  .modal-title
+                    .lead 
+                      %i.fa.fa-commenting
+                      Text Message
+                .modal-body
+                  = form_tag send_group_text_message_caddies_path, id: 'send_caddies_sms_form', method: 'get' do |f|
+                    = hidden_field_tag "caddy_ids[]", [@caddy.id]
+                    .row
+                      .col-xs-12
+                        = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 8, style: 'width:100%', autofocus: true
+                    .row
+                      .col-xs-12
+                        .pull-right
+                          %br
+                          %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
+                          %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Send"}} 
+                            Send
+      -#
+        .tab-pane{:id => "settings"}
+          %br
+          #caddy_settings.collapse.show.in{"aria-expanded" => "true"}
+            - if browser.device.mobile?
+              %h3 Settings
+            %p.lead
+              Phone:
+              = @caddy.customer.PhoneMobile
+            %p.lead
+              Email:
+              = @caddy.customer.Email
+            %p.lead
+              Active:
+              = "#{@caddy.active? ? 'Yes' : 'No'}"
+            =# link_to 'Edit', edit_user_registration_path(current_user), class: 'btn btn-primary'
