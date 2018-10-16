@@ -365,9 +365,9 @@ class Transfer < ApplicationRecord
     fee_in_dollars
   end
   
-  def reference_number
-    ez_cash_tran_id
-  end
+#  def reference_number
+#    ez_cash_tran_id
+#  end
   
   def member_guest
     player.note unless player.blank?

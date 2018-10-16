@@ -107,7 +107,7 @@
                     %td= transfer.caddy_name
                     %td= "#{transfer.caddy_rank.blank? ? 'N/A' : transfer.caddy_rank}"
                     %td= "#{transfer.holes.blank? ? 'N/A' : transfer.holes}"
-                    %td= link_to transfer.reference_number, transaction_path(transfer.reference_number) unless transfer.reference_number.blank?
+                    %td= link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id) unless transfer.ez_cash_tran_id.blank?
                     -# %td= transfer.description
                     %td= transfer.note
                     -# %td= number_to_currency(transfer.amount_paid_total)

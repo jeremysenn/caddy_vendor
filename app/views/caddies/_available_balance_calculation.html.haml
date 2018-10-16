@@ -1,0 +1,10 @@
+%p.lead
+  Balance:
+  = number_to_currency(@balance)
+%p.lead
+  Minimum:
+  = number_to_currency(@minimum_balance)
+  = link_to 'Change', edit_account_path(@account), class: 'btn btn-sm btn-secondary' if @account.present? and current_user.is_admin?
+%p.lead
+  Available:
+  = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"

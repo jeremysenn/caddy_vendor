@@ -69,4 +69,27 @@ jQuery ->
       $('a[href="' + lastTab + '"]').click()
     return
 
+  ### Pay Caddy Confirmation Details###
+  $(document).on 'turbolinks:load', ->
+    $('#pay_caddy_by_member_form').on 'click', '#pay_by_member_button', (e) ->
+      #user click on caddy pay button
+      member_name = $(this).closest('form').find('#member_id:first option:selected').text()
+      amount = Number($(this).closest('form').find('#amount:first').val())
+      if member_name == "-- Select member --"
+        e.preventDefault()
+        alert 'Please choose a member.'
+        return
+      else if (!$.isNumeric(amount) || amount <= 0)
+        e.preventDefault()
+        alert 'Amount must be a positive number.'
+        return
+      else 
+        confirm1 = confirm('Are you sure you want to charge ' + member_name + ' $' + amount.toFixed(2) + '?' )
+        if confirm1
+          return
+        else
+          e.preventDefault()
+          return
+  ### End Pay Caddy Confirmation Details ###
+
     

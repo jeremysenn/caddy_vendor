@@ -25,3 +25,7 @@
 
 # Redis database dump
 *.rdb
+
+# Ignore uploaded images.
+public/uploads/*
+/nbproject/private/

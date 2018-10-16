@@ -70,9 +70,25 @@ class Caddy < ApplicationRecord
     account.transactions
   end
   
-  def withdrawals
+  def withdrawal_transactions
     unless account.blank?
       account.withdrawals 
+    else
+      return []
+    end
+  end
+  
+  def wire_transactions
+    unless account.blank?
+      account.wire_transactions 
+    else
+      return []
+    end
+  end
+  
+  def credit_transactions
+    unless account.blank?
+      account.credit_transactions 
     else
       return []
     end

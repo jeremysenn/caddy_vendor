@@ -48,5 +48,15 @@
     %p.lead
       Description:
       = @transaction.Description
+    - unless @transaction.transfer_record.blank?
+      %p.lead
+        Reference Number:
+        = @transaction.transfer_record.reference_number
+      %p.lead
+        Note:
+        = @transaction.transfer_record.note
+      - unless @transaction.transfer_record.file.file.nil?
+        .col-sm-6
+          %img{:src => @transaction.transfer_record.file.url, class: 'img-fluid'}
 
   = link_to 'Back', :back, class: 'btn btn-secondary'

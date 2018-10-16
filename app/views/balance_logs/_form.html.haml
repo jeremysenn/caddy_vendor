@@ -41,7 +41,7 @@
                 %td= transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y")
                 %td= number_to_currency(transfer.amount_paid_to_caddy)
                 %td= transfer.caddy_name
-                %td= link_to transfer.reference_number, transaction_path(transfer.reference_number) unless transfer.reference_number.blank?
+                %td= link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id) unless transfer.ez_cash_tran_id.blank?
                 %td= transfer.note
                 %td= link_to "Show", transfer, class: 'btn btn-secondary'
       .form-inputs

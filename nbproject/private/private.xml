@@ -3,12 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/config/database.yml</file>
             <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddies/show.html.haml</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/db/migrate/20181012133826_add_reference_number_to_transfers.rb</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/controllers/transfers_controller.rb</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/views/caddies/_pay_caddy_by_member.html.haml</file>
-            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/Gemfile</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/caddy.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/controllers/caddies_controller.rb</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/config/database.yml</file>
+            <file>file:/Users/jeremysenn/RubyProjects/Tranact/caddy_vendor/app/models/account.rb</file>
         </group>
     </open-files>
 </project-private>

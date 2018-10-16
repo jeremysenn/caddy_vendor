@@ -60,21 +60,23 @@ class CaddiesController < ApplicationController
   # GET /caddies/1
   # GET /caddies/1.json
   def show
-    if current_user.is_caddy?
-      # Set current_company session variable for caddy user
-      session[:company_id] = params[:company_id] unless params[:company_id].blank?
-      # Set current_caddy session variable for caddy user
-      session[:caddy_id] = @caddy.id
-      @events = @caddy.events.where(created_at: 1.month.ago..Time.now).distinct.reverse
-    else
-#      @events = @caddy.events.last(50).uniq.reverse
-      @events = @caddy.events.where(created_at: 1.month.ago..Time.now).distinct.reverse
-    end
+#    if current_user.is_caddy?
+#      # Set current_company session variable for caddy user
+#      session[:company_id] = params[:company_id] unless params[:company_id].blank?
+#      # Set current_caddy session variable for caddy user
+#      session[:caddy_id] = @caddy.id
+#      @events = @caddy.events.where(created_at: 1.month.ago..Time.now).distinct.reverse
+#    else
+#      @events = @caddy.events.where(created_at: 1.month.ago..Time.now).distinct.reverse
+#    end
     @transfers = @caddy.account_transfers.where(company_id: current_company.id).order('created_at DESC') unless @caddy.account_transfers.blank?
-    @text_messages = @caddy.sms_messages.reverse
+#    @text_messages = @caddy.sms_messages.reverse
     # Get caddy account withdrawal transactions, filtered by company_id
 #    @withdrawal_transactions = @caddy.customer.transactions.where(DevCompanyNbr: current_company.id).withdrawals.last(20).reverse
-    @withdrawal_transactions = @caddy.withdrawals.last(20).reverse
+    @withdrawal_transactions = @caddy.withdrawal_transactions.reverse
+    @wire_transactions = @caddy.wire_transactions.reverse
+    @credit_transactions = @caddy.credit_transactions.reverse
+    @all_transactions = Kaminari.paginate_array((@withdrawal_transactions + @wire_transactions + @credit_transactions).sort_by(&:date_time).reverse).page(params[:page]).per(20)
     @caddy_rank_desc = @caddy.caddy_rank_desc
     @balance = @caddy.balance
     @minimum_balance = @caddy.minimum_balance
@@ -166,10 +168,11 @@ class CaddiesController < ApplicationController
     member = Customer.where(CustomerID: params[:member_id]).first
     amount = params[:amount].to_f.abs unless params[:amount].blank?
     note = params[:note]
+    reference_number = params[:reference_number]
     unless member.blank?
       transfer = Transfer.new(company_id: current_company.id, from_account_id: member.club_account(current_company.id).id, 
         to_account_id: @caddy.account.id, customer_id: member.id, amount: amount, 
-        note: note, caddy_fee_cents: amount * 100, caddy_tip_cents: 0)
+        note: note, caddy_fee_cents: amount * 100, caddy_tip_cents: 0, reference_number: reference_number)
       transfer.file = params[:file]
       if transfer.save
         redirect_back fallback_location: @caddy, notice: "Member's caddy payment submitted."
@@ -180,7 +183,8 @@ class CaddiesController < ApplicationController
       course = @caddy.course
       transaction_id = course.perform_one_sided_credit_transaction(amount)
       Rails.logger.debug "*********************************Club transaction ID: #{transaction_id}"
-      transfer = Transfer.new(company_id: current_company.id, from_account_id: current_company.account.id, to_account_id: @caddy.account.id, amount: amount, note: note, club_credit_transaction_id: transaction_id, caddy_fee_cents: amount * 100, caddy_tip_cents: 0)
+      transfer = Transfer.new(company_id: current_company.id, from_account_id: current_company.account.id, to_account_id: @caddy.account.id, 
+        amount: amount, note: note, club_credit_transaction_id: transaction_id, caddy_fee_cents: amount * 100, caddy_tip_cents: 0)
       if Transfer.save
         redirect_back fallback_location: @caddy, notice: 'Caddy payment submitted.'
       else

@@ -331,6 +331,10 @@ class Transaction < ActiveRecord::Base
     not credit_transaction_transfer.blank?
   end
   
+  def transfer_record
+    Transfer.where(ez_cash_tran_id: tranID).first
+  end
+  
   #############################
   #     Class Methods         #
   #############################
