@@ -4,6 +4,6 @@ class ApplicationMailer < ActionMailer::Base
   
   def send_member_email_notification(to, body)
     @body = body
-    mail(:to => to, :subject => "CaddyVend Transfer Notification")
+    mail(:to => to, :reply_to => 'jeremy@tranact.com', :subject => "CaddyVend Transfer Notification")
   end
 end

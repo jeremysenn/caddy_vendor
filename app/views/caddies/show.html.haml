@@ -16,13 +16,14 @@
             %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: 'btn btn-primary btn-block'}
               %i.fa.fa-qrcode
               = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
+    
     %p
-      - unless current_user.is_caddy?
-        .col-xs-12.col-sm-6.col-md-4
+      .col-xs-12.col-sm-6
+        - unless current_user.is_caddy?
           = @caddy.full_name
           %a{"data-content" => "#{render partial: 'caddy_details', locals: {caddy: @caddy}}", "data-placement" => 'bottom', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
             %i.fa.fa-info-circle
-      .col-xs-12.col-sm-6.col-md-4
+          %br
         %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'bottom', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
           Available Balance:
         = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
@@ -31,6 +32,7 @@
             %p
               %a{href: '#', class: 'btn btn-info btn-sm', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
                 %i.fa.fa-commenting
+                = "Text Message" unless browser.device.mobile?
     #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
       .modal-dialog.modal-sm{:role => "document"}
         .modal-content
