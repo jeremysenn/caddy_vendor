@@ -1,38 +1,81 @@
 %div{class: "#{browser.device.mobile? ? 'container-fluid' : 'container'}"}
   %div{class: "#{browser.device.mobile? ? 'row' : ''}"}
-    .col-xs-6.col-sm-4
-      %a{href: '#', class: 'btn btn-success btn-block', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
-        %i.fa.fa-dollar
-        Payment
-    = render 'pay_caddy_by_member'
-    - if @available_balance > 1
-      .col-xs-6.col-sm-4
-        - if current_user.is_caddy?
-          %a{href: barcode_caddy_path(@caddy), class: 'btn btn-primary btn-block'}
-            %i.fa.fa-qrcode
-            Withdraw
-        - elsif current_user.is_admin?
+    - unless current_user.is_caddy?
+      %p
+        .col-xs-4
+          %a{href: '#', class: 'btn btn-success btn-block', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
+            %i.fa.fa-dollar
+            = "Payment" unless browser.device.mobile?
+        .col-xs-4
           - unless @caddy.customer.user.blank?
-            %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: 'btn btn-primary btn-block'}
+            %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: "btn btn-primary btn-block"}
               %i.fa.fa-qrcode
-              = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
-    
-    %p
-      .col-xs-12.col-sm-6
-        - unless current_user.is_caddy?
+              = "Text Barcode" unless browser.device.mobile?
+          - else
+            %a{href: nil, class: "btn btn-primary btn-block disabled"}
+              %i.fa.fa-qrcode
+              = "Text Barcode" unless browser.device.mobile?
+        .col-xs-4
+          %a{href: '#', class: 'btn btn-info btn-block', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
+            %i.fa.fa-commenting
+            = "Text Message" unless browser.device.mobile?
+      %p
+        .col-xs-12
           = @caddy.full_name
           %a{"data-content" => "#{render partial: 'caddy_details', locals: {caddy: @caddy}}", "data-placement" => 'bottom', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
             %i.fa.fa-info-circle
-          %br
-        %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'bottom', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
-          Available Balance:
-        = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
-        - if current_user.is_admin?
           .pull-right
-            %p
-              %a{href: '#', class: 'btn btn-info btn-sm', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
-                %i.fa.fa-commenting
-                = "Text Message" unless browser.device.mobile?
+            %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'left', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
+              = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
+    - else
+      %p
+        .col-xs-6
+          %a{href: '#', class: 'btn btn-success btn-block', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
+            %i.fa.fa-dollar
+            = "Payment" unless browser.device.mobile?
+        .col-xs-6
+          %a{href: barcode_caddy_path(@caddy), class: "btn btn-primary btn-block #{@available_balance <= 0 ? 'disabled' : ''}"}
+            %i.fa.fa-qrcode
+            = "Withdraw" unless browser.device.mobile?
+      %p
+        .col-xs-12
+          .pull-right
+            %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'left', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
+              = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
+    = render 'pay_caddy_by_member'
+    
+    -#
+      .col-xs-6
+        %a{href: '#', class: 'btn btn-success btn-block', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
+          %i.fa.fa-dollar
+          Payment
+
+      - if @available_balance > 1
+        .col-xs-6
+          - if current_user.is_caddy?
+            %a{href: barcode_caddy_path(@caddy), class: 'btn btn-primary btn-block'}
+              %i.fa.fa-qrcode
+              Withdraw
+          - elsif current_user.is_admin?
+            - unless @caddy.customer.user.blank?
+              %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: 'btn btn-primary btn-block'}
+                %i.fa.fa-qrcode
+                = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
+    -#
+      %p
+        .col-xs-12.col-sm-6
+          - unless current_user.is_caddy?
+            = @caddy.full_name
+            %a{"data-content" => "#{render partial: 'caddy_details', locals: {caddy: @caddy}}", "data-placement" => 'bottom', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
+              %i.fa.fa-info-circle
+            %a{href: '#', class: 'btn btn-info btn-sm', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
+              %i.fa.fa-commenting
+              = "Text Message" unless browser.device.mobile?
+            %br
+          .pull-right
+            %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'right', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
+              = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
+        
     #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
       .modal-dialog.modal-sm{:role => "document"}
         .modal-content
