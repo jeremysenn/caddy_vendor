@@ -41,7 +41,7 @@
             - current_company.courses.each do |course|
               %a.dropdown-item{:href => new_customer_path(type: 'caddy', course_id: course.id)}= course.name
       - unless @all_caddies.blank?
-        %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
+        %a{href: '#', class: 'btn btn-info', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
           %i.fa.fa-commenting
           Message
       -#

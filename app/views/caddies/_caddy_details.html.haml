@@ -1,0 +1,30 @@
+%p.lead
+  %strong Phone:
+  %br
+  = @caddy.cell_phone_number
+%p.lead
+  %strong Email:
+  %br
+  = @caddy.email
+%p.lead
+  %strong Ranking:
+  %br
+  - unless @caddy_rank_desc.blank?
+    - if current_user.is_admin?
+      = link_to @caddy_rank_desc.description, @caddy_rank_desc
+    - else
+      = @caddy_rank_desc.description
+  - else
+    None
+%p.lead
+  %strong Portal User:
+  %br
+  = "#{@caddy.user.blank? ? 'No' : 'Yes'}"
+%p.lead
+  %strong Active:
+  %br
+  = "#{@caddy.active? ? 'Yes' : 'No'}"
+- if current_user.is_admin?
+  %a{href: edit_caddy_path(@caddy), class: 'btn btn-primary btn-sm', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
+    %i.fa.fa-edit
+    Edit

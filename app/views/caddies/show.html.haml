@@ -1,12 +1,12 @@
 %div{class: "#{browser.device.mobile? ? 'container-fluid' : 'container'}"}
   %div{class: "#{browser.device.mobile? ? 'row' : ''}"}
-    .col-xs-6.col-sm-3
+    .col-xs-6.col-sm-4
       %a{href: '#', class: 'btn btn-success btn-block', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
         %i.fa.fa-dollar
         Payment
     = render 'pay_caddy_by_member'
     - if @available_balance > 1
-      .col-xs-6.col-sm-3
+      .col-xs-6.col-sm-4
         - if current_user.is_caddy?
           %a{href: barcode_caddy_path(@caddy), class: 'btn btn-primary btn-block'}
             %i.fa.fa-qrcode
@@ -15,35 +15,45 @@
           - unless @caddy.customer.user.blank?
             %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: 'btn btn-primary btn-block'}
               %i.fa.fa-qrcode
-              Text Barcode
+              = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
     %p
       - unless current_user.is_caddy?
-        .col-xs-12.col-sm-6
+        .col-xs-12.col-sm-6.col-md-4
           = @caddy.full_name
-      .col-xs-12.col-sm-6
+          %a{"data-content" => "#{render partial: 'caddy_details', locals: {caddy: @caddy}}", "data-placement" => 'bottom', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
+            %i.fa.fa-info-circle
+      .col-xs-12.col-sm-6.col-md-4
         %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'bottom', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
           Available Balance:
         = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
-    -#
-      - unless @transfers.blank?
-        .table-responsive
-          %table.table.table-striped.table-hover
-            %thead
-              %tr
-                %th Date
-                %th From
-                %th Total
-            %tbody
-              - @transfers.each do |transfer|
-                %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                  %td= link_to transfer.created_at.in_time_zone(current_user.time_zone).strftime("%-m/%-d/%y"), transfer
-                  %td= transfer.customer.full_name unless transfer.customer.blank?
-                  %td
-                    = number_to_currency(transfer.amount)
-                    - if transfer.reversed?
-                      .text-danger= "(reversed)"
-      - else
-        %p.lead None
+        - if current_user.is_admin?
+          .pull-right
+            %p
+              %a{href: '#', class: 'btn btn-info btn-sm', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
+                %i.fa.fa-commenting
+    #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+      .modal-dialog.modal-sm{:role => "document"}
+        .modal-content
+          .modal-header
+            %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+              %span{"aria-hidden" => "true"} ×
+            .modal-title
+              .lead 
+                %i.fa.fa-commenting
+                Text Message
+          .modal-body
+            = form_tag send_group_text_message_caddies_path, id: 'send_caddies_sms_form', method: 'get' do |f|
+              = hidden_field_tag "caddy_ids[]", [@caddy.id]
+              .row
+                .col-xs-12
+                  = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 8, style: 'width:100%', autofocus: true
+              .row
+                .col-xs-12
+                  .pull-right
+                    %br
+                    %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
+                    %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Send"}} 
+                      Send
 
     - unless @all_transactions.blank?
       .table-responsive
@@ -58,11 +68,17 @@
               %tr{class: "#{transaction.reversal? ? 'table-danger' : '' }"}
                 %td= link_to transaction.date_time.strftime("%b %-d"), transaction
                 %td
-                  - if browser.device.mobile?
-                    = truncate(transaction.Description, length: 12)
+                  - unless transaction.withdrawal_or_withdrawal_all?
+                    - unless transaction.from_account_customer.blank?
+                      = transaction.from_account_customer.full_name 
+                    - else
+                      - if browser.device.mobile?
+                        = truncate(transaction.Description, length: 12)
+                      - else
+                        = transaction.Description
                   - else
-                    = transaction.Description
-                %td= number_to_currency(transaction.amt_auth)
+                    Withdrawal
+                %td= number_to_currency((transaction.withdrawal_or_withdrawal_all? or transaction.reversal?) ? -transaction.amt_auth : transaction.amt_auth)
       = paginate @all_transactions
     - else
       %p.lead None

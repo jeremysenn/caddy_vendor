@@ -125,6 +125,10 @@ class Transaction < ActiveRecord::Base
     type == "Withdrawal All"
   end
   
+  def withdrawal_or_withdrawal_all?
+    withdrawal? or withdrawal_all?
+  end
+  
   def reverse_withdrawal?
     type == "Reverse Withdrawal"
   end
