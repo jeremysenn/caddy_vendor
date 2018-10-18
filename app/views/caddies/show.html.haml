@@ -8,7 +8,7 @@
             = "Payment" unless browser.device.mobile?
         .col-xs-4
           - unless @caddy.customer.user.blank?
-            %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: "btn btn-primary btn-block"}
+            %a{href: text_barcode_users_admin_path(@caddy.customer.user), data: {confirm: "Are you sure you want to text a withdrawal barcode to #{@caddy.full_name}'s phone?"}, class: "btn btn-primary btn-block"}
               %i.fa.fa-qrcode
               = "Text Barcode" unless browser.device.mobile?
           - else
@@ -19,8 +19,8 @@
           %a{href: '#', class: 'btn btn-info btn-block', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
             %i.fa.fa-commenting
             = "Text Message" unless browser.device.mobile?
-      %p
-        .col-xs-12
+      %h5
+        .col-xs-12{style: 'margin-top: 20px;'}
           = @caddy.full_name
           %a{"data-content" => "#{render partial: 'caddy_details', locals: {caddy: @caddy}}", "data-placement" => 'bottom', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
             %i.fa.fa-info-circle
@@ -34,11 +34,15 @@
             %i.fa.fa-dollar
             = "Payment" unless browser.device.mobile?
         .col-xs-6
-          %a{href: barcode_caddy_path(@caddy), class: "btn btn-primary btn-block #{@available_balance <= 0 ? 'disabled' : ''}"}
+          %a{href: text_barcode_users_admin_path(@caddy.customer.user), data: {confirm: "Are you sure you want to text a withdrawal barcode to your phone?"}, class: "btn btn-primary btn-block"}
             %i.fa.fa-qrcode
-            = "Withdraw" unless browser.device.mobile?
-      %p
-        .col-xs-12
+            = "Text Barcode" unless browser.device.mobile?
+          -#
+            %a{href: barcode_caddy_path(@caddy), class: "btn btn-primary btn-block #{@available_balance <= 0 ? 'disabled' : ''}"}
+              %i.fa.fa-qrcode
+              = "Withdraw" unless browser.device.mobile?
+      %h5
+        .col-xs-12{style: 'margin-top: 20px;'}
           .pull-right
             %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'left', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
               = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
