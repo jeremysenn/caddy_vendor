@@ -9,86 +9,63 @@
     %br
     = "Account Minimum Balance: #{number_to_currency(@company.account_minimum_balance)}"
   %p.lead
+    Include Rounds:
+    = "#{@company.include_rounds? ? 'Yes' : 'No'}"
+  %p.lead
+    Reply-to Email Addresses:
+    - unless @company.reply_to_emails.blank?
+      %br
+      = @company.reply_to_emails
+    - else
+      None
+  %p.lead
     %strong Payment Screen:
     %br
     = "Caddy can edit payment amount: #{@company.payee_can_edit_payment? ? 'Yes' : 'No'}"
     %br
     = "Include tips: #{@company.include_tip? ? 'Yes' : 'No'}"
-
-  %ul.nav.nav-tabs
-    %li.nav-item
-      %a.nav-link.active{:href => "#transfers", :data => {:toggle => "tab"}} 
-        %i.fa.fa-dollar.fa-lg
-        Transfers
-    -#
+  -#
+    %ul.nav.nav-tabs
       %li.nav-item
-        %a.nav-link{:href => "#courses", :data => {:toggle => "tab"}} 
-          %i.fa.fa-tree
-          Courses
-    
+        %a.nav-link.active{:href => "#transfers", :data => {:toggle => "tab"}} 
+          %i.fa.fa-dollar.fa-lg
+          Transfers
 
-  .tab-content
-    .tab-pane.active{:id => "transfers"}
-      %br
-      - unless @transfers.blank?
-        .table-responsive
-          %table.table.table-striped
-            %thead
-              %tr
-                %th Tran ID
-                -#
-                  %th Date/Time
-                -# %th Course
-                %th From
-                %th To
-                %th Fee
-                %th Tip
-                %th Note
-                %th Total
-                %th
-            %tbody
-              - @transfers.each do |transfer|
-                %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
-                  %td
-                    - unless transfer.ez_cash_tran_id.blank?
-                      = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
-                    - else
-                      None
-                  -#
-                    %td= transfer.created_at.in_time_zone(transfer.course.time_zone).strftime("%-m/%-d/%y %l:%M %p")
-                  -# %td= transfer.course.CourseName unless transfer.course.blank?
-                  %td= transfer.customer.full_name unless transfer.customer.blank?
-                  %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
-                  %td= number_to_currency(transfer.caddy_fee)
-                  %td= number_to_currency(transfer.caddy_tip)
-                  %td= transfer.note
-                  %td= number_to_currency(transfer.amount)
-                  %td
-                    - if transfer.reversed?
-                      .text-danger Reversed
-                    = link_to "Show", transfer, class: 'btn btn-secondary'
-      - else
-        %p.lead None
-
-      = paginate @transfers
-    -#
-      .tab-pane{:id => "courses"}
+    .tab-content
+      .tab-pane.active{:id => "transfers"}
         %br
-        .card.card-block
+        - unless @transfers.blank?
           .table-responsive
             %table.table.table-striped
               %thead
                 %tr
-                  %th Name
+                  %th Tran ID
+                  %th From
+                  %th To
+                  %th Fee
+                  %th Tip
+                  %th Note
+                  %th Total
                   %th
               %tbody
-                - @company.courses.each do |course|
-                  %tr
-                    %td= course.name
+                - @transfers.each do |transfer|
+                  %tr{class: "#{transfer.reversed? ? 'table-danger' : '' }"}
                     %td
-                      = link_to "Show", course, class: 'btn btn-secondary'
-                      = link_to 'Edit', edit_course_path(course), class: 'btn btn-primary'
-    
-  
-  
-  
+                      - unless transfer.ez_cash_tran_id.blank?
+                        = link_to transfer.ez_cash_tran_id, transaction_path(transfer.ez_cash_tran_id)
+                      - else
+                        None
+                    %td= transfer.customer.full_name unless transfer.customer.blank?
+                    %td= transfer.to_customer.full_name unless transfer.to_customer.blank?
+                    %td= number_to_currency(transfer.caddy_fee)
+                    %td= number_to_currency(transfer.caddy_tip)
+                    %td= transfer.note
+                    %td= number_to_currency(transfer.amount)
+                    %td
+                      - if transfer.reversed?
+                        .text-danger Reversed
+                      = link_to "Show", transfer, class: 'btn btn-secondary'
+        - else
+          %p.lead None
+
+        = paginate @transfers

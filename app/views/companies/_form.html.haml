@@ -4,6 +4,8 @@
   .form-inputs
     = f.input :CompanyName
     = f.input :transaction_fee
+    = f.input :include_rounds, as: :boolean
+    = f.input :reply_to_emails, as: :string, label: "Reply-to emails sent to", hint: "<small>Separate multiple email addresses with commas</small>".html_safe
     .card.card-block
       .card-header
         Payment Screen

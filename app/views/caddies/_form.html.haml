@@ -9,7 +9,8 @@
       = customer_form.input :NameL, label: 'Last name', required: true
       = customer_form.input :Email, label: 'Email', required: true
       = customer_form.input :PhoneMobile, label: 'Phone'
-    = f.association :caddy_rank_desc, collection: current_user.company.caddy_rank_descs, label_method: :RankingAcronym, value_method: :id, include_blank: false
+    - if current_user.company.include_rounds?
+      = f.association :caddy_rank_desc, collection: current_user.company.caddy_rank_descs, label_method: :RankingAcronym, value_method: :id, include_blank: false
     = f.input :active, inline_label: 'Active'
     =# f.input :RankingAcronym, collection: @course.caddy_rankings_array, include_blank: false
     =# f.input :RankingAcronym, collection: current_user.company.caddy_rank_descs, :id, include_blank: false

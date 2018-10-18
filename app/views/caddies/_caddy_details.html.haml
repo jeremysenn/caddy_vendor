@@ -6,16 +6,17 @@
   %strong Email:
   %br
   = @caddy.email
-%p.lead
-  %strong Ranking:
-  %br
-  - unless @caddy_rank_desc.blank?
-    - if current_user.is_admin?
-      = link_to @caddy_rank_desc.description, @caddy_rank_desc
+- if current_user.company.include_rounds?
+  %p.lead
+    %strong Ranking:
+    %br
+    - unless @caddy_rank_desc.blank?
+      - if current_user.is_admin?
+        = link_to @caddy_rank_desc.description, @caddy_rank_desc
+      - else
+        = @caddy_rank_desc.description
     - else
-      = @caddy_rank_desc.description
-  - else
-    None
+      None
 %p.lead
   %strong Portal User:
   %br

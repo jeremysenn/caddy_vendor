@@ -462,7 +462,7 @@ class Transfer < ApplicationRecord
           message_body = "The bill of #{ActiveSupport::NumberHelper.number_to_currency(amount_billed.abs, precision: 2)} by #{company.name} for #{caddy.full_name} has been REVERSED."
         end
       end
-      ApplicationMailer.send_member_email_notification(member.email, message_body).deliver
+      ApplicationMailer.send_member_email_notification(company, member.email, message_body).deliver
     end
   end
   

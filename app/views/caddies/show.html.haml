@@ -32,11 +32,11 @@
         .col-xs-6
           %a{href: '#', class: 'btn btn-success btn-block', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
             %i.fa.fa-dollar
-            = "Payment" unless browser.device.mobile?
+            Payment
         .col-xs-6
           %a{href: text_barcode_users_admin_path(@caddy.customer.user), data: {confirm: "Are you sure you want to text a withdrawal barcode to your phone?"}, class: "btn btn-primary btn-block"}
             %i.fa.fa-qrcode
-            = "Text Barcode" unless browser.device.mobile?
+            = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
           -#
             %a{href: barcode_caddy_path(@caddy), class: "btn btn-primary btn-block #{@available_balance <= 0 ? 'disabled' : ''}"}
               %i.fa.fa-qrcode
