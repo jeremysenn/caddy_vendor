@@ -1,138 +1,107 @@
 %div{class: "#{browser.device.mobile? ? 'container-fluid' : 'container'}"}
   %div{class: "#{browser.device.mobile? ? 'row' : ''}"}
-    - unless current_user.is_caddy?
-      %p
-        .col-xs-4
-          %a{href: '#', class: 'btn btn-success btn-block', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
-            %i.fa.fa-dollar
-            = "Payment" unless browser.device.mobile?
-        .col-xs-4
-          - unless @caddy.customer.user.blank?
-            %a{href: text_barcode_users_admin_path(@caddy.customer.user), data: {confirm: "Are you sure you want to text a withdrawal barcode to #{@caddy.full_name}'s phone?"}, class: "btn btn-primary btn-block"}
-              %i.fa.fa-qrcode
-              = "Text Barcode" unless browser.device.mobile?
-          - else
-            %a{href: nil, class: "btn btn-primary btn-block disabled"}
-              %i.fa.fa-qrcode
-              = "Text Barcode" unless browser.device.mobile?
-        .col-xs-4
-          %a{href: '#', class: 'btn btn-info btn-block', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
-            %i.fa.fa-commenting
-            = "Text Message" unless browser.device.mobile?
-      %h5
-        .col-xs-12{style: 'margin-top: 20px;'}
-          = @caddy.full_name
-          %a{"data-content" => "#{render partial: 'caddy_details', locals: {caddy: @caddy}}", "data-placement" => 'bottom', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
-            %i.fa.fa-info-circle
-          .pull-right
-            %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'left', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
-              = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
-    - else
-      %p
-        .col-xs-6
-          %a{href: '#', class: 'btn btn-success btn-block', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
-            %i.fa.fa-dollar
-            Payment
-        .col-xs-6
-          %a{href: text_barcode_users_admin_path(@caddy.customer.user), data: {confirm: "Are you sure you want to text a withdrawal barcode to your phone?"}, class: "btn btn-primary btn-block"}
-            %i.fa.fa-qrcode
-            = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
-          -#
-            %a{href: barcode_caddy_path(@caddy), class: "btn btn-primary btn-block #{@available_balance <= 0 ? 'disabled' : ''}"}
-              %i.fa.fa-qrcode
-              = "Withdraw" unless browser.device.mobile?
-      %h5
-        .col-xs-12{style: 'margin-top: 20px;'}
-          .pull-right
-            %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'left', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
-              = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
-    = render 'pay_caddy_by_member'
-    
-    -#
-      .col-xs-6
-        %a{href: '#', class: 'btn btn-success btn-block', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
-          %i.fa.fa-dollar
-          Payment
-
-      - if @available_balance > 1
-        .col-xs-6
-          - if current_user.is_caddy?
-            %a{href: barcode_caddy_path(@caddy), class: 'btn btn-primary btn-block'}
-              %i.fa.fa-qrcode
-              Withdraw
-          - elsif current_user.is_admin?
+    - unless current_user.company.include_rounds?
+      - unless current_user.is_caddy?
+        %p
+          .col-xs-4
+            %a{href: '#', class: 'btn btn-success btn-block', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
+              %i.fa.fa-dollar
+              = "Payment" unless browser.device.mobile?
+          .col-xs-4
             - unless @caddy.customer.user.blank?
-              %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: 'btn btn-primary btn-block'}
+              %a{href: text_barcode_users_admin_path(@caddy.customer.user), data: {confirm: "Are you sure you want to text a withdrawal barcode to #{@caddy.full_name}'s phone?"}, class: "btn btn-primary btn-block"}
                 %i.fa.fa-qrcode
-                = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
-    -#
-      %p
-        .col-xs-12.col-sm-6
-          - unless current_user.is_caddy?
+                = "Text Barcode" unless browser.device.mobile?
+            - else
+              %a{href: nil, class: "btn btn-primary btn-block disabled"}
+                %i.fa.fa-qrcode
+                = "Text Barcode" unless browser.device.mobile?
+          .col-xs-4
+            %a{href: '#', class: 'btn btn-info btn-block', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
+              %i.fa.fa-commenting
+              = "Text Message" unless browser.device.mobile?
+        %h5
+          .col-xs-12{style: 'margin-top: 20px;'}
             = @caddy.full_name
             %a{"data-content" => "#{render partial: 'caddy_details', locals: {caddy: @caddy}}", "data-placement" => 'bottom', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
               %i.fa.fa-info-circle
-            %a{href: '#', class: 'btn btn-info btn-sm', "data-toggle" => "modal", "data-target" => "#send_sms_notification"}
-              %i.fa.fa-commenting
-              = "Text Message" unless browser.device.mobile?
-            %br
-          .pull-right
-            %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'right', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
-              = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
-        
-    #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
-      .modal-dialog.modal-sm{:role => "document"}
-        .modal-content
-          .modal-header
-            %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
-              %span{"aria-hidden" => "true"} ×
-            .modal-title
-              .lead 
-                %i.fa.fa-commenting
-                Text Message
-          .modal-body
-            = form_tag send_group_text_message_caddies_path, id: 'send_caddies_sms_form', method: 'get' do |f|
-              = hidden_field_tag "caddy_ids[]", [@caddy.id]
-              .row
-                .col-xs-12
-                  = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 8, style: 'width:100%', autofocus: true
-              .row
-                .col-xs-12
-                  .pull-right
-                    %br
-                    %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
-                    %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Send"}} 
-                      Send
+            .pull-right
+              %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'left', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
+                = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
+      - else
+        %p
+          .col-xs-6
+            %a{href: '#', class: 'btn btn-success btn-block', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
+              %i.fa.fa-dollar
+              Payment
+          .col-xs-6
+            %a{href: text_barcode_users_admin_path(@caddy.customer.user), data: {confirm: "Are you sure you want to text a withdrawal barcode to your phone?"}, class: "btn btn-primary btn-block"}
+              %i.fa.fa-qrcode
+              = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
+            -#
+              %a{href: barcode_caddy_path(@caddy), class: "btn btn-primary btn-block #{@available_balance <= 0 ? 'disabled' : ''}"}
+                %i.fa.fa-qrcode
+                = "Withdraw" unless browser.device.mobile?
+        %h5
+          .col-xs-12{style: 'margin-top: 20px;'}
+            .pull-right
+              %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'left', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
+                = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
+      = render 'pay_caddy_by_member'
 
-    - unless @all_transactions.blank?
-      .table-responsive
-        %table.table.table-striped
-          %thead
-            %tr
-              %th Date
-              %th Details
-              %th Amount
-          %tbody
-            - @all_transactions.each do |transaction|
-              %tr{class: "#{transaction.reversal? ? 'table-danger' : '' }"}
-                %td= link_to transaction.date_time.strftime("%b %-d"), transaction
-                %td
-                  - unless transaction.withdrawal_or_withdrawal_all?
-                    - unless transaction.from_account_customer.blank?
-                      = transaction.from_account_customer.full_name 
-                    - else
-                      - if browser.device.mobile?
-                        = truncate(transaction.Description, length: 12)
+      #send_sms_notification.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+        .modal-dialog.modal-sm{:role => "document"}
+          .modal-content
+            .modal-header
+              %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+                %span{"aria-hidden" => "true"} ×
+              .modal-title
+                .lead 
+                  %i.fa.fa-commenting
+                  Text Message
+            .modal-body
+              = form_tag send_group_text_message_caddies_path, id: 'send_caddies_sms_form', method: 'get' do |f|
+                = hidden_field_tag "caddy_ids[]", [@caddy.id]
+                .row
+                  .col-xs-12
+                    = text_area_tag :message_body, @message_body, :placeholder => "Message", class: "form-control input-lg", rows: 8, style: 'width:100%', autofocus: true
+                .row
+                  .col-xs-12
+                    .pull-right
+                      %br
+                      %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
+                      %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Send"}} 
+                        Send
+
+      - unless @all_transactions.blank?
+        .table-responsive
+          %table.table.table-striped
+            %thead
+              %tr
+                %th Date
+                %th Details
+                %th Amount
+            %tbody
+              - @all_transactions.each do |transaction|
+                %tr{class: "#{transaction.reversal? ? 'table-danger' : '' }"}
+                  %td= link_to transaction.date_time.strftime("%b %-d"), transaction
+                  %td
+                    - unless transaction.withdrawal_or_withdrawal_all?
+                      - unless transaction.from_account_customer.blank?
+                        = transaction.from_account_customer.full_name 
                       - else
-                        = transaction.Description
-                  - else
-                    Withdrawal
-                %td= number_to_currency((transaction.withdrawal_or_withdrawal_all? or transaction.reversal?) ? -transaction.amt_auth : transaction.amt_auth)
-      = paginate @all_transactions
-    - else
-      %p.lead None
+                        - if browser.device.mobile?
+                          = truncate(transaction.Description, length: 12)
+                        - else
+                          = transaction.Description
+                    - else
+                      Withdrawal
+                  %td= number_to_currency((transaction.withdrawal_or_withdrawal_all? or transaction.reversal?) ? -transaction.amt_auth : transaction.amt_auth)
+        = paginate @all_transactions
+      - else
+        %p.lead None
 
-    -#
+    - else
       %ul.nav.nav-tabs
         %li.nav-item
           %a.nav-link.active{:href => "#rounds", :data => {:toggle => "tab"}} 
@@ -154,11 +123,6 @@
           %a.nav-link{:href => "#messages", :data => {:toggle => "tab"}} 
             %i.fa.fa-commenting.fa-lg
             = "Messages" unless browser.device.mobile?
-        -#
-          %li.nav-item
-            %a.nav-link{:href => "#settings", :data => {:toggle => "tab"}} 
-              %i.fa.fa-gear.fa-lg
-              = "Settings" unless browser.device.mobile?
       .tab-content
         .tab-pane{:id => "info"}
           %br
@@ -166,41 +130,15 @@
             - if current_user.is_caddy?
               .pull-right
                 %p
-                  %a{href: barcode_caddy_path(@caddy), class: 'btn btn-primary'}
+                  -#
+                    %a{href: barcode_caddy_path(@caddy), class: 'btn btn-primary'}
+                      %i.fa.fa-qrcode
+                      ATM
+                  %a{href: text_barcode_users_admin_path(@caddy.customer.user), data: {confirm: "Are you sure you want to text a withdrawal barcode to your phone?"}, class: "btn btn-primary btn-block"}
                     %i.fa.fa-qrcode
-                    ATM
-              -#
-                %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#sms_payment_qr_code"}
-                  %i.fa.fa-qrcode
-                  ATM Payment
-                #sms_payment_qr_code.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
-                  .modal-dialog.modal-sm{:role => "document"}
-                    .modal-content
-                      .modal-header
-                        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
-                          %span{"aria-hidden" => "true"} ×
-                        .modal-title
-                          .lead 
-                            ATM Payment
-                      .modal-body
-                        %p.lead
-                          Please enter your PIN:
-                        = form_tag pin_verification_users_admin_path(current_user.id), id: 'send_caddy_sms_payment_verification_form', method: 'post' do |f|
-                          =# hidden_field_tag :caddy_id, @caddy.id
-                          .col-xs-9
-                            = text_field_tag :pin, nil, placeholder: "Your PIN", class: "form-control input-lg", autofocus: true, required: true
-                          .row
-                            .col-xs-12
-                              .pull-right
-                                %br
-                                %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
-                                %button.btn.btn-primary{id: 'send_sms_payment_qr_code_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Submit"}} 
-                                  Submit
+                    = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
             - elsif current_user.is_admin?
               .pull-right
-                %a{href: barcode_caddy_path(@caddy), class: 'btn btn-success'}
-                  %i.fa.fa-qrcode
-                  ATM
                 - unless @caddy.customer.user.blank?
                   %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: 'btn btn-warning'}
                     %i.fa.fa-comment
@@ -222,10 +160,6 @@
                 = link_to "#{@caddy.caddy_ratings.size} ratings", caddy_ratings_path(caddy_id: @caddy.id)
                 %br
                 .text-muted= "#{number_with_precision(@caddy.average_rating, precision: 1)} out of 5 stars"
-          -#
-            %p.lead
-              Course:
-              = link_to @caddy.course.CourseName, @caddy.course
           %p.lead
             Phone:
             = @caddy.cell_phone_number
@@ -241,10 +175,6 @@
                 = @caddy_rank_desc.description
             - else
               None
-          -#
-            %p.lead
-              Checked In:
-              = "#{@caddy.checkin_today? ? @caddy.CheckedIn.in_time_zone(@caddy.course.time_zone).strftime('%l:%M %p') : 'No'}" 
           %p.lead
             Portal User:
             = "#{@caddy.user.blank? ? 'No' : 'Yes'}"
@@ -252,32 +182,10 @@
             Active:
             = "#{@caddy.active? ? 'Yes' : 'No'}"
 
-          -#
-            %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_member"}
-              %i.fa.fa-dollar
-              Pay by member
-          -#
-            %a{href: '#', class: 'btn btn-success', "data-toggle" => "modal", "data-target" => "#pay_caddy_by_company"}
-              %i.fa.fa-dollar
-              Pay by company
           - if current_user.is_admin?
             %a{href: edit_caddy_path(@caddy), class: 'btn btn-primary', "data-turbolinks" => "false",  data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Edit" }}
               %i.fa.fa-edit
               Edit
-          =# render 'pay_caddy_by_member'
-          =# render 'pay_caddy_by_company'
-          -#
-            - if @caddy.checkin_today? 
-              = f.input_field :CheckedIn, as: :hidden, value: nil
-              = button_tag(type: 'submit', class: "btn btn-warning", "data-turbolinks" => "false", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check Out" }) do
-                %i.fa.fa-sign-out
-                Check Out
-            - else
-              = f.input_field :CheckedIn, as: :hidden, value: DateTime.now
-              = button_tag(type: 'submit', class: "btn btn-secondary", "data-turbolinks" => "false", data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Check In" }) do
-                %i.fa.fa-sign-in
-                Check In
-          =# link_to 'Rate caddy', new_caddy_rating_path(caddy_id: @caddy.id), class: 'btn btn-warning'
 
         .tab-pane{:id => "transfers"}
           %br
@@ -440,19 +348,3 @@
                             %button.btn.btn-secondary{"data-dismiss" => "modal", :type => "button"} Cancel
                             %button.btn.btn-primary{id: 'send_sms_button', :type => "submit", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Send"}} 
                               Send
-        -#
-          .tab-pane{:id => "settings"}
-            %br
-            #caddy_settings.collapse.show.in{"aria-expanded" => "true"}
-              - if browser.device.mobile?
-                %h3 Settings
-              %p.lead
-                Phone:
-                = @caddy.customer.PhoneMobile
-              %p.lead
-                Email:
-                = @caddy.customer.Email
-              %p.lead
-                Active:
-                = "#{@caddy.active? ? 'Yes' : 'No'}"
-              =# link_to 'Edit', edit_user_registration_path(current_user), class: 'btn btn-primary'
