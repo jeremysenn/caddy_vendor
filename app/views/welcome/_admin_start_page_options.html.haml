@@ -1,13 +1,10 @@
 .row.form-group
-  .col-xs-12.col-sm-6
-    %a.btn.btn-secondary.btn-lg.btn-block{:href => events_path, :role => "button"}
-      %i.fa.fa-flag
-      Rounds
-  .col-xs-12.col-sm-6
-    -#
-      %a.btn.btn-secondary.btn-lg.btn-block{:href => courses_path, :role => "button"}
-        %i.fa.fa-tree
-        Courses 
+  - if current_user.company.include_rounds?
+    .col-xs-12.col-sm-6
+      %a.btn.btn-secondary.btn-lg.btn-block{:href => events_path, :role => "button"}
+        %i.fa.fa-flag
+        Rounds
+  %div{class: "#{current_user.company.include_rounds? ? 'col-xs-12 col-sm-6' : 'col-xs-12'}"}
     %a.btn.btn-secondary.btn-lg.btn-block{:href => balance_logs_path, :role => "button"} 
       %i.fa.fa-refresh
       Billing
@@ -20,15 +17,16 @@
     %a.btn.btn-secondary.btn-lg.btn-block{:href => caddies_path, :role => "button"}
       %i.fa.fa-vcard-o
       Caddies
-.row.form-group
-  .col-xs-12.col-sm-6
-    %a.btn.btn-secondary.btn-lg.btn-block{:href => caddy_rank_descs_path, :role => "button"}
-      %i.fa.fa-certificate
-      Ranks
-  .col-xs-12.col-sm-6
-    %a.btn.btn-secondary.btn-lg.btn-block{:href => caddy_pay_rates_path, :role => "button"}
-      %i.fa.fa-credit-card-alt
-      Rates
+- if current_user.company.include_rounds?
+  .row.form-group
+    .col-xs-12.col-sm-6
+      %a.btn.btn-secondary.btn-lg.btn-block{:href => caddy_rank_descs_path, :role => "button"}
+        %i.fa.fa-certificate
+        Ranks
+    .col-xs-12.col-sm-6
+      %a.btn.btn-secondary.btn-lg.btn-block{:href => caddy_pay_rates_path, :role => "button"}
+        %i.fa.fa-credit-card-alt
+        Rates
 .row.form-group
   .col-xs-12.col-sm-6
     %a.btn.btn-secondary.btn-lg.btn-block{:href => transfers_path, :role => "button"}
