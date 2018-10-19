@@ -8,7 +8,8 @@
       .form-inputs
         - unless current_user.pin.blank? and current_user.is_caddy?
           - if current_user.is_admin?
-            = f.input :phone, required: true
+            =# f.input :phone, required: true
+            = f.input :phone, as: :integer, label: "Phone", required: true, autofocus: true, input_html: {:inputmode => "numeric", :min => "0", :pattern => "[0-9]*"}
           - else
             = f.input :phone, required: true, :input_html => {readonly: true}
           = f.input :email, as: :string, label: "Email or Username", required: true

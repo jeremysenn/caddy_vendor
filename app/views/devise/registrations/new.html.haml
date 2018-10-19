@@ -7,7 +7,8 @@
       .form-inputs
         = f.input :active, :as => :hidden, :input_html => { :value => true}
         = f.input :signing_up, :as => :hidden, :input_html => { :value => true}
-        = f.input :phone, required: true, autofocus: true
+        =# f.input :phone, required: true, autofocus: true
+        = f.input :phone, as: :integer, label: "Phone", required: true, autofocus: true, input_html: {:inputmode => "numeric", :min => "0", :pattern => "[0-9]*"}
         = f.input :email, as: :string, label: "Email", required: true
         -#
           .row.form-group

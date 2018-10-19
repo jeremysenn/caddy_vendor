@@ -5,7 +5,8 @@
     = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
       .form-inputs
         =# f.input :email, as: :string, label: "Username or Email", required: false, autofocus: true
-        = f.input :phone, as: :string, label: "Phone", required: false, autofocus: true
+        =# f.input :phone, as: :string, label: "Phone", required: false, autofocus: true
+        = f.input :phone, as: :integer, label: "Phone", required: false, autofocus: true, input_html: {:inputmode => "numeric", :min => "0", :pattern => "[0-9]*"}
         = f.input :password, required: false
         = f.input :remember_me, as: :boolean if devise_mapping.rememberable?
       .form-actions

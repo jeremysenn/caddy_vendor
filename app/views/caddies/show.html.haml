@@ -25,7 +25,8 @@
             = @caddy.full_name
             %a{"data-content" => "#{render partial: 'caddy_details', locals: {caddy: @caddy}}", "data-placement" => 'bottom', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
               %i.fa.fa-info-circle
-            .pull-right
+            %div{class: "#{browser.device.mobile? ? '' : 'pull-right'}"}
+              Available Balance:
               %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'left', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
                 = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
       - else
@@ -50,6 +51,7 @@
         %h5
           .col-xs-12{style: 'margin-top: 20px;'}
             .pull-right
+              Available Balance:
               %a{"data-content" => "#{render partial: 'available_balance_calculation', locals: {balance: @balance, available_balance: @available_balance, minimum_balance: @minimum_balance}}", "data-placement" => 'left', "data-html" => "true", "data-toggle" => "popover", :tabindex => "0"}
                 = "#{@available_balance < 0 ? number_to_currency(0) : number_to_currency(@available_balance)}"
       = render 'pay_caddy_by_member'
