@@ -13,7 +13,7 @@
                 %i.fa.fa-qrcode
                 = "Text Barcode" unless browser.device.mobile?
             - else
-              %a{href: nil, class: "btn btn-primary btn-block disabled"}
+              %a{href: nil, class: "btn btn-default btn-block disabled"}
                 %i.fa.fa-qrcode
                 = "Text Barcode" unless browser.device.mobile?
           .col-xs-4
@@ -40,7 +40,7 @@
                 %i.fa.fa-qrcode
                 = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
             - else
-              %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: "btn btn-primary btn-block disabled"}
+              %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: "btn btn-default btn-block disabled"}
                 %i.fa.fa-qrcode
                 = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
             -#
