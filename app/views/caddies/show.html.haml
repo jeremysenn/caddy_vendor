@@ -8,7 +8,7 @@
               %i.fa.fa-dollar
               = "Payment" unless browser.device.mobile?
           .col-xs-4
-            - unless @caddy.customer.user.blank?
+            - unless @caddy.customer.user.blank? or @available_balance <= 0
               %a{href: text_barcode_users_admin_path(@caddy.customer.user), data: {confirm: "Are you sure you want to text a withdrawal barcode to #{@caddy.full_name}'s phone?"}, class: "btn btn-primary btn-block"}
                 %i.fa.fa-qrcode
                 = "Text Barcode" unless browser.device.mobile?
@@ -35,9 +35,14 @@
               %i.fa.fa-dollar
               Payment
           .col-xs-6
-            %a{href: text_barcode_users_admin_path(@caddy.customer.user), data: {confirm: "Are you sure you want to text a withdrawal barcode to your phone?"}, class: "btn btn-primary btn-block"}
-              %i.fa.fa-qrcode
-              = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
+            - unless @available_balance <= 0
+              %a{href: text_barcode_users_admin_path(@caddy.customer.user), data: {confirm: "Are you sure you want to text a withdrawal barcode to your phone?"}, class: "btn btn-primary btn-block"}
+                %i.fa.fa-qrcode
+                = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
+            - else
+              %a{href: text_barcode_users_admin_path(@caddy.customer.user), class: "btn btn-primary btn-block disabled"}
+                %i.fa.fa-qrcode
+                = "#{browser.device.mobile? ? 'Barcode' : 'Text Barcode'}"
             -#
               %a{href: barcode_caddy_path(@caddy), class: "btn btn-primary btn-block #{@available_balance <= 0 ? 'disabled' : ''}"}
                 %i.fa.fa-qrcode
@@ -99,7 +104,7 @@
                   %td= number_to_currency((transaction.withdrawal_or_withdrawal_all? or transaction.reversal?) ? -transaction.amt_auth : transaction.amt_auth)
         = paginate @all_transactions
       - else
-        %p.lead None
+        %p.lead No transactions
 
     - else
       %br
